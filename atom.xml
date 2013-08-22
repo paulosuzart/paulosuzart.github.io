@@ -4,7 +4,7 @@
   <title><![CDATA[Paulo Suzart Blog]]></title>
   <link href="http://paulosuzart.github.com/atom.xml" rel="self"/>
   <link href="http://paulosuzart.github.com/"/>
-  <updated>2013-08-22T00:04:42-03:00</updated>
+  <updated>2013-08-22T00:09:46-03:00</updated>
   <id>http://paulosuzart.github.com/</id>
   <author>
     <name><![CDATA[Paulo Suzart]]></name>
@@ -116,7 +116,12 @@ discussions/patterns about how to solve the problems it is supposed to.</p>
 <p>Projects like: <a href="http://coreos.com/">CoreOS</a> and <a href="https://flynn.io/">Flynn</a> literally give you the real notion about what I&#8217;m talking. I don&#8217;t think Paas or Iaas will die, absolutely not. But a new room is needed for sure.</p>
 
 <p>I have both Docker and Ansible running production stuff and hope I can
-share some <code>Playbooks</code> and <code>Docker</code> files here in the near future.</p>
+share some <code>Playbooks</code> and <code>Dockerfiles</code> in the near future.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+
+
 ]]></content>
   </entry>
   
