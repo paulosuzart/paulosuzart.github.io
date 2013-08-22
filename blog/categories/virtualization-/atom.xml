@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: virtualization, | Paulo Suzart Blog]]></title>
+  <link href="http://paulosuzart.github.com/blog/categories/virtualization-/atom.xml" rel="self"/>
+  <link href="http://paulosuzart.github.com/"/>
+  <updated>2013-08-22T00:04:42-03:00</updated>
+  <id>http://paulosuzart.github.com/</id>
+  <author>
+    <name><![CDATA[Paulo Suzart]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Docker + Ansible]]></title>
+    <link href="http://paulosuzart.github.com/blog/2013/08/21/docker-plus-ansible/"/>
+    <updated>2013-08-21T23:21:00-03:00</updated>
+    <id>http://paulosuzart.github.com/blog/2013/08/21/docker-plus-ansible</id>
+    <content type="html"><![CDATA[<p>Hi! This form for blog posts title is working! Liked it.</p>
+
+<p>Again some time without writting. And this time I'm writting about
+something brand new: <a href="http://www.docker.io/">Docker</a>.</p>
+
+<p>It lives in the Virtualization contex. You can rear more at <a href="http://docs.docker.io/en/latest/">docker
+documentation</a>. And from my point of
+view, it comes to kill some important challenges me and you have been
+facing over years when talking about delivering software.</p>
+
+<h1>Paas</h1>
+
+<p>As <a href="http://blog.docker.io/2013/07/excited-to-be-joining-the-great-teams-at-dotcloud-docker-as-ceo/">stated around</a>
+Paas often fail to cover every necessity you migh have. Because they are
+closed black boxes where you "commit your code" in, or alike. I really
+like <a href="http://heroku.com">heroku</a> and
+<a href="https://www.dotcloud.com/">dotCloud</a>, but yes, I have apps that can't
+run there.</p>
+
+<h1>Ordinary virtualization, another fit for Docker</h1>
+
+<p>I've been using
+<a href="http://www.citrix.com.br/products/xenserver/overview.html">XenServer</a>
+to handle massive amount of requests distributed over dozens of machines
+and it works pretty well. But after a while I have some extra
+"disadvantages" (I'm puting quotes because it is really specific) to add
+to <a href="https://github.com/dotcloud/docker">this list</a>. Here they are:</p>
+
+<ul>
+<li> The sysadmin should be involved since he needs to access the Xen Center in order to create machines</li>
+<li> The developer needs to inform beforehand the amount of CPU cores, disk size and memory</li>
+<li> This involves an all new machine created with a full operating system, configurations, etc. No time for that</li>
+<li> Sysadmins are busy and don't like to give you attention</li>
+</ul>
+
+
+<p>Not only that, but many cases crating a full virtualized machine to put
+inside one wordpress, or few simple stuff doesn't pay off. For this sort
+fo situation I'm addopting Docker.</p>
+
+<p>The main advantages of container virtualization (like Docker) are:</p>
+
+<ul>
+<li> Concurrent deployment of the same app among developers. So no more single testing environment</li>
+<li> Platform-as-a-Service like environment. You don't need to think about anything else but run the process in charge of your application. No worries with operating system or an entire machine</li>
+<li> Make your app immediately available</li>
+<li> Run it over a virtualized Xen machine and you still hold all advantages from XEN in the host level (snapshot, live migration, etc, volume management)</li>
+</ul>
+
+
+<p>Add to the recipe the idea of <a href="http://12factor.net/">12 factor apps</a> and
+you are done! Wih Docker you can create the workflow:</p>
+
+<ol>
+<li>Developer creates a Docker container, commits it to a Docker index
+or even give you a <code>Dockerfile</code>.</li>
+<li>Since it is a 12factor app, it is supposed detect
+resources configuration from the environment it runs</li>
+<li>You simply run it.</li>
+</ol>
+
+
+<p>Excellent, but still a missing piece.</p>
+
+<h1>Ansible</h1>
+
+<p>Ok, call me crazy: <em>"You've been using <a href="http://puppetlabs.com/">Puppet</a>
+for more than 1 and a hal year, why are you talking about
+<a href="http://www.ansibleworks.com/">Ansible?</a>"</em>. It is simple. Well, Ansible
+is also simple, but I mean, it is simple to know why Ansible. Just look
+to step 1 above. See?</p>
+
+<p>Puppet is too much for you to set up your container. Ansible is fine.
+You need to be repeatable. Although Docker allows you for commiting
+images to a repository, you still need to set up it from scract without
+forgeting any detail.</p>
+
+<p>Ansible is a direct competitor for Puppet. But with a simpler approach
+and good enough to run it on every server if you want. I tried this
+combination and approved. Awesome!</p>
+
+<p>The step one above now could be rewritten like:</p>
+
+<ol>
+<li>Developer - with the help of sysadmins or not - crates a
+container and set it up with ansible. Then commit it to the repository
+and you can even forget Docker files.</li>
+</ol>
+
+
+<p>I'm absolutely sure Docker will solve many things but bring lots of
+discussions/patterns about how to solve the problems it is supposed to.</p>
+
+<h1>Future</h1>
+
+<p>Projects like: <a href="http://coreos.com/">CoreOS</a> and <a href="https://flynn.io/">Flynn</a> literally give you the real notion about what I'm talking. I don't think Paas or Iaas will die, absolutely not. But a new room is needed for sure.</p>
+
+<p>I have both Docker and Ansible running production stuff and hope I can
+share some <code>Playbooks</code> and <code>Docker</code> files here in the near future.</p>
+]]></content>
+  </entry>
+  
+</feed>

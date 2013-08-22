@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: me | Paulo Suzart Blog]]></title>
+  <link href="http://paulosuzart.github.com/blog/categories/me/atom.xml" rel="self"/>
+  <link href="http://paulosuzart.github.com/"/>
+  <updated>2013-08-22T00:04:42-03:00</updated>
+  <id>http://paulosuzart.github.com/</id>
+  <author>
+    <name><![CDATA[Paulo Suzart]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[What you are supposed to find here]]></title>
+    <link href="http://paulosuzart.github.com/blog/2011/10/30/what-you-are-supposed-to-find-here/"/>
+    <updated>2011-10-30T23:09:00-02:00</updated>
+    <id>http://paulosuzart.github.com/blog/2011/10/30/what-you-are-supposed-to-find-here</id>
+    <content type="html"><![CDATA[<p>Hi, this is another blog of mine. Yap, I have a - mostly in portuguese - wordpress called <a href="http://codemountain.wordpress.com">codemountain</a>, and a <a href="http://posterous.com/paulosuzart">Posterous</a>. Maybe I move to here and kill the others. Don't know yet.</p>
+
+<p>The main reason to starting blogging directly on my Github is to keep the subjects even more focused on projects committed here, and share some experiences with some libs also committed here.</p>
+
+<p><p>Don't forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: elementary | Paulo Suzart Blog]]></title>
+  <link href="http://paulosuzart.github.com/blog/categories/elementary/atom.xml" rel="self"/>
+  <link href="http://paulosuzart.github.com/"/>
+  <updated>2013-08-22T00:04:42-03:00</updated>
+  <id>http://paulosuzart.github.com/</id>
+  <author>
+    <name><![CDATA[Paulo Suzart]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[sorting with clojure comparator]]></title>
+    <link href="http://paulosuzart.github.com/blog/2012/04/11/sorting-with-clojure-comparator/"/>
+    <updated>2012-04-11T22:51:00-03:00</updated>
+    <id>http://paulosuzart.github.com/blog/2012/04/11/sorting-with-clojure-comparator</id>
+    <content type="html"><![CDATA[<p>This is a quick post to show an example of <a href="http://clojure.org">clojure</a> <code>comparator</code> for sorting a list with <code>sort</code>.</p>
+
+<p>At work a friend wrote dozen lines of java to sort a list of characters that represents t-shirt sizes. The sizes are: pp, p, m, mm, g, gg, a, aa. Where 'pp' is super small, 'p' small, 'm' medium, etc.</p>
+
+<p>Some shees have all the sizes available, some not. So imagine a shirt with just g, a, gg, p sizes availabe. The screen should show: p, g, gg, a.</p>
+
+<p>He requested me to do a clojure version of it. Here it goes.</p>
+
+<p><div><script src='https://gist.github.com/2351780.js?file='></script>
+<noscript><pre><code></code></pre></noscript></div>
+</p>
+
+<p>The first useful function is <a href="http://clojuredocs.org/clojure_core/clojure.core/map-indexed"><code>map-indexed</code></a>. Since the order of sizes is not natural, we associate numbers to them given we know the size order. So <code>sizes</code> becomes <code>{:a 6, :gg 5, :g 4, :pp 0, :m 2, :mm 3, :aa 7, :p 1}</code>.</p>
+
+<p>Then I used a <a href="http://clojuredocs.org/clojure_core/clojure.core/comparator"><code>comparator</code></a>. It produces a <code>java.util.Comparator</code> for the given function. In this case the comparison of the map values for each key.</p>
+
+<p>To finish that, the <a href="http://clojuredocs.org/clojure_core/clojure.core/sort"><code>sort</code></a> function. It takes a given product sizes list and sorts then. So <code>'(p, g, gg, aa)</code> becomes <code>(p g gg a)</code>.</p>
+
+<p>It is even silly for a blog post but what if I can convince him to replace the java methods/utils/whatever methods for a <a href="http://clojuredocs.org/clojure_core/clojure.core/gen-class"><code>gen-class</code></a> of it? Packing compiled clojure code and using them for utility functions and small piece of your application can be a good way to get used to the language and confidence to start a full application in it.</p>
+
+<p>Actually to let this code reusable, one can take the list of sizes instead of hard coding it. But this is an exercise for you.</p>
+
+<p><p>Don't forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+</p>
+
+<p><em>Thanks to USA guys, you are the top visitors here. Thank you very much.</em></p>
+]]></content>
+  </entry>
+  
+</feed>

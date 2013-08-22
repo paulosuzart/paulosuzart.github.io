@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: advanced | Paulo Suzart Blog]]></title>
+  <link href="http://paulosuzart.github.com/blog/categories/advanced/atom.xml" rel="self"/>
+  <link href="http://paulosuzart.github.com/"/>
+  <updated>2013-08-22T00:04:42-03:00</updated>
+  <id>http://paulosuzart.github.com/</id>
+  <author>
+    <name><![CDATA[Paulo Suzart]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Configuring Clojure Immutant by environment]]></title>
+    <link href="http://paulosuzart.github.com/blog/2013/02/07/configuring-clojure-immutant-by-environment/"/>
+    <updated>2013-02-07T08:39:00-02:00</updated>
+    <id>http://paulosuzart.github.com/blog/2013/02/07/configuring-clojure-immutant-by-environment</id>
+    <content type="html"><![CDATA[<p>Hi again! Not posting for too much long.</p>
+
+<p>Well, this time we will explore the <a href="http://clojure.org">clojure's</a> ability to <a href="http://clojuredocs.org/clojure_core/clojure.core/load-file">load arbitrary files as code</a>.</p>
+
+<p>This is such an amazing feature, but you should be careful. Don't start reading anyones files and evaluating them into your app. Be wise and use it for specific situation like this: I wanted to load a bunch of configurations (and even funtion calls) depending on the environment my app is running.</p>
+
+<p>To do the conditional evaluation, I decided to add an extra key to <code>:immutant</code> entry in my project definition. The entry <code>:env</code> is an <a href="http://immutant.org/documentation/current/initialization.html#sec-3-1">arbitrary configuration value</a>. Lets take a look:</p>
+
+<p>``` clojure Silly Project
+(defproject tserver "0.1.0-SNAPSHOT"
+  :description "A foo project"
+  :url "http://foo.com/"
+  :license {:name "Eclipse Public License"</p>
+
+<pre><code>        :url "http://www.eclipse.org/legal/epl-v10.html"}
+</code></pre>
+
+<p>  :dependencies [[org.clojure/clojure "1.4.0"]</p>
+
+<pre><code>             [compojure "1.0.2"]
+             ;... and many other dependecies
+</code></pre>
+
+<p>  :jvm-opts ["-Xmx2g" "-server"]
+  :immutant {:init "tserver.init/init"} ;; our custo immutant init function
+  :profiles {:dev {:immutant {:context-path "/"</p>
+
+<pre><code>                          :nrepl-port 4242
+                          :lein-profiles [:dev]
+                          :env :dev}}}) ;:dev will identify which config file to load
+</code></pre>
+
+<p>```</p>
+
+<p>In this sample <code>project.clj</code> you find <code>:immutant</code> directly under the project definition. This key is used to, regardless of the environment, inform immutant which funtion to call when your app starts up. In this case <code>tserver.init/init</code>, that we will further analyze.</p>
+
+<p>Pay attention to the <code>:env</code> entry. It is located under <code>:immutant</code> that is under <code>[:profiles :dev]</code>. Here enters a <a href="http://leiningen.org/">leiningen's</a> <a href="https://github.com/technomancy/leiningen/blob/stable/doc/PROFILES.md">profiles feature</a>. Where you can even specify dependencies or anything you want by profile. In this case, the immutant config is being configured by profile.</p>
+
+<p><strong>Why not simply load a config per profile?</strong></p>
+
+<p>Because you can combine <em>n</em> profiles at the sime time. So, which one to use as the enviroment reference? That is why I decided to use an specific entry for that.</p>
+
+<p>Below the initial function being called by immutant. Here goes intereting stuff.
+One of them is the use of <a href="http://clojuredocs.org/clojure_core/clojure.core/in-ns"><code>in-ns</code></a>, <a href="http://clojuredocs.org/clojure_core/clojure.core/use"><code>use</code></a> and <a href="http://clojuredocs.org/clojure_core/clojure.core/require"><code>require</code></a>. This is awesome because I'm calling what could be "equivalent to a java import" in the middle of a clojure file, and even better: I'm doing this to another namespace that differs from the code that is actually calling the "imports".</p>
+
+<p>So, <code>in-ns</code> will create the namespace <code>tserver.config</code> and "import" the appropriate functions and namespaces.</p>
+
+<p>The <code>init</code> funtion here will simply call the <code>load-config</code>, that is in charge of loading the config file. Look:</p>
+
+<p>``` clojure Silly Project
+(ns tserver.init
+  (:use [clojure.tools.logging :only (info error debug)]))</p>
+
+<p>(defn setup-config-ns [e]</p>
+
+<pre><code>(binding [*ns* *ns*]
+  (in-ns 'tserver.config)
+  (refer-clojure)
+  (use '[clojure.main :only (load-script)])
+  (require '[immutant.messaging :as msg]
+           '[immutant.web :as web]
+           '[immutant.util :as util])))
+</code></pre>
+
+<p>(defn load-config
+  "Attempts to evaluate the specified env file defined by <code>:env</code>
+  in the <code>project.clj</code>. <code>:env</code> is a immutant custom config.
+  <code>:env</code> MUST be a keyword: Ex.: :dev, :prod :office
+  Uses :dev by default.
+  Note: The absence of the requrested file will prevent the server to start.
+  These siles MUST be located at `src/tserver/config/%s.clj"
+  []
+  (binding [<em>ns</em> <em>ns</em>]</p>
+
+<pre><code>(in-ns 'tserver.config)
+(let [ev (get-in (immutant.registry/get :config) [:env] :dev)
+        config-file (format "src/tserver/config/%s.clj" (name ev))]
+  (setup-config-ns ev)
+  (info "Using config file " config-file)
+  (load-file config-file)
+  (immutant.registry/put :env ev))))
+</code></pre>
+
+<p>(defn init []
+  ;;may do some stuff before
+  (load-config)) ;;may do some stuff after
+```</p>
+
+<p>And finally, our config file containing the required configurations. It can be anything you need.</p>
+
+<p>``` clojure Silly Project
+(defn handler</p>
+
+<pre><code>[r] ((build-routes) r))
+</code></pre>
+
+<p>(web/start handler
+  :reload true)</p>
+
+<p>(msg/start "/queue/delivery.status")</p>
+
+<p>(msg/respond "/queue/delivery.status" handle-delivery-status)</p>
+
+<p>(register-job #'import-job)
+(register-job #'check-import)
+;register-job is function not provided here
+;since the intention is tho show the configuration solution
+```</p>
+
+<p>Now, to deploy and start the app with the given profile we simply do:</p>
+
+<p><code>bash
+lein with-profile dev immutant deploy
+lein immutant run
+</code></p>
+
+<p>Voila! This will load your <code>dev.clj</code> file and set up your queues, jobs, web-context, whatever you want. This is useful, and I would risk to say mandatory today. You probably have sereval environments where your app resides before going to prodution, and each of them with different names, addresses, pool sizes, queue names, database to connect, etc. And you can easily give to your app the intelligence to load what is more appropriate.</p>
+
+<p><p>Don't forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+</p>
+]]></content>
+  </entry>
+  
+</feed>

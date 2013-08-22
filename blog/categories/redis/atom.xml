@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: redis | Paulo Suzart Blog]]></title>
+  <link href="http://paulosuzart.github.com/blog/categories/redis/atom.xml" rel="self"/>
+  <link href="http://paulosuzart.github.com/"/>
+  <updated>2013-08-22T00:04:42-03:00</updated>
+  <id>http://paulosuzart.github.com/</id>
+  <author>
+    <name><![CDATA[Paulo Suzart]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[My Own REDIS Types - text - Notation]]></title>
+    <link href="http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-text-notation/"/>
+    <updated>2011-12-11T18:11:00-02:00</updated>
+    <id>http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-text-notation</id>
+    <content type="html"><![CDATA[<p>Some seconds after the <a href="http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-notation/">last post</a>, <a href="http://twitter.com/paraseba">@paraseba</a> commented that a text version of this notation may be even more helpful.</p>
+
+<p>Here it is:</p>
+
+<ul>
+<li><code>$</code> means provided by some interaction with redis.</li>
+<li><code>*</code> means provided by user.</li>
+<li><code>key</code> represents a redis KEY with the value set by <code>SET</code>.</li>
+<li><code>(listkey)</code> represents a redis LIST with elements manipulated by <code>LPUSH</code> and so on.</li>
+<li><code>{hashkey [key values]}</code> represents a redis <code>HASH</code> with data set by <code>HSET</code> or <code>HMSET</code>.</li>
+<li><code>#{setkey data}</code> represents a set or sorted set.</li>
+<li><code>as $varname</code> may be used for situations where <code>INCR</code> is used to generate an ID.</li>
+</ul>
+
+
+<p>The last post user creation process may be written as:</p>
+
+<pre><code>users:next as $uid
+{users:$uid data}
+#{users:pending:confirmation $uid)
+#{messages:welcome $uid}
+(users:send:mail *mail)
+</code></pre>
+
+<p>An instance of this process would be:</p>
+
+<pre><code>users:next ;; suppose 21 as result
+{users:21 [name Abraao mail somemailhere@gmail.com status pending-mail-confirmation]}
+#{users:pending:confirmation 21)
+#{messages:welcome 21}
+(users:send:mail somemailhere@gmail.com)
+</code></pre>
+
+<p>It is the form I'm using as doc strings in a namespace. It looks great with <a href="http://www.fogus.me/fun/marginalia/">Marginalia</a>.</p>
+
+<p><p>Don't forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My own REDIS types notation]]></title>
+    <link href="http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-notation/"/>
+    <updated>2011-12-11T17:20:00-02:00</updated>
+    <id>http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-notation</id>
+    <content type="html"><![CDATA[<p>One of the greatest <a href="http://en.wikipedia.org/wiki/NoSQL">NoSQL</a> <a href="http://en.wikipedia.org/wiki/NoSQL#Key-value_store">key-value</a> databases I value most, is <a href="http://redis.io/">redis</a>. It is simple, fast and tasty.</p>
+
+<p>You interact with redis through its protocol. They are divided by commands that you can apply to its different data structures. These structures are Key, String, Hashes, Lists, Sets, Sorted Sets and channels (this one used for <a href="http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">pub/sub pattern</a>).</p>
+
+<p>Since redis is key-value, it means you can store only keys with values. Right? It may sound bad at the beginning, but you get the way as you try. I'm just a newbe in redis world and I'm feeling comfortable with it.</p>
+
+<p>So, due to its key-value nature you should create some structures around you main structure to help you query your data. Suppose you are using a redis <code>HASH</code> to store user information. In a javascript notation:</p>
+
+<pre><code>HMSET  users:21 name Abraão mail somemailhere@gmail.com status pending-mail-confirmation
+</code></pre>
+
+<p><code>HMSET</code> is a command to store all the <code>HASH</code> entries into a <code>HASH</code> identified by <code>user:21</code> key. And for some reason, your system get all users pending mail confirmation and send them a remember. There is no way to get all the users that has mail confirmation pending other than check every user status, what would be expensive. A helper structure may save you from this.</p>
+
+<pre><code>SADD users:pending:confirmation 21
+</code></pre>
+
+<p>Bingo. Now your background process can pick up users to remember mail confirmation from the <code>SET</code> identified by <code>users:pending:confirmation</code> key.</p>
+
+<p>Suppose you also want to show a welcome message to the user in the first time it visits you. You may use another helper structure.</p>
+
+<pre><code>SADD messages:welcome 21
+</code></pre>
+
+<p>Thus, your system queries a <code>SET</code> identified by <code>messages:welcome</code> key to check if it should show a welcome message to the user. And finally, at the moment of user's creation, your system wants to send some information through mail also in a back ground process. Again a helper structure.</p>
+
+<pre><code>LPUSH users:send:mail somemailhere@gmail.com
+</code></pre>
+
+<p>Lot of thing to just create a user. Now imagine a big code base and even complex interactions with other helper structures like sorted sets to store information related to age, date, etc. It was my situation last week while interacting with redis.</p>
+
+<p>To make things clear and easy to remember and document. I created a simple, yet helpful (for me at least) notation to document redis structures and the sequence of interactions. Te symbols are:</p>
+
+<p><img src="https://s3.amazonaws.com/suzart.blogs.posts/redislayout/Slide1.jpg" alt="redis Types Notation" /></p>
+
+<p>Now our user's creation process using the notation we have:</p>
+
+<p><img src="https://s3.amazonaws.com/suzart.blogs.posts/redislayout/Slide4.jpg" alt="User's creation interactions" /></p>
+
+<p>It is simple and is helping a lot. Another good thing I started to do is to write queries in plain english (portuguese actually :)) to help identify which types of queries a structure is helping me to answer. To see a text version of it, visit this <a href="http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-text-notation/">new post</a>.</p>
+
+<p>I'm using <a href="https://github.com/mmcgrana/clj-redis/">clj-redis</a> interact with redis.</p>
+
+<p><p>Don't forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+</p>
+]]></content>
+  </entry>
+  
+</feed>

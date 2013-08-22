@@ -1,0 +1,546 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Monitoring ec2 with clojure and Server-Stats - Paulo Suzart Blog</title>
+  <meta name="author" content="Paulo Suzart">
+
+  
+  <meta name="description" content="Intro Before going further, please take a look at Parallel SSH and system monitoring in Clojure. Combining my need for monitoring an EC2 instance &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://paulosuzart.github.com/blog/2012/04/17/monitoring-ec2-with-clojure-and-server-stats">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Paulo Suzart Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26676810-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Paulo Suzart Blog</a></h1>
+  
+    <h2>Functional thoughts.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:paulosuzart.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Monitoring Ec2 With Clojure and Server-Stats</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+  
+
+<time datetime="2012-04-17T17:25:00-03:00" pubdate>Apr 17<span>th</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>Intro</h2>
+
+<p>Before going further, please take a look at <a href="http://info.rjmetrics.com/blog/bid/54114/Parallel-SSH-and-system-monitoring-in-Clojure">Parallel SSH and system monitoring in Clojure</a>.</p>
+
+<p>Combining my need for monitoring an EC2 instance running <a href="http://nginx.org">nginx</a>, <a href="http://www.atlassian.com/software/bamboo/overview">bamboo</a> and <a href="http://www.jfrog.com/products.php">artifactory</a>, with my will to code in clojure, I have decided to use <a href="https://github.com/paulosuzart/Server-Stats">server-stats</a> to basic monitor my server via ssh.</p>
+
+<p>EC2 supports interactions using SSH without need its <code>.pem</code> file if you add your public key to it. Take a look <a href="http://craiccomputing.blogspot.com.br/2009/07/rails-git-capistrano-ec2-and-ssh.html">here</a> to see how.</p>
+
+<p>These are dead simple commands and of course you should use more serious ones for critical services.</p>
+
+<p>The <code>server-stats</code> config file is actually a clojure file named <code>server-stats.cfg</code> where you put some definitions for monitoring. The strength of server-stats is the running it against several server. But in this case, I have just one.</p>
+
+<h2>The config file</h2>
+
+<figure class='code'><figcaption><span>server-stats.cfg</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">import </span><span class="nv">org</span><span class="o">.</span><span class="nv">apache</span><span class="o">.</span><span class="nv">commons</span><span class="o">.</span><span class="nv">mail</span><span class="o">.</span><span class="nv">SimpleEmail</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">defn </span><span class="nv">send-mail</span> <span class="p">[</span><span class="nv">alert-msg</span> <span class="nv">server-name</span> <span class="nv">cmd-output</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">doto </span><span class="p">(</span><span class="nf">SimpleEmail</span><span class="o">.</span><span class="p">)</span>
+</span><span class='line'>     <span class="c1">;; ... my email configs</span>
+</span><span class='line'>      <span class="p">(</span><span class="o">.</span><span class="nv">send</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-alert-handler</span> <span class="nv">email</span> <span class="p">[</span><span class="nv">alert-msg</span> <span class="nv">server-name</span> <span class="nv">cmd-output</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">send-mail</span> <span class="nv">alert-msg</span> <span class="nv">server-name</span> <span class="nv">cmd-output</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">set-ssh-username</span> <span class="s">&quot;ec2-user&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-server-group</span> <span class="nv">web-servers</span>
+</span><span class='line'>  <span class="p">[</span><span class="s">&quot;myserver.mydomain.com&quot;</span><span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">disk</span>
+</span><span class='line'>  <span class="p">{</span><span class="nv">:doc</span> <span class="s">&quot;Get the disk usage using df&quot;</span>
+</span><span class='line'>   <span class="nv">:cmd</span> <span class="s">&quot;df -h&quot;</span>
+</span><span class='line'>   <span class="nv">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+</span><span class='line'>   <span class="nv">:alerts</span> <span class="p">[{</span><span class="nv">:column</span> <span class="s">&quot;Use%&quot;</span>
+</span><span class='line'>             <span class="nv">:value-type</span> <span class="nv">percent</span>
+</span><span class='line'>             <span class="nv">:handlers</span> <span class="p">[</span><span class="nv">email</span><span class="p">]</span>
+</span><span class='line'>             <span class="nv">:msg</span> <span class="s">&quot;Disk space over 55% full&quot;</span>
+</span><span class='line'>             <span class="nv">:trigger</span> <span class="p">(</span><span class="nb">&gt; </span><span class="mi">55</span><span class="p">)}]})</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">is-nginx</span>
+</span><span class='line'>  <span class="p">{</span><span class="nv">:doc</span> <span class="s">&quot;Is nginx Running?&quot;</span>
+</span><span class='line'>   <span class="nv">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+</span><span class='line'>   <span class="nv">:cmd</span> <span class="s">&quot;[[ -z `ps aux | grep nginx` ]] &amp;&amp; echo &#39;false&#39; || echo &#39;true&#39;&quot;</span>
+</span><span class='line'>   <span class="nv">:alerts</span> <span class="p">[{</span><span class="nv">:value-type</span> <span class="nv">bool</span>
+</span><span class='line'>             <span class="nv">:msg</span> <span class="s">&quot;Nginx is not running&quot;</span>
+</span><span class='line'>             <span class="nv">:handlers</span> <span class="p">[</span><span class="nv">email</span><span class="p">]</span>
+</span><span class='line'>             <span class="nv">:trigger</span> <span class="p">(</span><span class="nb">= </span><span class="nv">false</span><span class="p">)}]})</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">app-log</span>
+</span><span class='line'>  <span class="p">{</span><span class="nv">:doc</span> <span class="s">&quot;Get last 20 entries in todays app-servers log&quot;</span>
+</span><span class='line'>   <span class="nv">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+</span><span class='line'>   <span class="nv">:cmd</span> <span class="s">&quot;tail -20 /home/ec2-user/artifactory-2.5.1.1/logs/access.log&quot;</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">http-errors</span>
+</span><span class='line'>  <span class="p">{</span><span class="nv">:doc</span> <span class="s">&quot;Show recent non-200s requests&quot;</span>
+</span><span class='line'>   <span class="nv">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+</span><span class='line'>   <span class="nv">:cmd</span> <span class="s">&quot;tail -200 /var/log/nginx/error.log&quot;</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">is-artifactory</span>
+</span><span class='line'>  <span class="p">{</span><span class="nv">:doc</span> <span class="s">&quot;Is Artifactory Running?&quot;</span>
+</span><span class='line'>   <span class="nv">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+</span><span class='line'>   <span class="nv">:cmd</span> <span class="s">&quot;[[ -z `ps aux | grep org.artifactory.standalone.main.Main` ]] &amp;&amp; echo &#39;false&#39; || echo &#39;true&#39;&quot;</span>
+</span><span class='line'>   <span class="nv">:alerts</span> <span class="p">[{</span><span class="nv">:value-type</span> <span class="nv">bool</span>
+</span><span class='line'>             <span class="nv">:msg</span> <span class="s">&quot;Artifactory is not running&quot;</span>
+</span><span class='line'>             <span class="nv">:handlers</span> <span class="p">[</span><span class="nv">email</span><span class="p">]</span>
+</span><span class='line'>             <span class="nv">:trigger</span> <span class="p">(</span><span class="nb">= </span><span class="nv">false</span><span class="p">)</span>
+</span><span class='line'>             <span class="nv">:mute-for</span> <span class="mi">1860000</span><span class="p">}]})</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">is-bamboo</span>
+</span><span class='line'>  <span class="p">{</span><span class="nv">:doc</span> <span class="s">&quot;Is bamboo Running?&quot;</span>
+</span><span class='line'>   <span class="nv">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+</span><span class='line'>   <span class="nv">:cmd</span> <span class="s">&quot;[[ -z `ps aux | grep com.attlassian.bamboo.server.Server` ]] &amp;&amp; echo &#39;false&#39; || echo &#39;true&#39;&quot;</span>
+</span><span class='line'>   <span class="nv">:alerts</span> <span class="p">[{</span><span class="nv">:value-type</span> <span class="nv">bool</span>
+</span><span class='line'>             <span class="nv">:msg</span> <span class="s">&quot;Bamboo is not running&quot;</span>
+</span><span class='line'>             <span class="nv">:handlers</span> <span class="p">[</span><span class="nv">email</span><span class="p">]</span>
+</span><span class='line'>             <span class="nv">:trigger</span> <span class="p">(</span><span class="nb">= </span><span class="nv">false</span><span class="p">)</span>
+</span><span class='line'>             <span class="nv">:mute-for</span> <span class="mi">1860000</span><span class="p">}]})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Almost all the commands were borrowed from the sample <code>cfg</code> file. A small but important detail is the key <code>:mute-for</code> in alerts. As you can see, the above link to server-stats points to my fork of it.</p>
+
+<p>The <a href="https://github.com/RJMetrics/Server-Stats/pull/2"><code>mute-for</code></a> key adds the capability to prevent any scheduled <code>ssh</code> commands with short intervals to flood your alert communication channel (e-mail in this <code>cfg</code>). The alerts are sent only if the <code>mute-for</code> time has been elapsed.</p>
+
+<p>This is done via empty files for controlling the alerts. <code>server-stats</code> checks the <code>lastModified</code> property of the file of a given alert, and activates the it only if the <code>mute-for</code> interval is over.</p>
+
+<p>To make server-stats send alerts before the <code>:mute-for</code> time, you can just delete the file named <code>.{Sanitized_alert_message}</code>. The sanitized message is just the message alert message with no characters as underlines. I should consider a hash version of it to avoid big names for big messages, but it is ok for now.</p>
+
+<p><strong>Note that <code>mute-for</code> controls the alert activation per <code>cmd</code> message.</strong></p>
+
+<h2>Use cron</h2>
+
+<p>Of course you can&#8217;t spend your time issuing ssh commands by hand. So, there are four <code>cron</code> entries for scheduled ssh interactions:</p>
+
+<figure class='code'><figcaption><span>crontab</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>0 7 * * * <span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name &#39;ssh*&#39; | head -n 1)&quot;</span> ~/workspace/p/Server-Stats/run.sh disk -log
+</span><span class='line'>*/10 * * * * <span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name &#39;ssh*&#39; | head -n 1)&quot;</span> ~/workspace/p/Server-Stats/run.sh is-nginx -log
+</span><span class='line'>*/30 * * * * <span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name &#39;ssh*&#39; | head -n 1)&quot;</span> ~/workspace/p/Server-Stats/run.sh is-artifactory -log
+</span><span class='line'>*/30 * * * * <span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name &#39;ssh*&#39; | head -n 1)&quot;</span> ~/workspace/p/Server-Stats/run.sh is-bamboo -log
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>run.sh</code> is pretty simple. Just wraps <code>java -jar</code> to server-stats. Some times I want to log the ssh output, so I can pass the <code>-log</code> option and the output goes to <code>log/cmd</code>.</p>
+
+<figure class='code'><figcaption><span>run.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'><span class="c"># Wraps the start of server-stats. If -log is passed, will save</span>
+</span><span class='line'><span class="c"># the resulting execution to log/cmd</span>
+</span><span class='line'><span class="c"># paulosuzart@gmail.com</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># java -jar should run from inside the server-stats dir</span>
+</span><span class='line'><span class="nb">cd</span> ~/workspace/p/Server-Stats
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> -z <span class="nv">$1</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;usage: run cmd [-log]&quot;</span>
+</span><span class='line'>  <span class="nb">exit </span>2
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">COMM</span><span class="o">=</span><span class="s2">&quot;java -jar server-stats-0.1-standalone.jar -a $1&quot;</span>
+</span><span class='line'><span class="k">if</span> <span class="o">[[</span> ! -z <span class="nv">$2</span> <span class="o">&amp;&amp;</span> <span class="s2">&quot;-log&quot;</span><span class="o">=</span><span class="nv">$2</span> <span class="o">]]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;logging to log/$1.out&quot;</span>
+</span><span class='line'>  <span class="nv">$COMM</span><span class="o">=</span><span class="nv">$COMM</span>:<span class="s2">&quot; &gt; log/$1.out&quot;</span>
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">echo</span> <span class="nv">$COMM</span>
+</span><span class='line'><span class="nv">$COMM</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Don&#8217;t ask me why, but <code>ssh</code> does not behave the way you except when called from a <code>cron</code> command. But I managed to find <a href="http://webcache.googleusercontent.com/search?q=cache:7h4hOIGZG-wJ:www.codealpha.net/163/cron-ssh-and-rsync-and-key-with-passphrase-ubuntu/+&amp;cd=1&amp;hl=en&amp;ct=clnk&amp;client=ubuntu">this article</a> that helped a lot.</p>
+
+<p>This <code>crontable</code> is configured on my laptop and any strange behavior is sent to my e-mail immediately. The other <code>cmds</code> (<code>app-log</code>, <code>http-errors</code>) are used directly with <code>./run.sh cmd</code> to see the output.</p>
+
+<h2>Conclusion</h2>
+
+<p>Of course the <code>mute-for</code> feature <a href="https://github.com/RJMetrics/Server-Stats/pull/2">might be merged</a> to the original repo. So, I would recommend you to use the original version of server-stats.</p>
+
+<p>If you need simple monitoring features or more elaborated ones, it is up to you. Just use server-stats as the  base for it.</p>
+
+<h2>Update</h2>
+
+<p>This post was republished <a href="http://www.dzone.com">Dzone</a>. See <a href="http://architects.dzone.com/articles/how-monitoring-ec2-clojure-and">here</a>.</p>
+
+<p>Don&#8217;t forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Paulo Suzart</span></span>
+
+      
+
+
+
+
+  
+
+<time datetime="2012-04-17T17:25:00-03:00" pubdate>Apr 17<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/aws/'>aws</a>, <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/cloud/'>cloud</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://paulosuzart.github.com/blog/2012/04/17/monitoring-ec2-with-clojure-and-server-stats/" data-via="paulosuzart" data-counturl="http://paulosuzart.github.com/blog/2012/04/17/monitoring-ec2-with-clojure-and-server-stats/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/04/11/sorting-with-clojure-comparator/" title="Previous Post: sorting with clojure comparator">&laquo; sorting with clojure comparator</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/07/09/tcp-server-with-clojure-aleph-and-gloss/" title="next Post: TCP Server with Clojure Aleph and Gloss">TCP Server with Clojure Aleph and Gloss &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/21/docker-plus-ansible/">Docker + Ansible</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/20/janus-plus-ack-grep-plus-fish-shell-tools-to-rule-everything/">Janus + ack-grep + fish shell: Tools to rule everything</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/07/configuring-clojure-immutant-by-environment/">Configuring Clojure Immutant by environment</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/09/tcp-server-with-clojure-aleph-and-gloss/">TCP Server with Clojure Aleph and Gloss</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/17/monitoring-ec2-with-clojure-and-server-stats/">Monitoring ec2 with clojure and Server-Stats</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/paulosuzart">@paulosuzart</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'paulosuzart',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("paulosuzart", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/paulosuzart" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @paulosuzart</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Paulo Suzart -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'paulosuzartblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://paulosuzart.github.com/blog/2012/04/17/monitoring-ec2-with-clojure-and-server-stats';
+        var disqus_url = 'http://paulosuzart.github.com/blog/2012/04/17/monitoring-ec2-with-clojure-and-server-stats';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

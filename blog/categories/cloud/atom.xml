@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: cloud | Paulo Suzart Blog]]></title>
+  <link href="http://paulosuzart.github.com/blog/categories/cloud/atom.xml" rel="self"/>
+  <link href="http://paulosuzart.github.com/"/>
+  <updated>2013-08-22T00:04:42-03:00</updated>
+  <id>http://paulosuzart.github.com/</id>
+  <author>
+    <name><![CDATA[Paulo Suzart]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Monitoring ec2 with clojure and Server-Stats]]></title>
+    <link href="http://paulosuzart.github.com/blog/2012/04/17/monitoring-ec2-with-clojure-and-server-stats/"/>
+    <updated>2012-04-17T17:25:00-03:00</updated>
+    <id>http://paulosuzart.github.com/blog/2012/04/17/monitoring-ec2-with-clojure-and-server-stats</id>
+    <content type="html"><![CDATA[<h2>Intro</h2>
+
+<p>Before going further, please take a look at <a href="http://info.rjmetrics.com/blog/bid/54114/Parallel-SSH-and-system-monitoring-in-Clojure">Parallel SSH and system monitoring in Clojure</a>.</p>
+
+<p>Combining my need for monitoring an EC2 instance running <a href="http://nginx.org">nginx</a>, <a href="http://www.atlassian.com/software/bamboo/overview">bamboo</a> and <a href="http://www.jfrog.com/products.php">artifactory</a>, with my will to code in clojure, I have decided to use <a href="https://github.com/paulosuzart/Server-Stats">server-stats</a> to basic monitor my server via ssh.</p>
+
+<p>EC2 supports interactions using SSH without need its <code>.pem</code> file if you add your public key to it. Take a look <a href="http://craiccomputing.blogspot.com.br/2009/07/rails-git-capistrano-ec2-and-ssh.html">here</a> to see how.</p>
+
+<p>These are dead simple commands and of course you should use more serious ones for critical services.</p>
+
+<p>The <code>server-stats</code> config file is actually a clojure file named <code>server-stats.cfg</code> where you put some definitions for monitoring. The strength of server-stats is the running it against several server. But in this case, I have just one.</p>
+
+<h2>The config file</h2>
+
+<p>``` clojure server-stats.cfg</p>
+
+<p>(import org.apache.commons.mail.SimpleEmail)</p>
+
+<p>(defn send-mail [alert-msg server-name cmd-output]</p>
+
+<pre><code>(doto (SimpleEmail.)
+ ;; ... my email configs
+  (.send)))
+</code></pre>
+
+<p>(add-alert-handler email [alert-msg server-name cmd-output]
+  (send-mail alert-msg server-name cmd-output))</p>
+
+<p>(set-ssh-username "ec2-user")</p>
+
+<p>(add-server-group web-servers
+  ["myserver.mydomain.com"])</p>
+
+<p>(add-cmd disk
+  {:doc "Get the disk usage using df"
+   :cmd "df -h"
+   :servers [web-servers]
+   :alerts [{:column "Use%"</p>
+
+<pre><code>         :value-type percent
+         :handlers [email]
+         :msg "Disk space over 55% full"
+         :trigger (&gt; 55)}]})
+</code></pre>
+
+<p>(add-cmd is-nginx
+  {:doc "Is nginx Running?"
+   :servers [web-servers]
+   :cmd "[[ -z <code>ps aux | grep nginx</code> ]] &amp;&amp; echo 'false' || echo 'true'"
+   :alerts [{:value-type bool</p>
+
+<pre><code>         :msg "Nginx is not running"
+         :handlers [email]
+         :trigger (= false)}]})
+</code></pre>
+
+<p>(add-cmd app-log
+  {:doc "Get last 20 entries in todays app-servers log"
+   :servers [web-servers]
+   :cmd "tail -20 /home/ec2-user/artifactory-2.5.1.1/logs/access.log"})</p>
+
+<p>(add-cmd http-errors
+  {:doc "Show recent non-200s requests"
+   :servers [web-servers]
+   :cmd "tail -200 /var/log/nginx/error.log"})</p>
+
+<p>(add-cmd is-artifactory
+  {:doc "Is Artifactory Running?"
+   :servers [web-servers]
+   :cmd "[[ -z <code>ps aux | grep org.artifactory.standalone.main.Main</code> ]] &amp;&amp; echo 'false' || echo 'true'"
+   :alerts [{:value-type bool</p>
+
+<pre><code>         :msg "Artifactory is not running"
+         :handlers [email]
+         :trigger (= false)
+         :mute-for 1860000}]})
+</code></pre>
+
+<p>(add-cmd is-bamboo
+  {:doc "Is bamboo Running?"
+   :servers [web-servers]
+   :cmd "[[ -z <code>ps aux | grep com.attlassian.bamboo.server.Server</code> ]] &amp;&amp; echo 'false' || echo 'true'"
+   :alerts [{:value-type bool</p>
+
+<pre><code>         :msg "Bamboo is not running"
+         :handlers [email]
+         :trigger (= false)
+         :mute-for 1860000}]})
+</code></pre>
+
+<p>```</p>
+
+<p>Almost all the commands were borrowed from the sample <code>cfg</code> file. A small but important detail is the key <code>:mute-for</code> in alerts. As you can see, the above link to server-stats points to my fork of it.</p>
+
+<p>The <a href="https://github.com/RJMetrics/Server-Stats/pull/2"><code>mute-for</code></a> key adds the capability to prevent any scheduled <code>ssh</code> commands with short intervals to flood your alert communication channel (e-mail in this <code>cfg</code>). The alerts are sent only if the <code>mute-for</code> time has been elapsed.</p>
+
+<p>This is done via empty files for controlling the alerts. <code>server-stats</code> checks the <code>lastModified</code> property of the file of a given alert, and activates the it only if the <code>mute-for</code> interval is over.</p>
+
+<p>To make server-stats send alerts before the <code>:mute-for</code> time, you can just delete the file named <code>.{Sanitized_alert_message}</code>. The sanitized message is just the message alert message with no characters as underlines. I should consider a hash version of it to avoid big names for big messages, but it is ok for now.</p>
+
+<p><strong>Note that <code>mute-for</code> controls the alert activation per <code>cmd</code> message.</strong></p>
+
+<h2>Use cron</h2>
+
+<p>Of course you can't spend your time issuing ssh commands by hand. So, there are four <code>cron</code> entries for scheduled ssh interactions:</p>
+
+<p>``` bash crontab</p>
+
+<p>0 7 * * * SSH_AUTH_SOCK="$(find /tmp/keyring<em>/ -type s -user paulosuzart -group paulosuzart  -name 'ssh</em>' | head -n 1)" ~/workspace/p/Server-Stats/run.sh disk -log
+<em>/10 * * * * SSH_AUTH_SOCK="$(find /tmp/keyring</em>/ -type s -user paulosuzart -group paulosuzart  -name 'ssh<em>' | head -n 1)" ~/workspace/p/Server-Stats/run.sh is-nginx -log
+</em>/30 * * * * SSH_AUTH_SOCK="$(find /tmp/keyring<em>/ -type s -user paulosuzart -group paulosuzart  -name 'ssh</em>' | head -n 1)" ~/workspace/p/Server-Stats/run.sh is-artifactory -log
+<em>/30 * * * * SSH_AUTH_SOCK="$(find /tmp/keyring</em>/ -type s -user paulosuzart -group paulosuzart  -name 'ssh*' | head -n 1)" ~/workspace/p/Server-Stats/run.sh is-bamboo -log</p>
+
+<p>```</p>
+
+<p>The <code>run.sh</code> is pretty simple. Just wraps <code>java -jar</code> to server-stats. Some times I want to log the ssh output, so I can pass the <code>-log</code> option and the output goes to <code>log/cmd</code>.</p>
+
+<p>``` bash run.sh</p>
+
+<h1>!/bin/bash</h1>
+
+<h1>Wraps the start of server-stats. If -log is passed, will save</h1>
+
+<h1>the resulting execution to log/cmd</h1>
+
+<h1>paulosuzart@gmail.com</h1>
+
+<h1>java -jar should run from inside the server-stats dir</h1>
+
+<p>cd ~/workspace/p/Server-Stats</p>
+
+<p>if [ -z $1 ]; then
+  echo "usage: run cmd [-log]"
+  exit 2
+fi</p>
+
+<p>COMM="java -jar server-stats-0.1-standalone.jar -a $1"
+if [[ ! -z $2 &amp;&amp; "-log"=$2 ]]; then
+  echo "logging to log/$1.out"
+  $COMM=$COMM:" > log/$1.out"
+fi</p>
+
+<p>echo $COMM
+$COMM</p>
+
+<p>```</p>
+
+<p>Don't ask me why, but <code>ssh</code> does not behave the way you except when called from a <code>cron</code> command. But I managed to find <a href="http://webcache.googleusercontent.com/search?q=cache:7h4hOIGZG-wJ:www.codealpha.net/163/cron-ssh-and-rsync-and-key-with-passphrase-ubuntu/+&amp;cd=1&amp;hl=en&amp;ct=clnk&amp;client=ubuntu">this article</a> that helped a lot.</p>
+
+<p>This <code>crontable</code> is configured on my laptop and any strange behavior is sent to my e-mail immediately. The other <code>cmds</code> (<code>app-log</code>, <code>http-errors</code>) are used directly with <code>./run.sh cmd</code> to see the output.</p>
+
+<h2>Conclusion</h2>
+
+<p>Of course the <code>mute-for</code> feature <a href="https://github.com/RJMetrics/Server-Stats/pull/2">might be merged</a> to the original repo. So, I would recommend you to use the original version of server-stats.</p>
+
+<p>If you need simple monitoring features or more elaborated ones, it is up to you. Just use server-stats as the  base for it.</p>
+
+<h2>Update</h2>
+
+<p>This post was republished <a href="http://www.dzone.com">Dzone</a>. See <a href="http://architects.dzone.com/articles/how-monitoring-ec2-clojure-and">here</a>.</p>
+
+<p><p>Don't forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+</p>
+]]></content>
+  </entry>
+  
+</feed>

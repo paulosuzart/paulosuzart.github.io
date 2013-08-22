@@ -1,0 +1,1627 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Paulo Suzart Blog]]></title>
+  <link href="http://paulosuzart.github.com/atom.xml" rel="self"/>
+  <link href="http://paulosuzart.github.com/"/>
+  <updated>2013-08-22T00:04:42-03:00</updated>
+  <id>http://paulosuzart.github.com/</id>
+  <author>
+    <name><![CDATA[Paulo Suzart]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Docker + Ansible]]></title>
+    <link href="http://paulosuzart.github.com/blog/2013/08/21/docker-plus-ansible/"/>
+    <updated>2013-08-21T23:21:00-03:00</updated>
+    <id>http://paulosuzart.github.com/blog/2013/08/21/docker-plus-ansible</id>
+    <content type="html"><![CDATA[<p>Hi! This form for blog posts title is working! Liked it.</p>
+
+<p>Again some time without writting. And this time I&#8217;m writting about
+something brand new: <a href="http://www.docker.io/">Docker</a>.</p>
+
+<p>It lives in the Virtualization contex. You can rear more at <a href="http://docs.docker.io/en/latest/">docker
+documentation</a>. And from my point of
+view, it comes to kill some important challenges me and you have been
+facing over years when talking about delivering software.</p>
+
+<h1>Paas</h1>
+
+<p>As <a href="http://blog.docker.io/2013/07/excited-to-be-joining-the-great-teams-at-dotcloud-docker-as-ceo/">stated around</a>
+Paas often fail to cover every necessity you migh have. Because they are
+closed black boxes where you &#8220;commit your code&#8221; in, or alike. I really
+like <a href="http://heroku.com">heroku</a> and
+<a href="https://www.dotcloud.com/">dotCloud</a>, but yes, I have apps that can&#8217;t
+run there.</p>
+
+<h1>Ordinary virtualization, another fit for Docker</h1>
+
+<p>I&#8217;ve been using
+<a href="http://www.citrix.com.br/products/xenserver/overview.html">XenServer</a>
+to handle massive amount of requests distributed over dozens of machines
+and it works pretty well. But after a while I have some extra
+&#8220;disadvantages&#8221; (I&#8217;m puting quotes because it is really specific) to add
+to <a href="https://github.com/dotcloud/docker">this list</a>. Here they are:</p>
+
+<ul>
+<li> The sysadmin should be involved since he needs to access the Xen Center in order to create machines</li>
+<li> The developer needs to inform beforehand the amount of CPU cores, disk size and memory</li>
+<li> This involves an all new machine created with a full operating system, configurations, etc. No time for that</li>
+<li> Sysadmins are busy and don&#8217;t like to give you attention</li>
+</ul>
+
+
+<p>Not only that, but many cases crating a full virtualized machine to put
+inside one wordpress, or few simple stuff doesn&#8217;t pay off. For this sort
+fo situation I&#8217;m addopting Docker.</p>
+
+<p>The main advantages of container virtualization (like Docker) are:</p>
+
+<ul>
+<li> Concurrent deployment of the same app among developers. So no more single testing environment</li>
+<li> Platform-as-a-Service like environment. You don&#8217;t need to think about anything else but run the process in charge of your application. No worries with operating system or an entire machine</li>
+<li> Make your app immediately available</li>
+<li> Run it over a virtualized Xen machine and you still hold all advantages from XEN in the host level (snapshot, live migration, etc, volume management)</li>
+</ul>
+
+
+<p>Add to the recipe the idea of <a href="http://12factor.net/">12 factor apps</a> and
+you are done! Wih Docker you can create the workflow:</p>
+
+<ol>
+<li>Developer creates a Docker container, commits it to a Docker index
+or even give you a <code>Dockerfile</code>.</li>
+<li>Since it is a 12factor app, it is supposed detect
+resources configuration from the environment it runs</li>
+<li>You simply run it.</li>
+</ol>
+
+
+<p>Excellent, but still a missing piece.</p>
+
+<h1>Ansible</h1>
+
+<p>Ok, call me crazy: <em>&#8220;You&#8217;ve been using <a href="http://puppetlabs.com/">Puppet</a>
+for more than 1 and a hal year, why are you talking about
+<a href="http://www.ansibleworks.com/">Ansible?</a>&#8221;</em>. It is simple. Well, Ansible
+is also simple, but I mean, it is simple to know why Ansible. Just look
+to step 1 above. See?</p>
+
+<p>Puppet is too much for you to set up your container. Ansible is fine.
+You need to be repeatable. Although Docker allows you for commiting
+images to a repository, you still need to set up it from scract without
+forgeting any detail.</p>
+
+<p>Ansible is a direct competitor for Puppet. But with a simpler approach
+and good enough to run it on every server if you want. I tried this
+combination and approved. Awesome!</p>
+
+<p>The step one above now could be rewritten like:</p>
+
+<ol>
+<li>Developer - with the help of sysadmins or not - crates a
+container and set it up with ansible. Then commit it to the repository
+and you can even forget Docker files.</li>
+</ol>
+
+
+<p>I&#8217;m absolutely sure Docker will solve many things but bring lots of
+discussions/patterns about how to solve the problems it is supposed to.</p>
+
+<h1>Future</h1>
+
+<p>Projects like: <a href="http://coreos.com/">CoreOS</a> and <a href="https://flynn.io/">Flynn</a> literally give you the real notion about what I&#8217;m talking. I don&#8217;t think Paas or Iaas will die, absolutely not. But a new room is needed for sure.</p>
+
+<p>I have both Docker and Ansible running production stuff and hope I can
+share some <code>Playbooks</code> and <code>Docker</code> files here in the near future.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Janus + ack-grep + fish shell: Tools to rule everything]]></title>
+    <link href="http://paulosuzart.github.com/blog/2013/05/20/janus-plus-ack-grep-plus-fish-shell-tools-to-rule-everything/"/>
+    <updated>2013-05-20T19:44:00-03:00</updated>
+    <id>http://paulosuzart.github.com/blog/2013/05/20/janus-plus-ack-grep-plus-fish-shell-tools-to-rule-everything</id>
+    <content type="html"><![CDATA[<p>Hello, I&#8217;m posting as often as the men go to the moon! Sad. For a good
+reason, though. We are having great times at
+<a href="http://www.guiato.com.br">Guiato</a>.</p>
+
+<p>What I bring today is the set of tools I&#8217;m using nowadays for developing
+Grails and Clojure at work.</p>
+
+<h1>Editor (gVim with Janus)</h1>
+
+<p>I used <a href="http://www.sublimetext.com/">Sublimetext</a> for almost two years at home and at work. I really like it, but if I understood well, the version 3 is available for purchasing only. And, you know, you have a <code>vim</code> editor. Why not?</p>
+
+<p>Ok, pure <code>vi</code> is too much for most people, so put some sauce and you have
+a Sublimetext like <code>vim</code> editor, or even more powerful. Just use <a href="https://github.com/carlhuda/janus">Janus</a> for it and combine with gVim.</p>
+
+<p>It comes with nice color scheemes and lots of plugins. The plugins I use
+more often are:</p>
+
+<ol>
+<li><a href="https://github.com/kien/ctrlp.vim">CtrlP</a>. This is exactly like
+ Control P at Sublime and allows you search your entire project.</li>
+<li><a href="https://github.com/scrooloose/nerdtree">NERDTree</a>. Simply can&#8217;t
+ live without it. It is your project browser.</li>
+<li><a href="https://github.com/jeetsukumaran/vim-buffergator">BufferGator</a>.
+To browse between all your open buffers</li>
+<li><a href="https://github.com/majutsushi/tagbar">Tagbar</a>. The campion! This
+is your code outlook similar to what popular IDEs offer.</li>
+</ol>
+
+
+<p>There is a nice support for <a href="http://git-scm.com/">Git</a>, but I stay at pure command line.</p>
+
+<p>Get it up and running is fairly easy. Don&#8217;t waste time, go set up yours.</p>
+
+<p>Just a note: Tagbar works perfect for clojure, but I work mainly with
+groovy and Grails, so you can set ctags to recognize <code>.groovy</code> content:</p>
+
+<figure class='code'><figcaption><span>ctags for groovy</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>--langdef<span class="o">=</span>groovy
+</span><span class='line'>--langmap<span class="o">=</span>groovy:.groovy
+</span><span class='line'>--regex-groovy<span class="o">=</span>/^<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*<span class="o">[(</span>private|public|protected<span class="o">)</span> <span class="o">(</span> <span class="se">\t</span><span class="o">)]</span>*<span class="o">[</span>A-Za-z0-9_&lt;&gt;<span class="o">]</span>+<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>+<span class="o">([</span>A-Za-z0-9_<span class="o">]</span>+<span class="o">)[</span> <span class="se">\t</span><span class="o">]</span>*<span class="se">\(</span>.*<span class="se">\)</span><span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*<span class="o">{</span>/<span class="se">\1</span>/f,function,functions/
+</span><span class='line'>--regex-groovy<span class="o">=</span>/^<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*def<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>+<span class="o">([</span>A-Za-z0-9_<span class="o">]</span>+<span class="o">)[</span> <span class="se">\t</span><span class="o">]</span>*<span class="se">\=</span><span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*<span class="se">\{</span>/<span class="se">\1</span>/f,function,functions/
+</span><span class='line'>--regex-groovy<span class="o">=</span>/^<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*private def<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>+<span class="o">([</span>A-Za-z0-9_<span class="o">]</span>+<span class="o">)[</span> <span class="se">\t</span><span class="o">]</span>*/<span class="se">\1</span>/v,private,private variables/
+</span><span class='line'>--regex-groovy<span class="o">=</span>/^<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*def<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>+<span class="o">([</span>A-Za-z0-9_<span class="o">]</span>+<span class="o">)[</span> <span class="se">\t</span><span class="o">]</span>*/<span class="se">\1</span>/u,public,public variables/
+</span><span class='line'>--regex-groovy<span class="o">=</span>/^<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*<span class="o">[</span>abstract <span class="o">(</span> <span class="se">\t</span><span class="o">)]</span>*<span class="o">[(</span>private|public<span class="o">)</span> <span class="o">(</span> <span class="se">\t</span><span class="o">)]</span>*class<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>+<span class="o">([</span>A-Za-z0-9_<span class="o">]</span>+<span class="o">)[</span> <span class="se">\t</span><span class="o">]</span>*/<span class="se">\1</span>/c,class,classes/
+</span><span class='line'>--regex-groovy<span class="o">=</span>/^<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*<span class="o">[</span>abstract <span class="o">(</span> <span class="se">\t</span><span class="o">)]</span>*<span class="o">[(</span>private|public<span class="o">)</span> <span class="o">(</span> <span class="se">\t</span><span class="o">)]</span>*enum<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>+<span class="o">([</span>A-Za-z0-9_<span class="o">]</span>+<span class="o">)[</span> <span class="se">\t</span><span class="o">]</span>*/<span class="se">\1</span>/c,class,classes/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Search</h1>
+
+<p>CtrlP is great, but you are not always with your vim open or with
+your project open. For this, linux offers grep and find. But waht is
+<a href="http://beyondgrep.com/">beyond grep</a>? There is <code>ack-grep</code>!</p>
+
+<p>Believe me you&#8217;ll love it. It is extremely practical, fast and developer
+focused. So you don&#8217;t even need to open gVim. Just seach, find edit and
+commit!</p>
+
+<p>The extra config for <code>ack-grep</code> is a new extension for groovy type and
+also support for <a href="https://puppetlabs.com/">Puppet</a> manifests and
+templates.</p>
+
+<figure class='code'><figcaption><span>puppet types </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>--type-add<span class="o">=</span><span class="nv">groovy</span><span class="o">=</span>.gsp
+</span><span class='line'>--type-set<span class="o">=</span><span class="nv">puppet</span><span class="o">=</span>.pp,.erb
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Fishing the Shell</h1>
+
+<p>Lots of friends call me crazy because I invest time in
+<a href="http://clojure.org">Clojure</a> and use it as much as I can. Also because
+I left behind &#8220;rich&#8221; IDEs like Eclipse or IntelliJ IDEA. But come on, you
+are a senior developer and you should be able to laugh on any IDE&#8217;s
+face. Even if you were coding Java.</p>
+
+<p>But ok, I&#8217;m here to talk about <a href="http://fishshell.com/">Fish Shell</a>. This
+is my most recent acquisition. Scripting it is
+easy like candy. Check the
+<a href="http://fishshell.com/tutorial.html">tutorial</a>.</p>
+
+<p>I&#8217;ve added <a href="https://gist.github.com/paulosuzart/5614350">few scripts to</a> easy connect to a bunch of machines I have to
+everyday. And adding some color for git is also easy, check <a href="http://zogovic.com/post/37906589287/showing-git-branch-in-fish-shell-prompt">this
+post</a>.</p>
+
+<p>Well, hope you enjoy the tool set. Any news I&#8217;ll let you know. Thanks
+for reading.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Configuring Clojure Immutant by environment]]></title>
+    <link href="http://paulosuzart.github.com/blog/2013/02/07/configuring-clojure-immutant-by-environment/"/>
+    <updated>2013-02-07T08:39:00-02:00</updated>
+    <id>http://paulosuzart.github.com/blog/2013/02/07/configuring-clojure-immutant-by-environment</id>
+    <content type="html"><![CDATA[<p>Hi again! Not posting for too much long.</p>
+
+<p>Well, this time we will explore the <a href="http://clojure.org">clojure&#8217;s</a> ability to <a href="http://clojuredocs.org/clojure_core/clojure.core/load-file">load arbitrary files as code</a>.</p>
+
+<p>This is such an amazing feature, but you should be careful. Don&#8217;t start reading anyones files and evaluating them into your app. Be wise and use it for specific situation like this: I wanted to load a bunch of configurations (and even funtion calls) depending on the environment my app is running.</p>
+
+<p>To do the conditional evaluation, I decided to add an extra key to <code>:immutant</code> entry in my project definition. The entry <code>:env</code> is an <a href="http://immutant.org/documentation/current/initialization.html#sec-3-1">arbitrary configuration value</a>. Lets take a look:</p>
+
+<figure class='code'><figcaption><span>Silly Project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defproject</span> <span class="nv">tserver</span> <span class="s">&quot;0.1.0-SNAPSHOT&quot;</span>
+</span><span class='line'>  <span class="nv">:description</span> <span class="s">&quot;A foo project&quot;</span>
+</span><span class='line'>  <span class="nv">:url</span> <span class="s">&quot;http://foo.com/&quot;</span>
+</span><span class='line'>  <span class="nv">:license</span> <span class="p">{</span><span class="nv">:name</span> <span class="s">&quot;Eclipse Public License&quot;</span>
+</span><span class='line'>            <span class="nv">:url</span> <span class="s">&quot;http://www.eclipse.org/legal/epl-v10.html&quot;</span><span class="p">}</span>
+</span><span class='line'>  <span class="nv">:dependencies</span> <span class="p">[[</span><span class="nv">org</span><span class="o">.</span><span class="nv">clojure/clojure</span> <span class="s">&quot;1.4.0&quot;</span><span class="p">]</span>
+</span><span class='line'>                 <span class="p">[</span><span class="nv">compojure</span> <span class="s">&quot;1.0.2&quot;</span><span class="p">]</span>
+</span><span class='line'>                 <span class="c1">;... and many other dependecies</span>
+</span><span class='line'>  <span class="nv">:jvm-opts</span> <span class="p">[</span><span class="s">&quot;-Xmx2g&quot;</span> <span class="s">&quot;-server&quot;</span><span class="p">]</span>
+</span><span class='line'>  <span class="nv">:immutant</span> <span class="p">{</span><span class="nv">:init</span> <span class="s">&quot;tserver.init/init&quot;</span><span class="p">}</span> <span class="c1">;; our custo immutant init function</span>
+</span><span class='line'>  <span class="nv">:profiles</span> <span class="p">{</span><span class="nv">:dev</span> <span class="p">{</span><span class="nv">:immutant</span> <span class="p">{</span><span class="nv">:context-path</span> <span class="s">&quot;/&quot;</span>
+</span><span class='line'>                              <span class="nv">:nrepl-port</span> <span class="mi">4242</span>
+</span><span class='line'>                              <span class="nv">:lein-profiles</span> <span class="p">[</span><span class="nv">:dev</span><span class="p">]</span>
+</span><span class='line'>                              <span class="nv">:env</span> <span class="nv">:dev</span><span class="p">}}})</span> <span class="c1">;:dev will identify which config file to load</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>In this sample <code>project.clj</code> you find <code>:immutant</code> directly under the project definition. This key is used to, regardless of the environment, inform immutant which funtion to call when your app starts up. In this case <code>tserver.init/init</code>, that we will further analyze.</p>
+
+<p>Pay attention to the <code>:env</code> entry. It is located under <code>:immutant</code> that is under <code>[:profiles :dev]</code>. Here enters a <a href="http://leiningen.org/">leiningen&#8217;s</a> <a href="https://github.com/technomancy/leiningen/blob/stable/doc/PROFILES.md">profiles feature</a>. Where you can even specify dependencies or anything you want by profile. In this case, the immutant config is being configured by profile.</p>
+
+<p><strong>Why not simply load a config per profile?</strong></p>
+
+<p>Because you can combine <em>n</em> profiles at the sime time. So, which one to use as the enviroment reference? That is why I decided to use an specific entry for that.</p>
+
+<p>Below the initial function being called by immutant. Here goes intereting stuff.
+One of them is the use of <a href="http://clojuredocs.org/clojure_core/clojure.core/in-ns"><code>in-ns</code></a>, <a href="http://clojuredocs.org/clojure_core/clojure.core/use"><code>use</code></a> and <a href="http://clojuredocs.org/clojure_core/clojure.core/require"><code>require</code></a>. This is awesome because I&#8217;m calling what could be &#8220;equivalent to a java import&#8221; in the middle of a clojure file, and even better: I&#8217;m doing this to another namespace that differs from the code that is actually calling the &#8220;imports&#8221;.</p>
+
+<p>So, <code>in-ns</code> will create the namespace <code>tserver.config</code> and &#8220;import&#8221; the appropriate functions and namespaces.</p>
+
+<p>The <code>init</code> funtion here will simply call the <code>load-config</code>, that is in charge of loading the config file. Look:</p>
+
+<figure class='code'><figcaption><span>Silly Project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">ns</span> <span class="nv">tserver</span><span class="o">.</span><span class="nv">init</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">:use</span> <span class="p">[</span><span class="nv">clojure</span><span class="o">.</span><span class="nv">tools</span><span class="o">.</span><span class="nv">logging</span> <span class="nv">:only</span> <span class="p">(</span><span class="nf">info</span> <span class="nv">error</span> <span class="nv">debug</span><span class="p">)]))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">defn </span><span class="nv">setup-config-ns</span> <span class="p">[</span><span class="nv">e</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">binding </span><span class="p">[</span><span class="nv">*ns*</span> <span class="nv">*ns*</span><span class="p">]</span>
+</span><span class='line'>      <span class="p">(</span><span class="nb">in-ns </span><span class="ss">&#39;tserver</span><span class="o">.</span><span class="nv">config</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">refer-clojure</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">use</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">clojure</span><span class="o">.</span><span class="nv">main</span> <span class="nv">:only</span> <span class="p">(</span><span class="nf">load-script</span><span class="p">)])</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">immutant</span><span class="o">.</span><span class="nv">messaging</span> <span class="nv">:as</span> <span class="nv">msg</span><span class="p">]</span>
+</span><span class='line'>               <span class="o">&#39;</span><span class="p">[</span><span class="nv">immutant</span><span class="o">.</span><span class="nv">web</span> <span class="nv">:as</span> <span class="nv">web</span><span class="p">]</span>
+</span><span class='line'>               <span class="o">&#39;</span><span class="p">[</span><span class="nv">immutant</span><span class="o">.</span><span class="nv">util</span> <span class="nv">:as</span> <span class="nv">util</span><span class="p">])))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">defn </span><span class="nv">load-config</span>
+</span><span class='line'>  <span class="s">&quot;Attempts to evaluate the specified env file defined by `:env` </span>
+</span><span class='line'><span class="s">  in the `project.clj`. `:env` is a immutant custom config.</span>
+</span><span class='line'><span class="s">  `:env` MUST be a keyword: Ex.: :dev, :prod :office</span>
+</span><span class='line'><span class="s">  Uses :dev by default.</span>
+</span><span class='line'><span class="s">  Note: The absence of the requrested file will prevent the server to start.</span>
+</span><span class='line'><span class="s">  These siles MUST be located at `src/tserver/config/%s.clj&quot;</span>
+</span><span class='line'>  <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">binding </span><span class="p">[</span><span class="nv">*ns*</span> <span class="nv">*ns*</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">in-ns </span><span class="ss">&#39;tserver</span><span class="o">.</span><span class="nv">config</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">ev</span> <span class="p">(</span><span class="nf">get-in</span> <span class="p">(</span><span class="nf">immutant</span><span class="o">.</span><span class="nv">registry/get</span> <span class="nv">:config</span><span class="p">)</span> <span class="p">[</span><span class="nv">:env</span><span class="p">]</span> <span class="nv">:dev</span><span class="p">)</span>
+</span><span class='line'>          <span class="nv">config-file</span> <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;src/tserver/config/%s.clj&quot;</span> <span class="p">(</span><span class="nb">name </span><span class="nv">ev</span><span class="p">))]</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">setup-config-ns</span> <span class="nv">ev</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">info</span> <span class="s">&quot;Using config file &quot;</span> <span class="nv">config-file</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nb">load-file </span><span class="nv">config-file</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">immutant</span><span class="o">.</span><span class="nv">registry/put</span> <span class="nv">:env</span> <span class="nv">ev</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">defn </span><span class="nv">init</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="c1">;;may do some stuff before</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">load-config</span><span class="p">))</span> <span class="c1">;;may do some stuff after</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And finally, our config file containing the required configurations. It can be anything you need.</p>
+
+<figure class='code'><figcaption><span>Silly Project</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">defn </span><span class="nv">handler</span>
+</span><span class='line'>    <span class="p">[</span><span class="nv">r</span><span class="p">]</span> <span class="p">((</span><span class="nf">build-routes</span><span class="p">)</span> <span class="nv">r</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">web/start</span> <span class="nv">handler</span>
+</span><span class='line'>  <span class="nv">:reload</span> <span class="nv">true</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">msg/start</span> <span class="s">&quot;/queue/delivery.status&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">msg/respond</span> <span class="s">&quot;/queue/delivery.status&quot;</span> <span class="nv">handle-delivery-status</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">register-job</span> <span class="o">#</span><span class="ss">&#39;import-job</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">register-job</span> <span class="o">#</span><span class="ss">&#39;check-import</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;register-job is function not provided here</span>
+</span><span class='line'><span class="c1">;since the intention is tho show the configuration solution</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, to deploy and start the app with the given profile we simply do:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>lein with-profile dev immutant deploy
+</span><span class='line'>lein immutant run
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Voila! This will load your <code>dev.clj</code> file and set up your queues, jobs, web-context, whatever you want. This is useful, and I would risk to say mandatory today. You probably have sereval environments where your app resides before going to prodution, and each of them with different names, addresses, pool sizes, queue names, database to connect, etc. And you can easily give to your app the intelligence to load what is more appropriate.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[TCP Server with Clojure Aleph and Gloss]]></title>
+    <link href="http://paulosuzart.github.com/blog/2012/07/09/tcp-server-with-clojure-aleph-and-gloss/"/>
+    <updated>2012-07-09T11:57:00-03:00</updated>
+    <id>http://paulosuzart.github.com/blog/2012/07/09/tcp-server-with-clojure-aleph-and-gloss</id>
+    <content type="html"><![CDATA[<p>Hi Ho! Its been a long time without writing here. As you might know, I&#8217;ve just launched a new web/mobile <a href="http://www.guiato.com.br">(Guiato)</a> platform to help retailers reach their customers with their existing brochures/pamphlets/flyers but now, electronically.</p>
+
+<p>It was as a 4 months adventure, including 20 days in Germany to plan and bring all the platform to Brazil. But now it is time to clojure a bit more. And we are just beginning.</p>
+
+<p>My team and I have a simple google docs with amazing funny statements - or facts - we say. But it is too much sophisticated, so I decided to write our own system (Clacts) to register and read this facts using <a href="http://clojure.org">Clojure</a>, <a href="https://github.com/ztellman/aleph/wiki">Aleph</a> as TCP server, <a href="https://github.com/ztellman/gloss/wiki">Gloss</a> for encoding/decoding messages and <a href="http://www.sqlite.org/">SQLite</a> for storing facts. Amazing! Isn&#8217;t it? :) Well at last it was funny.</p>
+
+<p>I started creating a very simple protocol to allow clients to connect via telnet. So it is:</p>
+
+<figure class='code'><figcaption><span>Clacts Protocol</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>PUT &lt;author&gt; &lt;via&gt; &lt;fact&gt;
+</span><span class='line'>LSA &lt;author&gt;|*
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We have two main commands, <code>PUT</code> and <code>LSA</code>. For <code>PUT</code>, author is the guy speaking, via is who noted it, and the fact is the statement itself. And for <code>LSA</code> command, you can pass the author&#8217;s name and the system will return all the facts spoken by the author. <code>*</code> means you want to read all the facts.</p>
+
+<p>Any other command will be handled as error. Enter Gloss, a lib that allows you to draw how sequence of bytes will be converted to clojure data structures, and how clojure data will be converted to byte sequences. Here is the definition of Clacts the protocol:</p>
+
+<figure class='code'><figcaption><span>Clacts Protocol with Gloss</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">p</span> <span class="p">(</span><span class="nf">string</span> <span class="nv">:utf-8</span> <span class="nv">:delimiters</span> <span class="s">&quot; &quot;</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">lp</span> <span class="p">(</span><span class="nf">string</span> <span class="nv">:utf-8</span> <span class="nv">:delimiters</span> <span class="p">[</span><span class="s">&quot;\r\n&quot;</span><span class="p">]))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">defcodec</span> <span class="nv">PUTC</span> <span class="p">[</span><span class="s">&quot;PUT&quot;</span> <span class="nv">p</span> <span class="nv">p</span> <span class="nv">lp</span><span class="p">])</span>
+</span><span class='line'><span class="p">(</span><span class="nf">defcodec</span> <span class="nv">LSAC</span> <span class="p">[</span><span class="s">&quot;LSA&quot;</span> <span class="nv">lp</span><span class="p">])</span>
+</span><span class='line'><span class="p">(</span><span class="nf">defcodec</span> <span class="nv">REPC</span> <span class="p">[</span><span class="s">&quot;REP&quot;</span> <span class="nv">lp</span><span class="p">])</span>
+</span><span class='line'><span class="p">(</span><span class="nf">defcodec</span> <span class="nv">LSRC</span> <span class="p">[</span><span class="s">&quot;LSR&quot;</span> <span class="p">(</span><span class="nf">string</span> <span class="nv">:utf-8</span> <span class="nv">:suffix</span> <span class="s">&quot; &quot;</span><span class="p">)</span>
+</span><span class='line'>                      <span class="p">(</span><span class="nf">string</span> <span class="nv">:utf-8</span> <span class="nv">:suffix</span> <span class="s">&quot; &quot;</span><span class="p">)</span>
+</span><span class='line'>                      <span class="p">(</span><span class="nf">string</span> <span class="nv">:utf-8</span> <span class="nv">:suffix</span> <span class="s">&quot; &quot;</span><span class="p">)</span>
+</span><span class='line'>                      <span class="p">(</span><span class="nf">string</span> <span class="nv">:utf-8</span> <span class="nv">:suffix</span> <span class="s">&quot;\r\n&quot;</span><span class="p">)])</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">defcodec</span> <span class="nv">ERRC</span> <span class="p">(</span><span class="nf">string</span> <span class="nv">:utf-8</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">defcodec</span> <span class="nv">CMDS</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">header</span>
+</span><span class='line'>    <span class="nv">p</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">h</span><span class="p">]</span> <span class="p">(</span><span class="nf">condp</span> <span class="nv">=</span> <span class="nv">h</span>
+</span><span class='line'>      <span class="s">&quot;PUT&quot;</span> <span class="nv">PUTC</span>
+</span><span class='line'>      <span class="s">&quot;LSA&quot;</span> <span class="nv">LSAC</span>
+</span><span class='line'>      <span class="s">&quot;REP&quot;</span> <span class="nv">REPC</span>
+</span><span class='line'>      <span class="s">&quot;LSR&quot;</span> <span class="nv">LSRC</span>
+</span><span class='line'>      <span class="nv">ERRC</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">b</span><span class="p">]</span> <span class="p">(</span><span class="nb">first </span><span class="nv">b</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Gloss uses the concept of frames and codecs to model your bytes. As a shortcut, i&#8217;m using <code>p</code> and <code>lp</code> to identify parameters ended in <code>" "</code> and parameters ended in <code>\r\n</code>. That is, <code>p</code> and <code>lp</code> are frames that will be converted to strings, with UTF-8 encoding.</p>
+
+<p>Given the building block frames <code>p</code> and <code>lp</code> we can start to form the commands. We have <code>PUTC</code>, a codec that is composed by the word <code>PUT</code> plus two <code>p</code> frames and one <code>lp</code> frame. So this: <code>PUT Agustinho Brisola Estou acostumado a criar my propria cloud</code>, will be converted to: <code>["PUT" "Agustinho" "Brisolla" "Estou acostumado a criar minha propria cloud"]</code>. Bang! We have bytes straight to a clojure vector. And testing it is pretty straight forward. Look:</p>
+
+<figure class='code'><figcaption><span>Testing codecs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">use</span> <span class="ss">&#39;gloss</span><span class="o">.</span><span class="nv">core</span> <span class="ss">&#39;gloss</span><span class="o">.</span><span class="nv">io</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nb">import </span><span class="nv">java</span><span class="o">.</span><span class="nv">nio</span><span class="o">.</span><span class="nv">ByteBuffer</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">buffer</span> <span class="p">(</span><span class="nf">java</span><span class="o">.</span><span class="nv">nio</span><span class="o">.</span><span class="nv">ByteBuffer/wrap</span> <span class="p">(</span><span class="o">.</span><span class="nv">getBytes</span> <span class="s">&quot;PUT Agustinho Brisolla Teste Fact\r\n&quot;</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">decode</span> <span class="nv">PUTC</span> <span class="nv">buffer</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; [&quot;PUT&quot; &quot;PUT&quot; &quot;Agustinho&quot; &quot;Brisolla Teste Fact&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are actually more codecs (<code>REPC</code> and <code>LSRC</code>) to handle generic responses and <code>LSA</code> responses respectively. But once you understand the commands, the answers are natural consequences.</p>
+
+<p>Hell yeah! Neat and handy. But clients can actually use different commands, how to understand which command to decode an handle appropriately?</p>
+
+<p>For these cases (and others for sure) Gloss allows you to define a <code>header</code>, which is some part of the frame that behaves as an indicative for the rest of the frames. In this case, look to the codec <code>CMDS</code>. It is composed by a header that, depending on its content, indicates the other commands.</p>
+
+<p>The <code>head</code> function is a bit strange at first, but once you get it, you can go really far. <code>head</code> takes 3 args, <em>(i)</em> its own frame, <em>(ii)</em> a function that given the header it points to the right codec for the rest of the message, and <em>(iii)</em> another function that given the body of a frame, extracts the value of the header. Easy?</p>
+
+<p>Take <code>PUT Agustinho Brisolla Teste Fact\r\n</code> command as an example. <code>PUT</code> is extracted by this <code>string</code> calling <code>frist</code> on it. This is the function that maps the body to header. And given the header, that is a <code>p</code> (the first string separated by space), I check its value and return the appropriate codec: <code>PUTC</code>.</p>
+
+<p>Note the default value for <code>ERRC</code>. This is for the cases where some smart user types an unknown command.</p>
+
+<p>Great, but we have to handle the requests coming from telnet clients. Now it is Aleph time:</p>
+
+<figure class='code'><figcaption><span>Aleph TCP Server</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">defn </span><span class="nv">handler</span>
+</span><span class='line'>  <span class="s">&quot;TCP Handler. Decodes the issued command and calls the appropriate</span>
+</span><span class='line'><span class="s">  function to excetion some action.&quot;</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">ch</span> <span class="nv">ci</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">receive-all</span> <span class="nv">ch</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">b</span><span class="p">]</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">deced</span> <span class="p">(</span><span class="nf">decode</span> <span class="nv">prt/CMDS</span> <span class="nv">b</span><span class="p">)]</span>
+</span><span class='line'>        <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Processing command: &quot;</span> <span class="nv">deced</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">condp</span> <span class="nv">=</span> <span class="p">(</span><span class="nb">first </span><span class="nv">deced</span><span class="p">)</span>
+</span><span class='line'>          <span class="s">&quot;PUT&quot;</span> <span class="p">(</span><span class="nf">put-fact</span> <span class="p">(</span><span class="nb">rest </span><span class="nv">deced</span><span class="p">)</span> <span class="nv">ch</span><span class="p">)</span>
+</span><span class='line'>          <span class="s">&quot;LSA&quot;</span> <span class="p">(</span><span class="nf">list-facts</span> <span class="p">(</span><span class="nb">second </span><span class="nv">deced</span><span class="p">)</span> <span class="nv">ch</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">(</span><span class="nf">handle-err</span> <span class="nv">ch</span> <span class="nv">ci</span><span class="p">))))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">start-tcp-server</span> <span class="nv">handler</span> <span class="p">{</span><span class="nv">:port</span> <span class="mi">10000</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When you start the tcp server without defining the frame to handle, Aleph delivers to the <code>handler</code> a series of <code>ByteBuffers</code>, what is perfect for this case. The handler function decodes the frames against the <code>CMDS</code> codec and calls the correspondent function passing as argument the channel to respond to.</p>
+
+<p>Not that there is a default function - <code>handle-err</code> being called in case of unknown commands. It will respond to clients random error messages.</p>
+
+<p>The functions to list and put facts into the database use the same <code>CMDS</code> codec to encode reply messages. Look:</p>
+
+<figure class='code'><figcaption><span>Inserting facts and replying</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">defn </span><span class="nv">put-fact</span>
+</span><span class='line'>  <span class="s">&quot;Inserts the fact into db according to proto/PUTC.</span>
+</span><span class='line'><span class="s">  Takes the decoded data end the channel to respond.&quot;</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">data</span> <span class="nv">ch</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">with-connection</span> <span class="nv">db</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">insert-record</span> <span class="nv">:facts</span>
+</span><span class='line'>      <span class="p">{</span><span class="nv">:date</span>   <span class="p">(</span><span class="nb">str </span><span class="p">(</span><span class="nf">System/currentTimeMillis</span><span class="p">))</span>
+</span><span class='line'>       <span class="nv">:author</span> <span class="p">(</span><span class="nb">first </span><span class="nv">data</span><span class="p">)</span>
+</span><span class='line'>       <span class="nv">:via</span>    <span class="p">(</span><span class="nb">second </span><span class="nv">data</span><span class="p">)</span>
+</span><span class='line'>       <span class="nv">:fact</span>   <span class="p">(</span><span class="nb">last </span><span class="nv">data</span><span class="p">)}))</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">enqueue</span> <span class="nv">ch</span> <span class="p">(</span><span class="nf">encode</span> <span class="nv">prt/CMDS</span> <span class="p">[</span><span class="s">&quot;REP&quot;</span> <span class="s">&quot;Fact recorded!! Have fun with it.&quot;</span><span class="p">])))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>REP</code> is a command encoded by <code>REPC</code> codec as defined above. The codec is defined by the header of the message (<code>REP</code>). What is pretty useful and saves your from using <code>if</code> to do that.</p>
+
+<p>You may argue: &#8220;Why not use HTTP/Restful thing?&#8221; And I say: because this is more fun :)</p>
+
+<p>You can find the full project on my github: <a href="https://github.com/paulosuzart/clact">https://github.com/paulosuzart/clact</a>. There you can see more details regarding interacting with SQLite, that wasn&#8217;t covered here.</p>
+
+<h1>UPDATE 2012/08/03</h1>
+
+<p>The great brain <a href="http://twitter.com/ztellman">@ztellman</a>, the creator of gloss, gave me a hand <a href="https://github.com/paulosuzart/clact/pull/1">pulling</a> some changes in the code. What he suggested was to specify the frame for the server. So Aleph takes care of the protocol being encoded/decoded and you interact solely with clojure data structures. The change was:</p>
+
+<figure class='code'><figcaption><span>Zach suggestions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">start-tcp-server</span> <span class="nv">handler</span> <span class="p">{</span><span class="nv">:port</span> <span class="p">(</span><span class="nf">:port</span> <span class="nv">opts</span><span class="p">)</span><span class="o">,</span> <span class="nv">:frame</span> <span class="nv">prt/CMDS</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;what leads us to check for commands like this:</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">receive-all</span> <span class="nv">ch</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">cmd</span><span class="p">]</span>
+</span><span class='line'>      <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Processing command: &quot;</span> <span class="nv">cmd</span> <span class="s">&quot;From &quot;</span> <span class="nv">ci</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">condp</span> <span class="nv">=</span> <span class="p">(</span><span class="nb">first </span><span class="nv">cmd</span><span class="p">)</span>
+</span><span class='line'>        <span class="s">&quot;PUT&quot;</span> <span class="p">(</span><span class="nf">put-fact</span> <span class="p">(</span><span class="nb">rest </span><span class="nv">cmd</span><span class="p">)</span> <span class="nv">ch</span><span class="p">)</span>
+</span><span class='line'>        <span class="s">&quot;LSA&quot;</span> <span class="p">(</span><span class="nf">list-facts</span> <span class="p">(</span><span class="nb">second </span><span class="nv">cmd</span><span class="p">)</span> <span class="nv">ch</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">handle-err</span> <span class="nv">ch</span> <span class="nv">ci</span><span class="p">)))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; instead of the previous version manually decoding bytes:</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">receive-all</span> <span class="nv">ch</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">b</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">deced</span> <span class="p">(</span><span class="nf">decode</span> <span class="nv">prt/CMDS</span> <span class="nv">b</span><span class="p">)]</span>
+</span><span class='line'>      <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Processing command: &quot;</span> <span class="nv">deced</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">condp</span> <span class="nv">=</span> <span class="p">(</span><span class="nb">first </span><span class="nv">deced</span><span class="p">)</span>
+</span><span class='line'>        <span class="s">&quot;PUT&quot;</span> <span class="p">(</span><span class="nf">put-fact</span> <span class="p">(</span><span class="nb">rest </span><span class="nv">deced</span><span class="p">)</span> <span class="nv">ch</span><span class="p">)</span>
+</span><span class='line'>        <span class="s">&quot;LSA&quot;</span> <span class="p">(</span><span class="nf">list-facts</span> <span class="p">(</span><span class="nb">second </span><span class="nv">deced</span><span class="p">)</span> <span class="nv">ch</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">handle-err</span> <span class="nv">ch</span> <span class="nv">ci</span><span class="p">))))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;the same applies for sending response back to the client:</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">enqueue</span> <span class="nv">broad-put</span> <span class="p">[</span><span class="s">&quot;REP&quot;</span>
+</span><span class='line'>                    <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;####Fact recorded by %s!! By %s: %s.&quot;</span>
+</span><span class='line'>                     <span class="nv">via</span> <span class="nv">author</span> <span class="nv">fact</span><span class="p">)]))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; no need for manual encoding :)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is great because the best thing on every clojure lib is use pure clojure data structures to keep things uniform.</p>
+
+<p>Thanks to Zach for the precious tips.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Monitoring ec2 with clojure and Server-Stats]]></title>
+    <link href="http://paulosuzart.github.com/blog/2012/04/17/monitoring-ec2-with-clojure-and-server-stats/"/>
+    <updated>2012-04-17T17:25:00-03:00</updated>
+    <id>http://paulosuzart.github.com/blog/2012/04/17/monitoring-ec2-with-clojure-and-server-stats</id>
+    <content type="html"><![CDATA[<h2>Intro</h2>
+
+<p>Before going further, please take a look at <a href="http://info.rjmetrics.com/blog/bid/54114/Parallel-SSH-and-system-monitoring-in-Clojure">Parallel SSH and system monitoring in Clojure</a>.</p>
+
+<p>Combining my need for monitoring an EC2 instance running <a href="http://nginx.org">nginx</a>, <a href="http://www.atlassian.com/software/bamboo/overview">bamboo</a> and <a href="http://www.jfrog.com/products.php">artifactory</a>, with my will to code in clojure, I have decided to use <a href="https://github.com/paulosuzart/Server-Stats">server-stats</a> to basic monitor my server via ssh.</p>
+
+<p>EC2 supports interactions using SSH without need its <code>.pem</code> file if you add your public key to it. Take a look <a href="http://craiccomputing.blogspot.com.br/2009/07/rails-git-capistrano-ec2-and-ssh.html">here</a> to see how.</p>
+
+<p>These are dead simple commands and of course you should use more serious ones for critical services.</p>
+
+<p>The <code>server-stats</code> config file is actually a clojure file named <code>server-stats.cfg</code> where you put some definitions for monitoring. The strength of server-stats is the running it against several server. But in this case, I have just one.</p>
+
+<h2>The config file</h2>
+
+<figure class='code'><figcaption><span>server-stats.cfg</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">import </span><span class="nv">org</span><span class="o">.</span><span class="nv">apache</span><span class="o">.</span><span class="nv">commons</span><span class="o">.</span><span class="nv">mail</span><span class="o">.</span><span class="nv">SimpleEmail</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">defn </span><span class="nv">send-mail</span> <span class="p">[</span><span class="nv">alert-msg</span> <span class="nv">server-name</span> <span class="nv">cmd-output</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">doto </span><span class="p">(</span><span class="nf">SimpleEmail</span><span class="o">.</span><span class="p">)</span>
+</span><span class='line'>     <span class="c1">;; ... my email configs</span>
+</span><span class='line'>      <span class="p">(</span><span class="o">.</span><span class="nv">send</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-alert-handler</span> <span class="nv">email</span> <span class="p">[</span><span class="nv">alert-msg</span> <span class="nv">server-name</span> <span class="nv">cmd-output</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">send-mail</span> <span class="nv">alert-msg</span> <span class="nv">server-name</span> <span class="nv">cmd-output</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">set-ssh-username</span> <span class="s">&quot;ec2-user&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-server-group</span> <span class="nv">web-servers</span>
+</span><span class='line'>  <span class="p">[</span><span class="s">&quot;myserver.mydomain.com&quot;</span><span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">disk</span>
+</span><span class='line'>  <span class="p">{</span><span class="nv">:doc</span> <span class="s">&quot;Get the disk usage using df&quot;</span>
+</span><span class='line'>   <span class="nv">:cmd</span> <span class="s">&quot;df -h&quot;</span>
+</span><span class='line'>   <span class="nv">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+</span><span class='line'>   <span class="nv">:alerts</span> <span class="p">[{</span><span class="nv">:column</span> <span class="s">&quot;Use%&quot;</span>
+</span><span class='line'>             <span class="nv">:value-type</span> <span class="nv">percent</span>
+</span><span class='line'>             <span class="nv">:handlers</span> <span class="p">[</span><span class="nv">email</span><span class="p">]</span>
+</span><span class='line'>             <span class="nv">:msg</span> <span class="s">&quot;Disk space over 55% full&quot;</span>
+</span><span class='line'>             <span class="nv">:trigger</span> <span class="p">(</span><span class="nb">&gt; </span><span class="mi">55</span><span class="p">)}]})</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">is-nginx</span>
+</span><span class='line'>  <span class="p">{</span><span class="nv">:doc</span> <span class="s">&quot;Is nginx Running?&quot;</span>
+</span><span class='line'>   <span class="nv">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+</span><span class='line'>   <span class="nv">:cmd</span> <span class="s">&quot;[[ -z `ps aux | grep nginx` ]] &amp;&amp; echo &#39;false&#39; || echo &#39;true&#39;&quot;</span>
+</span><span class='line'>   <span class="nv">:alerts</span> <span class="p">[{</span><span class="nv">:value-type</span> <span class="nv">bool</span>
+</span><span class='line'>             <span class="nv">:msg</span> <span class="s">&quot;Nginx is not running&quot;</span>
+</span><span class='line'>             <span class="nv">:handlers</span> <span class="p">[</span><span class="nv">email</span><span class="p">]</span>
+</span><span class='line'>             <span class="nv">:trigger</span> <span class="p">(</span><span class="nb">= </span><span class="nv">false</span><span class="p">)}]})</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">app-log</span>
+</span><span class='line'>  <span class="p">{</span><span class="nv">:doc</span> <span class="s">&quot;Get last 20 entries in todays app-servers log&quot;</span>
+</span><span class='line'>   <span class="nv">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+</span><span class='line'>   <span class="nv">:cmd</span> <span class="s">&quot;tail -20 /home/ec2-user/artifactory-2.5.1.1/logs/access.log&quot;</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">http-errors</span>
+</span><span class='line'>  <span class="p">{</span><span class="nv">:doc</span> <span class="s">&quot;Show recent non-200s requests&quot;</span>
+</span><span class='line'>   <span class="nv">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+</span><span class='line'>   <span class="nv">:cmd</span> <span class="s">&quot;tail -200 /var/log/nginx/error.log&quot;</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">is-artifactory</span>
+</span><span class='line'>  <span class="p">{</span><span class="nv">:doc</span> <span class="s">&quot;Is Artifactory Running?&quot;</span>
+</span><span class='line'>   <span class="nv">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+</span><span class='line'>   <span class="nv">:cmd</span> <span class="s">&quot;[[ -z `ps aux | grep org.artifactory.standalone.main.Main` ]] &amp;&amp; echo &#39;false&#39; || echo &#39;true&#39;&quot;</span>
+</span><span class='line'>   <span class="nv">:alerts</span> <span class="p">[{</span><span class="nv">:value-type</span> <span class="nv">bool</span>
+</span><span class='line'>             <span class="nv">:msg</span> <span class="s">&quot;Artifactory is not running&quot;</span>
+</span><span class='line'>             <span class="nv">:handlers</span> <span class="p">[</span><span class="nv">email</span><span class="p">]</span>
+</span><span class='line'>             <span class="nv">:trigger</span> <span class="p">(</span><span class="nb">= </span><span class="nv">false</span><span class="p">)</span>
+</span><span class='line'>             <span class="nv">:mute-for</span> <span class="mi">1860000</span><span class="p">}]})</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">is-bamboo</span>
+</span><span class='line'>  <span class="p">{</span><span class="nv">:doc</span> <span class="s">&quot;Is bamboo Running?&quot;</span>
+</span><span class='line'>   <span class="nv">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+</span><span class='line'>   <span class="nv">:cmd</span> <span class="s">&quot;[[ -z `ps aux | grep com.attlassian.bamboo.server.Server` ]] &amp;&amp; echo &#39;false&#39; || echo &#39;true&#39;&quot;</span>
+</span><span class='line'>   <span class="nv">:alerts</span> <span class="p">[{</span><span class="nv">:value-type</span> <span class="nv">bool</span>
+</span><span class='line'>             <span class="nv">:msg</span> <span class="s">&quot;Bamboo is not running&quot;</span>
+</span><span class='line'>             <span class="nv">:handlers</span> <span class="p">[</span><span class="nv">email</span><span class="p">]</span>
+</span><span class='line'>             <span class="nv">:trigger</span> <span class="p">(</span><span class="nb">= </span><span class="nv">false</span><span class="p">)</span>
+</span><span class='line'>             <span class="nv">:mute-for</span> <span class="mi">1860000</span><span class="p">}]})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Almost all the commands were borrowed from the sample <code>cfg</code> file. A small but important detail is the key <code>:mute-for</code> in alerts. As you can see, the above link to server-stats points to my fork of it.</p>
+
+<p>The <a href="https://github.com/RJMetrics/Server-Stats/pull/2"><code>mute-for</code></a> key adds the capability to prevent any scheduled <code>ssh</code> commands with short intervals to flood your alert communication channel (e-mail in this <code>cfg</code>). The alerts are sent only if the <code>mute-for</code> time has been elapsed.</p>
+
+<p>This is done via empty files for controlling the alerts. <code>server-stats</code> checks the <code>lastModified</code> property of the file of a given alert, and activates the it only if the <code>mute-for</code> interval is over.</p>
+
+<p>To make server-stats send alerts before the <code>:mute-for</code> time, you can just delete the file named <code>.{Sanitized_alert_message}</code>. The sanitized message is just the message alert message with no characters as underlines. I should consider a hash version of it to avoid big names for big messages, but it is ok for now.</p>
+
+<p><strong>Note that <code>mute-for</code> controls the alert activation per <code>cmd</code> message.</strong></p>
+
+<h2>Use cron</h2>
+
+<p>Of course you can&#8217;t spend your time issuing ssh commands by hand. So, there are four <code>cron</code> entries for scheduled ssh interactions:</p>
+
+<figure class='code'><figcaption><span>crontab</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>0 7 * * * <span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name &#39;ssh*&#39; | head -n 1)&quot;</span> ~/workspace/p/Server-Stats/run.sh disk -log
+</span><span class='line'>*/10 * * * * <span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name &#39;ssh*&#39; | head -n 1)&quot;</span> ~/workspace/p/Server-Stats/run.sh is-nginx -log
+</span><span class='line'>*/30 * * * * <span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name &#39;ssh*&#39; | head -n 1)&quot;</span> ~/workspace/p/Server-Stats/run.sh is-artifactory -log
+</span><span class='line'>*/30 * * * * <span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name &#39;ssh*&#39; | head -n 1)&quot;</span> ~/workspace/p/Server-Stats/run.sh is-bamboo -log
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>run.sh</code> is pretty simple. Just wraps <code>java -jar</code> to server-stats. Some times I want to log the ssh output, so I can pass the <code>-log</code> option and the output goes to <code>log/cmd</code>.</p>
+
+<figure class='code'><figcaption><span>run.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'><span class="c"># Wraps the start of server-stats. If -log is passed, will save</span>
+</span><span class='line'><span class="c"># the resulting execution to log/cmd</span>
+</span><span class='line'><span class="c"># paulosuzart@gmail.com</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># java -jar should run from inside the server-stats dir</span>
+</span><span class='line'><span class="nb">cd</span> ~/workspace/p/Server-Stats
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> -z <span class="nv">$1</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;usage: run cmd [-log]&quot;</span>
+</span><span class='line'>  <span class="nb">exit </span>2
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">COMM</span><span class="o">=</span><span class="s2">&quot;java -jar server-stats-0.1-standalone.jar -a $1&quot;</span>
+</span><span class='line'><span class="k">if</span> <span class="o">[[</span> ! -z <span class="nv">$2</span> <span class="o">&amp;&amp;</span> <span class="s2">&quot;-log&quot;</span><span class="o">=</span><span class="nv">$2</span> <span class="o">]]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;logging to log/$1.out&quot;</span>
+</span><span class='line'>  <span class="nv">$COMM</span><span class="o">=</span><span class="nv">$COMM</span>:<span class="s2">&quot; &gt; log/$1.out&quot;</span>
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">echo</span> <span class="nv">$COMM</span>
+</span><span class='line'><span class="nv">$COMM</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Don&#8217;t ask me why, but <code>ssh</code> does not behave the way you except when called from a <code>cron</code> command. But I managed to find <a href="http://webcache.googleusercontent.com/search?q=cache:7h4hOIGZG-wJ:www.codealpha.net/163/cron-ssh-and-rsync-and-key-with-passphrase-ubuntu/+&amp;cd=1&amp;hl=en&amp;ct=clnk&amp;client=ubuntu">this article</a> that helped a lot.</p>
+
+<p>This <code>crontable</code> is configured on my laptop and any strange behavior is sent to my e-mail immediately. The other <code>cmds</code> (<code>app-log</code>, <code>http-errors</code>) are used directly with <code>./run.sh cmd</code> to see the output.</p>
+
+<h2>Conclusion</h2>
+
+<p>Of course the <code>mute-for</code> feature <a href="https://github.com/RJMetrics/Server-Stats/pull/2">might be merged</a> to the original repo. So, I would recommend you to use the original version of server-stats.</p>
+
+<p>If you need simple monitoring features or more elaborated ones, it is up to you. Just use server-stats as the  base for it.</p>
+
+<h2>Update</h2>
+
+<p>This post was republished <a href="http://www.dzone.com">Dzone</a>. See <a href="http://architects.dzone.com/articles/how-monitoring-ec2-clojure-and">here</a>.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[sorting with clojure comparator]]></title>
+    <link href="http://paulosuzart.github.com/blog/2012/04/11/sorting-with-clojure-comparator/"/>
+    <updated>2012-04-11T22:51:00-03:00</updated>
+    <id>http://paulosuzart.github.com/blog/2012/04/11/sorting-with-clojure-comparator</id>
+    <content type="html"><![CDATA[<p>This is a quick post to show an example of <a href="http://clojure.org">clojure</a> <code>comparator</code> for sorting a list with <code>sort</code>.</p>
+
+<p>At work a friend wrote dozen lines of java to sort a list of characters that represents t-shirt sizes. The sizes are: pp, p, m, mm, g, gg, a, aa. Where &#8216;pp&#8217; is super small, &#8216;p&#8217; small, &#8216;m&#8217; medium, etc.</p>
+
+<p>Some shees have all the sizes available, some not. So imagine a shirt with just g, a, gg, p sizes availabe. The screen should show: p, g, gg, a.</p>
+
+<p>He requested me to do a clojure version of it. Here it goes.</p>
+
+<div><script src='https://gist.github.com/2351780.js?file='></script>
+<noscript><pre><code></code></pre></noscript></div>
+
+
+<p>The first useful function is <a href="http://clojuredocs.org/clojure_core/clojure.core/map-indexed"><code>map-indexed</code></a>. Since the order of sizes is not natural, we associate numbers to them given we know the size order. So <code>sizes</code> becomes <code>{:a 6, :gg 5, :g 4, :pp 0, :m 2, :mm 3, :aa 7, :p 1}</code>.</p>
+
+<p>Then I used a <a href="http://clojuredocs.org/clojure_core/clojure.core/comparator"><code>comparator</code></a>. It produces a <code>java.util.Comparator</code> for the given function. In this case the comparison of the map values for each key.</p>
+
+<p>To finish that, the <a href="http://clojuredocs.org/clojure_core/clojure.core/sort"><code>sort</code></a> function. It takes a given product sizes list and sorts then. So <code>'(p, g, gg, aa)</code> becomes <code>(p g gg a)</code>.</p>
+
+<p>It is even silly for a blog post but what if I can convince him to replace the java methods/utils/whatever methods for a <a href="http://clojuredocs.org/clojure_core/clojure.core/gen-class"><code>gen-class</code></a> of it? Packing compiled clojure code and using them for utility functions and small piece of your application can be a good way to get used to the language and confidence to start a full application in it.</p>
+
+<p>Actually to let this code reusable, one can take the list of sizes instead of hard coding it. But this is an exercise for you.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+
+<p><em>Thanks to USA guys, you are the top visitors here. Thank you very much.</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[lazy-seqs from database with clojure korma]]></title>
+    <link href="http://paulosuzart.github.com/blog/2012/03/27/lazy-seqs-from-database-with-clojure-korma/"/>
+    <updated>2012-03-27T20:54:00-03:00</updated>
+    <id>http://paulosuzart.github.com/blog/2012/03/27/lazy-seqs-from-database-with-clojure-korma</id>
+    <content type="html"><![CDATA[<p>As you may know, I&#8217;ve started in a new company last early this month. It is being a huge change in all aspects, technology, people, process, environment, etc.</p>
+
+<p>Well, this week I wanted to migrate some data (900k rows) from a <a href="http://mysql.com/">MySQL</a> database to a <a href="www.postgresql.org">Postgres</a> one. <a href="twitter.com/felipejcruz">@felipejcruz</a> recommended <a href="http://pypi.python.org/pypi/py-mysql2pgsql">py-mysql2pgsql</a>, but I wasn&#8217;t able to put it to run with dependency - or whatever that messages were - errors. Then I tried <a href="http://sqlfairy.sourceforge.net/">SQLFairy</a>, but does not migrate data, just the schema ddl and other cool features (worthy features).</p>
+
+<p>I ended up doing this administrative task with <a href="http://clojure.org/">clojure</a> and <a href="http://sqlkorma.com/">korma</a>, with few functional concepts to handle the entire data set as if it was in memory.</p>
+
+<p>The flow is: select everything from mysql, insert every thing into postgres. No transformation, no mapping, just select, insert. Take a look at the code:</p>
+
+<div><script src='https://gist.github.com/2221654.js?file='></script>
+<noscript><pre><code></code></pre></noscript></div>
+
+
+<p>It looks more like a script than any other complex program. Korma&#8217;s <code>defdb</code> and <code>defentity</code> are used to connect to databases and define its entities. Note that there are no mappings from columns or any boilerplate annotations/codes. And since the source table and destination table are equal, it is great. But what if I wanted to transform the data model? I could use the <code>transform</code> to change the shape of the data.</p>
+
+<p>Then you see <code>fetch-every</code>. It wraps a korma select with two arguments, one for limit, one for offset. So, the query can be reused at any time.</p>
+
+<p>Due to the volume in the scenario, I couldn&#8217;t simply fetch all data and the insert all at once. I needed to paginate. But deal with pagination right in the code the is inserting and getting more data, sucks.</p>
+
+<p>Clojure offers the excellent <a href="http://clojuredocs.org/clojure_core/clojure.core/lazy-seq"><code>lazy-seq</code></a> function and allows for creating laziness from anywhere. In this case, my lazy sequence is a sequence of pages. Although possible to have infinite ones, this sequence has an end. The end of sequence os reached right after the last row was read. See the <code>when-let</code> in the code.</p>
+
+<p>It is what <code>extract-every</code> does. <code>extract-every</code> actually can execute any query since it is represented by a function that takes two arguments, one for limit, one for offset (<code>fech-every</code> in this case). If we call (extract-every q 20) it will limit the result in 20 rows with a offset of 0. So the head is the 20 rows representing the results, and the tail is a lazy seq of <code>etract-every</code> with a limit of 20 and a offset of 20.</p>
+
+<p>The comes <code>persist</code>, the simples function in the code. It simply takes a v as argument and persists the data in the target database. It also prints the last tow saved for recovery purposes.</p>
+
+<p>Wrapping up, are the <code>map</code>, or <code>pmap</code> functions. Remember that <code>map</code> applies its first argument to every entry of its second argument. So, it is simple to assemble <code>(map persist (extract-every 1500))</code>. It will save to the target database every 1500 rows or any other amount of rows.</p>
+
+<p>It took 5 to 10 minutos to write the code and start the migration.</p>
+
+<p>Just to play around, try:</p>
+
+<figure class='code'><figcaption><span>Playing lazy</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">defn </span><span class="nv">until-ten</span>
+</span><span class='line'>    <span class="p">([]</span> <span class="p">(</span><span class="nf">until-ten</span> <span class="mi">0</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">([</span><span class="nv">n</span><span class="p">]</span> <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">&lt;= </span><span class="nv">n</span> <span class="mi">10</span><span class="p">)</span> <span class="p">(</span><span class="nb">cons </span><span class="nv">n</span> <span class="p">(</span><span class="nf">lazy-seq</span> <span class="p">(</span><span class="nf">until-ten</span> <span class="p">(</span><span class="nb">inc </span><span class="nv">n</span><span class="p">)))))))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">until-ten</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It returns from 0 to 10, being a finite lazy sequence just like the source data set. One can use <code>take-while</code> to limit the results of a lazy-seq. You can compute really big sets using the laziness approach.</p>
+
+<p>Hope it may be useful.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+
+<p><strong>Update - Apr 7 2012</strong>: <em>Although an interesting and working solution, this code is not that functional. First of all, because it does I/O, but there is something that could be fixed to have a better &#8220;purity&#8221;. <code>map</code> or <code>pmap</code> produce new sequences. Sequences full of <code>nils</code> in this case, because <code>persist</code> returns <code>nil</code>. The only advantage is the use of <code>pmap</code>, to run it in parallel, but it is still weird to have resulting seqs of <code>nils</code>.</em></p>
+
+<p><em>A way to solve this bizarre code is using <a href="http://clojuredocs.org/clojure_core/clojure.core/doseq"><code>doseq</code></a> instead of <code>map</code> or <code>pmap</code>. It is a function that can bind each value of a <code>seq</code> and executes its body:</em></p>
+
+<figure class='code'><figcaption><span>Changing to `doseq`</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;using until-ten</span>
+</span><span class='line'><span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="nf">until-ten</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Printing &quot;</span> <span class="nv">i</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;using korma</span>
+</span><span class='line'><span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">page</span> <span class="p">(</span><span class="nf">extract-every</span> <span class="nv">fetch-every</span> <span class="mi">20</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">persist</span> <span class="nv">page</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p><em>In this case, <code>doseq</code> does not retains the head of sequences, so there is no <code>seq</code> with tons being produced.</em></p>
+
+<p><em>Thanks to everyone around the world visiting this blog. See you!</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Web Noir plus enlive template]]></title>
+    <link href="http://paulosuzart.github.com/blog/2012/03/25/web-noir-plus-enlive-template/"/>
+    <updated>2012-03-25T21:43:00-03:00</updated>
+    <id>http://paulosuzart.github.com/blog/2012/03/25/web-noir-plus-enlive-template</id>
+    <content type="html"><![CDATA[<p>Hi again! Long time without writing here. But for a good reason.</p>
+
+<p>One of the most promising web frameworks for <a href="http://clojure.org/">clojure</a> is <a href="http://www.webnoir.org/">noir</a>. It is actually an abstraction on top of <a href="https://github.com/mmcgrana/ring/">ring</a> and <a href="https://github.com/weavejester/compojure">Compojure</a>, both successful clojure products.</p>
+
+<p>By default, noir comes with the excellent <a href="https://github.com/weavejester/hiccup">hiccup</a>, which allows one write html in clojure like this:</p>
+
+<figure class='code'><figcaption><span>Html in clojure</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">use</span> <span class="ss">&#39;hiccup</span><span class="o">.</span><span class="nv">core</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">name</span> <span class="s">&quot;Nacho&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">html</span> <span class="p">[</span><span class="nv">:span</span> <span class="p">{</span><span class="nv">:id</span> <span class="s">&quot;dog&quot;</span><span class="p">}</span> <span class="nv">name</span><span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; produces:</span>
+</span><span class='line'><span class="c1">;;&quot;&lt;span id=\&quot;dog\&quot;&gt;Nacho&lt;/span&gt;&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>It doesn&#8217;t look designer friendly, right? I would still use hiccup for admin pages or small chunks of html strictly generated by clojure code with a good css to help presenting it.</p>
+
+<p>Enters enlive. I&#8217;ve already used enlive <a href="http://codemountain.wordpress.com/2010/10/09/clojure-macros/">before</a>, without understanding it that much, I would say. It&#8217;s been almost two years since that post. And what makes me happy with enlive is the possibility to be closer to <a href="http://www.scala-lang.org/">Scala&#8217;s</a> web framework <a href="http://liftweb.net/">Lift</a>. That is, put some attention on the view with actually working with actions. So, combine this:</p>
+
+<figure class='code'><figcaption><span>Login form</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;form</span>  <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">id=</span><span class="s">&quot;login_form&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;errors&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;error&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;username&quot;</span><span class="nt">&gt;</span>Username<span class="nt">&lt;/label&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">id=</span><span class="s">&quot;username&quot;</span> <span class="na">name=</span><span class="s">&quot;username&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;password&quot;</span><span class="nt">&gt;</span>Password<span class="nt">&lt;/label&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">id=</span><span class="s">&quot;password&quot;</span> <span class="na">name=</span><span class="s">&quot;password&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">value=</span><span class="s">&quot;Login&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'> <span class="nt">&lt;/form&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With a snippet from enlive:</p>
+
+<figure class='code'><figcaption><span>Form snippet</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">defn </span><span class="nv">show-errors</span> <span class="p">[</span><span class="nv">msgs</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">h/clone-for</span> <span class="p">[</span><span class="nv">i</span> <span class="nv">msgs</span><span class="p">]</span>
+</span><span class='line'>      <span class="p">[</span><span class="nv">:span</span><span class="o">.</span><span class="nv">error</span><span class="p">]</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">h/content</span> <span class="nv">i</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">h/defsnippet</span> <span class="nv">_login</span> <span class="s">&quot;mayapp/views/_login.html&quot;</span>  <span class="p">[</span><span class="nv">:</span><span class="o">#</span><span class="nv">login_form</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">username</span> <span class="nv">password</span> <span class="nv">&amp;</span> <span class="p">[</span><span class="nv">errors</span><span class="p">]]</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">;;find sa div with ir=&#39;errors&#39;</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">:div</span><span class="o">#</span><span class="nv">errors</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">show-errors</span> <span class="nv">errors</span><span class="p">)</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">;;finds an input with id =&#39;username&#39; and replaces</span>
+</span><span class='line'>  <span class="c1">;;its value attribute by username</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">:input</span><span class="o">#</span><span class="nv">username</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">h/set-attr</span> <span class="nv">:value</span> <span class="nv">username</span><span class="p">)</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">;;the same for password</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">:input</span><span class="o">#</span><span class="nv">password</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">h/set-attr</span> <span class="nv">:value</span> <span class="nv">password</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And you have the html output that can be referenced this way:</p>
+
+<figure class='code'><figcaption><span>Login page</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defpage</span> <span class="s">&quot;/login&quot;</span> <span class="p">{</span><span class="nv">:as</span> <span class="nv">login</span><span class="p">}</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">_login</span> <span class="p">(</span><span class="nf">:username</span> <span class="nv">login</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">:password</span> <span class="nv">login</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">:error</span> <span class="nv">login</span><span class="p">)))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;handling the form submit       </span>
+</span><span class='line'><span class="p">(</span><span class="nf">defpage</span> <span class="p">[</span><span class="nv">:post</span> <span class="s">&quot;/login&quot;</span><span class="p">]</span> <span class="p">{</span><span class="nv">:as</span> <span class="nv">login</span><span class="p">}</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">valid?</span> <span class="nv">login</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;Yeah!! Welcome %s&quot;</span> <span class="p">(</span><span class="nf">:username</span> <span class="nv">login</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">render</span> <span class="s">&quot;/login&quot;</span> <span class="p">(</span><span class="nb">assoc </span><span class="nv">login</span> <span class="nv">:error</span> <span class="p">(</span><span class="nf">v/get-errors</span><span class="p">)))))</span>        
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We still have sort of action base framework but with good attention to the view. Not the <code>show-errors</code> function, that can be reused every where with a <code>:div#errors &gt; :span.error</code>. It will repeat the span for every error in <code>msgs</code>.</p>
+
+<p>The error messages may be produce by <code>noir.validation</code> package. In the <code>POST</code> route you can see the snippet being activated with the <code>[errors]</code> argument in case of any errors.</p>
+
+<p>Snippets should be natural for you, and can be used in situations where you define parts of an html, you you have a bigger html resource grouping many parts that cane be a snippet. That is why you passes a selector to <code>defsnipet</code> right after the resource name. That is, transformations will start from this point.</p>
+
+<p>The other option is the <code>deftemplate</code>, it works similar to <code>defsnippet</code>, but doesn&#8217;t take any selector as an argument, because it process the entire resource.</p>
+
+<p>A great usage of enlive you can find at <a href="https://github.com/metadaddy-sfdc/facebook-template-clojure/">Facebook/Heroku sample app &#8211; Clojure</a>.</p>
+
+<p>And to help you starting with noir plus enlive, I&#8217;ve created a template project using <a href="https://github.com/Raynes/lein-newnew">lein-newnew</a>, a way to pack a project as a template, so anyone can reuse it. Please refer to <a href="https://clojars.org/clj-enlive-template">https://clojars.org/clj-enlive-template</a> and the <a href="https://github.com/paulosuzart/clj-enlive-template">clj-enlive-template</a> source code. Just:</p>
+
+<figure class='code'><figcaption><span>Login page</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">lein</span> <span class="nv">plugin</span> <span class="nv">install</span> <span class="nv">clj-enlive-template</span> <span class="mf">0.0</span><span class="o">.</span><span class="mi">1</span>
+</span><span class='line'><span class="nv">lein</span> <span class="nv">new</span> <span class="nv">clj-enlive-template</span> <span class="nv">myproj</span>
+</span><span class='line'><span class="nv">cd</span> <span class="nv">myproj</span>
+</span><span class='line'><span class="nv">lein</span> <span class="nv">run</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And start having fun with enlive and noir. This project template may be evolved to have <a href="http://sqlkorma.com/">korma</a> or any persistence framework.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure macros: Automating AWS SimpleDB admin tasks.]]></title>
+    <link href="http://paulosuzart.github.com/blog/2012/02/03/clojure-macros-automating-aws-simpledb-admin-tasks/"/>
+    <updated>2012-02-03T21:16:00-02:00</updated>
+    <id>http://paulosuzart.github.com/blog/2012/02/03/clojure-macros-automating-aws-simpledb-admin-tasks</id>
+    <content type="html"><![CDATA[<p>First post of the year! To talk about clojure, of course.
+<a href="http://codemountain.wordpress.com/2010/10/09/clojure-macros/">I&#8217;ve written (pt_br)</a> about clojure macros before. And yes, it is really powerful.</p>
+
+<p>I&#8217;m using macros to help me setting up a connection with <a href="http://aws.amazon.com/simpledb/">Amazon SimpleDB</a> to do some small administrative tasks such as listing domains, creating domains, counting items in a domain, etc.</p>
+
+<p>SimpleDB hasn&#8217;t a console, so you have interact with it using a pure html + js application provided by AWS, or do it by hand. I do prefer doing it by my own :). Then I created de following macro:</p>
+
+<figure class='code'><figcaption><span>SimpleDB admin tasks </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">defmacro </span><span class="nv">boot-sdb</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="o">&#39;</span><span class="p">(</span><span class="nv">do</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="o">.</span><span class="nv">setLevel</span> <span class="p">(</span><span class="nf">java</span><span class="o">.</span><span class="nv">util</span><span class="o">.</span><span class="nv">logging</span><span class="o">.</span><span class="nv">Logger/getLogger</span> <span class="s">&quot;com.amazonaws&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="nv">java</span><span class="o">.</span><span class="nv">util</span><span class="o">.</span><span class="nv">logging</span><span class="o">.</span><span class="nv">Level/WARNING</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="o">.</span><span class="nv">setLevel</span> <span class="p">(</span><span class="nf">java</span><span class="o">.</span><span class="nv">util</span><span class="o">.</span><span class="nv">logging</span><span class="o">.</span><span class="nv">Logger/getLogger</span> <span class="s">&quot;httpclient&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="nv">java</span><span class="o">.</span><span class="nv">util</span><span class="o">.</span><span class="nv">logging</span><span class="o">.</span><span class="nv">Level/WARNING</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="o">.</span><span class="nv">setLevel</span> <span class="p">(</span><span class="nf">java</span><span class="o">.</span><span class="nv">util</span><span class="o">.</span><span class="nv">logging</span><span class="o">.</span><span class="nv">Logger/getLogger</span> <span class="s">&quot;org.apache.commons.httpclient&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="nv">java</span><span class="o">.</span><span class="nv">util</span><span class="o">.</span><span class="nv">logging</span><span class="o">.</span><span class="nv">Level/WARNING</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="nf">require</span> <span class="p">(</span><span class="nf">quote</span> <span class="p">[</span><span class="nv">cemerick</span><span class="o">.</span><span class="nv">rummage</span> <span class="nv">:as</span> <span class="nv">sdb</span><span class="p">]))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">require</span> <span class="p">(</span><span class="nf">quote</span> <span class="p">[</span><span class="nv">cemerick</span><span class="o">.</span><span class="nv">rummage</span><span class="o">.</span><span class="nv">encoding</span> <span class="nv">:as</span> <span class="nv">enc</span><span class="p">]))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">use</span> <span class="p">(</span><span class="nf">quote</span> <span class="nv">apix</span><span class="o">.</span><span class="nv">util</span><span class="p">))</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="p">(</span><span class="k">def </span><span class="nv">*sdb*</span> <span class="p">(</span><span class="nf">sdb/create-client</span> <span class="p">(</span><span class="nf">env</span> <span class="s">&quot;AWS_KEYID&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">env</span> <span class="s">&quot;AWS_KEY&quot;</span><span class="p">)))</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">def </span><span class="nv">*sdbconf*</span> <span class="p">(</span><span class="nb">assoc </span><span class="nv">enc/keyword-strings</span> <span class="nv">:client</span> <span class="nv">*sdb*</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Connected to SDB.&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="k">defn </span><span class="nv">lsd</span> <span class="p">[]</span> <span class="p">(</span><span class="nf">sdb/list-domains</span> <span class="nv">*sdbconf*</span><span class="p">))</span>
+</span><span class='line'>      
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="k">defn </span><span class="nv">mkd</span> <span class="p">[</span><span class="nv">d</span><span class="p">]</span> <span class="p">(</span><span class="nf">sdb/create-domain</span> <span class="nv">*sdbconf*</span> <span class="nv">d</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="k">defn </span><span class="nv">rmd</span> <span class="p">[</span><span class="nv">d</span><span class="p">]</span> <span class="p">(</span><span class="nf">sdb/delete-domain</span> <span class="nv">*sdbconf*</span> <span class="nv">d</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="k">defn </span><span class="nv">countd</span> <span class="p">[</span><span class="nv">d</span><span class="p">]</span> <span class="p">(</span><span class="nf">str</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;Total items [%s]: &quot;</span> <span class="nv">d</span><span class="p">)</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nf">:itemCount</span> <span class="p">(</span><span class="nf">sdb/domain-metadata</span> <span class="nv">*sdbconf*</span> <span class="nv">d</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="k">defn </span><span class="nv">sdb-help</span> <span class="p">[]</span>
+</span><span class='line'>          <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Type &#39;(lsd)&#39; to list all domains&quot;</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Type &#39;(mkd domain-name)&#39; to create a new domain&quot;</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Type &#39;(rmd domain-name)&#39; to delete a domain&quot;</span><span class="p">)</span>  
+</span><span class='line'>          <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Type &#39;(countd domain)&#39; to get the items count of domain&quot;</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Type &#39;(sdb-help)&#39; to see this help again&quot;</span><span class="p">))</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="p">(</span><span class="nf">sdb-help</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It saves the work of configuring the appropriate log levels as well as creating SimpleDB client using <a href="https://github.com/cemerick/rummage">rummage</a> (a SimpleDB client by <a href="twitter.com/cemerick">@cemerick</a>).</p>
+
+<p>And why a macro? Because in some extent you can see a macro as a code template, just like <a href="http://velocity.apache.org/">Velocity</a> or <a href="http://www.stringtemplate.org/">String Template</a>. So what this macro does is just &#8220;typing&#8221; all this code on my REPL namespace, than the defined functions and vars are automatic available in the <code>user</code> namespace.</p>
+
+<p>Using it is simple:</p>
+
+<figure class='code'><figcaption><span>Using the macro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">use</span> <span class="ss">&#39;the</span><span class="o">.</span><span class="nv">macro</span><span class="o">.</span><span class="nv">namespace</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">boot-sdb</span><span class="p">)</span>
+</span><span class='line'><span class="nv">Connected</span> <span class="nv">to</span> <span class="nv">SDB</span><span class="o">.</span>
+</span><span class='line'><span class="nv">Type</span> <span class="o">&#39;</span><span class="p">(</span><span class="nv">lsd</span><span class="p">)</span><span class="o">&#39;</span> <span class="nv">to</span> <span class="nv">list</span> <span class="nv">all</span> <span class="nv">domains</span>
+</span><span class='line'><span class="nv">Type</span> <span class="o">&#39;</span><span class="p">(</span><span class="nv">mkd</span> <span class="nv">domain-name</span><span class="p">)</span><span class="o">&#39;</span> <span class="nv">to</span> <span class="nv">create</span> <span class="nv">a</span> <span class="nv">new</span> <span class="nv">domain</span>
+</span><span class='line'><span class="nv">Type</span> <span class="o">&#39;</span><span class="p">(</span><span class="nv">rmd</span> <span class="nv">domain-name</span><span class="p">)</span><span class="o">&#39;</span> <span class="nv">to</span> <span class="nv">delete</span> <span class="nv">a</span> <span class="nv">domain</span>
+</span><span class='line'><span class="nv">Type</span> <span class="o">&#39;</span><span class="p">(</span><span class="nv">countd</span> <span class="nv">domain</span><span class="p">)</span><span class="o">&#39;</span> <span class="nv">to</span> <span class="nv">get</span> <span class="nv">the</span> <span class="nv">items</span> <span class="nv">count</span> <span class="nv">of</span> <span class="nv">domain</span>
+</span><span class='line'><span class="nv">Type</span> <span class="o">&#39;</span><span class="p">(</span><span class="nv">sdb-help</span><span class="p">)</span><span class="o">&#39;</span> <span class="nv">to</span> <span class="nv">see</span> <span class="nv">this</span> <span class="nv">help</span> <span class="nv">again</span>
+</span><span class='line'><span class="nv">nil</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>(boot-sdb)</code> &#8220;types&#8221; all the code for you, then you can call the functions like <code>(lsd)</code> to get the list of domains in your SimpleDB.</p>
+
+<p>If take a closer look you may notice a function call to <code>(env "AWS_KEYID")</code>. It simply gets the environment variables set with your credentials.</p>
+
+<p>You can extend the macro to have any admin task you may need. Note that the <code>*sdbconf*</code> will become available, so you can call rummage directly without having to configure all again.</p>
+
+<p>That is it. Clojure is smart!</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My Own REDIS Types - text - Notation]]></title>
+    <link href="http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-text-notation/"/>
+    <updated>2011-12-11T18:11:00-02:00</updated>
+    <id>http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-text-notation</id>
+    <content type="html"><![CDATA[<p>Some seconds after the <a href="http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-notation/">last post</a>, <a href="http://twitter.com/paraseba">@paraseba</a> commented that a text version of this notation may be even more helpful.</p>
+
+<p>Here it is:</p>
+
+<ul>
+<li><code>$</code> means provided by some interaction with redis.</li>
+<li><code>*</code> means provided by user.</li>
+<li><code>key</code> represents a redis KEY with the value set by <code>SET</code>.</li>
+<li><code>(listkey)</code> represents a redis LIST with elements manipulated by <code>LPUSH</code> and so on.</li>
+<li><code>{hashkey [key values]}</code> represents a redis <code>HASH</code> with data set by <code>HSET</code> or <code>HMSET</code>.</li>
+<li><code>#{setkey data}</code> represents a set or sorted set.</li>
+<li><code>as $varname</code> may be used for situations where <code>INCR</code> is used to generate an ID.</li>
+</ul>
+
+
+<p>The last post user creation process may be written as:</p>
+
+<pre><code>users:next as $uid
+{users:$uid data}
+#{users:pending:confirmation $uid)
+#{messages:welcome $uid}
+(users:send:mail *mail)
+</code></pre>
+
+<p>An instance of this process would be:</p>
+
+<pre><code>users:next ;; suppose 21 as result
+{users:21 [name Abraao mail somemailhere@gmail.com status pending-mail-confirmation]}
+#{users:pending:confirmation 21)
+#{messages:welcome 21}
+(users:send:mail somemailhere@gmail.com)
+</code></pre>
+
+<p>It is the form I&#8217;m using as doc strings in a namespace. It looks great with <a href="http://www.fogus.me/fun/marginalia/">Marginalia</a>.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My own REDIS types notation]]></title>
+    <link href="http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-notation/"/>
+    <updated>2011-12-11T17:20:00-02:00</updated>
+    <id>http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-notation</id>
+    <content type="html"><![CDATA[<p>One of the greatest <a href="http://en.wikipedia.org/wiki/NoSQL">NoSQL</a> <a href="http://en.wikipedia.org/wiki/NoSQL#Key-value_store">key-value</a> databases I value most, is <a href="http://redis.io/">redis</a>. It is simple, fast and tasty.</p>
+
+<p>You interact with redis through its protocol. They are divided by commands that you can apply to its different data structures. These structures are Key, String, Hashes, Lists, Sets, Sorted Sets and channels (this one used for <a href="http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">pub/sub pattern</a>).</p>
+
+<p>Since redis is key-value, it means you can store only keys with values. Right? It may sound bad at the beginning, but you get the way as you try. I&#8217;m just a newbe in redis world and I&#8217;m feeling comfortable with it.</p>
+
+<p>So, due to its key-value nature you should create some structures around you main structure to help you query your data. Suppose you are using a redis <code>HASH</code> to store user information. In a javascript notation:</p>
+
+<pre><code>HMSET  users:21 name Abraão mail somemailhere@gmail.com status pending-mail-confirmation
+</code></pre>
+
+<p><code>HMSET</code> is a command to store all the <code>HASH</code> entries into a <code>HASH</code> identified by <code>user:21</code> key. And for some reason, your system get all users pending mail confirmation and send them a remember. There is no way to get all the users that has mail confirmation pending other than check every user status, what would be expensive. A helper structure may save you from this.</p>
+
+<pre><code>SADD users:pending:confirmation 21
+</code></pre>
+
+<p>Bingo. Now your background process can pick up users to remember mail confirmation from the <code>SET</code> identified by <code>users:pending:confirmation</code> key.</p>
+
+<p>Suppose you also want to show a welcome message to the user in the first time it visits you. You may use another helper structure.</p>
+
+<pre><code>SADD messages:welcome 21
+</code></pre>
+
+<p>Thus, your system queries a <code>SET</code> identified by <code>messages:welcome</code> key to check if it should show a welcome message to the user. And finally, at the moment of user&#8217;s creation, your system wants to send some information through mail also in a back ground process. Again a helper structure.</p>
+
+<pre><code>LPUSH users:send:mail somemailhere@gmail.com
+</code></pre>
+
+<p>Lot of thing to just create a user. Now imagine a big code base and even complex interactions with other helper structures like sorted sets to store information related to age, date, etc. It was my situation last week while interacting with redis.</p>
+
+<p>To make things clear and easy to remember and document. I created a simple, yet helpful (for me at least) notation to document redis structures and the sequence of interactions. Te symbols are:</p>
+
+<p><img src="https://s3.amazonaws.com/suzart.blogs.posts/redislayout/Slide1.jpg" alt="redis Types Notation" /></p>
+
+<p>Now our user&#8217;s creation process using the notation we have:</p>
+
+<p><img src="https://s3.amazonaws.com/suzart.blogs.posts/redislayout/Slide4.jpg" alt="User's creation interactions" /></p>
+
+<p>It is simple and is helping a lot. Another good thing I started to do is to write queries in plain english (portuguese actually :)) to help identify which types of queries a structure is helping me to answer. To see a text version of it, visit this <a href="http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-text-notation/">new post</a>.</p>
+
+<p>I&#8217;m using <a href="https://github.com/mmcgrana/clj-redis/">clj-redis</a> interact with redis.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Korma and clojure records]]></title>
+    <link href="http://paulosuzart.github.com/blog/2011/12/04/korma-and-clojure-records/"/>
+    <updated>2011-12-04T19:02:00-02:00</updated>
+    <id>http://paulosuzart.github.com/blog/2011/12/04/korma-and-clojure-records</id>
+    <content type="html"><![CDATA[<p><a href="http://sqlkorma.com">Korma</a> is a <a href="http://clojure.org">clojure</a> framework (by <a href="http://twitter.com/ibdknox">@ibdknox</a>) that provides great SQL abstractions. You can work purely with clojure code without inserting SQL strings into your code.</p>
+
+<p>Consider the following entities:</p>
+
+<figure class='code'><figcaption><span>Using defentity </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'> <span class="p">(</span><span class="nf">defdb</span> <span class="nv">mydb</span> <span class="p">(</span><span class="nf">mysql</span>
+</span><span class='line'>                     <span class="p">{</span><span class="nv">:port</span> <span class="mi">3306</span>
+</span><span class='line'>                       <span class="nv">:host</span> <span class="s">&quot;localhost&quot;</span>
+</span><span class='line'>                       <span class="nv">:user</span> <span class="s">&quot;root&quot;</span>
+</span><span class='line'>                       <span class="nv">:db</span> <span class="s">&quot;korma_post&quot;</span><span class="p">}))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">defentity</span> <span class="nv">email</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">database</span> <span class="nv">mydb</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">defentity</span> <span class="nv">person</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">has-one</span> <span class="nv">email</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">database</span> <span class="nv">mydb</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>email</code> is the representation of the email table in a mysql database. Note that you don&#8217;t need to specify any fields. It is optional. In this case, both entities will return the column&#8217;s name as map keys in a given select. Let&#8217;s see:</p>
+
+<figure class='code'><figcaption><span>Selecting your data </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">select </span><span class="nv">person</span> <span class="p">(</span><span class="nf">with</span> <span class="nv">email</span><span class="p">)))</span>
+</span><span class='line'><span class="c1">;;will return</span>
+</span><span class='line'><span class="p">[{</span><span class="nv">:id</span> <span class="mi">1</span><span class="o">,</span> <span class="nv">:name</span> <span class="s">&quot;Paulo Suzart&quot;</span><span class="o">,</span>
+</span><span class='line'>   <span class="nv">:age</span> <span class="mi">29</span><span class="o">,</span> <span class="nv">:id_2</span> <span class="mi">1</span><span class="nv">x,</span>
+</span><span class='line'>   <span class="nv">:email</span> <span class="s">&quot;paulosuzart@gmail.com&quot;</span><span class="o">,</span>
+</span><span class='line'>   <span class="nv">:person_id</span> <span class="mi">1</span><span class="p">}</span>
+</span><span class='line'> <span class="p">{</span><span class="nv">:id</span> <span class="mi">2</span><span class="o">,</span>
+</span><span class='line'>   <span class="nv">:name</span> <span class="s">&quot;Rafael Felini&quot;</span><span class="o">,</span>
+</span><span class='line'>   <span class="nv">:age</span> <span class="mi">27</span><span class="o">,</span>
+</span><span class='line'>   <span class="nv">:id_2</span> <span class="mi">2</span><span class="o">,</span>
+</span><span class='line'>   <span class="nv">:email</span> <span class="s">&quot;rafael.felini@gmail.com&quot;</span><span class="o">,</span>
+</span><span class='line'>   <span class="nv">:person_id</span> <span class="mi">2</span><span class="p">}]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The result look like a java Resultset. You can choose the original column names to pass around your application. And since clojure is not type safe or compiled, you may find yourself suffering in cases of database refactories.</p>
+
+<p>A nice solution is to combine Korma <code>entities</code> with <code>transform</code> function and clojure <code>defrecord</code> to get rid of this problem, as well as diminish the surface contact of your code concerned with database access. One solution we (me and <a href="http://twitter.com/rafaelfelini">@rafaelfelini</a>) have found was:</p>
+
+<figure class='code'><figcaption><span>Combining entities with transform and defrecord </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defrecord</span> <span class="nv">Person</span> <span class="p">[</span><span class="nv">id</span> <span class="nv">name</span> <span class="nv">age</span> <span class="nv">email</span><span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">defentity</span> <span class="nv">person</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">transform</span> <span class="o">#</span><span class="p">(</span><span class="nv">Person</span><span class="o">.</span> <span class="p">(</span><span class="nf">:id</span> <span class="nv">%</span><span class="p">)</span> <span class="p">(</span><span class="nf">:name</span> <span class="nv">%</span><span class="p">)</span> <span class="p">(</span><span class="nf">:age</span> <span class="nv">%</span><span class="p">)</span> <span class="p">(</span><span class="nf">:email</span> <span class="nv">%</span><span class="p">)))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">has-one</span> <span class="nv">email</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">database</span> <span class="nv">mydb</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; now try again</span>
+</span><span class='line'><span class="p">(</span><span class="nb">select </span><span class="nv">person</span> <span class="p">(</span><span class="nf">with</span> <span class="nv">email</span><span class="p">)))</span>
+</span><span class='line'><span class="c1">;; will return</span>
+</span><span class='line'><span class="p">(</span><span class="o">#</span><span class="nv">:user</span><span class="o">.</span><span class="nv">Person</span><span class="p">{</span><span class="nv">:id</span> <span class="mi">1</span><span class="o">,</span>
+</span><span class='line'>                         <span class="nv">:name</span> <span class="s">&quot;Paulo Suzart&quot;</span><span class="o">,</span>
+</span><span class='line'>                         <span class="nv">:age</span> <span class="mi">29</span><span class="o">,</span>
+</span><span class='line'>                         <span class="nv">:email</span> <span class="s">&quot;paulosuzart@gmail.com&quot;</span><span class="p">}</span>
+</span><span class='line'> <span class="o">#</span><span class="nv">:user</span><span class="o">.</span><span class="nv">Person</span><span class="p">{</span><span class="nv">:id</span> <span class="mi">2</span><span class="o">,</span>
+</span><span class='line'>                         <span class="nv">:name</span> <span class="s">&quot;Rafael Felini&quot;</span><span class="o">,</span>
+</span><span class='line'>                         <span class="nv">:age</span> <span class="mi">27</span><span class="o">,</span>
+</span><span class='line'>                         <span class="nv">:email</span> <span class="s">&quot;rafael.felini@gmail.com&quot;</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>transform</code> function takes another function that transforms a database record (with the column names as keys) into a clojure&#8217;s record. In this case <code>Person</code> is the record - that always holds the e-mail. Korma takes care of the join, assuming that the <code>email</code> table has a column called <code>person_id</code>.</p>
+
+<p>Now your code is a bit more resilient to database changes with this thing layer of transformation. Actually a good practice you&#8217;ve done all life as developer.</p>
+
+<p>Korma can do a lot of things to make your life easier, as the abililty to compose queries, and performs really nice. Think I finally found THE framework for relational data access in clojure.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[DateParamMatcher for Finagle]]></title>
+    <link href="http://paulosuzart.github.com/blog/2011/10/30/dateparammatcher-for-finagle/"/>
+    <updated>2011-10-30T23:22:00-02:00</updated>
+    <id>http://paulosuzart.github.com/blog/2011/10/30/dateparammatcher-for-finagle</id>
+    <content type="html"><![CDATA[<p><a href="http://twitter.github.com/finagle">Twitter Finagle</a> is an amazing framework for RPC communication, and my interest is its HTTP features for creating RESTful APIs.</p>
+
+<p>As I bloged at <a href="http://codemountain.wordpress.com/2011/10/14/twitter-finagle-primeiras-impressoes/">codemountain</a>, I&#8217;m using finagle for a personal project. Don&#8217;t know how far it will go, but the facts is that I&#8217;m learning Finagle a lot.</p>
+
+<p>During this project I needed to extract from the query string, a param to be parsed to a twitter.util.Time. I ended up with a Param Matcher to be used my a pattern match agains the requested path. The use of this Param Patcher is:</p>
+
+<figure class='code'><figcaption><span>Using the DateParamMatcher</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="c1">//...</span>
+</span><span class='line'><span class="nc">Path</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="o">)</span> <span class="o">:?</span> <span class="n">request</span><span class="o">.</span><span class="n">params</span> <span class="k">match</span> <span class="o">{</span>
+</span><span class='line'>       <span class="k">case</span> <span class="nc">Root</span> <span class="o">/</span> <span class="s">&quot;myPath&quot;</span> <span class="o">:?</span> <span class="nc">RequestTime</span><span class="o">(</span><span class="n">requestTimeParam</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="c1">//do something</span>
+</span><span class='line'><span class="c1">//..</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="c1">//Where RequestTime is defined as</span>
+</span><span class='line'> <span class="k">object</span> <span class="nc">RequestTime</span> <span class="k">extends</span> <span class="nc">DateParamMatcher</span><span class="o">(</span><span class="s">&quot;requestTimeParam&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The source of DateParamMatcher is the following.</p>
+
+<figure class='code'><figcaption><span>Param Matcher for twitter.util.Time</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">com.twitter.util.Time._</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.util.Time</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">java.text.ParseException</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finagle.http.path._</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finagle.http.ParamMap</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Extractor that takes a request parameter and converts it to a {twitter.util.Time}.</span>
+</span><span class='line'><span class="cm"> * The date format should conform with {twitter.util.Time} default format.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="k">abstract</span> <span class="k">class</span> <span class="nc">DateParamMatcher</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">unapply</span><span class="o">(</span><span class="n">params</span><span class="k">:</span> <span class="kt">ParamMap</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Time</span><span class="o">]</span> <span class="k">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">name</span><span class="o">)</span> <span class="n">flatMap</span> <span class="o">{</span> <span class="n">value</span> <span class="k">=&gt;</span>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>      <span class="nc">Some</span><span class="o">(</span><span class="n">at</span><span class="o">(</span><span class="n">value</span><span class="o">))</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">case</span> <span class="n">ex</span><span class="k">:</span> <span class="kt">ParseException</span> <span class="o">=&gt;</span>
+</span><span class='line'>        <span class="nc">None</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finagle also provides an abstract <code>com.twitter.finagle.http.path.ParamMatcher</code> as well as <code>LongParamMatcher</code> and <code>IntParamMatcher</code> in the same package. They are actually Scala  Extractors (very well explained <a href="http://codemonkeyism.com/scala-goodness-extractors/">here</a> by @codemonkeyism). This is a practical way to extract values from a query string and put it available at your code already parsed.</p>
+
+<p>Note that if the param named <code>requestTimeParam</code> is not present or carries a invalid value for <code>Time</code> in the query string the <code>None</code> value is returned.</p>
+
+<p>Although easy to build and extract params from query string and requested path, it is not a Finagle strength. It is kinda limited. A better abstraction is offered by <a href="https://github.com/unfiltered/unfiltered">Unfiltered</a>(another <a href="http://twitter.com/n8han">@n8han&#8217;s</a> great job).</p>
+
+<p>Hope you enjoy it.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[What you are supposed to find here]]></title>
+    <link href="http://paulosuzart.github.com/blog/2011/10/30/what-you-are-supposed-to-find-here/"/>
+    <updated>2011-10-30T23:09:00-02:00</updated>
+    <id>http://paulosuzart.github.com/blog/2011/10/30/what-you-are-supposed-to-find-here</id>
+    <content type="html"><![CDATA[<p>Hi, this is another blog of mine. Yap, I have a - mostly in portuguese - wordpress called <a href="http://codemountain.wordpress.com">codemountain</a>, and a <a href="http://posterous.com/paulosuzart">Posterous</a>. Maybe I move to here and kill the others. Don&#8217;t know yet.</p>
+
+<p>The main reason to starting blogging directly on my Github is to keep the subjects even more focused on projects committed here, and share some experiences with some libs also committed here.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

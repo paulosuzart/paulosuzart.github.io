@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Docker + Ansible - Paulo Suzart Blog</title>
+  <meta name="author" content="Paulo Suzart">
+
+  
+  <meta name="description" content="Hi! This form for blog posts title is working! Liked it. Again some time without writting. And this time I&#8217;m writting about
+something brand new &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://paulosuzart.github.com/blog/2013/08/21/docker-plus-ansible">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Paulo Suzart Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26676810-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Paulo Suzart Blog</a></h1>
+  
+    <h2>Functional thoughts.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:paulosuzart.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Docker + Ansible</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+  
+
+<time datetime="2013-08-21T23:21:00-03:00" pubdate>Aug 21<span>st</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Hi! This form for blog posts title is working! Liked it.</p>
+
+<p>Again some time without writting. And this time I&#8217;m writting about
+something brand new: <a href="http://www.docker.io/">Docker</a>.</p>
+
+<p>It lives in the Virtualization contex. You can rear more at <a href="http://docs.docker.io/en/latest/">docker
+documentation</a>. And from my point of
+view, it comes to kill some important challenges me and you have been
+facing over years when talking about delivering software.</p>
+
+<h1>Paas</h1>
+
+<p>As <a href="http://blog.docker.io/2013/07/excited-to-be-joining-the-great-teams-at-dotcloud-docker-as-ceo/">stated around</a>
+Paas often fail to cover every necessity you migh have. Because they are
+closed black boxes where you &#8220;commit your code&#8221; in, or alike. I really
+like <a href="http://heroku.com">heroku</a> and
+<a href="https://www.dotcloud.com/">dotCloud</a>, but yes, I have apps that can&#8217;t
+run there.</p>
+
+<h1>Ordinary virtualization, another fit for Docker</h1>
+
+<p>I&#8217;ve been using
+<a href="http://www.citrix.com.br/products/xenserver/overview.html">XenServer</a>
+to handle massive amount of requests distributed over dozens of machines
+and it works pretty well. But after a while I have some extra
+&#8220;disadvantages&#8221; (I&#8217;m puting quotes because it is really specific) to add
+to <a href="https://github.com/dotcloud/docker">this list</a>. Here they are:</p>
+
+<ul>
+<li> The sysadmin should be involved since he needs to access the Xen Center in order to create machines</li>
+<li> The developer needs to inform beforehand the amount of CPU cores, disk size and memory</li>
+<li> This involves an all new machine created with a full operating system, configurations, etc. No time for that</li>
+<li> Sysadmins are busy and don&#8217;t like to give you attention</li>
+</ul>
+
+
+<p>Not only that, but many cases crating a full virtualized machine to put
+inside one wordpress, or few simple stuff doesn&#8217;t pay off. For this sort
+fo situation I&#8217;m addopting Docker.</p>
+
+<p>The main advantages of container virtualization (like Docker) are:</p>
+
+<ul>
+<li> Concurrent deployment of the same app among developers. So no more single testing environment</li>
+<li> Platform-as-a-Service like environment. You don&#8217;t need to think about anything else but run the process in charge of your application. No worries with operating system or an entire machine</li>
+<li> Make your app immediately available</li>
+<li> Run it over a virtualized Xen machine and you still hold all advantages from XEN in the host level (snapshot, live migration, etc, volume management)</li>
+</ul>
+
+
+<p>Add to the recipe the idea of <a href="http://12factor.net/">12 factor apps</a> and
+you are done! Wih Docker you can create the workflow:</p>
+
+<ol>
+<li>Developer creates a Docker container, commits it to a Docker index
+or even give you a <code>Dockerfile</code>.</li>
+<li>Since it is a 12factor app, it is supposed detect
+resources configuration from the environment it runs</li>
+<li>You simply run it.</li>
+</ol>
+
+
+<p>Excellent, but still a missing piece.</p>
+
+<h1>Ansible</h1>
+
+<p>Ok, call me crazy: <em>&#8220;You&#8217;ve been using <a href="http://puppetlabs.com/">Puppet</a>
+for more than 1 and a hal year, why are you talking about
+<a href="http://www.ansibleworks.com/">Ansible?</a>&#8221;</em>. It is simple. Well, Ansible
+is also simple, but I mean, it is simple to know why Ansible. Just look
+to step 1 above. See?</p>
+
+<p>Puppet is too much for you to set up your container. Ansible is fine.
+You need to be repeatable. Although Docker allows you for commiting
+images to a repository, you still need to set up it from scract without
+forgeting any detail.</p>
+
+<p>Ansible is a direct competitor for Puppet. But with a simpler approach
+and good enough to run it on every server if you want. I tried this
+combination and approved. Awesome!</p>
+
+<p>The step one above now could be rewritten like:</p>
+
+<ol>
+<li>Developer - with the help of sysadmins or not - crates a
+container and set it up with ansible. Then commit it to the repository
+and you can even forget Docker files.</li>
+</ol>
+
+
+<p>I&#8217;m absolutely sure Docker will solve many things but bring lots of
+discussions/patterns about how to solve the problems it is supposed to.</p>
+
+<h1>Future</h1>
+
+<p>Projects like: <a href="http://coreos.com/">CoreOS</a> and <a href="https://flynn.io/">Flynn</a> literally give you the real notion about what I&#8217;m talking. I don&#8217;t think Paas or Iaas will die, absolutely not. But a new room is needed for sure.</p>
+
+<p>I have both Docker and Ansible running production stuff and hope I can
+share some <code>Playbooks</code> and <code>Docker</code> files here in the near future.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Paulo Suzart</span></span>
+
+      
+
+
+
+
+  
+
+<time datetime="2013-08-21T23:21:00-03:00" pubdate>Aug 21<span>st</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/automation/'>automation</a>, <a class='category' href='/blog/categories/virtualization-/'>virtualization,</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://paulosuzart.github.com/blog/2013/08/21/docker-plus-ansible/" data-via="paulosuzart" data-counturl="http://paulosuzart.github.com/blog/2013/08/21/docker-plus-ansible/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/05/20/janus-plus-ack-grep-plus-fish-shell-tools-to-rule-everything/" title="Previous Post: Janus + ack-grep + fish shell: Tools to rule everything">&laquo; Janus + ack-grep + fish shell: Tools to rule everything</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/21/docker-plus-ansible/">Docker + Ansible</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/20/janus-plus-ack-grep-plus-fish-shell-tools-to-rule-everything/">Janus + ack-grep + fish shell: Tools to rule everything</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/07/configuring-clojure-immutant-by-environment/">Configuring Clojure Immutant by environment</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/09/tcp-server-with-clojure-aleph-and-gloss/">TCP Server with Clojure Aleph and Gloss</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/17/monitoring-ec2-with-clojure-and-server-stats/">Monitoring ec2 with clojure and Server-Stats</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/paulosuzart">@paulosuzart</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'paulosuzart',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("paulosuzart", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/paulosuzart" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @paulosuzart</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Paulo Suzart -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'paulosuzartblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://paulosuzart.github.com/blog/2013/08/21/docker-plus-ansible';
+        var disqus_url = 'http://paulosuzart.github.com/blog/2013/08/21/docker-plus-ansible';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
