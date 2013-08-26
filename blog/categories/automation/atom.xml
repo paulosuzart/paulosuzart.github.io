@@ -4,7 +4,7 @@
   <title><![CDATA[Category: automation | Paulo Suzart Blog]]></title>
   <link href="http://paulosuzart.github.com/blog/categories/automation/atom.xml" rel="self"/>
   <link href="http://paulosuzart.github.com/"/>
-  <updated>2013-08-22T00:14:16-03:00</updated>
+  <updated>2013-08-26T12:26:59-03:00</updated>
   <id>http://paulosuzart.github.com/</id>
   <author>
     <name><![CDATA[Paulo Suzart]]></name>
@@ -28,10 +28,10 @@ documentation</a>. And from my point of
 view, it comes to kill some important challenges me and you have been
 facing over years when talking about delivering software.</p>
 
-<h1>Paas</h1>
+<h1>PaaS</h1>
 
 <p>As <a href="http://blog.docker.io/2013/07/excited-to-be-joining-the-great-teams-at-dotcloud-docker-as-ceo/">stated around</a>
-Paas often fail to cover every necessity you migh have. Because they are
+PaaS often fail to cover every necessity you migh have. Because they are
 closed black boxes where you "commit your code" in, or alike. I really
 like <a href="http://heroku.com">heroku</a> and
 <a href="https://www.dotcloud.com/">dotCloud</a>, but yes, I have apps that can't
@@ -42,8 +42,9 @@ run there.</p>
 <p>I've been using
 <a href="http://www.citrix.com.br/products/xenserver/overview.html">XenServer</a>
 to handle massive amount of requests distributed over dozens of machines
-and it works pretty well. But after a while I have some extra
-"disadvantages" (I'm puting quotes because it is really specific) to add
+and it works pretty well. But after using it a while I have detected some extra
+"disadvantages" (I'm puting quotes because it is really specific) of
+this type of virtualization to add
 to <a href="https://github.com/dotcloud/docker">this list</a>. Here they are:</p>
 
 <ul>
@@ -61,9 +62,8 @@ fo situation I'm addopting Docker.</p>
 <p>The main advantages of container virtualization (like Docker) are:</p>
 
 <ul>
-<li> Concurrent deployment of the same app among developers. So no more single testing environment</li>
-<li> Platform-as-a-Service like environment. You don't need to think about anything else but run the process in charge of your application. No worries with operating system or an entire machine</li>
-<li> Make your app immediately available</li>
+<li> Platform-as-a-Service like environment. You don't need to think about anything else but run the process in charge of your application. No worries with an entire machine</li>
+<li> Make your app immediately available. No boot time needed. Just <code>docker run</code> and you are in</li>
 <li> Run it over a virtualized Xen machine and you still hold all advantages from XEN in the host level (snapshot, live migration, etc, volume management)</li>
 </ul>
 
@@ -90,21 +90,23 @@ for more than 1 and a half year, why are you talking about
 is also simple, but I mean, it is simple to know why Ansible. Just look
 to step 1 above. See?</p>
 
-<p>Puppet is too much for you to set up your container. Ansible is fine.
-You need to be repeatable. Although Docker allows you for commiting
-images to a repository, you still need to set up it from scract without
-forgeting any detail.</p>
+<p>Puppet is too much for you to set up your container. Ansible is fine.</p>
 
-<p>Ansible is a direct competitor for Puppet. But with a simpler approach
-and good enough to run it on every server if you want. I tried this
+<p>You need to be repeatable while setting up containers. You cannot deliver a container with Tomcat 7 plus OpenJDK 1.7 today, and tomorrow
+Tomcat 6 for the same app. You need consistency archieved though repeatability. Ansible can also give it to you.</p>
+
+<p>Although Docker allows you for commiting images to a repository, you still need to set them up from scratch without
+forgeting any detail. Otherwise your app wont't work properly.</p>
+
+<p>Ansible is a direct competitor for Puppet. But with a simpler approach and good enough to run it on every server if you want. I tried this
 combination and approved. Awesome!</p>
 
 <p>The step one above now could be rewritten like:</p>
 
 <ol>
-<li>Developer - with the help of sysadmins or not - crates a
-container and set it up with ansible. Then commit it to the repository
-and you can even forget Docker files.</li>
+<li>Developer - with the help of sysadmins or not - creates a
+container and set it up with Ansible. Then commit it to the repository
+and you can even forget  the <code>Dockerfiles</code></li>
 </ol>
 
 
@@ -113,10 +115,10 @@ discussions/patterns about how to solve the problems it is supposed to.</p>
 
 <h1>Future</h1>
 
-<p>Projects like: <a href="http://coreos.com/">CoreOS</a> and <a href="https://flynn.io/">Flynn</a> literally give you the real notion about what I'm talking. I don't think Paas or Iaas will die, absolutely not. But a new room is needed for sure.</p>
+<p>Projects like: <a href="http://coreos.com/">CoreOS</a> and <a href="https://flynn.io/">Flynn</a> literally give you the real notion about what I'm talking. I don't think PaaS or Iaas will die, absolutely not. But a new room is needed for sure.</p>
 
 <p>I have both Docker and Ansible running production stuff and hope I can
-share some <code>Playbooks</code> and <code>Dockerfiles</code> in the near future.</p>
+share some <code>Playbooks</code> and <code>Dockerfile</code>s in the near future.</p>
 
 <p><p>Don't forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
 </p>

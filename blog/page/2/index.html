@@ -9,7 +9,7 @@
   <meta name="author" content="Paulo Suzart">
 
   
-  <meta name="description" content="One of the greatest NoSQL key-value databases I value most, is redis. It is simple, fast and tasty. You interact with redis through its protocol. &hellip;">
+  <meta name="description" content="Some seconds after the last post, @paraseba commented that a text version of this notation may be even more helpful. Here it is: $ means provided by &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -75,6 +75,75 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/11/my-own-redis-types-text-notation/">My Own REDIS Types - Text - Notation</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+  
+
+<time datetime="2011-12-11T18:11:00-02:00" pubdate>Dec 11<span>th</span>, 2011</time>
+        
+         | <a href="/blog/2011/12/11/my-own-redis-types-text-notation/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Some seconds after the <a href="http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-notation/">last post</a>, <a href="http://twitter.com/paraseba">@paraseba</a> commented that a text version of this notation may be even more helpful.</p>
+
+<p>Here it is:</p>
+
+<ul>
+<li><code>$</code> means provided by some interaction with redis.</li>
+<li><code>*</code> means provided by user.</li>
+<li><code>key</code> represents a redis KEY with the value set by <code>SET</code>.</li>
+<li><code>(listkey)</code> represents a redis LIST with elements manipulated by <code>LPUSH</code> and so on.</li>
+<li><code>{hashkey [key values]}</code> represents a redis <code>HASH</code> with data set by <code>HSET</code> or <code>HMSET</code>.</li>
+<li><code>#{setkey data}</code> represents a set or sorted set.</li>
+<li><code>as $varname</code> may be used for situations where <code>INCR</code> is used to generate an ID.</li>
+</ul>
+
+
+<p>The last post user creation process may be written as:</p>
+
+<pre><code>users:next as $uid
+{users:$uid data}
+#{users:pending:confirmation $uid)
+#{messages:welcome $uid}
+(users:send:mail *mail)
+</code></pre>
+
+<p>An instance of this process would be:</p>
+
+<pre><code>users:next ;; suppose 21 as result
+{users:21 [name Abraao mail somemailhere@gmail.com status pending-mail-confirmation]}
+#{users:pending:confirmation 21)
+#{messages:welcome 21}
+(users:send:mail somemailhere@gmail.com)
+</code></pre>
+
+<p>It is the form I&#8217;m using as doc strings in a namespace. It looks great with <a href="http://www.fogus.me/fun/marginalia/">Marginalia</a>.</p>
+
+<p>Don&#8217;t forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -460,6 +529,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/08/26/geocoding-csvs-with-clojure/">Geocoding CSVs with Clojure</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/21/docker-plus-ansible/">Docker + Ansible</a>
       </li>
     
@@ -473,10 +546,6 @@
     
       <li class="post">
         <a href="/blog/2012/07/09/tcp-server-with-clojure-aleph-and-gloss/">TCP Server with Clojure Aleph and Gloss</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/17/monitoring-ec2-with-clojure-and-server-stats/">Monitoring ec2 with clojure and Server-Stats</a>
       </li>
     
   </ul>

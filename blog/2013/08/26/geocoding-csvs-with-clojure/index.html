@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: clojure - Paulo Suzart Blog</title>
+  <title>Geocoding CSVs with Clojure - Paulo Suzart Blog</title>
   <meta name="author" content="Paulo Suzart">
 
   
-  <meta name="description" content="Category: clojure">
+  <meta name="description" content="Hi! Nothing like delivering some value to your company using your preferred tool, hun? Well, I had this feeling after freeing up my team of writing &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://paulosuzart.github.comblog/categories/clojure">
+  <link rel="canonical" href="http://paulosuzart.github.com/blog/2013/08/26/geocoding-csvs-with-clojure">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -74,182 +74,133 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Clojure</h1>
+    
+      <h1 class="entry-title">Geocoding CSVs With Clojure</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+  
+
+<time datetime="2013-08-26T11:48:00-03:00" pubdate>Aug 26<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>Hi! Nothing like delivering some value to your company using your preferred tool, hun?</p>
 
-  
-  <h2>2013</h2>
+<p>Well, I had this feeling after freeing up my team of writing and writing the same thing again and again. As you can seen at <a href="https://github.com/paulosuzart/ultimate-geo">ultimate-geo project page</a>:</p>
 
-<article>
-  
-<h1><a href="/blog/2013/08/26/geocoding-csvs-with-clojure/">Geocoding CSVs with Clojure</a></h1>
-<time datetime="2013-08-26T11:48:00-03:00" pubdate><span class='month'>Aug</span> <span class='day'>26</span> <span class='year'>2013</span></time>
+<blockquote><p>Ultimate Geo is the final definitive geocoding app. The motivation behind it was: We have different CSVs full of address in the most crazy combinations. Some of them has the street, number, site, phone. while others have same columns in a different order, etc. This led us to keep creating (actually adjusting) our geocode scripts. Now it is over.</p></blockquote>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/clojure/'>clojure</a></span>
-</footer>
+<p>Of course it may not fit everyone&#8217;s needs. But helped my scenario a lot.</p>
 
+<p>After atending the <a href="http://www.meetup.com/clj-sp/events/132201232/">(sp (first meetup))</a> I polished this small project called <a href="https://github.com/paulosuzart/ultimate-geo"><code>ultimate-geo</code></a>, given I mentioned it while talking to people.</p>
 
-</article>
+<p>A general explannation of how <code>ultimate-geo</code> works can be found on its project page, but by didactic reasons, here a more detailed explanation:</p>
 
+<ol>
+<li>after parsing each line of a file</li>
+<li>it binding each colum to named variables, so they can be latter referenced fo querying google and also for output. Works like in a prepared statement</li>
+<li>then replaces <code>-query</code> parameter replacing named variables like <code>:country</code> or <code>:city</code> by their values mapped on step 2.</li>
+<li>finally request google address information</li>
+<li>and start generating results. Here few tricks are needed because goole can send back more than one results. So it filters the relevat result and pick the first one. From the same result it grabs the zip, if available.</li>
+</ol>
 
 
-<article>
-  
-<h1><a href="/blog/2013/02/07/configuring-clojure-immutant-by-environment/">Configuring Clojure Immutant by environment</a></h1>
-<time datetime="2013-02-07T08:39:00-02:00" pubdate><span class='month'>Feb</span> <span class='day'>07</span> <span class='year'>2013</span></time>
+<p>The image bellow depicts the flow of columns through this process:</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/advanced/'>advanced</a>, <a class='category' href='/blog/categories/clojure/'>clojure</a></span>
-</footer>
+<p><img src="http://github.com/paulosuzart/ultimate-geo/raw/master/ultimate.png" alt="ultimate-geo" /></p>
 
+<p>All happens lazily. So the code will not parse every single line, and then map all lines, and replace all values, etc. It happens as it goes. The main point to pay attention to is the write phase. This can pop up any exception during the process because it is the point that actually call all the chained lazy values.</p>
 
-</article>
+<p>Another important piece is <a href="http://clojuredocs.org/clojure_core/clojure.core/pmap"><code>pmap</code></a> for steps 2, 3 and 4. It means the all he lines are processed in parallel for eatch step increasing the overall performance.</p>
 
+<p>Coding variable replacement was by far the funniest part. Check the <a href="https://github.com/paulosuzart/ultimate-geo/blob/master/test/geocoder/t_core.clj">project tests</a> and see how useful for other scenarios it can be:</p>
 
+<div><script src='https://gist.github.com/6342437.js?file='></script>
+<noscript><pre><code></code></pre></noscript></div>
 
-  
-  <h2>2012</h2>
 
-<article>
-  
-<h1><a href="/blog/2012/07/09/tcp-server-with-clojure-aleph-and-gloss/">TCP Server with Clojure Aleph and Gloss</a></h1>
-<time datetime="2012-07-09T11:57:00-03:00" pubdate><span class='month'>Jul</span> <span class='day'>09</span> <span class='year'>2012</span></time>
+<p>This works fine and is able to ignore <code>_</code> mapped columns, meaning they are not relevant and will not be used later.</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/clojure/'>clojure</a></span>
-</footer>
+<p>The tests were written using <a href="https://github.com/marick/Midje">Midje</a>. I like Midje and it helped a lot to refactor the code while writing it specially using <code>:autotest</code>. I do recommend a try even if you want to use the basics, like I did.</p>
 
+<p>This project uses other nice libs like <a href="https://github.com/davidsantiago/clojure-csv">clojure-csv</a> and <a href="https://github.com/clojure/tools.cli">clojure/toosl.cli</a> that can be presented later.</p>
 
-</article>
+<p>Hope you liked the post. After the meetup I intend to post more often and focus on what were discussed during the meetings.</p>
 
+<p>Don&#8217;t forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
 
 
-<article>
-  
-<h1><a href="/blog/2012/04/17/monitoring-ec2-with-clojure-and-server-stats/">Monitoring ec2 with clojure and Server-Stats</a></h1>
-<time datetime="2012-04-17T17:25:00-03:00" pubdate><span class='month'>Apr</span> <span class='day'>17</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/aws/'>aws</a>, <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/cloud/'>cloud</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/04/11/sorting-with-clojure-comparator/">sorting with clojure comparator</a></h1>
-<time datetime="2012-04-11T22:51:00-03:00" pubdate><span class='month'>Apr</span> <span class='day'>11</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/elementary/'>elementary</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/03/27/lazy-seqs-from-database-with-clojure-korma/">lazy-seqs from database with clojure korma</a></h1>
-<time datetime="2012-03-27T20:54:00-03:00" pubdate><span class='month'>Mar</span> <span class='day'>27</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/clojure/'>clojure</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/03/25/web-noir-plus-enlive-template/">Web Noir plus enlive template</a></h1>
-<time datetime="2012-03-25T21:43:00-03:00" pubdate><span class='month'>Mar</span> <span class='day'>25</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/clojure/'>clojure</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/02/03/clojure-macros-automating-aws-simpledb-admin-tasks/">Clojure macros: Automating AWS SimpleDB admin tasks.</a></h1>
-<time datetime="2012-02-03T21:16:00-02:00" pubdate><span class='month'>Feb</span> <span class='day'>03</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/clojure/'>clojure</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2011</h2>
-
-<article>
-  
-<h1><a href="/blog/2011/12/11/my-own-redis-types-text-notation/">My Own REDIS Types - text - Notation</a></h1>
-<time datetime="2011-12-11T18:11:00-02:00" pubdate><span class='month'>Dec</span> <span class='day'>11</span> <span class='year'>2011</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/redis/'>redis</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2011/12/11/my-own-redis-types-notation/">My own REDIS types notation</a></h1>
-<time datetime="2011-12-11T17:20:00-02:00" pubdate><span class='month'>Dec</span> <span class='day'>11</span> <span class='year'>2011</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/redis/'>redis</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2011/12/04/korma-and-clojure-records/">Korma and clojure records</a></h1>
-<time datetime="2011-12-04T19:02:00-02:00" pubdate><span class='month'>Dec</span> <span class='day'>04</span> <span class='year'>2011</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/clojure/'>clojure</a></span>
-</footer>
-
-
-</article>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Paulo Suzart</span></span>
+
+      
+
+
+
+
+  
+
+<time datetime="2013-08-26T11:48:00-03:00" pubdate>Aug 26<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/clojure/'>clojure</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://paulosuzart.github.com/blog/2013/08/26/geocoding-csvs-with-clojure/" data-via="paulosuzart" data-counturl="http://paulosuzart.github.com/blog/2013/08/26/geocoding-csvs-with-clojure/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/08/21/docker-plus-ansible/" title="Previous Post: Docker + Ansible">&laquo; Docker + Ansible</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -350,7 +301,10 @@
       var disqus_shortname = 'paulosuzartblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://paulosuzart.github.com/blog/2013/08/26/geocoding-csvs-with-clojure';
+        var disqus_url = 'http://paulosuzart.github.com/blog/2013/08/26/geocoding-csvs-with-clojure';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

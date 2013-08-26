@@ -4,7 +4,7 @@
   <title><![CDATA[Paulo Suzart Blog]]></title>
   <link href="http://paulosuzart.github.com/atom.xml" rel="self"/>
   <link href="http://paulosuzart.github.com/"/>
-  <updated>2013-08-22T00:14:16-03:00</updated>
+  <updated>2013-08-26T12:26:59-03:00</updated>
   <id>http://paulosuzart.github.com/</id>
   <author>
     <name><![CDATA[Paulo Suzart]]></name>
@@ -12,6 +12,61 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Geocoding CSVs with Clojure]]></title>
+    <link href="http://paulosuzart.github.com/blog/2013/08/26/geocoding-csvs-with-clojure/"/>
+    <updated>2013-08-26T11:48:00-03:00</updated>
+    <id>http://paulosuzart.github.com/blog/2013/08/26/geocoding-csvs-with-clojure</id>
+    <content type="html"><![CDATA[<p>Hi! Nothing like delivering some value to your company using your preferred tool, hun?</p>
+
+<p>Well, I had this feeling after freeing up my team of writing and writing the same thing again and again. As you can seen at <a href="https://github.com/paulosuzart/ultimate-geo">ultimate-geo project page</a>:</p>
+
+<blockquote><p>Ultimate Geo is the final definitive geocoding app. The motivation behind it was: We have different CSVs full of address in the most crazy combinations. Some of them has the street, number, site, phone. while others have same columns in a different order, etc. This led us to keep creating (actually adjusting) our geocode scripts. Now it is over.</p></blockquote>
+
+<p>Of course it may not fit everyone&#8217;s needs. But helped my scenario a lot.</p>
+
+<p>After atending the <a href="http://www.meetup.com/clj-sp/events/132201232/">(sp (first meetup))</a> I polished this small project called <a href="https://github.com/paulosuzart/ultimate-geo"><code>ultimate-geo</code></a>, given I mentioned it while talking to people.</p>
+
+<p>A general explannation of how <code>ultimate-geo</code> works can be found on its project page, but by didactic reasons, here a more detailed explanation:</p>
+
+<ol>
+<li>after parsing each line of a file</li>
+<li>it binding each colum to named variables, so they can be latter referenced fo querying google and also for output. Works like in a prepared statement</li>
+<li>then replaces <code>-query</code> parameter replacing named variables like <code>:country</code> or <code>:city</code> by their values mapped on step 2.</li>
+<li>finally request google address information</li>
+<li>and start generating results. Here few tricks are needed because goole can send back more than one results. So it filters the relevat result and pick the first one. From the same result it grabs the zip, if available.</li>
+</ol>
+
+
+<p>The image bellow depicts the flow of columns through this process:</p>
+
+<p><img src="http://github.com/paulosuzart/ultimate-geo/raw/master/ultimate.png" alt="ultimate-geo" /></p>
+
+<p>All happens lazily. So the code will not parse every single line, and then map all lines, and replace all values, etc. It happens as it goes. The main point to pay attention to is the write phase. This can pop up any exception during the process because it is the point that actually call all the chained lazy values.</p>
+
+<p>Another important piece is <a href="http://clojuredocs.org/clojure_core/clojure.core/pmap"><code>pmap</code></a> for steps 2, 3 and 4. It means the all he lines are processed in parallel for eatch step increasing the overall performance.</p>
+
+<p>Coding variable replacement was by far the funniest part. Check the <a href="https://github.com/paulosuzart/ultimate-geo/blob/master/test/geocoder/t_core.clj">project tests</a> and see how useful for other scenarios it can be:</p>
+
+<div><script src='https://gist.github.com/6342437.js?file='></script>
+<noscript><pre><code></code></pre></noscript></div>
+
+
+<p>This works fine and is able to ignore <code>_</code> mapped columns, meaning they are not relevant and will not be used later.</p>
+
+<p>The tests were written using <a href="https://github.com/marick/Midje">Midje</a>. I like Midje and it helped a lot to refactor the code while writing it specially using <code>:autotest</code>. I do recommend a try even if you want to use the basics, like I did.</p>
+
+<p>This project uses other nice libs like <a href="https://github.com/davidsantiago/clojure-csv">clojure-csv</a> and <a href="https://github.com/clojure/tools.cli">clojure/toosl.cli</a> that can be presented later.</p>
+
+<p>Hope you liked the post. After the meetup I intend to post more often and focus on what were discussed during the meetings.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Docker + Ansible]]></title>
@@ -28,10 +83,10 @@ documentation</a>. And from my point of
 view, it comes to kill some important challenges me and you have been
 facing over years when talking about delivering software.</p>
 
-<h1>Paas</h1>
+<h1>PaaS</h1>
 
 <p>As <a href="http://blog.docker.io/2013/07/excited-to-be-joining-the-great-teams-at-dotcloud-docker-as-ceo/">stated around</a>
-Paas often fail to cover every necessity you migh have. Because they are
+PaaS often fail to cover every necessity you migh have. Because they are
 closed black boxes where you &#8220;commit your code&#8221; in, or alike. I really
 like <a href="http://heroku.com">heroku</a> and
 <a href="https://www.dotcloud.com/">dotCloud</a>, but yes, I have apps that can&#8217;t
@@ -42,8 +97,9 @@ run there.</p>
 <p>I&#8217;ve been using
 <a href="http://www.citrix.com.br/products/xenserver/overview.html">XenServer</a>
 to handle massive amount of requests distributed over dozens of machines
-and it works pretty well. But after a while I have some extra
-&#8220;disadvantages&#8221; (I&#8217;m puting quotes because it is really specific) to add
+and it works pretty well. But after using it a while I have detected some extra
+&#8220;disadvantages&#8221; (I&#8217;m puting quotes because it is really specific) of
+this type of virtualization to add
 to <a href="https://github.com/dotcloud/docker">this list</a>. Here they are:</p>
 
 <ul>
@@ -61,9 +117,8 @@ fo situation I&#8217;m addopting Docker.</p>
 <p>The main advantages of container virtualization (like Docker) are:</p>
 
 <ul>
-<li> Concurrent deployment of the same app among developers. So no more single testing environment</li>
-<li> Platform-as-a-Service like environment. You don&#8217;t need to think about anything else but run the process in charge of your application. No worries with operating system or an entire machine</li>
-<li> Make your app immediately available</li>
+<li> Platform-as-a-Service like environment. You don&#8217;t need to think about anything else but run the process in charge of your application. No worries with an entire machine</li>
+<li> Make your app immediately available. No boot time needed. Just <code>docker run</code> and you are in</li>
 <li> Run it over a virtualized Xen machine and you still hold all advantages from XEN in the host level (snapshot, live migration, etc, volume management)</li>
 </ul>
 
@@ -90,21 +145,23 @@ for more than 1 and a half year, why are you talking about
 is also simple, but I mean, it is simple to know why Ansible. Just look
 to step 1 above. See?</p>
 
-<p>Puppet is too much for you to set up your container. Ansible is fine.
-You need to be repeatable. Although Docker allows you for commiting
-images to a repository, you still need to set up it from scract without
-forgeting any detail.</p>
+<p>Puppet is too much for you to set up your container. Ansible is fine.</p>
 
-<p>Ansible is a direct competitor for Puppet. But with a simpler approach
-and good enough to run it on every server if you want. I tried this
+<p>You need to be repeatable while setting up containers. You cannot deliver a container with Tomcat 7 plus OpenJDK 1.7 today, and tomorrow
+Tomcat 6 for the same app. You need consistency archieved though repeatability. Ansible can also give it to you.</p>
+
+<p>Although Docker allows you for commiting images to a repository, you still need to set them up from scratch without
+forgeting any detail. Otherwise your app wont&#8217;t work properly.</p>
+
+<p>Ansible is a direct competitor for Puppet. But with a simpler approach and good enough to run it on every server if you want. I tried this
 combination and approved. Awesome!</p>
 
 <p>The step one above now could be rewritten like:</p>
 
 <ol>
-<li>Developer - with the help of sysadmins or not - crates a
-container and set it up with ansible. Then commit it to the repository
-and you can even forget Docker files.</li>
+<li>Developer - with the help of sysadmins or not - creates a
+container and set it up with Ansible. Then commit it to the repository
+and you can even forget  the <code>Dockerfiles</code></li>
 </ol>
 
 
@@ -113,10 +170,10 @@ discussions/patterns about how to solve the problems it is supposed to.</p>
 
 <h1>Future</h1>
 
-<p>Projects like: <a href="http://coreos.com/">CoreOS</a> and <a href="https://flynn.io/">Flynn</a> literally give you the real notion about what I&#8217;m talking. I don&#8217;t think Paas or Iaas will die, absolutely not. But a new room is needed for sure.</p>
+<p>Projects like: <a href="http://coreos.com/">CoreOS</a> and <a href="https://flynn.io/">Flynn</a> literally give you the real notion about what I&#8217;m talking. I don&#8217;t think PaaS or Iaas will die, absolutely not. But a new room is needed for sure.</p>
 
 <p>I have both Docker and Ansible running production stuff and hope I can
-share some <code>Playbooks</code> and <code>Dockerfiles</code> in the near future.</p>
+share some <code>Playbooks</code> and <code>Dockerfile</code>s in the near future.</p>
 
 <p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
 
@@ -483,7 +540,7 @@ One of them is the use of <a href="http://clojuredocs.org/clojure_core/clojure.c
 </span></code></pre></td></tr></table></div></figure>
 
 
-<blockquote></blockquote>
+<p></p>
 
 <p>Gloss uses the concept of frames and codecs to model your bytes. As a shortcut, i&#8217;m using <code>p</code> and <code>lp</code> to identify parameters ended in <code>" "</code> and parameters ended in <code>\r\n</code>. That is, <code>p</code> and <code>lp</code> are frames that will be converted to strings, with UTF-8 encoding.</p>
 
@@ -1019,7 +1076,7 @@ One of them is the use of <a href="http://clojuredocs.org/clojure_core/clojure.c
 </span></code></pre></td></tr></table></div></figure>
 
 
-<blockquote></blockquote>
+<p></p>
 
 <p><em>In this case, <code>doseq</code> does not retains the head of sequences, so there is no <code>seq</code> with tons being produced.</em></p>
 
@@ -1053,7 +1110,7 @@ One of them is the use of <a href="http://clojuredocs.org/clojure_core/clojure.c
 </span></code></pre></td></tr></table></div></figure>
 
 
-<blockquote></blockquote>
+<p></p>
 
 <p>It doesn&#8217;t look designer friendly, right? I would still use hiccup for admin pages or small chunks of html strictly generated by clojure code with a good css to help presenting it.</p>
 
