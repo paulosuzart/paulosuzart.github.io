@@ -104,7 +104,7 @@ something brand new &hellip;">
 <p>Again some time without writting. And this time I&#8217;m writting about
 something brand new: <a href="http://www.docker.io/">Docker</a>.</p>
 
-<p>It lives in the Virtualization contex. You can rear more at <a href="http://docs.docker.io/en/latest/">docker
+<p>It lies in the virtualization context. You can read more at <a href="http://docs.docker.io/en/latest/">docker
 documentation</a>. And from my point of
 view, it comes to kill some important challenges me and you have been
 facing over years when talking about delivering software.</p>
@@ -112,52 +112,38 @@ facing over years when talking about delivering software.</p>
 <h1>PaaS</h1>
 
 <p>As <a href="http://blog.docker.io/2013/07/excited-to-be-joining-the-great-teams-at-dotcloud-docker-as-ceo/">stated around</a>
-PaaS often fail to cover every necessity you migh have. Because they are
-closed black boxes where you &#8220;commit your code&#8221; in, or alike. I really
-like <a href="http://heroku.com">heroku</a> and
-<a href="https://www.dotcloud.com/">dotCloud</a>, but yes, I have apps that can&#8217;t
-run there.</p>
+PaaS often fail to cover every necessity you might have. Because they are closed black boxes where you &#8220;commit your code in&#8221;, or something like that. I really like <a href="http://heroku.com">heroku</a> and <a href="https://www.dotcloud.com/">dotCloud</a>, but yes, I have apps that can&#8217;t run there.</p>
 
 <h1>Ordinary virtualization, another fit for Docker</h1>
 
-<p>I&#8217;ve been using
-<a href="http://www.citrix.com.br/products/xenserver/overview.html">XenServer</a>
-to handle massive amount of requests distributed over dozens of machines
-and it works pretty well. But after using it a while I have detected some extra
-&#8220;disadvantages&#8221; (I&#8217;m puting quotes because it is really specific) of
-this type of virtualization to add
-to <a href="https://github.com/dotcloud/docker">this list</a>. Here they are:</p>
+<p>I&#8217;ve been using <a href="http://www.citrix.com.br/products/xenserver/overview.html">XenServer</a> to handle massive amount of requests distributed over dozens of machines and it works pretty well. But after using it for a while I have detected some extra &#8220;disadvantages&#8221; (I&#8217;m puting quotes because it is really specific) of this type of virtualization to add to <a href="https://github.com/dotcloud/docker">this list</a>. Here they are:</p>
 
 <ul>
 <li> The sysadmin should be involved since he needs to access the Xen Center in order to create machines</li>
 <li> The developer needs to inform beforehand the amount of CPU cores, disk size and memory</li>
-<li> This involves an all new machine created with a full operating system, configurations, etc. No time for that</li>
+<li> This involves an all-new machine created with a full operating system, configurations, etc. No time for that!</li>
 <li> Sysadmins are busy and don&#8217;t like to give you attention</li>
 </ul>
 
 
-<p>Not only that, but many cases crating a full virtualized machine to put
-inside one wordpress, or few simple stuff doesn&#8217;t pay off. For this sort
-fo situation I&#8217;m addopting Docker.</p>
+<p>Not only that, but many cases crating a full virtualized machine to setup a simple wordpress, or few simple stuff doesn&#8217;t pay off. For this sort of situation I&#8217;m addopting Docker.</p>
 
 <p>The main advantages of container virtualization (like Docker) are:</p>
 
 <ul>
 <li> Platform-as-a-Service like environment. You don&#8217;t need to think about anything else but run the process in charge of your application. No worries with an entire machine</li>
 <li> Make your app immediately available. No boot time needed. Just <code>docker run</code> and you are in</li>
-<li> Run it over a virtualized Xen machine and you still hold all advantages from XEN in the host level (snapshot, live migration, etc, volume management)</li>
+<li> Run it over a virtualized Xen machine and you still hold all advantages of XEN in the host level (snapshot, live migration, volume management, etc)</li>
 </ul>
 
 
-<p>Add to the recipe the idea of <a href="http://12factor.net/">12 factor apps</a> and
-you are done! Wih Docker you can create the workflow:</p>
+<p>Add to the recipe the idea behind <a href="http://12factor.net/">12 factor apps</a> and
+you are done! With Docker you can create the folowing workflow:</p>
 
 <ol>
-<li>Developer creates a Docker container, commits it to a Docker index
-or even give you a <code>Dockerfile</code>.</li>
-<li>Since it is a 12factor app, it is supposed detect
-resources configuration from the environment it runs</li>
-<li>You simply run it.</li>
+<li>Developers create a Docker container, commits it to a Docker index or even give you a <code>Dockerfile</code></li>
+<li>Since it is a 12factor app, it is supposed detect resources configuration from the environment it runs</li>
+<li>Move your container around development, staging and live envs</li>
 </ol>
 
 
@@ -173,33 +159,27 @@ to step 1 above. See?</p>
 
 <p>Puppet is too much for you to set up your container. Ansible is fine.</p>
 
-<p>You need to be repeatable while setting up containers. You cannot deliver a container with Tomcat 7 plus OpenJDK 1.7 today, and tomorrow
-Tomcat 6 for the same app. You need consistency archieved though repeatability. Ansible can also give it to you.</p>
+<p>You need to be repeatable while setting up containers. You cannot deliver a container with Tomcat 7 plus OpenJDK 1.7 today, and tomorrow deliver Tomcat 6 for the same app. You need consistency archieved through repeatability. Ansible can also give it to you.</p>
 
 <p>Although Docker allows you for commiting images to a repository, you still need to set them up from scratch without
 forgeting any detail. Otherwise your app wont&#8217;t work properly.</p>
 
-<p>Ansible is a direct competitor for Puppet. But with a simpler approach and good enough to run it on every server if you want. I tried this
-combination and approved. Awesome!</p>
+<p>Ansible is a direct competitor of Puppet. But with a simpler approach and good enough to run on every server you manage. I tried this combination and approved. Awesome!</p>
 
 <p>The step one above now could be rewritten like:</p>
 
 <ol>
-<li>Developer - with the help of sysadmins or not - creates a
-container and set it up with Ansible. Then commit it to the repository
-and you can even forget  the <code>Dockerfiles</code></li>
+<li>Developers - with the help of sysadmins or not - create a container and set it up with Ansible. Then commit it to the repository and you can even forget  the <code>Dockerfiles</code> (or keep a very minimal one)</li>
 </ol>
 
 
-<p>I&#8217;m absolutely sure Docker will solve many things but bring lots of
-discussions/patterns about how to solve the problems it is supposed to.</p>
+<p>I&#8217;m absolutely sure Docker will solve many things but bring lots of discussions/patterns about how to solve the problems it is supposed to.</p>
 
 <h1>Future</h1>
 
-<p>Projects like: <a href="http://coreos.com/">CoreOS</a> and <a href="https://flynn.io/">Flynn</a> literally give you the real notion about what I&#8217;m talking. I don&#8217;t think PaaS or Iaas will die, absolutely not. But a new room is needed for sure.</p>
+<p>Projects like <a href="http://coreos.com/">CoreOS</a> and <a href="https://flynn.io/">Flynn</a> literally give you the real notion about what I&#8217;m talking. I don&#8217;t think PaaS or IaaS will die, absolutely not. But a new room is needed for sure.</p>
 
-<p>I have both Docker and Ansible running production stuff and hope I can
-share some <code>Playbooks</code> and <code>Dockerfile</code>s in the near future.</p>
+<p>I have both Docker and Ansible running production stuff and hope I can share some <code>Playbooks</code> and <code>Dockerfile</code>s in the near future.</p>
 
 <p>Don&#8217;t forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
 
