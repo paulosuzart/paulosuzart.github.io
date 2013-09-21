@@ -4,7 +4,7 @@
   <title><![CDATA[Category: web, | Paulo Suzart Blog]]></title>
   <link href="http://paulosuzart.github.com/blog/categories/web-/atom.xml" rel="self"/>
   <link href="http://paulosuzart.github.com/"/>
-  <updated>2013-09-20T21:51:48-03:00</updated>
+  <updated>2013-09-20T22:08:22-03:00</updated>
   <id>http://paulosuzart.github.com/</id>
   <author>
     <name><![CDATA[Paulo Suzart]]></name>
@@ -88,7 +88,7 @@ server_port =&gt; config-&gt;{port},
 
 <h1>Deploying for real</h1>
 
-<p>Well, your dancer application is able to process one request at time if you simply run it with <code>perl yourap.pl</code>. I need to handle much more than one request at a time. There are plenty options like ones available for ruby (<a href="http://rubygems.org/gems/unicorn">unicorn</a> or <a href="https://www.phusionpassenger.com/">passenger</a>). I went for <a href="http://uwsgi-docs.readthedocs.org/en/latest/index.html">uWSGI</a> despite of many good options like <a href="http://search.cpan.org/~miyagawa/Twiggy-0.1023/lib/Twiggy.pm">Twiggy</a> or <a href="http://search.cpan.org/~miyagawa/Starman-0.1000/lib/Starman.pm">Startman</a>.</p>
+<p>Well, your dancer application is able to process one request at time if you simply run it with <code>perl yourap.pl</code>. I need to handle much more than one request at a time. There are plenty options like ones available for ruby (<a href="http://rubygems.org/gems/unicorn">unicorn</a> or <a href="https://www.phusionpassenger.com/">passenger</a>). I went for <a href="http://uwsgi-docs.readthedocs.org/en/latest/index.html">uWSGI</a> inspite of many good options like <a href="http://search.cpan.org/~miyagawa/Twiggy-0.1023/lib/Twiggy.pm">Twiggy</a> or <a href="http://search.cpan.org/~miyagawa/Starman-0.1000/lib/Starman.pm">Startman</a>.</p>
 
 <p>uWSGI provides a robust infrastructure and supports perl as well. But not all its features are available for perl like the <a href="http://uwsgi-docs.readthedocs.org/en/latest/Queue.html">queue framework</a> and <a href="http://uwsgi-docs.readthedocs.org/en/latest/WebCaching.html">caching stuff</a>. The speed of execution may compensate in most cases.</p>
 
