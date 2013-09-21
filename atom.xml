@@ -4,7 +4,7 @@
   <title><![CDATA[Paulo Suzart Blog]]></title>
   <link href="http://paulosuzart.github.com/atom.xml" rel="self"/>
   <link href="http://paulosuzart.github.com/"/>
-  <updated>2013-08-31T21:33:32-03:00</updated>
+  <updated>2013-09-20T21:43:16-03:00</updated>
   <id>http://paulosuzart.github.com/</id>
   <author>
     <name><![CDATA[Paulo Suzart]]></name>
@@ -12,6 +12,105 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ultrafast web development with Perl + Bootstrap + MongoDB]]></title>
+    <link href="http://paulosuzart.github.com/blog/2013/09/20/ultrafast-web-development-with-perl-plus-bootstrap-plus-mongodb/"/>
+    <updated>2013-09-20T19:35:00-03:00</updated>
+    <id>http://paulosuzart.github.com/blog/2013/09/20/ultrafast-web-development-with-perl-plus-bootstrap-plus-mongodb</id>
+    <content type="html"><![CDATA[<p>Few weeks ago s I had to fix some <a href="http://www.perl.org">perl</a> scripts. Actually make some HTTP requests, etc.</p>
+
+<p>That was actually my first contact with the language. Never tried before! How can it be? Well, I ended up finding an amazing community and ecosystem (mostly covered by <a href="http://www.perl.org/cpan.html">CPAN</a>).</p>
+
+<p>By ecosystem, I mean libs and tools out there. Couldn&#8217;t be different since it was created in 1987 (I was just a kid)!</p>
+
+<p>So, I needed to develop something simple yet powerful enough to be further extended with new features. But the may requirement was: DO IT RIGHT NOW!</p>
+
+<p>Ok, I could have chosen <a href="http://www.grails.org">Grails</a> (my daily job), but know what? I even had time for JVM startup time. Same applies to anything on JVM, even clojure web stuff. I could also have chosen <a href="http://python.org/">python</a> with <a href="http://flask.pocoo.org/">Flask</a> and would be great. But what I was going to add to my toolset?</p>
+
+<h1>Enter Perl Dancer</h1>
+
+<p>After a quick research on the internet I found at least 3 trusted options:</p>
+
+<ul>
+<li><a href="http://www.catalystframework.org/">Catalyst</a> - No, I wanted something simpler than that. Catalyst looks awesome, and I should try in another opportunity</li>
+<li><a href="http://mojolicio.us/">Mojolicious</a> - Nice option. Very simple. But few plugins available if compared to the one I picked up</li>
+<li><a href="http://perldancer.org">Dancer</a> - YES! It is super compact, and the community around it has created tons of great plugins: <a href="http://search.cpan.org/~ajct/Dancer-Plugin-Mongo-0.03/lib/Dancer/Plugin/Mongo.pm">Dancer::Plugin::Mongo</a>, <a href="http://search.cpan.org/~sukria/Dancer-Plugin-REST-0.07/lib/Dancer/Plugin/REST.pm">Dancer::Plugin::REST</a> and <a href="http://search.cpan.org/~dams/Dancer-Plugin-FlashMessage-0.314/lib/Dancer/Plugin/FlashMessage.pm">Dancer::Plugin::FlashMessage</a>just to mention few.</li>
+</ul>
+
+
+<p>That is it, assemble plugins as you want and you are done.</p>
+
+<p>Another nice point is the project folder structure created by Dancer. If you are used to frameworks like Grails and Django, you&#8217;ll like it. And not only that, Dancer comes by default with per-environment configuration (yaml) files, and a general config file where you configure template, plugins, powerful templates, http filters, and test suite.</p>
+
+<p>I can&#8217;t open that much the code I finished writing in few nights. But I can guarantee it was funny and quick to write. A simple Http request handle is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="n">get</span> <span class="s">&#39;/job/:wok_id&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{</span>
+</span><span class='line'>  <span class="k">my</span> <span class="nv">$job</span> <span class="o">=</span> <span class="n">mconfigs</span><span class="o">-&gt;</span><span class="n">find_one</span><span class="p">({</span><span class="n">wok_id</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">-&gt;</span><span class="p">{</span><span class="s">&#39;wok_id&#39;</span><span class="p">}});</span>
+</span><span class='line'>  <span class="n">template</span> <span class="s">&#39;jobs/edit.tt&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">job</span> <span class="o">=&gt;</span> <span class="nv">$job</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">server_host</span> <span class="o">=&gt;</span> <span class="n">config</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">server</span><span class="p">},</span>
+</span><span class='line'>    <span class="n">server_port</span> <span class="o">=&gt;</span> <span class="n">config</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">port</span><span class="p">},</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It is simple like that. You call the <code>get</code> providing the request path (notice the <code>:wok_id</code> path variable) and then your perl routine that handles the request. <code>mconfigs</code> is a simple routine that wraps the access to a MongoDB collection and a query.</p>
+
+<p>Most web frameworks today offer this <a href="http://www.sinatrarb.com/">Sinatra</a> approach, where you define routes and functions to handle them.</p>
+
+<p>The <a href="http://www.template-toolkit.org/index.html">template system</a> is flexible and very powerful. Just embbed your html/css/js <a href="http://getbootstrap.com">Twitter Bootstrap</a> stuff and you have beauty. No time wasted with style cascading, user interface layout, etc.</p>
+
+<h1>MongoDB and keep fast</h1>
+
+<p>As I said: DO IT RIGHT NOW! So, set up a new database machine? Create schemas? No way! Get a ready to go mongo instance at (mongoHQ)[http://www.mongohq.com/home] and start coding right away.</p>
+
+<p>The good part of it is no set up time, no administration time, and you can grow it as you go. Well, mongoHQ here was actually used for development and I don&#8217;t intend to keep it once moving to production</p>
+
+<p>The benefits of itself you can find around. What I want to highlight is the <a href="http://docs.mongodb.org/manual/aggregation/">aggregation</a> framework in conjuntion with perl. The perl hash syntax perfectly fits mongo documents:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'>  <span class="k">my</span> <span class="nv">$result</span> <span class="o">=</span> <span class="n">mexecutions</span><span class="o">-&gt;</span><span class="n">aggregate</span><span class="p">([</span>
+</span><span class='line'>       <span class="p">{</span><span class="s">&#39;$match&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="s">&#39;alarm_enabled&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">}},</span>
+</span><span class='line'>       <span class="p">{</span><span class="s">&#39;$group&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="s">&#39;_id&#39;</span> <span class="o">=&gt;</span>  <span class="p">{</span><span class="s">&#39;status&#39;</span> <span class="o">=&gt;</span> <span class="s">&#39;$status&#39;</span><span class="p">,</span> <span class="s">&#39;wok_id&#39;</span><span class="o">=&gt;</span> <span class="s">&#39;$wok_id&#39;</span><span class="p">},</span>
+</span><span class='line'>                     <span class="s">&#39;count&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="s">&#39;$sum&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">}}}</span>
+</span><span class='line'>   <span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using the aggregation framework you can easily break through any limitations when working without SQL statements.</p>
+
+<h1>Deploying for real</h1>
+
+<p>Well, your dancer application is able to process one request at time if you simply run it with <code>perl yourap.pl</code>. I need to handle much more than one request at a time. There are plenty options like ones available for ruby (<a href="http://rubygems.org/gems/unicorn">unicorn</a> or <a href="https://www.phusionpassenger.com/">passenger</a>. I went for <a href="http://uwsgi-docs.readthedocs.org/en/latest/index.html">uWSGI</a>.</p>
+
+<p>uWSGI provides a robust infrastructure and supports perl as well. But not all its features are available for perl like the <a href="http://uwsgi-docs.readthedocs.org/en/latest/Queue.html">queue framework</a> and <a href="http://uwsgi-docs.readthedocs.org/en/latest/WebCaching.html">caching stuff</a>. The speed of execution may compensate in most cases.</p>
+
+<h1>Wrapping Up</h1>
+
+<p>I&#8217;m passionate about clojure, and this blog won&#8217;t change because this quick perl affair. But sincerely speaking, I haven&#8217;t met any clojure equivalent for web yet. Fast to start, fast to develop, fast to test and fast to deploy. Plus strong community, plugins, etc.</p>
+
+<p>I&#8217;m not expert enough in perl, but it now has a nice place among my tools. I can imagne myself with front end perl stuff and crazy distributed async clojure in the back end.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+
+<p>Well, my requirements I ended up developing something very useful using</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Geocoding CSVs with Clojure]]></title>

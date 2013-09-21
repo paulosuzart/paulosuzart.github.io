@@ -75,8 +75,14 @@
         <lastmod>2013-08-26T12:26:32-03:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://paulosuzart.github.com/blog/2013/09/20/ultrafast-web-development-with-perl-plus-bootstrap-plus-mongodb/
+        </loc>
+        <lastmod>2013-09-20T21:42:49-03:00</lastmod>
+    </url>
+    <url>
         <loc>http://paulosuzart.github.com/</loc>
-        <lastmod>2013-08-26T21:20:08-03:00</lastmod>
+        <lastmod>2013-09-20T21:42:49-03:00</lastmod>
     </url>
     <url>
         <loc>http://paulosuzart.github.com/about/</loc>
@@ -88,7 +94,7 @@
     </url>
     <url>
         <loc>http://paulosuzart.github.com/blog/archives/</loc>
-        <lastmod>2013-08-26T21:20:08-03:00</lastmod>
+        <lastmod>2013-09-20T21:42:49-03:00</lastmod>
     </url>
     <url>
         <loc>http://paulosuzart.github.com/404.html</loc>

@@ -9,7 +9,8 @@
   <meta name="author" content="Paulo Suzart">
 
   
-  <meta name="description" content="Some seconds after the last post, @paraseba commented that a text version of this notation may be even more helpful. Here it is: $ means provided by &hellip;">
+  <meta name="description" content="First post of the year! To talk about clojure, of course.
+I&#8217;ve written (pt_br) about clojure macros before. And yes, it is really powerful. I&# &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -75,6 +76,159 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/02/03/clojure-macros-automating-aws-simpledb-admin-tasks/">Clojure Macros: Automating AWS SimpleDB Admin Tasks.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+  
+
+<time datetime="2012-02-03T21:16:00-02:00" pubdate>Feb 3<span>rd</span>, 2012</time>
+        
+         | <a href="/blog/2012/02/03/clojure-macros-automating-aws-simpledb-admin-tasks/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>First post of the year! To talk about clojure, of course.
+<a href="http://codemountain.wordpress.com/2010/10/09/clojure-macros/">I&#8217;ve written (pt_br)</a> about clojure macros before. And yes, it is really powerful.</p>
+
+<p>I&#8217;m using macros to help me setting up a connection with <a href="http://aws.amazon.com/simpledb/">Amazon SimpleDB</a> to do some small administrative tasks such as listing domains, creating domains, counting items in a domain, etc.</p>
+
+<p>SimpleDB hasn&#8217;t a console, so you have interact with it using a pure html + js application provided by AWS, or do it by hand. I do prefer doing it by my own :). Then I created de following macro:</p>
+
+<figure class='code'><figcaption><span>SimpleDB admin tasks </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">defmacro </span><span class="nv">boot-sdb</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="o">&#39;</span><span class="p">(</span><span class="nv">do</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="o">.</span><span class="nv">setLevel</span> <span class="p">(</span><span class="nf">java</span><span class="o">.</span><span class="nv">util</span><span class="o">.</span><span class="nv">logging</span><span class="o">.</span><span class="nv">Logger/getLogger</span> <span class="s">&quot;com.amazonaws&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="nv">java</span><span class="o">.</span><span class="nv">util</span><span class="o">.</span><span class="nv">logging</span><span class="o">.</span><span class="nv">Level/WARNING</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="o">.</span><span class="nv">setLevel</span> <span class="p">(</span><span class="nf">java</span><span class="o">.</span><span class="nv">util</span><span class="o">.</span><span class="nv">logging</span><span class="o">.</span><span class="nv">Logger/getLogger</span> <span class="s">&quot;httpclient&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="nv">java</span><span class="o">.</span><span class="nv">util</span><span class="o">.</span><span class="nv">logging</span><span class="o">.</span><span class="nv">Level/WARNING</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="o">.</span><span class="nv">setLevel</span> <span class="p">(</span><span class="nf">java</span><span class="o">.</span><span class="nv">util</span><span class="o">.</span><span class="nv">logging</span><span class="o">.</span><span class="nv">Logger/getLogger</span> <span class="s">&quot;org.apache.commons.httpclient&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="nv">java</span><span class="o">.</span><span class="nv">util</span><span class="o">.</span><span class="nv">logging</span><span class="o">.</span><span class="nv">Level/WARNING</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="nf">require</span> <span class="p">(</span><span class="nf">quote</span> <span class="p">[</span><span class="nv">cemerick</span><span class="o">.</span><span class="nv">rummage</span> <span class="nv">:as</span> <span class="nv">sdb</span><span class="p">]))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">require</span> <span class="p">(</span><span class="nf">quote</span> <span class="p">[</span><span class="nv">cemerick</span><span class="o">.</span><span class="nv">rummage</span><span class="o">.</span><span class="nv">encoding</span> <span class="nv">:as</span> <span class="nv">enc</span><span class="p">]))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">use</span> <span class="p">(</span><span class="nf">quote</span> <span class="nv">apix</span><span class="o">.</span><span class="nv">util</span><span class="p">))</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="p">(</span><span class="k">def </span><span class="nv">*sdb*</span> <span class="p">(</span><span class="nf">sdb/create-client</span> <span class="p">(</span><span class="nf">env</span> <span class="s">&quot;AWS_KEYID&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nf">env</span> <span class="s">&quot;AWS_KEY&quot;</span><span class="p">)))</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">def </span><span class="nv">*sdbconf*</span> <span class="p">(</span><span class="nb">assoc </span><span class="nv">enc/keyword-strings</span> <span class="nv">:client</span> <span class="nv">*sdb*</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Connected to SDB.&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="k">defn </span><span class="nv">lsd</span> <span class="p">[]</span> <span class="p">(</span><span class="nf">sdb/list-domains</span> <span class="nv">*sdbconf*</span><span class="p">))</span>
+</span><span class='line'>      
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="k">defn </span><span class="nv">mkd</span> <span class="p">[</span><span class="nv">d</span><span class="p">]</span> <span class="p">(</span><span class="nf">sdb/create-domain</span> <span class="nv">*sdbconf*</span> <span class="nv">d</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="k">defn </span><span class="nv">rmd</span> <span class="p">[</span><span class="nv">d</span><span class="p">]</span> <span class="p">(</span><span class="nf">sdb/delete-domain</span> <span class="nv">*sdbconf*</span> <span class="nv">d</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="k">defn </span><span class="nv">countd</span> <span class="p">[</span><span class="nv">d</span><span class="p">]</span> <span class="p">(</span><span class="nf">str</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;Total items [%s]: &quot;</span> <span class="nv">d</span><span class="p">)</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nf">:itemCount</span> <span class="p">(</span><span class="nf">sdb/domain-metadata</span> <span class="nv">*sdbconf*</span> <span class="nv">d</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">(</span><span class="k">defn </span><span class="nv">sdb-help</span> <span class="p">[]</span>
+</span><span class='line'>          <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Type &#39;(lsd)&#39; to list all domains&quot;</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Type &#39;(mkd domain-name)&#39; to create a new domain&quot;</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Type &#39;(rmd domain-name)&#39; to delete a domain&quot;</span><span class="p">)</span>  
+</span><span class='line'>          <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Type &#39;(countd domain)&#39; to get the items count of domain&quot;</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Type &#39;(sdb-help)&#39; to see this help again&quot;</span><span class="p">))</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="p">(</span><span class="nf">sdb-help</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It saves the work of configuring the appropriate log levels as well as creating SimpleDB client using <a href="https://github.com/cemerick/rummage">rummage</a> (a SimpleDB client by <a href="twitter.com/cemerick">@cemerick</a>).</p>
+
+<p>And why a macro? Because in some extent you can see a macro as a code template, just like <a href="http://velocity.apache.org/">Velocity</a> or <a href="http://www.stringtemplate.org/">String Template</a>. So what this macro does is just &#8220;typing&#8221; all this code on my REPL namespace, than the defined functions and vars are automatic available in the <code>user</code> namespace.</p>
+
+<p>Using it is simple:</p>
+
+<figure class='code'><figcaption><span>Using the macro</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">use</span> <span class="ss">&#39;the</span><span class="o">.</span><span class="nv">macro</span><span class="o">.</span><span class="nv">namespace</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="nf">boot-sdb</span><span class="p">)</span>
+</span><span class='line'><span class="nv">Connected</span> <span class="nv">to</span> <span class="nv">SDB</span><span class="o">.</span>
+</span><span class='line'><span class="nv">Type</span> <span class="o">&#39;</span><span class="p">(</span><span class="nv">lsd</span><span class="p">)</span><span class="o">&#39;</span> <span class="nv">to</span> <span class="nv">list</span> <span class="nv">all</span> <span class="nv">domains</span>
+</span><span class='line'><span class="nv">Type</span> <span class="o">&#39;</span><span class="p">(</span><span class="nv">mkd</span> <span class="nv">domain-name</span><span class="p">)</span><span class="o">&#39;</span> <span class="nv">to</span> <span class="nv">create</span> <span class="nv">a</span> <span class="nv">new</span> <span class="nv">domain</span>
+</span><span class='line'><span class="nv">Type</span> <span class="o">&#39;</span><span class="p">(</span><span class="nv">rmd</span> <span class="nv">domain-name</span><span class="p">)</span><span class="o">&#39;</span> <span class="nv">to</span> <span class="nv">delete</span> <span class="nv">a</span> <span class="nv">domain</span>
+</span><span class='line'><span class="nv">Type</span> <span class="o">&#39;</span><span class="p">(</span><span class="nv">countd</span> <span class="nv">domain</span><span class="p">)</span><span class="o">&#39;</span> <span class="nv">to</span> <span class="nv">get</span> <span class="nv">the</span> <span class="nv">items</span> <span class="nv">count</span> <span class="nv">of</span> <span class="nv">domain</span>
+</span><span class='line'><span class="nv">Type</span> <span class="o">&#39;</span><span class="p">(</span><span class="nv">sdb-help</span><span class="p">)</span><span class="o">&#39;</span> <span class="nv">to</span> <span class="nv">see</span> <span class="nv">this</span> <span class="nv">help</span> <span class="nv">again</span>
+</span><span class='line'><span class="nv">nil</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>(boot-sdb)</code> &#8220;types&#8221; all the code for you, then you can call the functions like <code>(lsd)</code> to get the list of domains in your SimpleDB.</p>
+
+<p>If take a closer look you may notice a function call to <code>(env "AWS_KEYID")</code>. It simply gets the environment variables set with your credentials.</p>
+
+<p>You can extend the macro to have any admin task you may need. Note that the <code>*sdbconf*</code> will become available, so you can call rummage directly without having to configure all again.</p>
+
+<p>That is it. Clojure is smart!</p>
+
+<p>Don&#8217;t forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -529,6 +683,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/20/ultrafast-web-development-with-perl-plus-bootstrap-plus-mongodb/">Ultrafast web development with Perl + Bootstrap + MongoDB</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/26/geocoding-csvs-with-clojure/">Geocoding CSVs with Clojure</a>
       </li>
     
@@ -542,10 +700,6 @@
     
       <li class="post">
         <a href="/blog/2013/02/07/configuring-clojure-immutant-by-environment/">Configuring Clojure Immutant by environment</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/07/09/tcp-server-with-clojure-aleph-and-gloss/">TCP Server with Clojure Aleph and Gloss</a>
       </li>
     
   </ul>
