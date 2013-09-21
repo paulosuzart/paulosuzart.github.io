@@ -115,15 +115,15 @@
 <ul>
 <li><a href="http://www.catalystframework.org/">Catalyst</a> - No, I wanted something simpler than that. Catalyst looks awesome, and I should try in another opportunity</li>
 <li><a href="http://mojolicio.us/">Mojolicious</a> - Nice option. Very simple. But few plugins available if compared to the one I picked up</li>
-<li><a href="http://perldancer.org">Dancer</a> - YES! It is super compact, and the community around it has created tons of great plugins: <a href="http://search.cpan.org/~ajct/Dancer-Plugin-Mongo-0.03/lib/Dancer/Plugin/Mongo.pm">Dancer::Plugin::Mongo</a>, <a href="http://search.cpan.org/~sukria/Dancer-Plugin-REST-0.07/lib/Dancer/Plugin/REST.pm">Dancer::Plugin::REST</a> and <a href="http://search.cpan.org/~dams/Dancer-Plugin-FlashMessage-0.314/lib/Dancer/Plugin/FlashMessage.pm">Dancer::Plugin::FlashMessage</a>just to mention few.</li>
+<li><a href="http://perldancer.org">Dancer</a> - YES! It is super compact, and the community around it has created tons of great plugins: <a href="http://search.cpan.org/~ajct/Dancer-Plugin-Mongo-0.03/lib/Dancer/Plugin/Mongo.pm">Dancer::Plugin::Mongo</a>, <a href="http://search.cpan.org/~sukria/Dancer-Plugin-REST-0.07/lib/Dancer/Plugin/REST.pm">Dancer::Plugin::REST</a> and <a href="http://search.cpan.org/~dams/Dancer-Plugin-FlashMessage-0.314/lib/Dancer/Plugin/FlashMessage.pm">Dancer::Plugin::FlashMessage</a> just to mention a few.</li>
 </ul>
 
 
 <p>That is it, assemble plugins as you want and you are done.</p>
 
-<p>Another nice point is the project folder structure created by Dancer. If you are used to frameworks like Grails and Django, you&#8217;ll like it. And not only that, Dancer comes by default with per-environment configuration (yaml) files, and a general config file where you configure template, plugins, powerful templates, http filters, and test suite.</p>
+<p>Another nice point is the project folder structure created by Dancer. If you are used to frameworks like Grails and Django, you&#8217;ll like it. And not only that, Dancer comes by default with per-environment configuration (yaml) files, and a general config file where you configure, plugins, powerful templates, http filters, etc.</p>
 
-<p>I can&#8217;t open that much the code I finished writing in few nights. But I can guarantee it was funny and quick to write. A simple Http request handle is:</p>
+<p>I can&#8217;t open that much of the code I wrote in few nights. But I can guarantee it was funny and quick to write. A simple Http request handler is:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -150,13 +150,13 @@
 
 <p>The <a href="http://www.template-toolkit.org/index.html">template system</a> is flexible and very powerful. Just embbed your html/css/js <a href="http://getbootstrap.com">Twitter Bootstrap</a> stuff and you have beauty. No time wasted with style cascading, user interface layout, etc.</p>
 
-<h1>MongoDB and keep fast</h1>
+<h1>MongoDB and keep it fast</h1>
 
 <p>As I said: DO IT RIGHT NOW! So, set up a new database machine? Create schemas? No way! Get a ready to go mongo instance at (mongoHQ)[http://www.mongohq.com/home] and start coding right away.</p>
 
 <p>The good part of it is no set up time, no administration time, and you can grow it as you go. Well, mongoHQ here was actually used for development and I don&#8217;t intend to keep it once moving to production</p>
 
-<p>The benefits of itself you can find around. What I want to highlight is the <a href="http://docs.mongodb.org/manual/aggregation/">aggregation</a> framework in conjuntion with perl. The perl hash syntax perfectly fits mongo documents:</p>
+<p>The benefits of mongo itself you can find around. What I want to highlight is the <a href="http://docs.mongodb.org/manual/aggregation/">aggregation</a> framework in conjuntion with perl. The perl hash syntax perfectly fits mongo documents:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -171,7 +171,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Using the aggregation framework you can easily break through any limitations when working without SQL statements.</p>
+<p>Using the aggregation framework you can easily break through any limitations when working without SQL statements with incredible performance.</p>
 
 <h1>Deploying for real</h1>
 
