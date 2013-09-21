@@ -4,7 +4,7 @@
   <title><![CDATA[Category: perl | Paulo Suzart Blog]]></title>
   <link href="http://paulosuzart.github.com/blog/categories/perl/atom.xml" rel="self"/>
   <link href="http://paulosuzart.github.com/"/>
-  <updated>2013-09-20T22:08:22-03:00</updated>
+  <updated>2013-09-20T23:41:16-03:00</updated>
   <id>http://paulosuzart.github.com/</id>
   <author>
     <name><![CDATA[Paulo Suzart]]></name>
@@ -18,13 +18,13 @@
     <link href="http://paulosuzart.github.com/blog/2013/09/20/ultrafast-web-development-with-perl-plus-bootstrap-plus-mongodb/"/>
     <updated>2013-09-20T19:35:00-03:00</updated>
     <id>http://paulosuzart.github.com/blog/2013/09/20/ultrafast-web-development-with-perl-plus-bootstrap-plus-mongodb</id>
-    <content type="html"><![CDATA[<p>Few weeks ago s I had to fix some <a href="http://www.perl.org">perl</a> scripts. Actually make some HTTP requests, etc.</p>
+    <content type="html"><![CDATA[<p>Few weeks ago I had to fix some <a href="http://www.perl.org">perl</a> scripts. Actually make some HTTP requests, etc.</p>
 
 <p>That was actually my first contact with the language. Never tried before! How can it be? Well, I ended up finding an amazing community and ecosystem (mostly covered by <a href="http://www.perl.org/cpan.html">CPAN</a>).</p>
 
 <p>By ecosystem, I mean libs and tools out there. Couldn't be different since it was created in 1987 (I was just a kid)!</p>
 
-<p>So, I needed to develop something simple yet powerful enough to be further extended with new features. But the may requirement was: DO IT RIGHT NOW!</p>
+<p>So, I needed to develop something simple yet powerful enough to be further extended with new features. But the main requirement was: DO IT RIGHT NOW!</p>
 
 <p>Ok, I could have chosen <a href="http://www.grails.org">Grails</a> (my daily job), but know what? I even had time for JVM startup time. Same applies to anything on JVM, even clojure web stuff. I could also have chosen <a href="http://python.org/">python</a> with <a href="http://flask.pocoo.org/">Flask</a> and would be great. But what I was going to add to my toolset?</p>
 
