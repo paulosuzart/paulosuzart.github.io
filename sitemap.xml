@@ -81,8 +81,14 @@
         <lastmod>2013-09-21T13:24:11-03:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://paulosuzart.github.com/blog/2013/10/30/understanding-clojure-apply-and-partial/
+        </loc>
+        <lastmod>2013-10-30T21:28:51-02:00</lastmod>
+    </url>
+    <url>
         <loc>http://paulosuzart.github.com/</loc>
-        <lastmod>2013-09-21T13:24:11-03:00</lastmod>
+        <lastmod>2013-10-30T21:28:51-02:00</lastmod>
     </url>
     <url>
         <loc>http://paulosuzart.github.com/about/</loc>
@@ -94,7 +100,7 @@
     </url>
     <url>
         <loc>http://paulosuzart.github.com/blog/archives/</loc>
-        <lastmod>2013-09-21T13:24:11-03:00</lastmod>
+        <lastmod>2013-10-30T21:28:51-02:00</lastmod>
     </url>
     <url>
         <loc>http://paulosuzart.github.com/404.html</loc>

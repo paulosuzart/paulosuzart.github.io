@@ -4,7 +4,7 @@
   <title><![CDATA[Category: clojure | Paulo Suzart Blog]]></title>
   <link href="http://paulosuzart.github.com/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://paulosuzart.github.com/"/>
-  <updated>2013-09-21T13:24:24-03:00</updated>
+  <updated>2013-10-30T21:30:38-02:00</updated>
   <id>http://paulosuzart.github.com/</id>
   <author>
     <name><![CDATA[Paulo Suzart]]></name>
@@ -12,6 +12,110 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Understanding Clojure apply and partial]]></title>
+    <link href="http://paulosuzart.github.com/blog/2013/10/30/understanding-clojure-apply-and-partial/"/>
+    <updated>2013-10-30T20:15:00-02:00</updated>
+    <id>http://paulosuzart.github.com/blog/2013/10/30/understanding-clojure-apply-and-partial</id>
+    <content type="html"><![CDATA[<p>Hi guys, a really introductory post on <a href="http://clojure.org">Cloure</a> <code>apply</code> and <code>partial</code>functions. I need to confess that I didn't take a look around to see how people are usually explaining these functions. For sure there are better ways to explain it using Javascript, but remember it was used to teach a beginner.</p>
+
+<p>Anyway. This sample <code>js</code> codes come from an explanation I gave to a colleague at work. And pretty much worked to illustrate both cases.</p>
+
+<h1>Apply</h1>
+
+<p>To a beginner it might me not that easy to imagine how they will find room for using <code>apply</code>. They think it will take millon years until it become useful. Wrong!</p>
+
+<p>After listening to some "newbysh" considerations I came across te following code in Java Script, a well known language:</p>
+
+<p>```javascript
+// Imagine a function returning this
+var pessoa = [21, "paulo", "red"];</p>
+
+<p>// And you have the following function to user
+var printer = function(age, name, color) {</p>
+
+<pre><code>console.log("Person with name " + name + " and age " + age + " and cor " + color);
+</code></pre>
+
+<p>};</p>
+
+<p>// You'll probably do this
+printer(pessoa[0], pessoa[1], "vermelho");
+// => Person with name paulo and age 21 and cor red
+// But imagine you could do this:
+apply(printer, pessoa);</p>
+
+<p>// This would be possible using the following apply function</p>
+
+<p>var apply = function(fn, args) {
+  var str = "fn(";
+  for (x = 0; x &lt; args.length; x++)  {</p>
+
+<pre><code>str = str + "args["+x+"]";
+if (x &lt; args.length - 1) {
+  str += ",";
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  str += ");";
+  console.log(str);
+  eval(str);
+};</p>
+
+<p>// And the output is the same:
+// => Person with name paulo and age 21 and cor red
+<code>``
+After reading this snippet. He instantaneously understood everything and how helpful</code>apply` is. Wrapping up, ...</p>
+
+<blockquote><h2>... I told him:</h2>
+
+<p>Use apply for variadic functions. Functions you don't know how many arguments it can take and you want to consider each element in a vector as if they were independent arguments. Or, even if you know how many args this function takes, for many times you'll have vectors with values that matches arguments of a function.</p></blockquote>
+
+<p>For the second case it is easier to use <a href="http://clojure.org/special_forms#Special%20Forms--Binding%20Forms%20(Destructuring">destructuring</a>), but it still applies.</p>
+
+<h1>Partial</h1>
+
+<p>Believe me, there are plenty ways to explain this. From the most scientific to the most simplistic. I would say below you are going to the a simplistic like explannation. But enough to bootstrap you with your clojure code.</p>
+
+<p>``` javascript
+var hello = function(saud, name) {
+  console.log(saud + ", " + name);
+};</p>
+
+<p>hello("ola", "brunolandia");</p>
+
+<p>var morning = function(nome) {
+  hello("Bom dia", nome);
+};</p>
+
+<p>morning("Brunovisk");
+```</p>
+
+<p>After reading the snippet...</p>
+
+<blockquote><h2>... he then came to an end:</h2>
+
+<p>But Paulo, <code>morning</code> is just reducing the <code>hello</code> function surface, then exposing another function that takes one argument and forwards it to <code>hello</code>, plus passing a constant predefined argument?</p></blockquote>
+
+<p><strong>YES</strong>. That is it! But the most important question was: when should I use it?</p>
+
+<p><a href="http://blog.jayfields.com/2011/01/clojure-partial-and-comp.html">Partial functions</a> have a plenty use cases. To not make things "scientific" and keep then simple:</p>
+
+<p>Imagine you are providing functions to someone else to query a database. You might create a base function that takes an enormous number arguments that actually assemble the queries. But you want to guarantee that certain fields/constraints/indexes are present on every query.</p>
+
+<p>A good choice is to partially apply this base function with your prefixed well known safe arguments and then expose this produced function to your users.</p>
+
+<p>There are much more use cases for partial functions. A good motivation is to make your code more legible and elegant. A good post on it was published by Christopher Maier <a href="http://christophermaier.name/blog/2011/07/07/writing-elegant-clojure-code-using-higher-order-functions">right here</a>.</p>
+
+<p>Well, hope you liked the text and that it can help you faster understand things that may be left behind while studying it. See you!</p>
+
+<p><p>Don't forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Geocoding CSVs with Clojure]]></title>
@@ -551,40 +655,6 @@ $COMM</p>
 
 <p><p>Don't forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
 </p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[sorting with clojure comparator]]></title>
-    <link href="http://paulosuzart.github.com/blog/2012/04/11/sorting-with-clojure-comparator/"/>
-    <updated>2012-04-11T22:51:00-03:00</updated>
-    <id>http://paulosuzart.github.com/blog/2012/04/11/sorting-with-clojure-comparator</id>
-    <content type="html"><![CDATA[<p>This is a quick post to show an example of <a href="http://clojure.org">clojure</a> <code>comparator</code> for sorting a list with <code>sort</code>.</p>
-
-<p>At work a friend wrote dozen lines of java to sort a list of characters that represents t-shirt sizes. The sizes are: pp, p, m, mm, g, gg, a, aa. Where 'pp' is super small, 'p' small, 'm' medium, etc.</p>
-
-<p>Some shees have all the sizes available, some not. So imagine a shirt with just g, a, gg, p sizes availabe. The screen should show: p, g, gg, a.</p>
-
-<p>He requested me to do a clojure version of it. Here it goes.</p>
-
-<p><div><script src='https://gist.github.com/2351780.js?file='></script>
-<noscript><pre><code></code></pre></noscript></div>
-</p>
-
-<p>The first useful function is <a href="http://clojuredocs.org/clojure_core/clojure.core/map-indexed"><code>map-indexed</code></a>. Since the order of sizes is not natural, we associate numbers to them given we know the size order. So <code>sizes</code> becomes <code>{:a 6, :gg 5, :g 4, :pp 0, :m 2, :mm 3, :aa 7, :p 1}</code>.</p>
-
-<p>Then I used a <a href="http://clojuredocs.org/clojure_core/clojure.core/comparator"><code>comparator</code></a>. It produces a <code>java.util.Comparator</code> for the given function. In this case the comparison of the map values for each key.</p>
-
-<p>To finish that, the <a href="http://clojuredocs.org/clojure_core/clojure.core/sort"><code>sort</code></a> function. It takes a given product sizes list and sorts then. So <code>'(p, g, gg, aa)</code> becomes <code>(p g gg a)</code>.</p>
-
-<p>It is even silly for a blog post but what if I can convince him to replace the java methods/utils/whatever methods for a <a href="http://clojuredocs.org/clojure_core/clojure.core/gen-class"><code>gen-class</code></a> of it? Packing compiled clojure code and using them for utility functions and small piece of your application can be a good way to get used to the language and confidence to start a full application in it.</p>
-
-<p>Actually to let this code reusable, one can take the list of sizes instead of hard coding it. But this is an exercise for you.</p>
-
-<p><p>Don't forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
-</p>
-
-<p><em>Thanks to USA guys, you are the top visitors here. Thank you very much.</em></p>
 ]]></content>
   </entry>
   
