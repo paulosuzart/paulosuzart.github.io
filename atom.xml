@@ -4,7 +4,7 @@
   <title><![CDATA[Paulo Suzart Blog]]></title>
   <link href="http://paulosuzart.github.com/atom.xml" rel="self"/>
   <link href="http://paulosuzart.github.com/"/>
-  <updated>2013-12-15T22:27:34-02:00</updated>
+  <updated>2013-12-15T22:32:52-02:00</updated>
   <id>http://paulosuzart.github.com/</id>
   <author>
     <name><![CDATA[Paulo Suzart]]></name>
@@ -45,9 +45,9 @@
 <noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist/7980317&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
 
 
-<p>Yes, it sounded for me. I&#8217;m using it a lot for mostly everything that should repeatedly defined at node level. If you are a puppet specialist, let me know your opinion.</p>
+<p>Yes, it sounded for me. I&#8217;m using it a lot for mostly everything that should be repeatedly defined at node level. If you are a puppet specialist, let me know your opinion.</p>
 
-<p>Hope you can take advantage of this resource as it seems to be helping me a lot. Merry Christmas.</p>
+<p>Hope you can take advantage of this as it seems to be helping me a lot. Merry Christmas!</p>
 
 <p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
 
@@ -61,9 +61,9 @@
     <link href="http://paulosuzart.github.com/blog/2013/10/30/understanding-clojure-apply-and-partial/"/>
     <updated>2013-10-30T20:15:00-02:00</updated>
     <id>http://paulosuzart.github.com/blog/2013/10/30/understanding-clojure-apply-and-partial</id>
-    <content type="html"><![CDATA[<p>Hi guys, a really introductory post on <a href="http://clojure.org">Clojure</a> <code>apply</code> and <code>partial</code>functions. I need to confess that I didn&#8217;t take a look around to see how people are usually explaining these functions. For sure there are better ways to explain it using Javascript, but remember it was used to teach a beginner and is not a purist way to explaing clojure.</p>
+    <content type="html"><![CDATA[<p>Hi guys, a really introductory post on <a href="http://clojure.org">Clojure</a> <code>apply</code> and <code>partial</code>functions. I need to confess that I didn&#8217;t take a look around to see how people are usually explaining these functions. For sure there are better ways to explain it even usingJavascript, but remember: it was used to teach a beginne, so no purism here.</p>
 
-<p>Anyway. These sample <code>js</code> codes come from an explanation I gave to a colleague at work. And pretty much worked to illustrate both cases.</p>
+<p>Anyway. These sample <code>js</code> codes come from the explanation I gave to a colleague at work. And pretty much worked to illustrate both cases.</p>
 
 <h1>Apply</h1>
 
