@@ -4,7 +4,7 @@
   <title><![CDATA[Paulo Suzart Blog]]></title>
   <link href="http://paulosuzart.github.com/atom.xml" rel="self"/>
   <link href="http://paulosuzart.github.com/"/>
-  <updated>2013-10-30T21:37:59-02:00</updated>
+  <updated>2013-12-15T22:27:34-02:00</updated>
   <id>http://paulosuzart.github.com/</id>
   <author>
     <name><![CDATA[Paulo Suzart]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Puppet good pattern?]]></title>
+    <link href="http://paulosuzart.github.com/blog/2013/12/15/puppet-good-pattern/"/>
+    <updated>2013-12-15T21:43:00-02:00</updated>
+    <id>http://paulosuzart.github.com/blog/2013/12/15/puppet-good-pattern</id>
+    <content type="html"><![CDATA[<p>Hi all! First note:
+<a href="http://puppetlabs.com/">Puppet</a> definitely goes beyond what is written here. Also, I&#8217;m far from being a puppet specialist, and after posting about <a href="http://www.ansibleworks.com/">Ansible</a>, I&#8217;m writing about puppet because it is my main tool.</p>
+
+<p>While translating a Ansible playbook once used to setup a developer machine - if I can call it rewrite - I found myself often using the same patter: Using <code>create_resources</code> <a href="http://docs.puppetlabs.com/references/latest/function.html#createresources">function</a> + pure hashmaps.</p>
+
+<p>What a hell?</p>
+
+<p>Well, while defining nodes you use puppet resources to install lots os packages and configure them. Eg.: Create <a href="http://www.postgresql.org/">postgres</a> databases, install <a href="http://gvmtool.net/">GVM</a> packages, etc. Then the need &#8220;iterate every new package/database and install/create it&#8221;.</p>
+
+<p>To be fair, puppet doesn&#8217;t seem to be iteration friend. After a couple of research I found <code>create_resources</code> as a good solution for situations you need to repeate the creation of resources. Below an example will help to clarify:</p>
+
+<div><script src='https://gist.github.com/7980105.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist/7980105&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>Ok. What is happening? My real intention is to create as many databases as needed in my host. Notice the <code>pg_databases</code> parameter passed to <code>developer_role</code> class. This contains a map of <code>database name =&gt; $definition</code> pairs. Where <code>definition</code> is actually a map containing the database owner and password.</p>
+
+<p>Then, the <code>create_resources</code> will execute a <code>developer_role::postgres::create_db</code> resource for every key defined at <code>$pg_databases</code>, matching every inner map key to resource variable.</p>
+
+<p>So, instead of iterating every database yourself, or hard coding every call to <code>postgresql::server::db</code> defined by <a href="https://forge.puppetlabs.com/puppetlabs/postgresql">puppetlabs/postgresql</a> you wrap everything in a second resource defined by yourself.</p>
+
+<p>Another good example is the creation of python virtual envs, plus the packages to install in it. These two definitions wraps <a href="https://github.com/stankevich/puppet-python">puppet-python</a>:</p>
+
+<div><script src='https://gist.github.com/7980317.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist/7980317&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>Yes, it sounded for me. I&#8217;m using it a lot for mostly everything that should repeatedly defined at node level. If you are a puppet specialist, let me know your opinion.</p>
+
+<p>Hope you can take advantage of this resource as it seems to be helping me a lot. Merry Christmas.</p>
+
+<p>Don&#8217;t forget to visit the <a href="http://paulosuzart.github.com/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Understanding Clojure apply and partial]]></title>
@@ -763,7 +806,7 @@ One of them is the use of <a href="http://clojuredocs.org/clojure_core/clojure.c
 </span></code></pre></td></tr></table></div></figure>
 
 
-<blockquote></blockquote>
+<p></p>
 
 <p>Gloss uses the concept of frames and codecs to model your bytes. As a shortcut, i&#8217;m using <code>p</code> and <code>lp</code> to identify parameters ended in <code>" "</code> and parameters ended in <code>\r\n</code>. That is, <code>p</code> and <code>lp</code> are frames that will be converted to strings, with UTF-8 encoding.</p>
 
@@ -1299,7 +1342,7 @@ One of them is the use of <a href="http://clojuredocs.org/clojure_core/clojure.c
 </span></code></pre></td></tr></table></div></figure>
 
 
-<blockquote></blockquote>
+<p></p>
 
 <p><em>In this case, <code>doseq</code> does not retains the head of sequences, so there is no <code>seq</code> with tons being produced.</em></p>
 
@@ -1333,7 +1376,7 @@ One of them is the use of <a href="http://clojuredocs.org/clojure_core/clojure.c
 </span></code></pre></td></tr></table></div></figure>
 
 
-<blockquote></blockquote>
+<p></p>
 
 <p>It doesn&#8217;t look designer friendly, right? I would still use hiccup for admin pages or small chunks of html strictly generated by clojure code with a good css to help presenting it.</p>
 

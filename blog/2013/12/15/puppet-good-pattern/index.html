@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: linux - Paulo Suzart Blog</title>
+  <title>Puppet good pattern? - Paulo Suzart Blog</title>
   <meta name="author" content="Paulo Suzart">
 
   
-  <meta name="description" content="Category: linux">
+  <meta name="description" content="Hi all! First note:
+Puppet definitely goes beyond what is written here. Also, I&#8217;m far from being a puppet specialist, and after posting about &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://paulosuzart.github.comblog/categories/linux">
+  <link rel="canonical" href="http://paulosuzart.github.com/blog/2013/12/15/puppet-good-pattern">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -74,36 +75,121 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Linux</h1>
+    
+      <h1 class="entry-title">Puppet Good Pattern?</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+  
+
+<time datetime="2013-12-15T21:43:00-02:00" pubdate>Dec 15<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>Hi all! First note:
+<a href="http://puppetlabs.com/">Puppet</a> definitely goes beyond what is written here. Also, I&#8217;m far from being a puppet specialist, and after posting about <a href="http://www.ansibleworks.com/">Ansible</a>, I&#8217;m writing about puppet because it is my main tool.</p>
 
-  
-  <h2>2013</h2>
+<p>While translating a Ansible playbook once used to setup a developer machine - if I can call it rewrite - I found myself often using the same patter: Using <code>create_resources</code> <a href="http://docs.puppetlabs.com/references/latest/function.html#createresources">function</a> + pure hashmaps.</p>
 
-<article>
-  
-<h1><a href="/blog/2013/05/20/janus-plus-ack-grep-plus-fish-shell-tools-to-rule-everything/">Janus + ack-grep + fish shell: Tools to rule everything</a></h1>
-<time datetime="2013-05-20T19:44:00-03:00" pubdate><span class='month'>May</span> <span class='day'>20</span> <span class='year'>2013</span></time>
+<p>What a hell?</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/tools-/'>tools,</a></span>
-</footer>
+<p>Well, while defining nodes you use puppet resources to install lots os packages and configure them. Eg.: Create <a href="http://www.postgresql.org/">postgres</a> databases, install <a href="http://gvmtool.net/">GVM</a> packages, etc. Then the need &#8220;iterate every new package/database and install/create it&#8221;.</p>
+
+<p>To be fair, puppet doesn&#8217;t seem to be iteration friend. After a couple of research I found <code>create_resources</code> as a good solution for situations you need to repeate the creation of resources. Below an example will help to clarify:</p>
+
+<div><script src='https://gist.github.com/7980105.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist/7980105&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
 
 
-</article>
+<p>Ok. What is happening? My real intention is to create as many databases as needed in my host. Notice the <code>pg_databases</code> parameter passed to <code>developer_role</code> class. This contains a map of <code>database name =&gt; $definition</code> pairs. Where <code>definition</code> is actually a map containing the database owner and password.</p>
+
+<p>Then, the <code>create_resources</code> will execute a <code>developer_role::postgres::create_db</code> resource for every key defined at <code>$pg_databases</code>, matching every inner map key to resource variable.</p>
+
+<p>So, instead of iterating every database yourself, or hard coding every call to <code>postgresql::server::db</code> defined by <a href="https://forge.puppetlabs.com/puppetlabs/postgresql">puppetlabs/postgresql</a> you wrap everything in a second resource defined by yourself.</p>
+
+<p>Another good example is the creation of python virtual envs, plus the packages to install in it. These two definitions wraps <a href="https://github.com/stankevich/puppet-python">puppet-python</a>:</p>
+
+<div><script src='https://gist.github.com/7980317.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist/7980317&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>Yes, it sounded for me. I&#8217;m using it a lot for mostly everything that should repeatedly defined at node level. If you are a puppet specialist, let me know your opinion.</p>
+
+<p>Hope you can take advantage of this resource as it seems to be helping me a lot. Merry Christmas.</p>
+
+<p>Don&#8217;t forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Paulo Suzart</span></span>
+
+      
+
+
+
+
+  
+
+<time datetime="2013-12-15T21:43:00-02:00" pubdate>Dec 15<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/advanced/'>advanced</a>, <a class='category' href='/blog/categories/puppet-/'>puppet,</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://paulosuzart.github.com/blog/2013/12/15/puppet-good-pattern/" data-via="paulosuzart" data-counturl="http://paulosuzart.github.com/blog/2013/12/15/puppet-good-pattern/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/30/understanding-clojure-apply-and-partial/" title="Previous Post: Understanding Clojure apply and partial">&laquo; Understanding Clojure apply and partial</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -204,7 +290,10 @@
       var disqus_shortname = 'paulosuzartblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://paulosuzart.github.com/blog/2013/12/15/puppet-good-pattern';
+        var disqus_url = 'http://paulosuzart.github.com/blog/2013/12/15/puppet-good-pattern';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

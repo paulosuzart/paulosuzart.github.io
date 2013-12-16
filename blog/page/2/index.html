@@ -9,7 +9,7 @@
   <meta name="author" content="Paulo Suzart">
 
   
-  <meta name="description" content="Hi again! Long time without writing here. But for a good reason. One of the most promising web frameworks for clojure is noir. It is actually an &hellip;">
+  <meta name="description" content="As you may know, I&#8217;ve started in a new company last early this month. It is being a huge change in all aspects, technology, people, process, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +81,112 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/03/27/lazy-seqs-from-database-with-clojure-korma/">Lazy-seqs From Database With Clojure Korma</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+  
+
+<time datetime="2012-03-27T20:54:00-03:00" pubdate>Mar 27<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/03/27/lazy-seqs-from-database-with-clojure-korma/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As you may know, I&#8217;ve started in a new company last early this month. It is being a huge change in all aspects, technology, people, process, environment, etc.</p>
+
+<p>Well, this week I wanted to migrate some data (900k rows) from a <a href="http://mysql.com/">MySQL</a> database to a <a href="www.postgresql.org">Postgres</a> one. <a href="twitter.com/felipejcruz">@felipejcruz</a> recommended <a href="http://pypi.python.org/pypi/py-mysql2pgsql">py-mysql2pgsql</a>, but I wasn&#8217;t able to put it to run with dependency - or whatever that messages were - errors. Then I tried <a href="http://sqlfairy.sourceforge.net/">SQLFairy</a>, but does not migrate data, just the schema ddl and other cool features (worthy features).</p>
+
+<p>I ended up doing this administrative task with <a href="http://clojure.org/">clojure</a> and <a href="http://sqlkorma.com/">korma</a>, with few functional concepts to handle the entire data set as if it was in memory.</p>
+
+<p>The flow is: select everything from mysql, insert every thing into postgres. No transformation, no mapping, just select, insert. Take a look at the code:</p>
+
+<div><script src='https://gist.github.com/2221654.js?file='></script>
+<noscript><pre><code></code></pre></noscript></div>
+
+
+<p>It looks more like a script than any other complex program. Korma&#8217;s <code>defdb</code> and <code>defentity</code> are used to connect to databases and define its entities. Note that there are no mappings from columns or any boilerplate annotations/codes. And since the source table and destination table are equal, it is great. But what if I wanted to transform the data model? I could use the <code>transform</code> to change the shape of the data.</p>
+
+<p>Then you see <code>fetch-every</code>. It wraps a korma select with two arguments, one for limit, one for offset. So, the query can be reused at any time.</p>
+
+<p>Due to the volume in the scenario, I couldn&#8217;t simply fetch all data and the insert all at once. I needed to paginate. But deal with pagination right in the code the is inserting and getting more data, sucks.</p>
+
+<p>Clojure offers the excellent <a href="http://clojuredocs.org/clojure_core/clojure.core/lazy-seq"><code>lazy-seq</code></a> function and allows for creating laziness from anywhere. In this case, my lazy sequence is a sequence of pages. Although possible to have infinite ones, this sequence has an end. The end of sequence os reached right after the last row was read. See the <code>when-let</code> in the code.</p>
+
+<p>It is what <code>extract-every</code> does. <code>extract-every</code> actually can execute any query since it is represented by a function that takes two arguments, one for limit, one for offset (<code>fech-every</code> in this case). If we call (extract-every q 20) it will limit the result in 20 rows with a offset of 0. So the head is the 20 rows representing the results, and the tail is a lazy seq of <code>etract-every</code> with a limit of 20 and a offset of 20.</p>
+
+<p>The comes <code>persist</code>, the simples function in the code. It simply takes a v as argument and persists the data in the target database. It also prints the last tow saved for recovery purposes.</p>
+
+<p>Wrapping up, are the <code>map</code>, or <code>pmap</code> functions. Remember that <code>map</code> applies its first argument to every entry of its second argument. So, it is simple to assemble <code>(map persist (extract-every 1500))</code>. It will save to the target database every 1500 rows or any other amount of rows.</p>
+
+<p>It took 5 to 10 minutos to write the code and start the migration.</p>
+
+<p>Just to play around, try:</p>
+
+<figure class='code'><figcaption><span>Playing lazy</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">defn </span><span class="nv">until-ten</span>
+</span><span class='line'>    <span class="p">([]</span> <span class="p">(</span><span class="nf">until-ten</span> <span class="mi">0</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">([</span><span class="nv">n</span><span class="p">]</span> <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">&lt;= </span><span class="nv">n</span> <span class="mi">10</span><span class="p">)</span> <span class="p">(</span><span class="nb">cons </span><span class="nv">n</span> <span class="p">(</span><span class="nf">lazy-seq</span> <span class="p">(</span><span class="nf">until-ten</span> <span class="p">(</span><span class="nb">inc </span><span class="nv">n</span><span class="p">)))))))</span>
+</span><span class='line'><span class="p">(</span><span class="nf">until-ten</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It returns from 0 to 10, being a finite lazy sequence just like the source data set. One can use <code>take-while</code> to limit the results of a lazy-seq. You can compute really big sets using the laziness approach.</p>
+
+<p>Hope it may be useful.</p>
+
+<p>Don&#8217;t forget to visit the <a href="/about">about</a> page. And follow me on Twitter: <a href="http://twitter.com/paulosuzart">@paulosuzart</a>.</p>
+
+
+<p><strong>Update - Apr 7 2012</strong>: <em>Although an interesting and working solution, this code is not that functional. First of all, because it does I/O, but there is something that could be fixed to have a better &#8220;purity&#8221;. <code>map</code> or <code>pmap</code> produce new sequences. Sequences full of <code>nils</code> in this case, because <code>persist</code> returns <code>nil</code>. The only advantage is the use of <code>pmap</code>, to run it in parallel, but it is still weird to have resulting seqs of <code>nils</code>.</em></p>
+
+<p><em>A way to solve this bizarre code is using <a href="http://clojuredocs.org/clojure_core/clojure.core/doseq"><code>doseq</code></a> instead of <code>map</code> or <code>pmap</code>. It is a function that can bind each value of a <code>seq</code> and executes its body:</em></p>
+
+<figure class='code'><figcaption><span>Changing to `doseq`</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="c1">;;using until-ten</span>
+</span><span class='line'><span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="nf">until-ten</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Printing &quot;</span> <span class="nv">i</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;;using korma</span>
+</span><span class='line'><span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">page</span> <span class="p">(</span><span class="nf">extract-every</span> <span class="nv">fetch-every</span> <span class="mi">20</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">persist</span> <span class="nv">page</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p><em>In this case, <code>doseq</code> does not retains the head of sequences, so there is no <code>seq</code> with tons being produced.</em></p>
+
+<p><em>Thanks to everyone around the world visiting this blog. See you!</em></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/03/25/web-noir-plus-enlive-template/">Web Noir Plus Enlive Template</a></h1>
     
     
@@ -122,7 +228,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<blockquote></blockquote>
+<p></p>
 
 <p>It doesn&#8217;t look designer friendly, right? I would still use hiccup for admin pages or small chunks of html strictly generated by clojure code with a good css to help presenting it.</p>
 
@@ -861,6 +967,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/12/15/puppet-good-pattern/">Puppet good pattern?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/30/understanding-clojure-apply-and-partial/">Understanding Clojure apply and partial</a>
       </li>
     
@@ -874,10 +984,6 @@
     
       <li class="post">
         <a href="/blog/2013/08/21/docker-plus-ansible/">Docker + Ansible</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/05/20/janus-plus-ack-grep-plus-fish-shell-tools-to-rule-everything/">Janus + ack-grep + fish shell: Tools to rule everything</a>
       </li>
     
   </ul>
