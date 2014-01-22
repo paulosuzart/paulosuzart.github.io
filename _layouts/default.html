@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  {% include head.html %}
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <h1><a href="/">{{ site.title }}</a></h1>
+        <p>{{ site.description }}</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="https://twitter.com/paulosuzart">@paulosuzart</a>,
+            </li>
+            <li>
+              <a href="https://github.com/paulosuzart">Codes</a>,
+            </li>
+            <li>
+              CTO at <a href="http://www.guiato.com.br" target="_new">Guiato S.A.</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      {{ content }}
+    </div>
+
+  </body>
+</html>
