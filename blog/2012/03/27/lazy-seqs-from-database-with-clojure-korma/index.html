@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    lazy-seqs from database with clojure korma &middot; 
+    my blog at github.io
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26676810-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <h1><a href="/">Paulo Suzart</a></h1>
+        <p>I am working with Java platform for the last 10 years. Former SOA architect, now my priority is functional programming (mostly with clojure), virtualization and cloud computing.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="https://twitter.com/paulosuzart">@paulosuzart</a>,
+            </li>
+            <li>
+              <a href="https://github.com/paulosuzart">Codes</a>,
+            </li>
+            <li>
+              CTO at <a href="http://www.guiato.com.br" target="_new">Guiato S.A.</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="post">
+  <h1>lazy-seqs from database with clojure korma</h1>
+  <span class="post-date">27 Mar 2012</span>
+  <p>As you may know, I've started in a new company last early this month. It is being a huge change in all aspects, technology, people, process, environment, etc.</p>
+
+<p>Well, this week I wanted to migrate some data (900k rows) from a <a href="http://mysql.com/">MySQL</a> database to a <a href="www.postgresql.org">Postgres</a> one. <a href="twitter.com/felipejcruz">@felipejcruz</a> recommended <a href="http://pypi.python.org/pypi/py-mysql2pgsql">py-mysql2pgsql</a>, but I wasn't able to put it to run with dependency - or whatever that messages were - errors. Then I tried <a href="http://sqlfairy.sourceforge.net/">SQLFairy</a>, but does not migrate data, just the schema ddl and other cool features (worthy features).</p>
+
+<p>I ended up doing this administrative task with <a href="http://clojure.org/">clojure</a> and <a href="http://sqlkorma.com/">korma</a>, with few functional concepts to handle the entire data set as if it was in memory.</p>
+
+<p>The flow is: select everything from mysql, insert every thing into postgres. No transformation, no mapping, just select, insert. Take a look at the code:</p>
+
+<script src="https://gist.github.com/2221654.js"> </script>
+
+
+<p>It looks more like a script than any other complex program. Korma's <code>defdb</code> and <code>defentity</code> are used to connect to databases and define its entities. Note that there are no mappings from columns or any boilerplate annotations/codes. And since the source table and destination table are equal, it is great. But what if I wanted to transform the data model? I could use the <code>transform</code> to change the shape of the data.</p>
+
+<p>Then you see <code>fetch-every</code>. It wraps a korma select with two arguments, one for limit, one for offset. So, the query can be reused at any time.</p>
+
+<p>Due to the volume in the scenario, I couldn't simply fetch all data and the insert all at once. I needed to paginate. But deal with pagination right in the code the is inserting and getting more data, sucks.</p>
+
+<p>Clojure offers the excellent <a href="http://clojuredocs.org/clojure_core/clojure.core/lazy-seq"><code>lazy-seq</code></a> function and allows for creating laziness from anywhere. In this case, my lazy sequence is a sequence of pages. Although possible to have infinite ones, this sequence has an end. The end of sequence os reached right after the last row was read. See the <code>when-let</code> in the code.</p>
+
+<p>It is what <code>extract-every</code> does. <code>extract-every</code> actually can execute any query since it is represented by a function that takes two arguments, one for limit, one for offset (<code>fech-every</code> in this case). If we call (extract-every q 20) it will limit the result in 20 rows with a offset of 0. So the head is the 20 rows representing the results, and the tail is a lazy seq of <code>etract-every</code> with a limit of 20 and a offset of 20.</p>
+
+<p>The comes <code>persist</code>, the simples function in the code. It simply takes a v as argument and persists the data in the target database. It also prints the last tow saved for recovery purposes.</p>
+
+<p>Wrapping up, are the <code>map</code>, or <code>pmap</code> functions. Remember that <code>map</code> applies its first argument to every entry of its second argument. So, it is simple to assemble <code>(map persist (extract-every 1500))</code>. It will save to the target database every 1500 rows or any other amount of rows.</p>
+
+<p>It took 5 to 10 minutos to write the code and start the migration.</p>
+
+<p>Just to play around, try:</p>
+
+<pre><code class="clojure Playing lazy">    (defn until-ten 
+        ([] (until-ten 0))
+        ([n] (when (&lt;= n 10) (cons n (lazy-seq (until-ten (inc n)))))))
+    (until-ten)
+</code></pre>
+
+<p>It returns from 0 to 10, being a finite lazy sequence just like the source data set. One can use <code>take-while</code> to limit the results of a lazy-seq. You can compute really big sets using the laziness approach.</p>
+
+<p>Hope it may be useful.</p>
+
+<p><strong>Update - Apr 7 2012</strong>: <em>Although an interesting and working solution, this code is not that functional. First of all, because it does I/O, but there is something that could be fixed to have a better "purity". <code>map</code> or <code>pmap</code> produce new sequences. Sequences full of <code>nils</code> in this case, because <code>persist</code> returns <code>nil</code>. The only advantage is the use of <code>pmap</code>, to run it in parallel, but it is still weird to have resulting seqs of <code>nils</code>.</em></p>
+
+<p><em>A way to solve this bizarre code is using <a href="http://clojuredocs.org/clojure_core/clojure.core/doseq"><code>doseq</code></a> instead of <code>map</code> or <code>pmap</code>. It is a function that can bind each value of a <code>seq</code> and executes its body:</em></p>
+
+<p><code>`` clojure Changing to</code>doseq`
+    ;;using until-ten
+    (doseq [i (until-ten)]
+        (println "Printing " i))</p>
+
+<pre><code>;;using korma
+(doseq [page (extract-every fetch-every 20)]
+    (persist page))
+</code></pre>
+
+<p>```</p>
+
+<p><em>In this case, <code>doseq</code> does not retains the head of sequences, so there is no <code>seq</code> with tons being produced.</em></p>
+
+<p><em>Thanks to everyone around the world visiting this blog. See you!</em></p>
+
+</div>
+
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = "paulosuzartblog"; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
+            My Contribution to Puppet Forge
+            <small>21 Jan 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/2013/12/15/puppet-good-pattern/">
+            Puppet good pattern?
+            <small>15 Dec 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/2013/10/30/understanding-clojure-apply-and-partial/">
+            Understanding Clojure apply and partial
+            <small>30 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>

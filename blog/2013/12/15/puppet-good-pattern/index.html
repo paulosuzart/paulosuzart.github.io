@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    Puppet good pattern? &middot; 
+    my blog at github.io
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26676810-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <h1><a href="/">Paulo Suzart</a></h1>
+        <p>I am working with Java platform for the last 10 years. Former SOA architect, now my priority is functional programming (mostly with clojure), virtualization and cloud computing.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="https://twitter.com/paulosuzart">@paulosuzart</a>,
+            </li>
+            <li>
+              <a href="https://github.com/paulosuzart">Codes</a>,
+            </li>
+            <li>
+              CTO at <a href="http://www.guiato.com.br" target="_new">Guiato S.A.</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="post">
+  <h1>Puppet good pattern?</h1>
+  <span class="post-date">15 Dec 2013</span>
+  <p>Hi all! First note:
+<a href="http://puppetlabs.com/">Puppet</a> definitely goes beyond what is written here. Also, I'm far from being a puppet specialist, and after posting about <a href="http://www.ansibleworks.com/">Ansible</a>, I'm writing about puppet because it is my main tool.</p>
+
+<p>While translating a Ansible playbook once used to setup a developer machine - if I can call it rewrite - I found myself often using the same patter: Using <code>create_resources</code> <a href="http://docs.puppetlabs.com/references/latest/function.html#createresources">function</a> + pure hashmaps.</p>
+
+<p>What a hell?</p>
+
+<p>Well, while defining nodes you use puppet resources to install lots os packages and configure them. Eg.: Create <a href="http://www.postgresql.org/">postgres</a> databases, install <a href="http://gvmtool.net/">GVM</a> packages, etc. Then the need "iterate every new package/database and install/create it".</p>
+
+<p>To be fair, puppet doesn't seem to be iteration friend. After a couple of research I found <code>create_resources</code> as a good solution for situations you need to repeate the creation of resources. Below an example will help to clarify:</p>
+
+<script src="https://gist.github.com/7980105.js"> </script>
+
+
+<p>Ok. What is happening? My real intention is to create as many databases as needed in my host. Notice the <code>pg_databases</code> parameter passed to <code>developer_role</code> class. This contains a map of <code>database name =&gt; $definition</code> pairs. Where <code>definition</code> is actually a map containing the database owner and password.</p>
+
+<p>Then, the <code>create_resources</code> will execute a <code>developer_role::postgres::create_db</code> resource for every key defined at <code>$pg_databases</code>, matching every inner map key to resource variable.</p>
+
+<p>So, instead of iterating every database yourself, or hard coding every call to <code>postgresql::server::db</code> defined by <a href="https://forge.puppetlabs.com/puppetlabs/postgresql">puppetlabs/postgresql</a> you wrap everything in a second resource defined by yourself.</p>
+
+<p>Another good example is the creation of python virtual envs, plus the packages to install in it. These two definitions wraps <a href="https://github.com/stankevich/puppet-python">puppet-python</a>:</p>
+
+<script src="https://gist.github.com/7980317.js"> </script>
+
+
+<p>Yes, it sounded for me. I'm using it a lot for mostly everything that should be repeatedly defined at node level. If you are a puppet specialist, let me know your opinion.</p>
+
+<p>Hope you can take advantage of this as it seems to be helping me a lot. Merry Christmas!</p>
+
+</div>
+
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = "paulosuzartblog"; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
+            My Contribution to Puppet Forge
+            <small>21 Jan 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/2013/10/30/understanding-clojure-apply-and-partial/">
+            Understanding Clojure apply and partial
+            <small>30 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/2013/09/20/ultrafast-web-development-with-perl-plus-bootstrap-plus-mongodb/">
+            Ultrafast web development with Perl + Bootstrap + MongoDB
+            <small>20 Sep 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>
