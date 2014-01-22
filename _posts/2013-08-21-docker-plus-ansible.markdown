@@ -3,7 +3,7 @@ layout: post
 title: "Docker + Ansible"
 date: 2013-08-21 23:21
 comments: true
-categories: virtualization, automation
+categories: virtualization automation
 ---
 Hi! This form for blog posts title is working! Liked it.
 
