@@ -6,7 +6,7 @@ comments: true
 categories: [puppet, devops]
 ---
 
-Happy new year! This time I would like to share with you that I've just shared a [Puppet](http://puppetlabs.com/puppet/puppet-open-source) module at [Puppet Forge](http://forge.puppetlabs.com/). That is awesome!
+Happy new year! This time I would like to share with you that I've just shared a [Puppet](http://puppetlabs.com/puppet/puppet-open-source) [module](https://forge.puppetlabs.com/paulosuzart/gvm) at [Puppet Forge](http://forge.puppetlabs.com/). That is awesome!
 
 As you may know, I'm using puppet to manage my own manage resources. You can find all these manifestes my git hub at [https://github.com/paulosuzart/puppet](https://github.com/paulosuzart/puppet). There you'll basically see some resources to setup, update and keep a bunch of packages and and configurations. That sort of thing you don't wanna miss next time you format your laptop, or when you evolve the current one.
 
