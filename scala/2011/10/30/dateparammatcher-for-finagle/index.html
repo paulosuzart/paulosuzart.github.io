@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    DateParamMatcher for Finagle &middot; 
+    my blog at github.io
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26676810-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <h1><a href="/">Paulo Suzart</a></h1>
+        <p>I am working with Java platform for the last 10 years. Former SOA architect, now my priority is functional programming (mostly with clojure), virtualization and cloud computing.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="https://twitter.com/paulosuzart">@paulosuzart</a>,
+            </li>
+            <li>
+              <a href="https://github.com/paulosuzart">Codes</a>,
+            </li>
+            <li>
+              CTO at <a href="http://www.guiato.com.br" target="_new">Guiato S.A.</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="post">
+  <h1>DateParamMatcher for Finagle</h1>
+  <span class="post-date">30 Oct 2011</span>
+  <p><a href="http://twitter.github.com/finagle">Twitter Finagle</a> is an amazing framework for RPC communication, and my interest is its HTTP features for creating RESTful APIs.</p>
+
+<p>As I bloged at <a href="http://codemountain.wordpress.com/2011/10/14/twitter-finagle-primeiras-impressoes/">codemountain</a>, I'm using finagle for a personal project. Don't know how far it will go, but the facts is that I'm learning Finagle a lot.</p>
+
+<p>During this project I needed to extract from the query string, a param to be parsed to a twitter.util.Time. I ended up with a Param Matcher to be used my a pattern match agains the requested path. The use of this Param Patcher is:</p>
+
+<pre><code class="scala Using the DateParamMatcher">//...
+Path(request.path) :? request.params match {
+       case Root / "myPath" :? RequestTime(requestTimeParam)  =&gt; //do something
+//..
+}
+//Where RequestTime is defined as
+ object RequestTime extends DateParamMatcher("requestTimeParam")
+</code></pre>
+
+<p>The source of DateParamMatcher is the following.
+``` scala Param Matcher for twitter.util.Time
+import com.twitter.util.Time.<em>
+import com.twitter.util.Time
+import java.text.ParseException
+import com.twitter.finagle.http.path.</em>
+import com.twitter.finagle.http.ParamMap</p>
+
+<p>/<em>*
+ * Extractor that takes a request parameter and converts it to a {twitter.util.Time}.
+ * The date format should conform with {twitter.util.Time} default format.
+ </em>/
+abstract class DateParamMatcher(name: String) {</p>
+
+<p>  def unapply(params: ParamMap): Option[Time] = params.get(name) flatMap { value =>
+    try {
+      Some(at(value))
+    } catch {
+      case ex: ParseException =>
+        None
+    }
+  }
+}</p>
+
+<p><code>``
+Finagle also provides an abstract</code>com.twitter.finagle.http.path.ParamMatcher<code>as well as</code>LongParamMatcher<code>and</code>IntParamMatcher` in the same package. They are actually Scala  Extractors (very well explained <a href="http://codemonkeyism.com/scala-goodness-extractors/">here</a> by @codemonkeyism). This is a practical way to extract values from a query string and put it available at your code already parsed.</p>
+
+<p>Note that if the param named <code>requestTimeParam</code> is not present or carries a invalid value for <code>Time</code> in the query string the <code>None</code> value is returned.</p>
+
+<p>Although easy to build and extract params from query string and requested path, it is not a Finagle strength. It is kinda limited. A better abstraction is offered by <a href="https://github.com/unfiltered/unfiltered">Unfiltered</a>(another <a href="http://twitter.com/n8han">@n8han's</a> great job).</p>
+
+<p>Hope you enjoy it.</p>
+
+</div>
+
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = "paulosuzartblog"; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/puppet,/devops/2014/01/21/my-contribution-to-puppet-forge/">
+            My Contribution to Puppet Forge
+            <small>21 Jan 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/puppet,/advanced/2013/12/15/puppet-good-pattern/">
+            Puppet good pattern?
+            <small>15 Dec 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/clojure/2013/10/30/understanding-clojure-apply-and-partial/">
+            Understanding Clojure apply and partial
+            <small>30 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>

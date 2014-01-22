@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    My Contribution to Puppet Forge &middot; 
+    my blog at github.io
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26676810-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <h1><a href="/">Paulo Suzart</a></h1>
+        <p>I am working with Java platform for the last 10 years. Former SOA architect, now my priority is functional programming (mostly with clojure), virtualization and cloud computing.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="https://twitter.com/paulosuzart">@paulosuzart</a>,
+            </li>
+            <li>
+              <a href="https://github.com/paulosuzart">Codes</a>,
+            </li>
+            <li>
+              CTO at <a href="http://www.guiato.com.br" target="_new">Guiato S.A.</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="post">
+  <h1>My Contribution to Puppet Forge</h1>
+  <span class="post-date">21 Jan 2014</span>
+  <p>Happy new year! This time I would like to share with you that I've just shared a <a href="http://puppetlabs.com/puppet/puppet-open-source">Puppet</a> module at <a href="http://forge.puppetlabs.com/">Puppet Forge</a>. That is awesome!</p>
+
+<p>As you may know, I'm using puppet to manage my own managine resources. You can find all these manifestes my git hub at <a href="https://github.com/paulosuzart/puppet">https://github.com/paulosuzart/puppet</a>. There you'll basically see some resources to setup, update and keep a bunch of packages and and configurations. That sort of thing you don't wanna miss next time you format your machine, or when you evolve the current one.</p>
+
+<p>Examples are installation of postgresql, postgis, git, change your prompt, configure your git, install clojure lein, create python virtual env and its packages, install and update <a href="http://gvmtool.net/">GVM</a> packages.</p>
+
+<p>Well, as many other communities, puppet users can share their code with anyone interested on it. For example, my manifests uses really nice community modules such as <a href="http://forge.puppetlabs.com/puppetlabs/apt">apt</a>, <a href="http://forge.puppetlabs.com/maestrodev/wget">wget</a> and many others.</p>
+
+<p>After looking for a module to install GVM and its packages, I've found nothing. At this point I had created my own module that I than decided to share.</p>
+
+<p>The process of <a href="http://docs.puppetlabs.com/puppet/latest/reference/modules_publishing.html">creating and publishing a module</a> is quite straightforward. So anyone can share modules, but good to be responsible and take care of compatibility, etc. Any way, this is up to you either user or not a community module.</p>
+
+<h2>What was used</h2>
+
+<p>The module itself relies on <code>wget</code> to grab the GVM setup file from the internet, and then install it and download packages needed by the user. So it is mostly <a href="http://docs.puppetlabs.com/references/latest/type.html#exec"><code>exec</code></a> commands.</p>
+
+<p>The most interesting part is how to prevent some <code>exec</code> block to run. Below you see a piece of <code>package.pp</code> that is responsible for setting a given package as default. But this step is not needed if a the package is already the default.</p>
+
+<p>To prevent it to run, one can use <code>unless</code> attribute from <code>exec</code> command. It basically runs some piece of code that should return 0 to allow this <code>exec</code> to be ran.</p>
+
+<div class="highlight"><pre><code class="puppet">    <span class="nc">exec</span> <span class="p">{</span><span class="s2">&quot;gvm default $name&quot;</span> <span class="p">:</span>
+      <span class="nt">environment</span> <span class="p">=&gt;</span> <span class="s2">&quot;HOME=$user_home&quot;</span><span class="p">,</span>
+      <span class="nt">command</span>     <span class="p">=&gt;</span> <span class="s2">&quot;bash -c &#39;$gvm_init &amp;&amp; gvm default $name $version&#39;&quot;</span><span class="p">,</span>
+      <span class="nt">user</span>        <span class="p">=&gt;</span> <span class="nv">$owner</span><span class="p">,</span>
+      <span class="nt">path</span>        <span class="p">=&gt;</span> <span class="s1">&#39;/usr/bin:/usr/sbin:/bin&#39;</span><span class="p">,</span>
+      <span class="nt">logoutput</span>   <span class="p">=&gt;</span> <span class="ss">true</span><span class="p">,</span>
+      <span class="nt">unless</span>      <span class="p">=&gt;</span> <span class="s2">&quot;test </span><span class="se">\&quot;</span><span class="s2">$version</span><span class="se">\&quot;</span><span class="s2"> = </span><span class="se">\$</span><span class="s2">(find $user_home/.gvm/$name -type l -printf &#39;%p -&gt; %l</span><span class="se">\\</span><span class="s2">n&#39;| awk &#39;{print </span><span class="se">\$</span><span class="s2">3}&#39; | awk -F&#39;/&#39; &#39;{print </span><span class="se">\$</span><span class="s2">NF}&#39;)&quot;</span>
+    <span class="p">}</span>
+</code></pre></div>
+
+
+</div>
+
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = "paulosuzartblog"; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/puppet,/advanced/2013/12/15/puppet-good-pattern/">
+            Puppet good pattern?
+            <small>15 Dec 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/clojure/2013/10/30/understanding-clojure-apply-and-partial/">
+            Understanding Clojure apply and partial
+            <small>30 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/web,/perl/2013/09/20/ultrafast-web-development-with-perl-plus-bootstrap-plus-mongodb/">
+            Ultrafast web development with Perl + Bootstrap + MongoDB
+            <small>20 Sep 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>
