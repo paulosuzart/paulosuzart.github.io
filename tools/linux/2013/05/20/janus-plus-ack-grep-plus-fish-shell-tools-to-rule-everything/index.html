@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    Janus + ack-grep + fish shell: Tools to rule everything &middot; 
+    my blog at github.io
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26676810-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <h1><a href="/">Paulo Suzart</a></h1>
+        <p>I am working with Java platform for the last 10 years. Former SOA architect, now my priority is functional programming (mostly with clojure), virtualization and cloud computing.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="https://twitter.com/paulosuzart">@paulosuzart</a>,
+            </li>
+            <li>
+              <a href="https://github.com/paulosuzart">Codes</a>,
+            </li>
+            <li>
+              CTO at <a href="http://www.guiato.com.br" target="_new">Guiato S.A.</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="post">
+  <h1>Janus + ack-grep + fish shell: Tools to rule everything</h1>
+  <span class="post-date">20 May 2013</span>
+  <p>Hello, I'm posting as often as the men go to the moon! Sad. For a good
+reason, though. We are having great times at
+<a href="http://www.guiato.com.br">Guiato</a>.</p>
+
+<p>What I bring today is the set of tools I'm using nowadays for developing
+Grails and Clojure at work.</p>
+
+<h1>Editor (gVim with Janus)</h1>
+
+<p>I used <a href="http://www.sublimetext.com/">Sublimetext</a> for almost two years at home and at work. I really like it, but if I understood well, the version 3 is available for purchasing only. And, you know, you have a <code>vim</code> editor. Why not?</p>
+
+<p>Ok, pure <code>vi</code> is too much for most people, so put some sauce and you have
+a Sublimetext like <code>vim</code> editor, or even more powerful. Just use <a href="https://github.com/carlhuda/janus">Janus</a> for it and combine with gVim.</p>
+
+<p>It comes with nice color scheemes and lots of plugins. The plugins I use
+more often are:</p>
+
+<ol>
+<li>. <a href="https://github.com/kien/ctrlp.vim">CtrlP</a>. This is exactly like
+   Control P at Sublime and allows you search your entire project.</li>
+<li>. <a href="https://github.com/scrooloose/nerdtree">NERDTree</a>. Simply can't
+   live without it. It is your project browser.</li>
+<li>. <a href="https://github.com/jeetsukumaran/vim-buffergator">BufferGator</a>.
+  To browse between all your open buffers</li>
+<li>. <a href="https://github.com/majutsushi/tagbar">Tagbar</a>. The campion! This
+  is your code outlook similar to what popular IDEs offer.</li>
+</ol>
+
+
+<p>There is a nice support for <a href="http://git-scm.com/">Git</a>, but I stay at pure command line.</p>
+
+<p>Get it up and running is fairly easy. Don't waste time, go set up yours.</p>
+
+<p>Just a note: Tagbar works perfect for clojure, but I work mainly with
+groovy and Grails, so you can set ctags to recognize <code>.groovy</code> content:</p>
+
+<pre><code class="bash ctags for groovy">--langdef=groovy
+--langmap=groovy:.groovy
+--regex-groovy=/^[ \t]*[(private|public|protected) ( \t)]*[A-Za-z0-9_&lt;&gt;]+[ \t]+([A-Za-z0-9_]+)[ \t]*\(.*\)[ \t]*{/\1/f,function,functions/
+--regex-groovy=/^[ \t]*def[ \t]+([A-Za-z0-9_]+)[ \t]*\=[ \t]*\{/\1/f,function,functions/
+--regex-groovy=/^[ \t]*private def[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/v,private,private variables/
+--regex-groovy=/^[ \t]*def[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/u,public,public variables/
+--regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*class[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
+--regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*enum[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
+</code></pre>
+
+<h1>Search</h1>
+
+<p>CtrlP is great, but you are not always with your vim open or with
+your project open. For this, linux offers grep and find. But waht is
+<a href="http://beyondgrep.com/">beyond grep</a>? There is <code>ack-grep</code>!</p>
+
+<p>Believe me you'll love it. It is extremely practical, fast and developer
+focused. So you don't even need to open gVim. Just seach, find edit and
+commit!</p>
+
+<p>The extra config for <code>ack-grep</code> is a new extension for groovy type and
+also support for <a href="https://puppetlabs.com/">Puppet</a> manifests and
+templates.</p>
+
+<pre><code class="bash puppet types ">--type-add=groovy=.gsp
+--type-set=puppet=.pp,.erb
+</code></pre>
+
+<h1>Fishing the Shell</h1>
+
+<p>Lots of friends call me crazy because I invest time in
+<a href="http://clojure.org">Clojure</a> and use it as much as I can. Also because
+I left behind "rich" IDEs like Eclipse or IntelliJ IDEA. But come on, you
+are a senior developer and you should be able to laugh on any IDE's
+face. Even if you were coding Java.</p>
+
+<p>But ok, I'm here to talk about <a href="http://fishshell.com/">Fish Shell</a>. This
+is my most recent acquisition. Scripting it is
+easy like candy. Check the
+<a href="http://fishshell.com/tutorial.html">tutorial</a>.</p>
+
+<p>I've added <a href="https://gist.github.com/paulosuzart/5614350">few scripts to</a> easy connect to a bunch of machines I have to
+everyday. And adding some color for git is also easy, check <a href="http://zogovic.com/post/37906589287/showing-git-branch-in-fish-shell-prompt">this
+post</a>.</p>
+
+<p>Well, hope you enjoy the tool set. Any news I'll let you know. Thanks
+for reading.</p>
+
+</div>
+
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = "paulosuzartblog"; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/puppet/devops/2014/01/21/my-contribution-to-puppet-forge/">
+            My Contribution to Puppet Forge
+            <small>21 Jan 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/puppet/advanced/2013/12/15/puppet-good-pattern/">
+            Puppet good pattern?
+            <small>15 Dec 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/clojure/2013/10/30/understanding-clojure-apply-and-partial/">
+            Understanding Clojure apply and partial
+            <small>30 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>

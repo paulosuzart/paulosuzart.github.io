@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    Docker + Ansible &middot; 
+    my blog at github.io
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26676810-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <h1><a href="/">Paulo Suzart</a></h1>
+        <p>I am working with Java platform for the last 10 years. Former SOA architect, now my priority is functional programming (mostly with clojure), virtualization and cloud computing.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="https://twitter.com/paulosuzart">@paulosuzart</a>,
+            </li>
+            <li>
+              <a href="https://github.com/paulosuzart">Codes</a>,
+            </li>
+            <li>
+              CTO at <a href="http://www.guiato.com.br" target="_new">Guiato S.A.</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="post">
+  <h1>Docker + Ansible</h1>
+  <span class="post-date">21 Aug 2013</span>
+  <p>Hi! This form for blog posts title is working! Liked it.</p>
+
+<p>Again some time without writting. And this time I'm writting about
+something brand new: <a href="http://www.docker.io/">Docker</a>.</p>
+
+<p>It lies in the virtualization context. You can read more at <a href="http://docs.docker.io/en/latest/">docker
+documentation</a>. And from my point of
+view, it comes to kill some important challenges me and you have been
+facing over years when talking about delivering software.</p>
+
+<h1>PaaS</h1>
+
+<p>As <a href="http://blog.docker.io/2013/07/excited-to-be-joining-the-great-teams-at-dotcloud-docker-as-ceo/">stated around</a>
+PaaS often fail to cover every necessity you might have. Because they are closed black boxes where you "commit your code in", or something like that. I really like <a href="http://heroku.com">heroku</a> and <a href="https://www.dotcloud.com/">dotCloud</a>, but yes, I have apps that can't run there.</p>
+
+<h1>Ordinary virtualization, another fit for Docker</h1>
+
+<p>I've been using <a href="http://www.citrix.com.br/products/xenserver/overview.html">XenServer</a> to handle massive amount of requests distributed over dozens of machines and it works pretty well. But after using it for a while I have detected some extra "disadvantages" (I'm puting quotes because it is really specific) of this type of virtualization to add to <a href="https://github.com/dotcloud/docker">this list</a>. Here they are:</p>
+
+<ul>
+<li> The sysadmin should be involved since he needs to access the Xen Center in order to create machines</li>
+<li> The developer needs to inform beforehand the amount of CPU cores, disk size and memory</li>
+<li> This involves an all-new machine created with a full operating system, configurations, etc. No time for that!</li>
+<li> Sysadmins are busy and don't like to give you attention</li>
+</ul>
+
+
+<p>Not only that, but many cases crating a full virtualized machine to setup a simple wordpress, or few simple stuff doesn't pay off. For this sort of situation I'm addopting Docker.</p>
+
+<p>The main advantages of container virtualization (like Docker) are:</p>
+
+<ul>
+<li> Platform-as-a-Service like environment. You don't need to think about anything else but run the process in charge of your application. No worries with an entire machine</li>
+<li> Make your app immediately available. No boot time needed. Just <code>docker run</code> and you are in</li>
+<li> Run it over a virtualized Xen machine and you still hold all advantages of XEN in the host level (snapshot, live migration, volume management, etc)</li>
+</ul>
+
+
+<p>Add to the recipe the idea behind <a href="http://12factor.net/">12 factor apps</a> and
+you are done! With Docker you can create the folowing workflow:</p>
+
+<ol>
+<li>. Developers create a Docker container, commits it to a Docker index or even give you a <code>Dockerfile</code></li>
+<li>. Since it is a 12factor app, it is supposed detect resources configuration from the environment it runs</li>
+<li>. Move your container around development, staging and live envs</li>
+</ol>
+
+
+<p>Excellent, but still a missing piece.</p>
+
+<h1>Ansible</h1>
+
+<p>Ok, call me crazy: <em>"You've been using <a href="http://puppetlabs.com/">Puppet</a>
+for more than 1 and a half year, why are you talking about
+<a href="http://www.ansibleworks.com/">Ansible?</a>"</em>. It is simple. Well, Ansible
+is also simple, but I mean, it is simple to know why Ansible. Just look
+to step 1 above. See?</p>
+
+<p>Puppet is too much for you to set up your container. Ansible is fine.</p>
+
+<p>You need to be repeatable while setting up containers. You cannot deliver a container with Tomcat 7 plus OpenJDK 1.7 today, and tomorrow deliver Tomcat 6 for the same app. You need consistency archieved through repeatability. Ansible can also give it to you.</p>
+
+<p>Although Docker allows you for commiting images to a repository, you still need to set them up from scratch without
+forgeting any detail. Otherwise your app wont't work properly.</p>
+
+<p>Ansible is a direct competitor of Puppet. But with a simpler approach and good enough to run on every server you manage. I tried this combination and approved. Awesome!</p>
+
+<p>The step one above now could be rewritten like:</p>
+
+<ol>
+<li>. Developers - with the help of sysadmins or not - create a container and set it up with Ansible. Then commit it to the repository and you can even forget  the <code>Dockerfiles</code> (or keep a very minimal one)</li>
+</ol>
+
+
+<p>I'm absolutely sure Docker will solve many things but bring lots of discussions/patterns about how to solve the problems it is supposed to.</p>
+
+<h1>Future</h1>
+
+<p>Projects like <a href="http://coreos.com/">CoreOS</a> and <a href="https://flynn.io/">Flynn</a> literally give you the real notion about what I'm talking. I don't think PaaS or IaaS will die, absolutely not. But a new room is needed for sure.</p>
+
+<p>I have both Docker and Ansible running production stuff and hope I can share some <code>Playbooks</code> and <code>Dockerfile</code>s in the near future.</p>
+
+</div>
+
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = "paulosuzartblog"; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/puppet/devops/2014/01/21/my-contribution-to-puppet-forge/">
+            My Contribution to Puppet Forge
+            <small>21 Jan 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/puppet/advanced/2013/12/15/puppet-good-pattern/">
+            Puppet good pattern?
+            <small>15 Dec 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/clojure/2013/10/30/understanding-clojure-apply-and-partial/">
+            Understanding Clojure apply and partial
+            <small>30 Oct 2013</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>
