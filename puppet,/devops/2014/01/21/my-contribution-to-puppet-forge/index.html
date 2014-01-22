@@ -68,7 +68,7 @@
   <span class="post-date">21 Jan 2014</span>
   <p>Happy new year! This time I would like to share with you that I've just shared a <a href="http://puppetlabs.com/puppet/puppet-open-source">Puppet</a> module at <a href="http://forge.puppetlabs.com/">Puppet Forge</a>. That is awesome!</p>
 
-<p>As you may know, I'm using puppet to manage my own managine resources. You can find all these manifestes my git hub at <a href="https://github.com/paulosuzart/puppet">https://github.com/paulosuzart/puppet</a>. There you'll basically see some resources to setup, update and keep a bunch of packages and and configurations. That sort of thing you don't wanna miss next time you format your machine, or when you evolve the current one.</p>
+<p>As you may know, I'm using puppet to manage my own manage resources. You can find all these manifestes my git hub at <a href="https://github.com/paulosuzart/puppet">https://github.com/paulosuzart/puppet</a>. There you'll basically see some resources to setup, update and keep a bunch of packages and and configurations. That sort of thing you don't wanna miss next time you format your laptop, or when you evolve the current one.</p>
 
 <p>Examples are installation of postgresql, postgis, git, change your prompt, configure your git, install clojure lein, create python virtual env and its packages, install and update <a href="http://gvmtool.net/">GVM</a> packages.</p>
 
@@ -86,19 +86,20 @@
 
 <p>To prevent it to run, one can use <code>unless</code> attribute from <code>exec</code> command. It basically runs some piece of code that should return 0 to allow this <code>exec</code> to be ran.</p>
 
-<div class="highlight"><pre><code class="puppet">    <span class="nc">exec</span> <span class="p">{</span><span class="s2">&quot;gvm default $name&quot;</span> <span class="p">:</span>
-      <span class="nt">environment</span> <span class="p">=&gt;</span> <span class="s2">&quot;HOME=$user_home&quot;</span><span class="p">,</span>
-      <span class="nt">command</span>     <span class="p">=&gt;</span> <span class="s2">&quot;bash -c &#39;$gvm_init &amp;&amp; gvm default $name $version&#39;&quot;</span><span class="p">,</span>
-      <span class="nt">user</span>        <span class="p">=&gt;</span> <span class="nv">$owner</span><span class="p">,</span>
-      <span class="nt">path</span>        <span class="p">=&gt;</span> <span class="s1">&#39;/usr/bin:/usr/sbin:/bin&#39;</span><span class="p">,</span>
-      <span class="nt">logoutput</span>   <span class="p">=&gt;</span> <span class="ss">true</span><span class="p">,</span>
-      <span class="nt">unless</span>      <span class="p">=&gt;</span> <span class="s2">&quot;test </span><span class="se">\&quot;</span><span class="s2">$version</span><span class="se">\&quot;</span><span class="s2"> = </span><span class="se">\$</span><span class="s2">(find $user_home/.gvm/$name -type l -printf &#39;%p -&gt; %l</span><span class="se">\\</span><span class="s2">n&#39;| awk &#39;{print </span><span class="se">\$</span><span class="s2">3}&#39; | awk -F&#39;/&#39; &#39;{print </span><span class="se">\$</span><span class="s2">NF}&#39;)&quot;</span>
-    <span class="p">}</span>
+<div class="highlight"><pre><code class="puppet"><span class="nc">exec</span> <span class="p">{</span><span class="s2">&quot;gvm default $name&quot;</span> <span class="p">:</span>
+  <span class="nt">environment</span> <span class="p">=&gt;</span> <span class="s2">&quot;HOME=$user_home&quot;</span><span class="p">,</span>
+  <span class="nt">command</span>     <span class="p">=&gt;</span> <span class="s2">&quot;bash -c &#39;$gvm_init &amp;&amp; gvm default $name $version&#39;&quot;</span><span class="p">,</span>
+  <span class="nt">user</span>        <span class="p">=&gt;</span> <span class="nv">$owner</span><span class="p">,</span>
+  <span class="nt">path</span>        <span class="p">=&gt;</span> <span class="s1">&#39;/usr/bin:/usr/sbin:/bin&#39;</span><span class="p">,</span>
+  <span class="nt">logoutput</span>   <span class="p">=&gt;</span> <span class="ss">true</span><span class="p">,</span>
+  <span class="nt">unless</span>      <span class="p">=&gt;</span> <span class="s2">&quot;test </span><span class="se">\&quot;</span><span class="s2">$version</span><span class="se">\&quot;</span><span class="s2"> = </span><span class="se">\$</span><span class="s2">(find $user_home/.gvm/$name -type l -printf &#39;%p -&gt; %l</span><span class="se">\\</span><span class="s2">n&#39;| awk &#39;{print </span><span class="se">\$</span><span class="s2">3}&#39; | awk -F&#39;/&#39; &#39;{print </span><span class="se">\$</span><span class="s2">NF}&#39;)&quot;</span>
+<span class="p">}</span>
 </code></pre></div>
 
 
-<p>Sometimes you must find the most crazy commands to prevent something to run. But good that you go deep into linux.
-This project you can find on this Github repo: <a href="https://github.com/paulosuzart/gvm">https://github.com/paulosuzart/gvm</a>. Hope people in the community can use and contribute.</p>
+<p>Sometimes you have to find the most crazy commands to prevent something to run. But good that you go deep into linux. In this case, GVM creates a <code>symlink</code> from the package version to a folder named <code>current</code> under the installed package folder. So, if such link exists for the given <code>$verion</code>, it is already the default verion and not needed to run this resource.</p>
+
+<p>This project you can find on this Github repo: <a href="https://github.com/paulosuzart/gvm">https://github.com/paulosuzart/gvm</a>. Hope people in the community can use and contribute.</p>
 
 </div>
 
