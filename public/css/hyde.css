@@ -75,6 +75,14 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
   font-size: 40px;
 }
+h1 a {
+  color: #222;
+
+}
+h1 a:hover,
+a:focus {
+  text-decoration: underline;
+}
 h2 {
   margin-top: 20px;
   font-size: 32px;
@@ -208,7 +216,7 @@ img {
 
 a {
   font-weight: 600;
-  color: #222;
+  color: #2f6f9f;
   text-decoration: none;
 }
 a:hover,
