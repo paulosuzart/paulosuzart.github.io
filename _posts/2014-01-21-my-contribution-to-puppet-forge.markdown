@@ -38,3 +38,6 @@ To prevent it to run, one can use `unless` attribute from `exec` command. It bas
     }
 
 {% endhighlight %}
+
+Sometimes you must find the most crazy commands to prevent something to run. But good that you go deep into linux.
+This project you can find on this Github repo: [https://github.com/paulosuzart/gvm](https://github.com/paulosuzart/gvm). Hope people in the community can use and contribute.
