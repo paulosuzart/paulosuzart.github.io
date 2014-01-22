@@ -3,7 +3,7 @@ layout: post
 title: "Configuring Clojure Immutant by environment"
 date: 2013-02-07 08:39
 comments: true
-categories: clojure advanced
+categories: [clojure, advanced]
 ---
 
 Hi again! Not posting for too much long.

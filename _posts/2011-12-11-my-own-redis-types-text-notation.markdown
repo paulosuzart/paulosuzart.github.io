@@ -3,7 +3,7 @@ layout: post
 title: "My Own REDIS Types - text - Notation"
 date: 2011-12-11 18:11
 comments: true
-categories: clojure redis
+categories: [clojure, redis]
 ---
 Some seconds after the [last post](http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-notation/), [@paraseba](http://twitter.com/paraseba) commented that a text version of this notation may be even more helpful.
 

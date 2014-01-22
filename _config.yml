@@ -7,7 +7,7 @@ author:
   name:       'Paulo Suzart'
   email:      'paulosuzart@gmail.com'
 markdown:     rdiscount
-permalink:    pretty
+permalink:    /blog/:year/:month/:day/:title/
 pygments:     true
 paginate:     5
 tracking_id : 'UA-26676810-1'

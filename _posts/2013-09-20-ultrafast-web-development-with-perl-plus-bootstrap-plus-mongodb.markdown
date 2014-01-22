@@ -3,7 +3,7 @@ layout: post
 title: "Ultrafast web development with Perl + Bootstrap + MongoDB"
 date: 2013-09-20 19:35
 comments: true
-categories: web perl
+categories: [web, perl]
 ---
 
 Few weeks ago I had to fix some [perl](http://www.perl.org) scripts. Actually make some HTTP requests, etc. 

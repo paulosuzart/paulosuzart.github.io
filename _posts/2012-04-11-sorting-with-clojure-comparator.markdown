@@ -3,7 +3,7 @@ layout: post
 title: "sorting with clojure comparator"
 date: 2012-04-11 22:51
 comments: true
-categories: clojure elementary
+categories: [clojure, elementary]
 ---
 
 This is a quick post to show an example of [clojure](http://clojure.org) `comparator` for sorting a list with `sort`.

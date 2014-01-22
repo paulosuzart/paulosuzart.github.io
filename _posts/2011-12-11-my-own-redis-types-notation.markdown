@@ -3,7 +3,7 @@ layout: post
 title: "My own REDIS types notation"
 date: 2011-12-11 17:20
 comments: true
-categories: clojure redis
+categories: [clojure, redis]
 ---
 
 One of the greatest [NoSQL](http://en.wikipedia.org/wiki/NoSQL) [key-value](http://en.wikipedia.org/wiki/NoSQL#Key-value_store) databases I value most, is [redis](http://redis.io/). It is simple, fast and tasty.

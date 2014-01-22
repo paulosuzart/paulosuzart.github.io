@@ -3,7 +3,7 @@ layout: post
 title: "Puppet good pattern?"
 date: 2013-12-15 21:43
 comments: true
-categories: puppet advanced
+categories: [puppet, advanced]
 ---
 
 Hi all! First note:
