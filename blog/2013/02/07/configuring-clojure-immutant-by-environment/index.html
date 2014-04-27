@@ -74,21 +74,31 @@
 
 <p>To do the conditional evaluation, I decided to add an extra key to <code>:immutant</code> entry in my project definition. The entry <code>:env</code> is an <a href="http://immutant.org/documentation/current/initialization.html#sec-3-1">arbitrary configuration value</a>. Lets take a look:</p>
 
-<pre><code class="clojure Silly Project">(defproject tserver "0.1.0-SNAPSHOT"
+<p>``` clojure Silly Project
+(defproject tserver "0.1.0-SNAPSHOT"
   :description "A foo project"
   :url "http://foo.com/"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.4.0"]
-                 [compojure "1.0.2"]
-                 ;... and many other dependecies
-  :jvm-opts ["-Xmx2g" "-server"]
-  :immutant {:init "tserver.init/init"} ;; our custo immutant init function
-  :profiles {:dev {:immutant {:context-path "/"
-                              :nrepl-port 4242
-                              :lein-profiles [:dev]
-                              :env :dev}}}) ;:dev will identify which config file to load
+  :license {:name "Eclipse Public License"</p>
+
+<pre><code>        :url "http://www.eclipse.org/legal/epl-v10.html"}
 </code></pre>
+
+<p>  :dependencies [[org.clojure/clojure "1.4.0"]</p>
+
+<pre><code>             [compojure "1.0.2"]
+             ;... and many other dependecies
+</code></pre>
+
+<p>  :jvm-opts ["-Xmx2g" "-server"]
+  :immutant {:init "tserver.init/init"} ;; our custo immutant init function
+  :profiles {:dev {:immutant {:context-path "/"</p>
+
+<pre><code>                          :nrepl-port 4242
+                          :lein-profiles [:dev]
+                          :env :dev}}}) ;:dev will identify which config file to load
+</code></pre>
+
+<p>```</p>
 
 <p>In this sample <code>project.clj</code> you find <code>:immutant</code> directly under the project definition. This key is used to, regardless of the environment, inform immutant which funtion to call when your app starts up. In this case <code>tserver.init/init</code>, that we will further analyze.</p>
 
@@ -105,63 +115,72 @@ One of them is the use of <a href="http://clojuredocs.org/clojure_core/clojure.c
 
 <p>The <code>init</code> funtion here will simply call the <code>load-config</code>, that is in charge of loading the config file. Look:</p>
 
-<pre><code class="clojure Silly Project">(ns tserver.init
-  (:use [clojure.tools.logging :only (info error debug)]))
+<p>``` clojure Silly Project
+(ns tserver.init
+  (:use [clojure.tools.logging :only (info error debug)]))</p>
 
-(defn setup-config-ns [e]
-    (binding [*ns* *ns*]
-      (in-ns 'tserver.config)
-      (refer-clojure)
-      (use '[clojure.main :only (load-script)])
-      (require '[immutant.messaging :as msg]
-               '[immutant.web :as web]
-               '[immutant.util :as util])))
+<p>(defn setup-config-ns [e]</p>
 
-(defn load-config 
-  "Attempts to evaluate the specified env file defined by `:env` 
-  in the `project.clj`. `:env` is a immutant custom config.
-  `:env` MUST be a keyword: Ex.: :dev, :prod :office
+<pre><code>(binding [*ns* *ns*]
+  (in-ns 'tserver.config)
+  (refer-clojure)
+  (use '[clojure.main :only (load-script)])
+  (require '[immutant.messaging :as msg]
+           '[immutant.web :as web]
+           '[immutant.util :as util])))
+</code></pre>
+
+<p>(defn load-config
+  "Attempts to evaluate the specified env file defined by <code>:env</code>
+  in the <code>project.clj</code>. <code>:env</code> is a immutant custom config.
+  <code>:env</code> MUST be a keyword: Ex.: :dev, :prod :office
   Uses :dev by default.
   Note: The absence of the requrested file will prevent the server to start.
   These siles MUST be located at `src/tserver/config/%s.clj"
-  [] 
-  (binding [*ns* *ns*]
-    (in-ns 'tserver.config)
-    (let [ev (get-in (immutant.registry/get :config) [:env] :dev)
-            config-file (format "src/tserver/config/%s.clj" (name ev))]
-      (setup-config-ns ev)
-      (info "Using config file " config-file)
-      (load-file config-file)
-      (immutant.registry/put :env ev))))
+  []
+  (binding [<em>ns</em> <em>ns</em>]</p>
 
-(defn init []
+<pre><code>(in-ns 'tserver.config)
+(let [ev (get-in (immutant.registry/get :config) [:env] :dev)
+        config-file (format "src/tserver/config/%s.clj" (name ev))]
+  (setup-config-ns ev)
+  (info "Using config file " config-file)
+  (load-file config-file)
+  (immutant.registry/put :env ev))))
+</code></pre>
+
+<p>(defn init []
   ;;may do some stuff before
   (load-config)) ;;may do some stuff after
-</code></pre>
+```</p>
 
 <p>And finally, our config file containing the required configurations. It can be anything you need.</p>
 
-<pre><code class="clojure Silly Project">(defn handler 
-    [r] ((build-routes) r))
+<p>``` clojure Silly Project
+(defn handler</p>
 
-(web/start handler
-  :reload true)
+<pre><code>[r] ((build-routes) r))
+</code></pre>
 
-(msg/start "/queue/delivery.status")
+<p>(web/start handler
+  :reload true)</p>
 
-(msg/respond "/queue/delivery.status" handle-delivery-status)
+<p>(msg/start "/queue/delivery.status")</p>
 
-(register-job #'import-job)
+<p>(msg/respond "/queue/delivery.status" handle-delivery-status)</p>
+
+<p>(register-job #'import-job)
 (register-job #'check-import)
 ;register-job is function not provided here
 ;since the intention is tho show the configuration solution
-</code></pre>
+```</p>
 
 <p>Now, to deploy and start the app with the given profile we simply do:</p>
 
-<pre><code class="bash">lein with-profile dev immutant deploy
+<p><code>bash
+lein with-profile dev immutant deploy
 lein immutant run
-</code></pre>
+</code></p>
 
 <p>Voila! This will load your <code>dev.clj</code> file and set up your queues, jobs, web-context, whatever you want. This is useful, and I would risk to say mandatory today. You probably have sereval environments where your app resides before going to prodution, and each of them with different names, addresses, pool sizes, queue names, database to connect, etc. And you can easily give to your app the intelligence to load what is more appropriate.</p>
 
@@ -189,6 +208,15 @@ lein immutant run
     
       <li>
         <h3>
+          <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
+            Sliding Window events with Clojure
+            <small>27 Apr 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
             My Contribution to Puppet Forge
             <small>21 Jan 2014</small>
@@ -201,15 +229,6 @@ lein immutant run
           <a href="/blog/2013/12/15/puppet-good-pattern/">
             Puppet good pattern?
             <small>15 Dec 2013</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2013/10/30/understanding-clojure-apply-and-partial/">
-            Understanding Clojure apply and partial
-            <small>30 Oct 2013</small>
           </a>
         </h3>
       </li>

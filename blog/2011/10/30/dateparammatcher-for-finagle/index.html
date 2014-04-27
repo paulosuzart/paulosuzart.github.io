@@ -72,17 +72,20 @@
 
 <p>During this project I needed to extract from the query string, a param to be parsed to a twitter.util.Time. I ended up with a Param Matcher to be used my a pattern match agains the requested path. The use of this Param Patcher is:</p>
 
-<pre><code class="scala Using the DateParamMatcher">//...
-Path(request.path) :? request.params match {
-       case Root / "myPath" :? RequestTime(requestTimeParam)  =&gt; //do something
-//..
+<p>``` scala Using the DateParamMatcher
+//...
+Path(request.path) :? request.params match {</p>
+
+<pre><code>   case Root / "myPath" :? RequestTime(requestTimeParam)  =&gt; //do something
+</code></pre>
+
+<p>//..
 }
 //Where RequestTime is defined as
  object RequestTime extends DateParamMatcher("requestTimeParam")
-</code></pre>
-
-<p>The source of DateParamMatcher is the following.
-``` scala Param Matcher for twitter.util.Time
+<code>
+The source of DateParamMatcher is the following.
+</code> scala Param Matcher for twitter.util.Time
 import com.twitter.util.Time.<em>
 import com.twitter.util.Time
 import java.text.ParseException
@@ -95,14 +98,17 @@ import com.twitter.finagle.http.ParamMap</p>
  </em>/
 abstract class DateParamMatcher(name: String) {</p>
 
-<p>  def unapply(params: ParamMap): Option[Time] = params.get(name) flatMap { value =>
-    try {
-      Some(at(value))
-    } catch {
-      case ex: ParseException =>
-        None
-    }
-  }
+<p>  def unapply(params: ParamMap): Option[Time] = params.get(name) flatMap { value =></p>
+
+<pre><code>try {
+  Some(at(value))
+} catch {
+  case ex: ParseException =&gt;
+    None
+}
+</code></pre>
+
+<p>  }
 }</p>
 
 <p><code>``
@@ -138,6 +144,15 @@ Finagle also provides an abstract</code>com.twitter.finagle.http.path.ParamMatch
     
       <li>
         <h3>
+          <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
+            Sliding Window events with Clojure
+            <small>27 Apr 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
             My Contribution to Puppet Forge
             <small>21 Jan 2014</small>
@@ -150,15 +165,6 @@ Finagle also provides an abstract</code>com.twitter.finagle.http.path.ParamMatch
           <a href="/blog/2013/12/15/puppet-good-pattern/">
             Puppet good pattern?
             <small>15 Dec 2013</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2013/10/30/understanding-clojure-apply-and-partial/">
-            Understanding Clojure apply and partial
-            <small>30 Oct 2013</small>
           </a>
         </h3>
       </li>

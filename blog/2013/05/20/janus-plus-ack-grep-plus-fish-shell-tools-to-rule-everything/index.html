@@ -84,14 +84,14 @@ a Sublimetext like <code>vim</code> editor, or even more powerful. Just use <a h
 more often are:</p>
 
 <ol>
-<li>. <a href="https://github.com/kien/ctrlp.vim">CtrlP</a>. This is exactly like
-   Control P at Sublime and allows you search your entire project.</li>
-<li>. <a href="https://github.com/scrooloose/nerdtree">NERDTree</a>. Simply can't
-   live without it. It is your project browser.</li>
-<li>. <a href="https://github.com/jeetsukumaran/vim-buffergator">BufferGator</a>.
-  To browse between all your open buffers</li>
-<li>. <a href="https://github.com/majutsushi/tagbar">Tagbar</a>. The campion! This
-  is your code outlook similar to what popular IDEs offer.</li>
+<li><a href="https://github.com/kien/ctrlp.vim">CtrlP</a>. This is exactly like
+ Control P at Sublime and allows you search your entire project.</li>
+<li><a href="https://github.com/scrooloose/nerdtree">NERDTree</a>. Simply can't
+ live without it. It is your project browser.</li>
+<li><a href="https://github.com/jeetsukumaran/vim-buffergator">BufferGator</a>.
+To browse between all your open buffers</li>
+<li><a href="https://github.com/majutsushi/tagbar">Tagbar</a>. The campion! This
+is your code outlook similar to what popular IDEs offer.</li>
 </ol>
 
 
@@ -102,7 +102,8 @@ more often are:</p>
 <p>Just a note: Tagbar works perfect for clojure, but I work mainly with
 groovy and Grails, so you can set ctags to recognize <code>.groovy</code> content:</p>
 
-<pre><code class="bash ctags for groovy">--langdef=groovy
+<p><code>bash ctags for groovy
+--langdef=groovy
 --langmap=groovy:.groovy
 --regex-groovy=/^[ \t]*[(private|public|protected) ( \t)]*[A-Za-z0-9_&lt;&gt;]+[ \t]+([A-Za-z0-9_]+)[ \t]*\(.*\)[ \t]*{/\1/f,function,functions/
 --regex-groovy=/^[ \t]*def[ \t]+([A-Za-z0-9_]+)[ \t]*\=[ \t]*\{/\1/f,function,functions/
@@ -110,7 +111,7 @@ groovy and Grails, so you can set ctags to recognize <code>.groovy</code> conten
 --regex-groovy=/^[ \t]*def[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/u,public,public variables/
 --regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*class[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
 --regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*enum[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
-</code></pre>
+</code></p>
 
 <h1>Search</h1>
 
@@ -126,9 +127,10 @@ commit!</p>
 also support for <a href="https://puppetlabs.com/">Puppet</a> manifests and
 templates.</p>
 
-<pre><code class="bash puppet types ">--type-add=groovy=.gsp
+<p><code>bash puppet types
+--type-add=groovy=.gsp
 --type-set=puppet=.pp,.erb
-</code></pre>
+</code></p>
 
 <h1>Fishing the Shell</h1>
 
@@ -174,6 +176,15 @@ for reading.</p>
     
       <li>
         <h3>
+          <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
+            Sliding Window events with Clojure
+            <small>27 Apr 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
             My Contribution to Puppet Forge
             <small>21 Jan 2014</small>
@@ -186,15 +197,6 @@ for reading.</p>
           <a href="/blog/2013/12/15/puppet-good-pattern/">
             Puppet good pattern?
             <small>15 Dec 2013</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2013/10/30/understanding-clojure-apply-and-partial/">
-            Understanding Clojure apply and partial
-            <small>30 Oct 2013</small>
           </a>
         </h3>
       </li>
