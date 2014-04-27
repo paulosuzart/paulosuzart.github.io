@@ -6,7 +6,7 @@ cd /tmp/blog_source
 jekyll build --destination /tmp/blog_site
 cd $CURRENT_DIR
 git checkout master
-rm -rf .
+rm -rf *
 cp -r /tmp/blog_site .
 cd blog_site
 cp -r . ../
