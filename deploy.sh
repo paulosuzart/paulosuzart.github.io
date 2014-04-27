@@ -2,7 +2,7 @@
 CURRENT_DIR=`pwd`
 
 mkdir /tmp/blog_source
-cp /tmp/blog_source
+cd /tmp/blog_source
 jekyll build --destination /tmp/blog_site
 cd $CURRENT_DIR
 git checkout master
