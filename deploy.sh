@@ -1,6 +1,6 @@
 #! /bin/bash
 CURRENT_DIR=`pwd`
-
+#ESCRIPT DEFICIENTE!!!!
 mkdir /tmp/blog_source
 cd /tmp/blog_source
 jekyll build --destination /tmp/blog_site
