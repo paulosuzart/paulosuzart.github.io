@@ -80,83 +80,72 @@
 
 <h2>The config file</h2>
 
-<p>``` clojure server-stats.cfg</p>
+<pre><code class="clojure server-stats.cfg">
+(import org.apache.commons.mail.SimpleEmail)
 
-<p>(import org.apache.commons.mail.SimpleEmail)</p>
 
-<p>(defn send-mail [alert-msg server-name cmd-output]</p>
+(defn send-mail [alert-msg server-name cmd-output]
+    (doto (SimpleEmail.)
+     ;; ... my email configs
+      (.send)))
 
-<pre><code>(doto (SimpleEmail.)
- ;; ... my email configs
-  (.send)))
-</code></pre>
+(add-alert-handler email [alert-msg server-name cmd-output]
+  (send-mail alert-msg server-name cmd-output))
 
-<p>(add-alert-handler email [alert-msg server-name cmd-output]
-  (send-mail alert-msg server-name cmd-output))</p>
+(set-ssh-username "ec2-user")
 
-<p>(set-ssh-username "ec2-user")</p>
+(add-server-group web-servers
+  ["myserver.mydomain.com"])
 
-<p>(add-server-group web-servers
-  ["myserver.mydomain.com"])</p>
-
-<p>(add-cmd disk
+(add-cmd disk 
   {:doc "Get the disk usage using df"
    :cmd "df -h"
    :servers [web-servers]
-   :alerts [{:column "Use%"</p>
+   :alerts [{:column "Use%"
+             :value-type percent
+             :handlers [email]
+             :msg "Disk space over 55% full"
+             :trigger (&gt; 55)}]})
 
-<pre><code>         :value-type percent
-         :handlers [email]
-         :msg "Disk space over 55% full"
-         :trigger (&gt; 55)}]})
-</code></pre>
-
-<p>(add-cmd is-nginx
+(add-cmd is-nginx 
   {:doc "Is nginx Running?"
    :servers [web-servers]
-   :cmd "[[ -z <code>ps aux | grep nginx</code> ]] &amp;&amp; echo 'false' || echo 'true'"
-   :alerts [{:value-type bool</p>
+   :cmd "[[ -z `ps aux | grep nginx` ]] &amp;&amp; echo 'false' || echo 'true'"
+   :alerts [{:value-type bool
+             :msg "Nginx is not running"
+             :handlers [email]
+             :trigger (= false)}]})
 
-<pre><code>         :msg "Nginx is not running"
-         :handlers [email]
-         :trigger (= false)}]})
-</code></pre>
-
-<p>(add-cmd app-log
+(add-cmd app-log
   {:doc "Get last 20 entries in todays app-servers log"
    :servers [web-servers]
-   :cmd "tail -20 /home/ec2-user/artifactory-2.5.1.1/logs/access.log"})</p>
+   :cmd "tail -20 /home/ec2-user/artifactory-2.5.1.1/logs/access.log"})
 
-<p>(add-cmd http-errors
+(add-cmd http-errors
   {:doc "Show recent non-200s requests"
    :servers [web-servers]
-   :cmd "tail -200 /var/log/nginx/error.log"})</p>
+   :cmd "tail -200 /var/log/nginx/error.log"})
 
-<p>(add-cmd is-artifactory
+(add-cmd is-artifactory
   {:doc "Is Artifactory Running?"
    :servers [web-servers]
-   :cmd "[[ -z <code>ps aux | grep org.artifactory.standalone.main.Main</code> ]] &amp;&amp; echo 'false' || echo 'true'"
-   :alerts [{:value-type bool</p>
+   :cmd "[[ -z `ps aux | grep org.artifactory.standalone.main.Main` ]] &amp;&amp; echo 'false' || echo 'true'"
+   :alerts [{:value-type bool
+             :msg "Artifactory is not running"
+             :handlers [email]
+             :trigger (= false)
+             :mute-for 1860000}]})
 
-<pre><code>         :msg "Artifactory is not running"
-         :handlers [email]
-         :trigger (= false)
-         :mute-for 1860000}]})
-</code></pre>
-
-<p>(add-cmd is-bamboo
+(add-cmd is-bamboo
   {:doc "Is bamboo Running?"
    :servers [web-servers]
-   :cmd "[[ -z <code>ps aux | grep com.attlassian.bamboo.server.Server</code> ]] &amp;&amp; echo 'false' || echo 'true'"
-   :alerts [{:value-type bool</p>
-
-<pre><code>         :msg "Bamboo is not running"
-         :handlers [email]
-         :trigger (= false)
-         :mute-for 1860000}]})
+   :cmd "[[ -z `ps aux | grep com.attlassian.bamboo.server.Server` ]] &amp;&amp; echo 'false' || echo 'true'"
+   :alerts [{:value-type bool
+             :msg "Bamboo is not running"
+             :handlers [email]
+             :trigger (= false)
+             :mute-for 1860000}]})
 </code></pre>
-
-<p>```</p>
 
 <p>Almost all the commands were borrowed from the sample <code>cfg</code> file. A small but important detail is the key <code>:mute-for</code> in alerts. As you can see, the above link to server-stats points to my fork of it.</p>
 
@@ -172,46 +161,37 @@
 
 <p>Of course you can't spend your time issuing ssh commands by hand. So, there are four <code>cron</code> entries for scheduled ssh interactions:</p>
 
-<p>``` bash crontab</p>
-
-<p>0 7 * * * SSH_AUTH_SOCK="$(find /tmp/keyring<em>/ -type s -user paulosuzart -group paulosuzart  -name 'ssh</em>' | head -n 1)" ~/workspace/p/Server-Stats/run.sh disk -log
-<em>/10 * * * * SSH_AUTH_SOCK="$(find /tmp/keyring</em>/ -type s -user paulosuzart -group paulosuzart  -name 'ssh<em>' | head -n 1)" ~/workspace/p/Server-Stats/run.sh is-nginx -log
-</em>/30 * * * * SSH_AUTH_SOCK="$(find /tmp/keyring<em>/ -type s -user paulosuzart -group paulosuzart  -name 'ssh</em>' | head -n 1)" ~/workspace/p/Server-Stats/run.sh is-artifactory -log
-<em>/30 * * * * SSH_AUTH_SOCK="$(find /tmp/keyring</em>/ -type s -user paulosuzart -group paulosuzart  -name 'ssh*' | head -n 1)" ~/workspace/p/Server-Stats/run.sh is-bamboo -log</p>
-
-<p>```</p>
+<pre><code class="bash crontab">
+0 7 * * * SSH_AUTH_SOCK="$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name 'ssh*' | head -n 1)" ~/workspace/p/Server-Stats/run.sh disk -log
+*/10 * * * * SSH_AUTH_SOCK="$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name 'ssh*' | head -n 1)" ~/workspace/p/Server-Stats/run.sh is-nginx -log
+*/30 * * * * SSH_AUTH_SOCK="$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name 'ssh*' | head -n 1)" ~/workspace/p/Server-Stats/run.sh is-artifactory -log
+*/30 * * * * SSH_AUTH_SOCK="$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name 'ssh*' | head -n 1)" ~/workspace/p/Server-Stats/run.sh is-bamboo -log
+</code></pre>
 
 <p>The <code>run.sh</code> is pretty simple. Just wraps <code>java -jar</code> to server-stats. Some times I want to log the ssh output, so I can pass the <code>-log</code> option and the output goes to <code>log/cmd</code>.</p>
 
-<p>``` bash run.sh</p>
+<pre><code class="bash run.sh">#!/bin/bash
+# Wraps the start of server-stats. If -log is passed, will save
+# the resulting execution to log/cmd
+# paulosuzart@gmail.com
 
-<h1>!/bin/bash</h1>
+# java -jar should run from inside the server-stats dir
+cd ~/workspace/p/Server-Stats 
 
-<h1>Wraps the start of server-stats. If -log is passed, will save</h1>
-
-<h1>the resulting execution to log/cmd</h1>
-
-<h1>paulosuzart@gmail.com</h1>
-
-<h1>java -jar should run from inside the server-stats dir</h1>
-
-<p>cd ~/workspace/p/Server-Stats</p>
-
-<p>if [ -z $1 ]; then
+if [ -z $1 ]; then
   echo "usage: run cmd [-log]"
   exit 2
-fi</p>
+fi
 
-<p>COMM="java -jar server-stats-0.1-standalone.jar -a $1"
+COMM="java -jar server-stats-0.1-standalone.jar -a $1"
 if [[ ! -z $2 &amp;&amp; "-log"=$2 ]]; then
   echo "logging to log/$1.out"
-  $COMM=$COMM:" > log/$1.out"
-fi</p>
+  $COMM=$COMM:" &gt; log/$1.out"
+fi
 
-<p>echo $COMM
-$COMM</p>
-
-<p>```</p>
+echo $COMM
+$COMM
+</code></pre>
 
 <p>Don't ask me why, but <code>ssh</code> does not behave the way you except when called from a <code>cron</code> command. But I managed to find <a href="http://webcache.googleusercontent.com/search?q=cache:7h4hOIGZG-wJ:www.codealpha.net/163/cron-ssh-and-rsync-and-key-with-passphrase-ubuntu/+&amp;cd=1&amp;hl=en&amp;ct=clnk&amp;client=ubuntu">this article</a> that helped a lot.</p>
 
@@ -251,6 +231,15 @@ $COMM</p>
     
       <li>
         <h3>
+          <a href="/blog/2014/07/07/going-back-to-go/">
+            Going back to Go (golang)
+            <small>07 Jul 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
             Sliding Window events with Clojure
             <small>27 Apr 2014</small>
@@ -263,15 +252,6 @@ $COMM</p>
           <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
             My Contribution to Puppet Forge
             <small>21 Jan 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2013/12/15/puppet-good-pattern/">
-            Puppet good pattern?
-            <small>15 Dec 2013</small>
           </a>
         </h3>
       </li>

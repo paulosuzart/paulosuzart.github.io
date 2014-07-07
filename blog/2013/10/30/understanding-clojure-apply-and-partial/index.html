@@ -76,47 +76,41 @@
 
 <p>After listening to some "newbysh" considerations I came across te following code in Java Script, a well known language:</p>
 
-<p>```javascript
-// Imagine a function returning this
-var pessoa = [21, "paulo", "red"];</p>
+<pre><code class="javascript">// Imagine a function returning this
+var pessoa = [21, "paulo", "red"];
 
-<p>// And you have the following function to user
-var printer = function(age, name, color) {</p>
+// And you have the following function to user
+var printer = function(age, name, color) {
+    console.log("Person with name " + name + " and age " + age + " and cor " + color);
+};
 
-<pre><code>console.log("Person with name " + name + " and age " + age + " and cor " + color);
-</code></pre>
-
-<p>};</p>
-
-<p>// You'll probably do this
+// You'll probably do this
 printer(pessoa[0], pessoa[1], "vermelho");
-// => Person with name paulo and age 21 and cor red
+// =&gt; Person with name paulo and age 21 and cor red
 // But imagine you could do this:
-apply(printer, pessoa);</p>
+apply(printer, pessoa);
 
-<p>// This would be possible using the following apply function</p>
+// This would be possible using the following apply function
 
-<p>var apply = function(fn, args) {
+var apply = function(fn, args) {
   var str = "fn(";
-  for (x = 0; x &lt; args.length; x++)  {</p>
+  for (x = 0; x &lt; args.length; x++)  {
+    str = str + "args["+x+"]";
+    if (x &lt; args.length - 1) {
+      str += ",";
+    }
+  }
 
-<pre><code>str = str + "args["+x+"]";
-if (x &lt; args.length - 1) {
-  str += ",";
-}
-</code></pre>
-
-<p>  }</p>
-
-<p>  str += ");";
+  str += ");";
   console.log(str);
   eval(str);
-};</p>
+};
 
-<p>// And the output is the same:
-// => Person with name paulo and age 21 and cor red
-<code>``
-After reading this snippet. He instantaneously understood everything and how helpful</code>apply` is. Wrapping up, ...</p>
+// And the output is the same:
+// =&gt; Person with name paulo and age 21 and cor red
+</code></pre>
+
+<p>After reading this snippet. He instantaneously understood everything and how helpful <code>apply</code> is. Wrapping up, ...</p>
 
 <blockquote><h2>... I told him:</h2>
 
@@ -128,19 +122,18 @@ After reading this snippet. He instantaneously understood everything and how hel
 
 <p>Believe me, there are plenty ways to explain this. From the most scientific to the most simplistic. I would say below you are going to the a simplistic like explannation. But enough to bootstrap you with your clojure code.</p>
 
-<p>``` javascript
-var hello = function(saud, name) {
+<pre><code class="javascript">var hello = function(saud, name) {
   console.log(saud + ", " + name);
-};</p>
+};
 
-<p>hello("ola", "brunolandia");</p>
+hello("ola", "brunolandia");
 
-<p>var morning = function(nome) {
+var morning = function(nome) {
   hello("Bom dia", nome);
-};</p>
+};
 
-<p>morning("Brunovisk");
-```</p>
+morning("Brunovisk");
+</code></pre>
 
 <p>After reading the snippet...</p>
 
@@ -184,6 +177,15 @@ var hello = function(saud, name) {
     
       <li>
         <h3>
+          <a href="/blog/2014/07/07/going-back-to-go/">
+            Going back to Go (golang)
+            <small>07 Jul 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
             Sliding Window events with Clojure
             <small>27 Apr 2014</small>
@@ -196,15 +198,6 @@ var hello = function(saud, name) {
           <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
             My Contribution to Puppet Forge
             <small>21 Jan 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2013/12/15/puppet-good-pattern/">
-            Puppet good pattern?
-            <small>15 Dec 2013</small>
           </a>
         </h3>
       </li>

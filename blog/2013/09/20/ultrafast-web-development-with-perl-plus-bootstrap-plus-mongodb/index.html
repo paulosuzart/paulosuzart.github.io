@@ -93,19 +93,15 @@
 
 <p>I can't open that much of the code I wrote in few nights. But I can guarantee it was funny and quick to write. A simple Http request handler is:</p>
 
-<p>``` perl
-get '/job/:wok_id' => sub {
-  my $job = mconfigs->find_one({wok_id => params->{'wok_id'}});
-  template 'jobs/edit.tt', {</p>
-
-<pre><code>job =&gt; $job,
-server_host =&gt; config-&gt;{server},
-server_port =&gt; config-&gt;{port},
-</code></pre>
-
-<p>  };
+<pre><code class="perl">get '/job/:wok_id' =&gt; sub {
+  my $job = mconfigs-&gt;find_one({wok_id =&gt; params-&gt;{'wok_id'}});
+  template 'jobs/edit.tt', {
+    job =&gt; $job,
+    server_host =&gt; config-&gt;{server},
+    server_port =&gt; config-&gt;{port},
+  };
 };
-```</p>
+</code></pre>
 
 <p>It is simple like that. You call the <code>get</code> providing the request path (notice the <code>:wok_id</code> path variable) and then your perl routine that handles the request. <code>mconfigs</code> is a simple routine that wraps the access to a MongoDB collection and a query.</p>
 
@@ -121,16 +117,12 @@ server_port =&gt; config-&gt;{port},
 
 <p>The benefits of mongo itself you can find around. What I want to highlight is the <a href="http://docs.mongodb.org/manual/aggregation/">aggregation</a> framework in conjuntion with perl. The perl hash syntax perfectly fits mongo documents:</p>
 
-<p>``` perl
-  my $result = mexecutions->aggregate([</p>
-
-<pre><code>   {'$match' =&gt; {'alarm_enabled' =&gt; 1}},
-   {'$group' =&gt; {'_id' =&gt;  {'status' =&gt; '$status', 'wok_id'=&gt; '$wok_id'},
-                 'count' =&gt; {'$sum' =&gt; 1}}}
+<pre><code class="perl">  my $result = mexecutions-&gt;aggregate([
+       {'$match' =&gt; {'alarm_enabled' =&gt; 1}},
+       {'$group' =&gt; {'_id' =&gt;  {'status' =&gt; '$status', 'wok_id'=&gt; '$wok_id'},
+                     'count' =&gt; {'$sum' =&gt; 1}}}
+   ]);
 </code></pre>
-
-<p>   ]);
-```</p>
 
 <p>Using the aggregation framework you can easily break through any limitations when working without SQL statements with incredible performance.</p>
 
@@ -170,6 +162,15 @@ server_port =&gt; config-&gt;{port},
     
       <li>
         <h3>
+          <a href="/blog/2014/07/07/going-back-to-go/">
+            Going back to Go (golang)
+            <small>07 Jul 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
             Sliding Window events with Clojure
             <small>27 Apr 2014</small>
@@ -182,15 +183,6 @@ server_port =&gt; config-&gt;{port},
           <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
             My Contribution to Puppet Forge
             <small>21 Jan 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2013/12/15/puppet-good-pattern/">
-            Puppet good pattern?
-            <small>15 Dec 2013</small>
           </a>
         </h3>
       </li>

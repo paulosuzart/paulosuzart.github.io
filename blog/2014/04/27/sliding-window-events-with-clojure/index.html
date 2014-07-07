@@ -78,9 +78,8 @@
 
 <p>To answer that, we can't accumulate events for 4 minutes, send all of the to a handler, and empty the buffer. If so, two subsequential queries to the buffer will return wrong values. Ex.:</p>
 
-<div class="highlight"><pre><code class="bash"><span class="p">|</span>10 USD <span class="p">|</span>10 USD , 20 USD <span class="p">|</span> 10 USD , 20 USD                   <span class="p">|</span> 0 USD
-t0       t1               t3 <span class="s2">&quot;time elapsed, do empty buffer!&quot;</span>  t4
-</code></pre></div>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="p">|</span><span class="m">10</span> USD <span class="p">|</span><span class="m">10</span> USD , <span class="m">20</span> USD <span class="p">|</span> <span class="m">10</span> USD , <span class="m">20</span> USD                   <span class="p">|</span> <span class="m">0</span> USD
+t0       t1               t3 <span class="s2">&quot;time elapsed, do empty buffer!&quot;</span>  t4</code></pre></div>
 
 
 <p>Suppose every <code>tn</code> is a minute elapsed. See? If time elapses at <code>t3</code> you <code>sum</code> and get 30, but if you want to know the  total sold one minute later, you get 0! It is not what I wanted. I then decided to go for my own implementation using <a href="https://github.com/clojurewerkz/meltdown">Meltdown</a>.</p>
@@ -89,7 +88,7 @@ t0       t1               t3 <span class="s2">&quot;time elapsed, do empty buffe
 
 <p>Ok, enough. Lets see some code (The comments in the code explains everything):</p>
 
-<div class="highlight"><pre><code class="clojure"><span class="c1">;; Paulo Suzart 2014</span>
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="c1">;; Paulo Suzart 2014</span>
 <span class="c1">;; Code to suport a blog post at paulosuzart.github.io</span>
 <span class="p">(</span><span class="kd">ns </span><span class="nv">melt.core</span>
   <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">clojurewerkz.meltdown.streams</span> <span class="ss">:as</span> <span class="nv">ms</span> <span class="ss">:refer</span> <span class="p">[</span><span class="nv">create</span> <span class="nv">consume</span> <span class="nv">accept</span> <span class="nv">reduce*</span><span class="p">]]</span>
@@ -175,8 +174,7 @@ t0       t1               t3 <span class="s2">&quot;time elapsed, do empty buffe
   <span class="p">(</span><span class="nf">Thread/sleep</span> <span class="mi">2000</span><span class="p">)</span>
   <span class="p">(</span><span class="nf">mr/notify</span> <span class="nv">prices</span> <span class="s">&quot;tenis&quot;</span> <span class="mi">20</span><span class="p">)</span>
   <span class="nv">nil</span>
-<span class="p">)</span>
-</code></pre></div>
+<span class="p">)</span></code></pre></div>
 
 
 <p>I could have embedded the ticker channel in the <code>slide</code> function. Or it could be a record implementing some protocol, etc. But this is quite simple and enough for now.</p>
@@ -213,6 +211,15 @@ t0       t1               t3 <span class="s2">&quot;time elapsed, do empty buffe
     
       <li>
         <h3>
+          <a href="/blog/2014/07/07/going-back-to-go/">
+            Going back to Go (golang)
+            <small>07 Jul 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
             My Contribution to Puppet Forge
             <small>21 Jan 2014</small>
@@ -225,15 +232,6 @@ t0       t1               t3 <span class="s2">&quot;time elapsed, do empty buffe
           <a href="/blog/2013/12/15/puppet-good-pattern/">
             Puppet good pattern?
             <small>15 Dec 2013</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2013/10/30/understanding-clojure-apply-and-partial/">
-            Understanding Clojure apply and partial
-            <small>30 Oct 2013</small>
           </a>
         </h3>
       </li>
