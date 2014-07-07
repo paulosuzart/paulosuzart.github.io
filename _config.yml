@@ -8,7 +8,7 @@ author:
   email:      'paulosuzart@gmail.com'
 markdown:     rdiscount
 permalink:    /blog/:year/:month/:day/:title/
-pygments:     true
+highlighter:  pygments
 paginate:     5
 tracking_id : 'UA-26676810-1'
 disqus_short_name: paulosuzartblog      
