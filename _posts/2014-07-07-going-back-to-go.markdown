@@ -9,30 +9,30 @@ categories: [golang]
 Intro
 =====
 
-Hi people, a while ago I made a clear expression of my kinda frustration with clojure ecosystem in the clojure mailling list. I'm not going to share the link here because my post it self was confusing and answers even more. 
+Hi people, a while ago I made a clear expression of my kinda frustration with clojure ecosystem in the clojure mailling list. I'm not going to share the link here because my post itself was confusing and answers even more.
 
-In sumarry the furstration comes from TOO TOO TOO MUCH '[ANN]' posts on the list as if it was open source and more specifically, few of them are really bringing value to clojure as other languages have strong libs/tools.
+In summary the furstration comes from TOO TOO TOO MUCH `'[ANN]'` posts on the list as if it was open source and more specifically, few of them are really bringing value to clojure as other languages have strong libs/tools.
 
-Ok, lets move on. Back in 2011 I wrote a very simple tool for called [gb](https://github.com/paulosuzart/gb) just for the sake of learning [Go](http://golang.org). In the end it is quite good code and useful if you want to build and use id. It is inspired by [Apache Benchmark](http://httpd.apache.org/docs/2.2/programs/ab.html) with less features.
+Ok, lets move on. Back in 2011 I wrote a very simple tool called [gb](https://github.com/paulosuzart/gb) just for the sake of learning [Go](http://golang.org). In the end it is quite good code and useful if you want to build and use it. It is inspired by [Apache Benchmark](http://httpd.apache.org/docs/2.2/programs/ab.html) with less features.
 
 After that, I stopped with Go and went deep in clojure. But the destiny brought me back to Go (I can write about later). I could write a lot about Why Go, but you can find good [articles](http://nathany.com/why-go/) and [videos](http://www.gophercon.com/speakers/) out there. In summary I would say:
 
-   - Native clean [concurrency](http://www.golang-book.com/10/index.htm): Golang routines and Channels are amazing abstractions for writing concurrent code, making your brain free to mix and match your logic instead of haveing it busy with concurrency challenges.
+   - Native clean [concurrency](http://www.golang-book.com/10/index.htm) model: Golang routines and channels are amazing abstractions for writing concurrent code, making your brain free to mix and match your logic instead of having it busy with concurrency challenges.
    - Pragmatic - Go has no method overloading, no interface implementation keyword (just write the same methods defined in a interface and you are done), no reserved words for public/private/etc (low case for private, upper for public functions and attributes).
-   - [Pointes and references](http://spf13.com/post/go-pointers-vs-references) - This will meke things even faster with lesse copies between invocations, etc.
+   - [Pointes and references](http://spf13.com/post/go-pointers-vs-references) - This will make things even faster with lesser copies between invocations, etc.
    - Single binary - No classpath, etc. Build your code in a single binary file with no dependecies. It is just an executable.
-   - Simple - The language itself is very simple. Easy to understand specially if written by others.
-   - Backed by Google - I used to have more crazy times when I would use anything (including any lib announced ain a '[ANN]' post in a mailing list), but it is not sustainable. No maintanance, no support, no clear future are few characteristics of this type of lib. Share code on Github is not open source. Go is backed by Google, what makes it with longer and responsible life.
+   - Simple - The language itself is very simple. Easy to understand even if written by others.
+   - Backed by Google - I used to have more crazy times when I would use anything (including any lib announced in a `'[ANN]'` post in a mailing list), but it is not sustainable. No maintanance, no support, no clear future are few characteristics of this type of lib. **Share code on Github is not doing open source**. Go is backed by Google, what makes it with longer and responsible life.
    - Performance - Golang is super fast. See [this comparison](http://www.techempower.com/benchmarks/#section=data-r9&hw=peak&test=json&s=2&l=co4&p=3s-0&w=trv3) for example.
 
 What Am I doing?
 ================
 
-I'm writing some kind of tracking system build with [go standard lib](http://golang.org/pkg/, [Gorilla HTTP Toolkit](http://www.gorillatoolkit.org/) and [BoltDB](https://github.com/boltdb/bolt). I'll not share any of my code now, hope I can share the whole tool that is 60% done and evolving fast.
+I'm writing some kind of tracking system built with [go standard lib](http://golang.org/pkg/, [Gorilla HTTP Toolkit](http://www.gorillatoolkit.org/) and [BoltDB](https://github.com/boltdb/bolt). I'll not share any of my code now, hope I can share the whole tool that is 60% done and evolving fast.
 
 BoltDB is *"pure Go key/value store"* with the goals of providing *"a simple, fast, and reliable database for projects that don't require a full database server such as Postgres or MySQL"*.
 
-I hit BoltDB while learning about [Implementing a Key Value Storate](http://codecapsule.com/2012/11/07/ikvs-implementing-a-key-value-store-table-of-contents/). It is a very interesting topic but I have no time - and possibily no brain - to implement mine. I then went for a simple persistent queue (like (Kestrel)[https://github.com/twitter/kestrel]), but I made the favor to myself of `rm -rf` my source code folder that had n git. Ok, it is already overtaken :(
+I hit BoltDB while learning about [Implementing a Key Value Storate](http://codecapsule.com/2012/11/07/ikvs-implementing-a-key-value-store-table-of-contents/). It is a very interesting topic but I have no time - and possibily no brain - to implement mine. I then went for a simple persistent queue (like (Kestrel)[https://github.com/twitter/kestrel]), but I made the favor to myself of `rm -rf` my source code folder that had no git. Ok, it is already overtaken :(
 
 These days, [@BoltDB](https://twitter.com/boltdb) shared with me a [interesting benchmark](https://gist.github.com/benbjohnson/91b05a83f6668e3baeab):
 
@@ -68,15 +68,17 @@ func (this *BoltStorage) writer() {
     bucket := data[0].(string)
     keyId := data[1].(string)
     dataBytes := data[2].([]byte)
-    this.DB.Update(func(tx *bolt.Tx) error {
+    err := this.DB.Update(func(tx *bolt.Tx) error {
       sesionBucket, err := tx.CreateBucket([]byte(bucket))
       if err != nil {
-        // TODO: Handle instead of panic
-        panic(err)
+        return err
       }
-      sesionBucket.Put([]byte(keyId), dataBytes)
-      return nil
+      return sesionBucket.Put([]byte(keyId), dataBytes)
     })
+    if err != nil {
+      // TODO: Handle instead of panic
+      panic(err)
+    }
   }
 }
 
@@ -92,6 +94,7 @@ func NewBoltStorage(dbPath string) *BoltStorage {
   return boltStorage
 }
 
+// somewhere else
 writerChan <- [3]interface{}{"3212123", "1478812031", data}
 
 {% endhighlight %}
@@ -99,9 +102,12 @@ writerChan <- [3]interface{}{"3212123", "1478812031", data}
 
 Notice that there is a single channel consumed by a go routine. This is the guy that will interact with BoltDB. I'm also using keys that can be ordered while using `ForEach` to iterate over a Bucket of tracked data.
 
-Notice how simple it is to create a go routine at the line `28`. And even more easy it is to create a channel at at line 25 and consume it 7.
+Notice how simple it is to create a go routine at the line. And even easier it is to create a channel. Not only that, the BoltDB API is straightforward as you can see.
 
-Ok, hope I can finish this project as soon as possible so I can share more thoughts and lessons.
+BoltDB organizes data into buckets and then keys and values. An important feature of BoltDB is the transactions. This is a requirement for dealing with multiple insertions (the data itself and any other metadata stored somewhere else).
+
+Ok, hope I can finish this project as soon as possible so I can share more thoughts and lessons learned. 
+
 
 Cheers!	
 
