@@ -68,32 +68,32 @@
   <span class="post-date">07 Jul 2014</span>
   <h1>Intro</h1>
 
-<p>Hi people, a while ago I made a clear expression of my kinda frustration with clojure ecosystem in the clojure mailling list. I'm not going to share the link here because my post it self was confusing and answers even more.</p>
+<p>Hi people, a while ago I made a clear expression of my kinda frustration with clojure ecosystem in the clojure mailling list. I'm not going to share the link here because my post itself was confusing and answers even more.</p>
 
-<p>In sumarry the furstration comes from TOO TOO TOO MUCH '[ANN]' posts on the list as if it was open source and more specifically, few of them are really bringing value to clojure as other languages have strong libs/tools.</p>
+<p>In summary the furstration comes from TOO TOO TOO MUCH <code>'[ANN]'</code> posts on the list as if it was open source and more specifically, few of them are really bringing value to clojure as other languages have strong libs/tools.</p>
 
-<p>Ok, lets move on. Back in 2011 I wrote a very simple tool for called <a href="https://github.com/paulosuzart/gb">gb</a> just for the sake of learning <a href="http://golang.org">Go</a>. In the end it is quite good code and useful if you want to build and use id. It is inspired by <a href="http://httpd.apache.org/docs/2.2/programs/ab.html">Apache Benchmark</a> with less features.</p>
+<p>Ok, lets move on. Back in 2011 I wrote a very simple tool called <a href="https://github.com/paulosuzart/gb">gb</a> just for the sake of learning <a href="http://golang.org">Go</a>. In the end it is quite good code and useful if you want to build and use it. It is inspired by <a href="http://httpd.apache.org/docs/2.2/programs/ab.html">Apache Benchmark</a> with less features.</p>
 
 <p>After that, I stopped with Go and went deep in clojure. But the destiny brought me back to Go (I can write about later). I could write a lot about Why Go, but you can find good <a href="http://nathany.com/why-go/">articles</a> and <a href="http://www.gophercon.com/speakers/">videos</a> out there. In summary I would say:</p>
 
 <ul>
-<li> Native clean <a href="http://www.golang-book.com/10/index.htm">concurrency</a>: Golang routines and Channels are amazing abstractions for writing concurrent code, making your brain free to mix and match your logic instead of haveing it busy with concurrency challenges.</li>
+<li> Native clean <a href="http://www.golang-book.com/10/index.htm">concurrency</a> model: Golang routines and channels are amazing abstractions for writing concurrent code, making your brain free to mix and match your logic instead of having it busy with concurrency challenges.</li>
 <li> Pragmatic - Go has no method overloading, no interface implementation keyword (just write the same methods defined in a interface and you are done), no reserved words for public/private/etc (low case for private, upper for public functions and attributes).</li>
-<li> <a href="http://spf13.com/post/go-pointers-vs-references">Pointes and references</a> - This will meke things even faster with lesse copies between invocations, etc.</li>
+<li> <a href="http://spf13.com/post/go-pointers-vs-references">Pointes and references</a> - This will make things even faster with lesser copies between invocations, etc.</li>
 <li> Single binary - No classpath, etc. Build your code in a single binary file with no dependecies. It is just an executable.</li>
-<li> Simple - The language itself is very simple. Easy to understand specially if written by others.</li>
-<li> Backed by Google - I used to have more crazy times when I would use anything (including any lib announced ain a '[ANN]' post in a mailing list), but it is not sustainable. No maintanance, no support, no clear future are few characteristics of this type of lib. Share code on Github is not open source. Go is backed by Google, what makes it with longer and responsible life.</li>
+<li> Simple - The language itself is very simple. Easy to understand even if written by others.</li>
+<li> Backed by Google - I used to have more crazy times when I would use anything (including any lib announced in a <code>'[ANN]'</code> post in a mailing list), but it is not sustainable. No maintanance, no support, no clear future are few characteristics of this type of lib. <strong>Share code on Github is not doing open source</strong>. Go is backed by Google, what makes it with longer and responsible life.</li>
 <li> Performance - Golang is super fast. See <a href="http://www.techempower.com/benchmarks/#section=data-r9&amp;hw=peak&amp;test=json&amp;s=2&amp;l=co4&amp;p=3s-0&amp;w=trv3">this comparison</a> for example.</li>
 </ul>
 
 
 <h1>What Am I doing?</h1>
 
-<p>I'm writing some kind of tracking system build with <a href="http://golang.org/pkg/,%20[Gorilla%20HTTP%20Toolkit](http://www.gorillatoolkit.org/">go standard lib</a> and <a href="https://github.com/boltdb/bolt">BoltDB</a>. I'll not share any of my code now, hope I can share the whole tool that is 60% done and evolving fast.</p>
+<p>I'm writing some kind of tracking system built with <a href="http://golang.org/pkg/,%20[Gorilla%20HTTP%20Toolkit](http://www.gorillatoolkit.org/">go standard lib</a> and <a href="https://github.com/boltdb/bolt">BoltDB</a>. I'll not share any of my code now, hope I can share the whole tool that is 60% done and evolving fast.</p>
 
 <p>BoltDB is <em>"pure Go key/value store"</em> with the goals of providing <em>"a simple, fast, and reliable database for projects that don't require a full database server such as Postgres or MySQL"</em>.</p>
 
-<p>I hit BoltDB while learning about <a href="http://codecapsule.com/2012/11/07/ikvs-implementing-a-key-value-store-table-of-contents/">Implementing a Key Value Storate</a>. It is a very interesting topic but I have no time - and possibily no brain - to implement mine. I then went for a simple persistent queue (like (Kestrel)[https://github.com/twitter/kestrel]), but I made the favor to myself of <code>rm -rf</code> my source code folder that had n git. Ok, it is already overtaken :(</p>
+<p>I hit BoltDB while learning about <a href="http://codecapsule.com/2012/11/07/ikvs-implementing-a-key-value-store-table-of-contents/">Implementing a Key Value Storate</a>. It is a very interesting topic but I have no time - and possibily no brain - to implement mine. I then went for a simple persistent queue (like (Kestrel)[https://github.com/twitter/kestrel]), but I made the favor to myself of <code>rm -rf</code> my source code folder that had no git. Ok, it is already overtaken :(</p>
 
 <p>These days, <a href="https://twitter.com/boltdb">@BoltDB</a> shared with me a <a href="https://gist.github.com/benbjohnson/91b05a83f6668e3baeab">interesting benchmark</a>:</p>
 
@@ -124,38 +124,43 @@
 <span class="lineno"> 8</span>     <span class="nx">bucket</span> <span class="o">:=</span> <span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">].(</span><span class="kt">string</span><span class="p">)</span>
 <span class="lineno"> 9</span>     <span class="nx">keyId</span> <span class="o">:=</span> <span class="nx">data</span><span class="p">[</span><span class="mi">1</span><span class="p">].(</span><span class="kt">string</span><span class="p">)</span>
 <span class="lineno">10</span>     <span class="nx">dataBytes</span> <span class="o">:=</span> <span class="nx">data</span><span class="p">[</span><span class="mi">2</span><span class="p">].([]</span><span class="kt">byte</span><span class="p">)</span>
-<span class="lineno">11</span>     <span class="nx">this</span><span class="p">.</span><span class="nx">DB</span><span class="p">.</span><span class="nx">Update</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">tx</span> <span class="o">*</span><span class="nx">bolt</span><span class="p">.</span><span class="nx">Tx</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+<span class="lineno">11</span>     <span class="nx">err</span> <span class="o">:=</span> <span class="nx">this</span><span class="p">.</span><span class="nx">DB</span><span class="p">.</span><span class="nx">Update</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">tx</span> <span class="o">*</span><span class="nx">bolt</span><span class="p">.</span><span class="nx">Tx</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
 <span class="lineno">12</span>       <span class="nx">sesionBucket</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nx">CreateBucket</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">bucket</span><span class="p">))</span>
 <span class="lineno">13</span>       <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-<span class="lineno">14</span>         <span class="c1">// TODO: Handle instead of panic</span>
-<span class="lineno">15</span>         <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-<span class="lineno">16</span>       <span class="p">}</span>
-<span class="lineno">17</span>       <span class="nx">sesionBucket</span><span class="p">.</span><span class="nx">Put</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">keyId</span><span class="p">),</span> <span class="nx">dataBytes</span><span class="p">)</span>
-<span class="lineno">18</span>       <span class="k">return</span> <span class="kc">nil</span>
-<span class="lineno">19</span>     <span class="p">})</span>
-<span class="lineno">20</span>   <span class="p">}</span>
-<span class="lineno">21</span> <span class="p">}</span>
-<span class="lineno">22</span> 
-<span class="lineno">23</span> <span class="kd">func</span> <span class="nx">NewBoltStorage</span><span class="p">(</span><span class="nx">dbPath</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">BoltStorage</span> <span class="p">{</span>
-<span class="lineno">24</span>   <span class="nx">db</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">bolt</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="nx">dbPath</span><span class="p">,</span> <span class="mo">0666</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
-<span class="lineno">25</span>   <span class="nx">writerChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
-<span class="lineno">26</span>   <span class="nx">boltStorage</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">BoltStorage</span><span class="p">{</span><span class="nx">DB</span><span class="p">:</span> <span class="nx">db</span><span class="p">,</span> <span class="nx">writerChan</span><span class="p">:</span> <span class="nx">writerChan</span><span class="p">}</span>
-<span class="lineno">27</span> 
-<span class="lineno">28</span>   <span class="k">go</span> <span class="nx">boltStorage</span><span class="p">.</span><span class="nx">writer</span><span class="p">()</span>
-<span class="lineno">29</span>   <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-<span class="lineno">30</span>     <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-<span class="lineno">31</span>   <span class="p">}</span>
-<span class="lineno">32</span>   <span class="k">return</span> <span class="nx">boltStorage</span>
-<span class="lineno">33</span> <span class="p">}</span>
-<span class="lineno">34</span> 
-<span class="lineno">35</span> <span class="nx">writerChan</span> <span class="o">&lt;-</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}{</span><span class="s">&quot;3212123&quot;</span><span class="p">,</span> <span class="s">&quot;1478812031&quot;</span><span class="p">,</span> <span class="nx">data</span><span class="p">}</span></code></pre></div>
+<span class="lineno">14</span>         <span class="k">return</span> <span class="nx">err</span>
+<span class="lineno">15</span>       <span class="p">}</span>
+<span class="lineno">16</span>       <span class="k">return</span> <span class="nx">sesionBucket</span><span class="p">.</span><span class="nx">Put</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">keyId</span><span class="p">),</span> <span class="nx">dataBytes</span><span class="p">)</span>
+<span class="lineno">17</span>     <span class="p">})</span>
+<span class="lineno">18</span>     <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="lineno">19</span>       <span class="c1">// TODO: Handle instead of panic</span>
+<span class="lineno">20</span>       <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="lineno">21</span>     <span class="p">}</span>
+<span class="lineno">22</span>   <span class="p">}</span>
+<span class="lineno">23</span> <span class="p">}</span>
+<span class="lineno">24</span> 
+<span class="lineno">25</span> <span class="kd">func</span> <span class="nx">NewBoltStorage</span><span class="p">(</span><span class="nx">dbPath</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">BoltStorage</span> <span class="p">{</span>
+<span class="lineno">26</span>   <span class="nx">db</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">bolt</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="nx">dbPath</span><span class="p">,</span> <span class="mo">0666</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+<span class="lineno">27</span>   <span class="nx">writerChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
+<span class="lineno">28</span>   <span class="nx">boltStorage</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">BoltStorage</span><span class="p">{</span><span class="nx">DB</span><span class="p">:</span> <span class="nx">db</span><span class="p">,</span> <span class="nx">writerChan</span><span class="p">:</span> <span class="nx">writerChan</span><span class="p">}</span>
+<span class="lineno">29</span> 
+<span class="lineno">30</span>   <span class="k">go</span> <span class="nx">boltStorage</span><span class="p">.</span><span class="nx">writer</span><span class="p">()</span>
+<span class="lineno">31</span>   <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="lineno">32</span>     <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="lineno">33</span>   <span class="p">}</span>
+<span class="lineno">34</span>   <span class="k">return</span> <span class="nx">boltStorage</span>
+<span class="lineno">35</span> <span class="p">}</span>
+<span class="lineno">36</span> 
+<span class="lineno">37</span> <span class="c1">// somewhere else</span>
+<span class="lineno">38</span> <span class="nx">writerChan</span> <span class="o">&lt;-</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}{</span><span class="s">&quot;3212123&quot;</span><span class="p">,</span> <span class="s">&quot;1478812031&quot;</span><span class="p">,</span> <span class="nx">data</span><span class="p">}</span></code></pre></div>
 
 
 <p>Notice that there is a single channel consumed by a go routine. This is the guy that will interact with BoltDB. I'm also using keys that can be ordered while using <code>ForEach</code> to iterate over a Bucket of tracked data.</p>
 
-<p>Notice how simple it is to create a go routine at the line <code>28</code>. And even more easy it is to create a channel at at line 25 and consume it 7.</p>
+<p>Notice how simple it is to create a go routine at the line. And even easier it is to create a channel. Not only that, the BoltDB API is straightforward as you can see.</p>
 
-<p>Ok, hope I can finish this project as soon as possible so I can share more thoughts and lessons.</p>
+<p>BoltDB organizes data into buckets and then keys and values. An important feature of BoltDB is the transactions. This is a requirement for dealing with multiple insertions (the data itself and any other metadata stored somewhere else).</p>
+
+<p>Ok, hope I can finish this project as soon as possible so I can share more thoughts and lessons learned.</p>
 
 <p>Cheers!</p>
 
