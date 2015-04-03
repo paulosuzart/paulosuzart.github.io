@@ -66,15 +66,14 @@
       <div class="post">
   <h1>Janus + ack-grep + fish shell: Tools to rule everything</h1>
   <span class="post-date">20 May 2013</span>
-  <p>Hello, I'm posting as often as the men go to the moon! Sad. For a good
+  <p>Hello, I’m posting as often as the men go to the moon! Sad. For a good
 reason, though. We are having great times at
 <a href="http://www.guiato.com.br">Guiato</a>.</p>
 
-<p>What I bring today is the set of tools I'm using nowadays for developing
+<p>What I bring today is the set of tools I’m using nowadays for developing
 Grails and Clojure at work.</p>
 
-<h1>Editor (gVim with Janus)</h1>
-
+<h1 id="editor-gvim-with-janus">Editor (gVim with Janus)</h1>
 <p>I used <a href="http://www.sublimetext.com/">Sublimetext</a> for almost two years at home and at work. I really like it, but if I understood well, the version 3 is available for purchasing only. And, you know, you have a <code>vim</code> editor. Why not?</p>
 
 <p>Ok, pure <code>vi</code> is too much for most people, so put some sauce and you have
@@ -84,25 +83,25 @@ a Sublimetext like <code>vim</code> editor, or even more powerful. Just use <a h
 more often are:</p>
 
 <ol>
-<li>. <a href="https://github.com/kien/ctrlp.vim">CtrlP</a>. This is exactly like
-   Control P at Sublime and allows you search your entire project.</li>
-<li>. <a href="https://github.com/scrooloose/nerdtree">NERDTree</a>. Simply can't
-   live without it. It is your project browser.</li>
-<li>. <a href="https://github.com/jeetsukumaran/vim-buffergator">BufferGator</a>.
-  To browse between all your open buffers</li>
-<li>. <a href="https://github.com/majutsushi/tagbar">Tagbar</a>. The campion! This
-  is your code outlook similar to what popular IDEs offer.</li>
+  <li><a href="https://github.com/kien/ctrlp.vim">CtrlP</a>. This is exactly like
+ Control P at Sublime and allows you search your entire project.</li>
+  <li><a href="https://github.com/scrooloose/nerdtree">NERDTree</a>. Simply can’t
+ live without it. It is your project browser.</li>
+  <li><a href="https://github.com/jeetsukumaran/vim-buffergator">BufferGator</a>.
+To browse between all your open buffers</li>
+  <li><a href="https://github.com/majutsushi/tagbar">Tagbar</a>. The campion! This
+is your code outlook similar to what popular IDEs offer.</li>
 </ol>
-
 
 <p>There is a nice support for <a href="http://git-scm.com/">Git</a>, but I stay at pure command line.</p>
 
-<p>Get it up and running is fairly easy. Don't waste time, go set up yours.</p>
+<p>Get it up and running is fairly easy. Don’t waste time, go set up yours.</p>
 
 <p>Just a note: Tagbar works perfect for clojure, but I work mainly with
 groovy and Grails, so you can set ctags to recognize <code>.groovy</code> content:</p>
 
-<pre><code class="bash ctags for groovy">--langdef=groovy
+<p><code>bash ctags for groovy
+--langdef=groovy
 --langmap=groovy:.groovy
 --regex-groovy=/^[ \t]*[(private|public|protected) ( \t)]*[A-Za-z0-9_&lt;&gt;]+[ \t]+([A-Za-z0-9_]+)[ \t]*\(.*\)[ \t]*{/\1/f,function,functions/
 --regex-groovy=/^[ \t]*def[ \t]+([A-Za-z0-9_]+)[ \t]*\=[ \t]*\{/\1/f,function,functions/
@@ -110,45 +109,47 @@ groovy and Grails, so you can set ctags to recognize <code>.groovy</code> conten
 --regex-groovy=/^[ \t]*def[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/u,public,public variables/
 --regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*class[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
 --regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*enum[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
-</code></pre>
+</code></p>
 
-<h1>Search</h1>
+<h1 id="search">Search</h1>
 
 <p>CtrlP is great, but you are not always with your vim open or with
 your project open. For this, linux offers grep and find. But waht is
 <a href="http://beyondgrep.com/">beyond grep</a>? There is <code>ack-grep</code>!</p>
 
-<p>Believe me you'll love it. It is extremely practical, fast and developer
-focused. So you don't even need to open gVim. Just seach, find edit and
+<p>Believe me you’ll love it. It is extremely practical, fast and developer
+focused. So you don’t even need to open gVim. Just seach, find edit and
 commit!</p>
 
 <p>The extra config for <code>ack-grep</code> is a new extension for groovy type and
 also support for <a href="https://puppetlabs.com/">Puppet</a> manifests and
 templates.</p>
 
-<pre><code class="bash puppet types ">--type-add=groovy=.gsp
+<p><code>bash puppet types 
+--type-add=groovy=.gsp
 --type-set=puppet=.pp,.erb
-</code></pre>
+</code></p>
 
-<h1>Fishing the Shell</h1>
+<h1 id="fishing-the-shell">Fishing the Shell</h1>
 
 <p>Lots of friends call me crazy because I invest time in
 <a href="http://clojure.org">Clojure</a> and use it as much as I can. Also because
-I left behind "rich" IDEs like Eclipse or IntelliJ IDEA. But come on, you
-are a senior developer and you should be able to laugh on any IDE's
+I left behind “rich” IDEs like Eclipse or IntelliJ IDEA. But come on, you
+are a senior developer and you should be able to laugh on any IDE’s
 face. Even if you were coding Java.</p>
 
-<p>But ok, I'm here to talk about <a href="http://fishshell.com/">Fish Shell</a>. This
+<p>But ok, I’m here to talk about <a href="http://fishshell.com/">Fish Shell</a>. This
 is my most recent acquisition. Scripting it is
 easy like candy. Check the
 <a href="http://fishshell.com/tutorial.html">tutorial</a>.</p>
 
-<p>I've added <a href="https://gist.github.com/paulosuzart/5614350">few scripts to</a> easy connect to a bunch of machines I have to
+<p>I’ve added <a href="https://gist.github.com/paulosuzart/5614350">few scripts to</a> easy connect to a bunch of machines I have to
 everyday. And adding some color for git is also easy, check <a href="http://zogovic.com/post/37906589287/showing-git-branch-in-fish-shell-prompt">this
 post</a>.</p>
 
-<p>Well, hope you enjoy the tool set. Any news I'll let you know. Thanks
+<p>Well, hope you enjoy the tool set. Any news I’ll let you know. Thanks
 for reading.</p>
+
 
 </div>
 
@@ -174,6 +175,15 @@ for reading.</p>
     
       <li>
         <h3>
+          <a href="/blog/2015/04/02/why-racket-is-awesome/">
+            Why Racket is Awesome
+            <small>02 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/07/07/going-back-to-go/">
             Going back to Go (golang)
             <small>07 Jul 2014</small>
@@ -186,15 +196,6 @@ for reading.</p>
           <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
             Sliding Window events with Clojure
             <small>27 Apr 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
-            My Contribution to Puppet Forge
-            <small>21 Jan 2014</small>
           </a>
         </h3>
       </li>

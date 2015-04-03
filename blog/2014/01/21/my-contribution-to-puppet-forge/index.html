@@ -66,19 +66,19 @@
       <div class="post">
   <h1>My Contribution to Puppet Forge</h1>
   <span class="post-date">21 Jan 2014</span>
-  <p>Happy new year! This time I would like to share with you that I've just shared a <a href="http://puppetlabs.com/puppet/puppet-open-source">Puppet</a> <a href="https://forge.puppetlabs.com/paulosuzart/gvm">module</a> at <a href="http://forge.puppetlabs.com/">Puppet Forge</a>. That is awesome!</p>
+  <p>Happy new year! This time I would like to share with you that I’ve just shared a <a href="http://puppetlabs.com/puppet/puppet-open-source">Puppet</a> <a href="https://forge.puppetlabs.com/paulosuzart/gvm">module</a> at <a href="http://forge.puppetlabs.com/">Puppet Forge</a>. That is awesome!</p>
 
-<p>As you may know, I'm using puppet to manage my own manage resources. You can find all these manifestes my git hub at <a href="https://github.com/paulosuzart/puppet">https://github.com/paulosuzart/puppet</a>. There you'll basically see some resources to setup, update and keep a bunch of packages and and configurations. That sort of thing you don't wanna miss next time you format your laptop, or when you evolve the current one.</p>
+<p>As you may know, I’m using puppet to manage my own manage resources. You can find all these manifestes my git hub at <a href="https://github.com/paulosuzart/puppet">https://github.com/paulosuzart/puppet</a>. There you’ll basically see some resources to setup, update and keep a bunch of packages and and configurations. That sort of thing you don’t wanna miss next time you format your laptop, or when you evolve the current one.</p>
 
 <p>Examples are installation of postgresql, postgis, git, change your prompt, configure your git, install clojure lein, create python virtual env and its packages, install and update <a href="http://gvmtool.net/">GVM</a> packages.</p>
 
 <p>Well, as many other communities, puppet users can share their code with anyone interested on it. For example, my manifests uses really nice community modules such as <a href="http://forge.puppetlabs.com/puppetlabs/apt">apt</a>, <a href="http://forge.puppetlabs.com/maestrodev/wget">wget</a> and many others.</p>
 
-<p>After looking for a module to install GVM and its packages, I've found nothing. At this point I had created my own module that I than decided to share.</p>
+<p>After looking for a module to install GVM and its packages, I’ve found nothing. At this point I had created my own module that I than decided to share.</p>
 
 <p>The process of <a href="http://docs.puppetlabs.com/puppet/latest/reference/modules_publishing.html">creating and publishing a module</a> is quite straightforward. So anyone can share modules, but good to be responsible and take care of compatibility, etc. Any way, this is up to you either user or not a community module.</p>
 
-<h2>What was used</h2>
+<h2 id="what-was-used">What was used</h2>
 
 <p>The module itself relies on <code>wget</code> to grab the GVM setup file from the internet, and then install it and download packages needed by the user. So it is mostly <a href="http://docs.puppetlabs.com/references/latest/type.html#exec"><code>exec</code></a> commands.</p>
 
@@ -94,7 +94,6 @@
   <span class="na">logoutput</span>   <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
   <span class="na">unless</span>      <span class="o">=&gt;</span> <span class="s">&quot;test \&quot;</span><span class="nv">$version\&quot;</span> <span class="o">=</span> <span class="err">\</span><span class="nv">$(find</span> <span class="nv">$user_home/.gvm/$name</span> <span class="o">-</span><span class="na">type</span> <span class="na">l</span> <span class="o">-</span><span class="na">printf</span> <span class="s">&#39;%p -&gt; %l\\n&#39;</span><span class="o">|</span> <span class="na">awk</span> <span class="s">&#39;{print \$3}&#39;</span> <span class="o">|</span> <span class="na">awk</span> <span class="o">-</span><span class="na">F</span><span class="s">&#39;/&#39;</span> <span class="s">&#39;{print \$NF}&#39;</span><span class="p">)</span><span class="err">&quot;</span>
 <span class="p">}</span></code></pre></div>
-
 
 <p>Sometimes you have to find the most crazy commands to prevent something to run. But good that you go deep into linux. In this case, GVM creates a <code>symlink</code> from the package version to a folder named <code>current</code> under the installed package folder. So, if such link exists for the given <code>$verion</code>, it is already the default verion and not needed to run this resource.</p>
 
@@ -124,6 +123,15 @@
     
       <li>
         <h3>
+          <a href="/blog/2015/04/02/why-racket-is-awesome/">
+            Why Racket is Awesome
+            <small>02 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/07/07/going-back-to-go/">
             Going back to Go (golang)
             <small>07 Jul 2014</small>
@@ -136,15 +144,6 @@
           <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
             Sliding Window events with Clojure
             <small>27 Apr 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2013/12/15/puppet-good-pattern/">
-            Puppet good pattern?
-            <small>15 Dec 2013</small>
           </a>
         </h3>
       </li>

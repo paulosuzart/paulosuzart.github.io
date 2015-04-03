@@ -67,58 +67,57 @@
   <h1>Clojure macros: Automating AWS SimpleDB admin tasks.</h1>
   <span class="post-date">03 Feb 2012</span>
   <p>First post of the year! To talk about clojure, of course.
-<a href="http://codemountain.wordpress.com/2010/10/09/clojure-macros/">I've written (pt_br)</a> about clojure macros before. And yes, it is really powerful.</p>
+<a href="http://codemountain.wordpress.com/2010/10/09/clojure-macros/">I’ve written (pt_br)</a> about clojure macros before. And yes, it is really powerful.</p>
 
-<p>I'm using macros to help me setting up a connection with <a href="http://aws.amazon.com/simpledb/">Amazon SimpleDB</a> to do some small administrative tasks such as listing domains, creating domains, counting items in a domain, etc.</p>
+<p>I’m using macros to help me setting up a connection with <a href="http://aws.amazon.com/simpledb/">Amazon SimpleDB</a> to do some small administrative tasks such as listing domains, creating domains, counting items in a domain, etc.</p>
 
-<p>SimpleDB hasn't a console, so you have interact with it using a pure html + js application provided by AWS, or do it by hand. I do prefer doing it by my own :). Then I created de following macro:</p>
+<p>SimpleDB hasn’t a console, so you have interact with it using a pure html + js application provided by AWS, or do it by hand. I do prefer doing it by my own :). Then I created de following macro:</p>
 
-<pre><code class="clojure SimpleDB admin tasks ">(defmacro boot-sdb []
-    '(do
+<p>``` clojure SimpleDB admin tasks 
+(defmacro boot-sdb []
+	‘(do</p>
 
-        (.setLevel (java.util.logging.Logger/getLogger "com.amazonaws")
-  java.util.logging.Level/WARNING)
-        (.setLevel (java.util.logging.Logger/getLogger "httpclient")
-  java.util.logging.Level/WARNING)
-        (.setLevel (java.util.logging.Logger/getLogger "org.apache.commons.httpclient")
-  java.util.logging.Level/WARNING)
+<pre><code>	(.setLevel (java.util.logging.Logger/getLogger "com.amazonaws")   java.util.logging.Level/WARNING)
+	(.setLevel (java.util.logging.Logger/getLogger "httpclient")   java.util.logging.Level/WARNING)
+	(.setLevel (java.util.logging.Logger/getLogger "org.apache.commons.httpclient")   java.util.logging.Level/WARNING)
 
-        (require (quote [cemerick.rummage :as sdb]))
-        (require (quote [cemerick.rummage.encoding :as enc]))
-        (use (quote apix.util))
+	(require (quote [cemerick.rummage :as sdb]))
+ 	(require (quote [cemerick.rummage.encoding :as enc]))
+ 	(use (quote apix.util))
+ 	
+ 	(def *sdb* (sdb/create-client (env "AWS_KEYID") (env "AWS_KEY")))
+ 	(def *sdbconf* (assoc enc/keyword-strings :client *sdb*))
+ 	(println "Connected to SDB.")
 
-        (def *sdb* (sdb/create-client (env "AWS_KEYID") (env "AWS_KEY")))
-        (def *sdbconf* (assoc enc/keyword-strings :client *sdb*))
-        (println "Connected to SDB.")
+ 	(defn lsd [] (sdb/list-domains *sdbconf*))
+ 	
 
-        (defn lsd [] (sdb/list-domains *sdbconf*))
+ 	(defn mkd [d] (sdb/create-domain *sdbconf* d))
 
+ 	(defn rmd [d] (sdb/delete-domain *sdbconf* d))
 
-        (defn mkd [d] (sdb/create-domain *sdbconf* d))
+ 	(defn countd [d] (str
+	 					(format "Total items [%s]: " d)
+	 					(:itemCount (sdb/domain-metadata *sdbconf* d))))
 
-        (defn rmd [d] (sdb/delete-domain *sdbconf* d))
-
-        (defn countd [d] (str
-                            (format "Total items [%s]: " d)
-                            (:itemCount (sdb/domain-metadata *sdbconf* d))))
-
-        (defn sdb-help [] 
-            (println "Type '(lsd)' to list all domains")
-            (println "Type '(mkd domain-name)' to create a new domain")
-            (println "Type '(rmd domain-name)' to delete a domain") 
-            (println "Type '(countd domain)' to get the items count of domain")
-            (println "Type '(sdb-help)' to see this help again"))
-
-        (sdb-help)))
+	(defn sdb-help [] 
+		(println "Type '(lsd)' to list all domains")
+ 		(println "Type '(mkd domain-name)' to create a new domain")
+		(println "Type '(rmd domain-name)' to delete a domain")	
+		(println "Type '(countd domain)' to get the items count of domain")
+		(println "Type '(sdb-help)' to see this help again"))
+	
+	(sdb-help))) ```
 </code></pre>
 
 <p>It saves the work of configuring the appropriate log levels as well as creating SimpleDB client using <a href="https://github.com/cemerick/rummage">rummage</a> (a SimpleDB client by <a href="twitter.com/cemerick">@cemerick</a>).</p>
 
-<p>And why a macro? Because in some extent you can see a macro as a code template, just like <a href="http://velocity.apache.org/">Velocity</a> or <a href="http://www.stringtemplate.org/">String Template</a>. So what this macro does is just "typing" all this code on my REPL namespace, than the defined functions and vars are automatic available in the <code>user</code> namespace.</p>
+<p>And why a macro? Because in some extent you can see a macro as a code template, just like <a href="http://velocity.apache.org/">Velocity</a> or <a href="http://www.stringtemplate.org/">String Template</a>. So what this macro does is just “typing” all this code on my REPL namespace, than the defined functions and vars are automatic available in the <code>user</code> namespace.</p>
 
 <p>Using it is simple:</p>
 
-<pre><code class="clojure Using the macro">    (use 'the.macro.namespace)
+<p><code>clojure Using the macro
+    (use 'the.macro.namespace)
     (boot-sdb)
     Connected to SDB.
     Type '(lsd)' to list all domains
@@ -127,15 +126,16 @@
     Type '(countd domain)' to get the items count of domain
     Type '(sdb-help)' to see this help again
     nil
-</code></pre>
+</code></p>
 
-<p><code>(boot-sdb)</code> "types" all the code for you, then you can call the functions like <code>(lsd)</code> to get the list of domains in your SimpleDB.</p>
+<p><code>(boot-sdb)</code> “types” all the code for you, then you can call the functions like <code>(lsd)</code> to get the list of domains in your SimpleDB.</p>
 
 <p>If take a closer look you may notice a function call to <code>(env "AWS_KEYID")</code>. It simply gets the environment variables set with your credentials.</p>
 
 <p>You can extend the macro to have any admin task you may need. Note that the <code>*sdbconf*</code> will become available, so you can call rummage directly without having to configure all again.</p>
 
 <p>That is it. Clojure is smart!</p>
+
 
 </div>
 
@@ -161,6 +161,15 @@
     
       <li>
         <h3>
+          <a href="/blog/2015/04/02/why-racket-is-awesome/">
+            Why Racket is Awesome
+            <small>02 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/07/07/going-back-to-go/">
             Going back to Go (golang)
             <small>07 Jul 2014</small>
@@ -173,15 +182,6 @@
           <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
             Sliding Window events with Clojure
             <small>27 Apr 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
-            My Contribution to Puppet Forge
-            <small>21 Jan 2014</small>
           </a>
         </h3>
       </li>

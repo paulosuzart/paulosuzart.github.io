@@ -68,51 +68,52 @@
   <span class="post-date">30 Oct 2011</span>
   <p><a href="http://twitter.github.com/finagle">Twitter Finagle</a> is an amazing framework for RPC communication, and my interest is its HTTP features for creating RESTful APIs.</p>
 
-<p>As I bloged at <a href="http://codemountain.wordpress.com/2011/10/14/twitter-finagle-primeiras-impressoes/">codemountain</a>, I'm using finagle for a personal project. Don't know how far it will go, but the facts is that I'm learning Finagle a lot.</p>
+<p>As I bloged at <a href="http://codemountain.wordpress.com/2011/10/14/twitter-finagle-primeiras-impressoes/">codemountain</a>, I’m using finagle for a personal project. Don’t know how far it will go, but the facts is that I’m learning Finagle a lot.</p>
 
 <p>During this project I needed to extract from the query string, a param to be parsed to a twitter.util.Time. I ended up with a Param Matcher to be used my a pattern match agains the requested path. The use of this Param Patcher is:</p>
 
-<pre><code class="scala Using the DateParamMatcher">//...
+<p><code>scala Using the DateParamMatcher
+//...
 Path(request.path) :? request.params match {
        case Root / "myPath" :? RequestTime(requestTimeParam)  =&gt; //do something
 //..
 }
 //Where RequestTime is defined as
  object RequestTime extends DateParamMatcher("requestTimeParam")
-</code></pre>
-
-<p>The source of DateParamMatcher is the following.
+</code>
+The source of DateParamMatcher is the following.
 ``` scala Param Matcher for twitter.util.Time
-import com.twitter.util.Time.<em>
+import com.twitter.util.Time._
 import com.twitter.util.Time
 import java.text.ParseException
-import com.twitter.finagle.http.path.</em>
+import com.twitter.finagle.http.path._
 import com.twitter.finagle.http.ParamMap</p>
 
-<p>/<em>*
+<p>/**
  * Extractor that takes a request parameter and converts it to a {twitter.util.Time}.
  * The date format should conform with {twitter.util.Time} default format.
- </em>/
+ */
 abstract class DateParamMatcher(name: String) {</p>
 
-<p>  def unapply(params: ParamMap): Option[Time] = params.get(name) flatMap { value =>
+<p>def unapply(params: ParamMap): Option[Time] = params.get(name) flatMap { value =&gt;
     try {
       Some(at(value))
     } catch {
-      case ex: ParseException =>
+      case ex: ParseException =&gt;
         None
     }
   }
 }</p>
 
-<p><code>``
-Finagle also provides an abstract</code>com.twitter.finagle.http.path.ParamMatcher<code>as well as</code>LongParamMatcher<code>and</code>IntParamMatcher` in the same package. They are actually Scala  Extractors (very well explained <a href="http://codemonkeyism.com/scala-goodness-extractors/">here</a> by @codemonkeyism). This is a practical way to extract values from a query string and put it available at your code already parsed.</p>
+<p>```
+Finagle also provides an abstract <code>com.twitter.finagle.http.path.ParamMatcher</code> as well as <code>LongParamMatcher</code> and <code>IntParamMatcher</code> in the same package. They are actually Scala  Extractors (very well explained <a href="http://codemonkeyism.com/scala-goodness-extractors/">here</a> by @codemonkeyism). This is a practical way to extract values from a query string and put it available at your code already parsed.</p>
 
 <p>Note that if the param named <code>requestTimeParam</code> is not present or carries a invalid value for <code>Time</code> in the query string the <code>None</code> value is returned.</p>
 
-<p>Although easy to build and extract params from query string and requested path, it is not a Finagle strength. It is kinda limited. A better abstraction is offered by <a href="https://github.com/unfiltered/unfiltered">Unfiltered</a>(another <a href="http://twitter.com/n8han">@n8han's</a> great job).</p>
+<p>Although easy to build and extract params from query string and requested path, it is not a Finagle strength. It is kinda limited. A better abstraction is offered by <a href="https://github.com/unfiltered/unfiltered">Unfiltered</a>(another <a href="http://twitter.com/n8han">@n8han’s</a> great job).</p>
 
 <p>Hope you enjoy it.</p>
+
 
 </div>
 
@@ -138,6 +139,15 @@ Finagle also provides an abstract</code>com.twitter.finagle.http.path.ParamMatch
     
       <li>
         <h3>
+          <a href="/blog/2015/04/02/why-racket-is-awesome/">
+            Why Racket is Awesome
+            <small>02 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/07/07/going-back-to-go/">
             Going back to Go (golang)
             <small>07 Jul 2014</small>
@@ -150,15 +160,6 @@ Finagle also provides an abstract</code>com.twitter.finagle.http.path.ParamMatch
           <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
             Sliding Window events with Clojure
             <small>27 Apr 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
-            My Contribution to Puppet Forge
-            <small>21 Jan 2014</small>
           </a>
         </h3>
       </li>

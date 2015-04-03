@@ -66,7 +66,7 @@
       <div class="post">
   <h1>Sliding Window events with Clojure</h1>
   <span class="post-date">27 Apr 2014</span>
-  <p>Hello all, I'm back to <a href="http://clojuredocs.org">clojure</a> posts again. :)</p>
+  <p>Hello all, I’m back to <a href="http://clojuredocs.org">clojure</a> posts again. :)</p>
 
 <p>I was looking for a sliding window processing of events. This is something very common in the world of <a href="http://en.wikipedia.org/wiki/Complex_event_processing">Complex Event Processing</a> that can be roughly translated to querying events adding a time dimension to the query.</p>
 
@@ -74,13 +74,12 @@
 
 <p>Excepting EEP, all the others are very complete. They offer a DSL so you can query and aggregate streams of events in a very intuitive manner. But I was looking for something veeeery simple like <strong>EEP</strong>.</p>
 
-<p>EEP comes with some basic sliding window buffers. Be it based on size, be it based on time. The point with time based windows on EEP, is that they are basically a buffer waiting for some time to be elapsed before it sends all the entries to a handler. So in this case it is not so suitable for answering questions like: <em>"How much my e-commerce sold in the last 4 minutes?"</em></p>
+<p>EEP comes with some basic sliding window buffers. Be it based on size, be it based on time. The point with time based windows on EEP, is that they are basically a buffer waiting for some time to be elapsed before it sends all the entries to a handler. So in this case it is not so suitable for answering questions like: <em>“How much my e-commerce sold in the last 4 minutes?”</em></p>
 
-<p>To answer that, we can't accumulate events for 4 minutes, send all of the to a handler, and empty the buffer. If so, two subsequential queries to the buffer will return wrong values. Ex.:</p>
+<p>To answer that, we can’t accumulate events for 4 minutes, send all of the to a handler, and empty the buffer. If so, two subsequential queries to the buffer will return wrong values. Ex.:</p>
 
 <div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="p">|</span><span class="m">10</span> USD <span class="p">|</span><span class="m">10</span> USD , <span class="m">20</span> USD <span class="p">|</span> <span class="m">10</span> USD , <span class="m">20</span> USD                   <span class="p">|</span> <span class="m">0</span> USD
 t0       t1               t3 <span class="s2">&quot;time elapsed, do empty buffer!&quot;</span>  t4</code></pre></div>
-
 
 <p>Suppose every <code>tn</code> is a minute elapsed. See? If time elapses at <code>t3</code> you <code>sum</code> and get 30, but if you want to know the  total sold one minute later, you get 0! It is not what I wanted. I then decided to go for my own implementation using <a href="https://github.com/clojurewerkz/meltdown">Meltdown</a>.</p>
 
@@ -176,16 +175,16 @@ t0       t1               t3 <span class="s2">&quot;time elapsed, do empty buffe
   <span class="nv">nil</span>
 <span class="p">)</span></code></pre></div>
 
-
 <p>I could have embedded the ticker channel in the <code>slide</code> function. Or it could be a record implementing some protocol, etc. But this is quite simple and enough for now.</p>
 
-<p>There is no mistery, but for sure the combination of Meltdown's clean interface plus clojure's ability to handle concurrency make this type of construction very straightforward.</p>
+<p>There is no mistery, but for sure the combination of Meltdown’s clean interface plus clojure’s ability to handle concurrency make this type of construction very straightforward.</p>
 
 <p>Notice, however, that bigger your window interval, bigger your buffer. Faster you add events to the <code>price</code> reactor, faster your buffer becomes bigger. Seems no problem for the power of Reactor.</p>
 
 <p>Tha is all. CEP is very useful in the filds of pattern/behavior detection and real-time analysis for detecting fraud, etc. It pays off to study and find opportunities to provide smart solutions using it.</p>
 
 <p>Cheers!</p>
+
 
 </div>
 
@@ -211,6 +210,15 @@ t0       t1               t3 <span class="s2">&quot;time elapsed, do empty buffe
     
       <li>
         <h3>
+          <a href="/blog/2015/04/02/why-racket-is-awesome/">
+            Why Racket is Awesome
+            <small>02 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/07/07/going-back-to-go/">
             Going back to Go (golang)
             <small>07 Jul 2014</small>
@@ -223,15 +231,6 @@ t0       t1               t3 <span class="s2">&quot;time elapsed, do empty buffe
           <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
             My Contribution to Puppet Forge
             <small>21 Jan 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2013/12/15/puppet-good-pattern/">
-            Puppet good pattern?
-            <small>15 Dec 2013</small>
           </a>
         </h3>
       </li>

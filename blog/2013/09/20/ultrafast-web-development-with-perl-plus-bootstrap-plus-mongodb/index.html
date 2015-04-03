@@ -70,30 +70,30 @@
 
 <p>That was actually my first contact with the language. Never tried before! How can it be? Well, I ended up finding an amazing community and ecosystem (mostly covered by <a href="http://www.perl.org/cpan.html">CPAN</a>).</p>
 
-<p>By ecosystem, I mean libs and tools out there. Couldn't be different since it was created in 1987 (I was just a kid)!</p>
+<p>By ecosystem, I mean libs and tools out there. Couldn’t be different since it was created in 1987 (I was just a kid)!</p>
 
 <p>So, I needed to develop something simple yet powerful enough to be further extended with new features. But the main requirement was: DO IT RIGHT NOW!</p>
 
 <p>Ok, I could have chosen <a href="http://www.grails.org">Grails</a> (my daily job), but know what? I even had time for JVM startup time. Same applies to anything on JVM, even clojure web stuff. I could also have chosen <a href="http://python.org/">python</a> with <a href="http://flask.pocoo.org/">Flask</a> and would be great. But what I was going to add to my toolset?</p>
 
-<h1>Enter Perl Dancer</h1>
+<h1 id="enter-perl-dancer">Enter Perl Dancer</h1>
 
 <p>After a quick research on the internet I found at least 3 trusted options:</p>
 
 <ul>
-<li><a href="http://www.catalystframework.org/">Catalyst</a> - No, I wanted something simpler than that. Catalyst looks awesome, and I will try it at some point</li>
-<li><a href="http://mojolicio.us/">Mojolicious</a> - Nice option. Very simple. But few plugins available if compared to the one I picked up</li>
-<li><a href="http://perldancer.org">Dancer</a> - YES! It is super compact, and the community around it has created tons of great plugins: <a href="http://search.cpan.org/~ajct/Dancer-Plugin-Mongo-0.03/lib/Dancer/Plugin/Mongo.pm">Dancer::Plugin::Mongo</a>, <a href="http://search.cpan.org/~sukria/Dancer-Plugin-REST-0.07/lib/Dancer/Plugin/REST.pm">Dancer::Plugin::REST</a> and <a href="http://search.cpan.org/~dams/Dancer-Plugin-FlashMessage-0.314/lib/Dancer/Plugin/FlashMessage.pm">Dancer::Plugin::FlashMessage</a> just to mention a few.</li>
+  <li><a href="http://www.catalystframework.org/">Catalyst</a> - No, I wanted something simpler than that. Catalyst looks awesome, and I will try it at some point</li>
+  <li><a href="http://mojolicio.us/">Mojolicious</a> - Nice option. Very simple. But few plugins available if compared to the one I picked up</li>
+  <li><a href="http://perldancer.org">Dancer</a> - YES! It is super compact, and the community around it has created tons of great plugins: <a href="http://search.cpan.org/~ajct/Dancer-Plugin-Mongo-0.03/lib/Dancer/Plugin/Mongo.pm">Dancer::Plugin::Mongo</a>, <a href="http://search.cpan.org/~sukria/Dancer-Plugin-REST-0.07/lib/Dancer/Plugin/REST.pm">Dancer::Plugin::REST</a> and <a href="http://search.cpan.org/~dams/Dancer-Plugin-FlashMessage-0.314/lib/Dancer/Plugin/FlashMessage.pm">Dancer::Plugin::FlashMessage</a> just to mention a few.</li>
 </ul>
-
 
 <p>That is it, assemble plugins as you want and you are done.</p>
 
-<p>Another nice point is the project folder structure created by Dancer. If you are used to frameworks like Grails and Django, you'll like it. And not only that, Dancer comes by default with per-environment configuration (yaml) files, and a general config file where you configure, plugins, powerful templates, http filters, etc.</p>
+<p>Another nice point is the project folder structure created by Dancer. If you are used to frameworks like Grails and Django, you’ll like it. And not only that, Dancer comes by default with per-environment configuration (yaml) files, and a general config file where you configure, plugins, powerful templates, http filters, etc.</p>
 
-<p>I can't open that much of the code I wrote in few nights. But I can guarantee it was funny and quick to write. A simple Http request handler is:</p>
+<p>I can’t open that much of the code I wrote in few nights. But I can guarantee it was funny and quick to write. A simple Http request handler is:</p>
 
-<pre><code class="perl">get '/job/:wok_id' =&gt; sub {
+<p><code>perl
+get '/job/:wok_id' =&gt; sub {
   my $job = mconfigs-&gt;find_one({wok_id =&gt; params-&gt;{'wok_id'}});
   template 'jobs/edit.tt', {
     job =&gt; $job,
@@ -101,7 +101,7 @@
     server_port =&gt; config-&gt;{port},
   };
 };
-</code></pre>
+</code></p>
 
 <p>It is simple like that. You call the <code>get</code> providing the request path (notice the <code>:wok_id</code> path variable) and then your perl routine that handles the request. <code>mconfigs</code> is a simple routine that wraps the access to a MongoDB collection and a query.</p>
 
@@ -109,34 +109,36 @@
 
 <p>The <a href="http://www.template-toolkit.org/index.html">template system</a> is flexible and very powerful. Just embbed your html/css/js <a href="http://getbootstrap.com">Twitter Bootstrap</a> stuff and you have beauty. No time wasted with style cascading, user interface layout, etc.</p>
 
-<h1>MongoDB and keep it fast</h1>
+<h1 id="mongodb-and-keep-it-fast">MongoDB and keep it fast</h1>
 
 <p>As I said: DO IT RIGHT NOW! So, set up a new database machine? Create schemas? No way! Get a ready to go mongo instance at (mongoHQ)[http://www.mongohq.com/home] and start coding right away.</p>
 
-<p>The good part of it is no set up time, no administration time, and you can grow it as you go. Well, mongoHQ here was actually used for development and I don't intend to keep it once moving to production</p>
+<p>The good part of it is no set up time, no administration time, and you can grow it as you go. Well, mongoHQ here was actually used for development and I don’t intend to keep it once moving to production</p>
 
 <p>The benefits of mongo itself you can find around. What I want to highlight is the <a href="http://docs.mongodb.org/manual/aggregation/">aggregation</a> framework in conjuntion with perl. The perl hash syntax perfectly fits mongo documents:</p>
 
-<pre><code class="perl">  my $result = mexecutions-&gt;aggregate([
+<p><code>perl
+  my $result = mexecutions-&gt;aggregate([
        {'$match' =&gt; {'alarm_enabled' =&gt; 1}},
        {'$group' =&gt; {'_id' =&gt;  {'status' =&gt; '$status', 'wok_id'=&gt; '$wok_id'},
                      'count' =&gt; {'$sum' =&gt; 1}}}
    ]);
-</code></pre>
+</code></p>
 
 <p>Using the aggregation framework you can easily break through any limitations when working without SQL statements with incredible performance.</p>
 
-<h1>Deploying for real</h1>
+<h1 id="deploying-for-real">Deploying for real</h1>
 
 <p>Well, your dancer application is able to process one request at time if you simply run it with <code>perl yourap.pl</code>. I need to handle much more than one request at a time. There are plenty options like ones available for ruby (<a href="http://rubygems.org/gems/unicorn">unicorn</a> or <a href="https://www.phusionpassenger.com/">passenger</a>). I went for <a href="http://uwsgi-docs.readthedocs.org/en/latest/index.html">uWSGI</a> inspite of many good options like <a href="http://search.cpan.org/~miyagawa/Twiggy-0.1023/lib/Twiggy.pm">Twiggy</a> or <a href="http://search.cpan.org/~miyagawa/Starman-0.1000/lib/Starman.pm">Startman</a>.</p>
 
 <p>uWSGI provides a robust infrastructure and supports perl as well. But not all its features are available for perl like the <a href="http://uwsgi-docs.readthedocs.org/en/latest/Queue.html">queue framework</a> and <a href="http://uwsgi-docs.readthedocs.org/en/latest/WebCaching.html">caching stuff</a>. The speed of execution may compensate in most cases.</p>
 
-<h1>Wrapping Up</h1>
+<h1 id="wrapping-up">Wrapping Up</h1>
 
-<p>I'm passionate about clojure, and this blog won't change because this quick perl affair. But sincerely speaking, I haven't met any clojure equivalent for web yet. Fast to start, fast to develop, fast to test and fast to deploy. Plus strong community, plugins, etc.</p>
+<p>I’m passionate about clojure, and this blog won’t change because this quick perl affair. But sincerely speaking, I haven’t met any clojure equivalent for web yet. Fast to start, fast to develop, fast to test and fast to deploy. Plus strong community, plugins, etc.</p>
 
-<p>I'm not expert enough in perl, but it now has a nice place among my tools. I can imagne myself with front end perl stuff and crazy distributed async clojure in the back end.</p>
+<p>I’m not expert enough in perl, but it now has a nice place among my tools. I can imagne myself with front end perl stuff and crazy distributed async clojure in the back end.</p>
+
 
 </div>
 
@@ -162,6 +164,15 @@
     
       <li>
         <h3>
+          <a href="/blog/2015/04/02/why-racket-is-awesome/">
+            Why Racket is Awesome
+            <small>02 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/07/07/going-back-to-go/">
             Going back to Go (golang)
             <small>07 Jul 2014</small>
@@ -174,15 +185,6 @@
           <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
             Sliding Window events with Clojure
             <small>27 Apr 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
-            My Contribution to Puppet Forge
-            <small>21 Jan 2014</small>
           </a>
         </h3>
       </li>

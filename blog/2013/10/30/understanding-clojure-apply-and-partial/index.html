@@ -66,84 +66,85 @@
       <div class="post">
   <h1>Understanding Clojure apply and partial</h1>
   <span class="post-date">30 Oct 2013</span>
-  <p>Hi guys, a really introductory post on <a href="http://clojure.org">Clojure</a> <code>apply</code> and <code>partial</code>functions. I need to confess that I didn't take a look around to see how people are usually explaining these functions. For sure there are better ways to explain it even usingJavascript, but remember: it was used to teach a beginne, so no purism here.</p>
+  <p>Hi guys, a really introductory post on <a href="http://clojure.org">Clojure</a> <code>apply</code> and <code>partial</code>functions. I need to confess that I didn’t take a look around to see how people are usually explaining these functions. For sure there are better ways to explain it even usingJavascript, but remember: it was used to teach a beginne, so no purism here.</p>
 
 <p>Anyway. These sample <code>js</code> codes come from the explanation I gave to a colleague at work. And pretty much worked to illustrate both cases.</p>
 
-<h1>Apply</h1>
-
+<h1 id="apply">Apply</h1>
 <p>To a beginner it might be not that easy to imagine how they will find room for using <code>apply</code>. They think it will take millon years until it become useful. Wrong!</p>
 
-<p>After listening to some "newbysh" considerations I came across te following code in Java Script, a well known language:</p>
+<p>After listening to some “newbysh” considerations I came across te following code in Java Script, a well known language:</p>
 
-<pre><code class="javascript">// Imagine a function returning this
-var pessoa = [21, "paulo", "red"];
+<p>```javascript
+// Imagine a function returning this
+var pessoa = [21, “paulo”, “red”];</p>
 
-// And you have the following function to user
+<p>// And you have the following function to user
 var printer = function(age, name, color) {
-    console.log("Person with name " + name + " and age " + age + " and cor " + color);
-};
+    console.log(“Person with name “ + name + “ and age “ + age + “ and cor “ + color);
+};</p>
 
-// You'll probably do this
-printer(pessoa[0], pessoa[1], "vermelho");
+<p>// You’ll probably do this
+printer(pessoa[0], pessoa[1], “vermelho”);
 // =&gt; Person with name paulo and age 21 and cor red
 // But imagine you could do this:
-apply(printer, pessoa);
+apply(printer, pessoa);</p>
 
-// This would be possible using the following apply function
+<p>// This would be possible using the following apply function</p>
 
-var apply = function(fn, args) {
-  var str = "fn(";
+<p>var apply = function(fn, args) {
+  var str = “fn(“;
   for (x = 0; x &lt; args.length; x++)  {
-    str = str + "args["+x+"]";
+    str = str + “args[“+x+”]”;
     if (x &lt; args.length - 1) {
-      str += ",";
+      str += “,”;
     }
-  }
+  }</p>
 
-  str += ");";
+<p>str += “);”;
   console.log(str);
   eval(str);
-};
+};</p>
 
-// And the output is the same:
+<p>// And the output is the same:
 // =&gt; Person with name paulo and age 21 and cor red
-</code></pre>
+```
+After reading this snippet. He instantaneously understood everything and how helpful <code>apply</code> is. Wrapping up, …</p>
 
-<p>After reading this snippet. He instantaneously understood everything and how helpful <code>apply</code> is. Wrapping up, ...</p>
+<blockquote>
+  <h2 id="i-told-him">… I told him:</h2>
+  <p>Use apply for variadic functions. Functions you don’t know how many arguments it can take and you want to consider each element in a vector as if they were independent arguments. Or, even if you know how many args this function takes, for many times you’ll have vectors with values that matches arguments of a function.</p>
+</blockquote>
 
-<blockquote><h2>... I told him:</h2>
+<p>For the second case it is easier to use <a href="http://clojure.org/special_forms#Special%20Forms--Binding%20Forms%20(Destructuring)">destructuring</a>, but it still applies.</p>
 
-<p>Use apply for variadic functions. Functions you don't know how many arguments it can take and you want to consider each element in a vector as if they were independent arguments. Or, even if you know how many args this function takes, for many times you'll have vectors with values that matches arguments of a function.</p></blockquote>
-
-<p>For the second case it is easier to use <a href="http://clojure.org/special_forms#Special%20Forms--Binding%20Forms%20(Destructuring">destructuring</a>), but it still applies.</p>
-
-<h1>Partial</h1>
-
+<h1 id="partial">Partial</h1>
 <p>Believe me, there are plenty ways to explain this. From the most scientific to the most simplistic. I would say below you are going to the a simplistic like explannation. But enough to bootstrap you with your clojure code.</p>
 
-<pre><code class="javascript">var hello = function(saud, name) {
-  console.log(saud + ", " + name);
-};
+<p>``` javascript
+var hello = function(saud, name) {
+  console.log(saud + “, “ + name);
+};</p>
 
-hello("ola", "brunolandia");
+<p>hello(“ola”, “brunolandia”);</p>
 
-var morning = function(nome) {
-  hello("Bom dia", nome);
-};
+<p>var morning = function(nome) {
+  hello(“Bom dia”, nome);
+};</p>
 
-morning("Brunovisk");
-</code></pre>
+<p>morning(“Brunovisk”);
+```</p>
 
-<p>After reading the snippet...</p>
+<p>After reading the snippet…</p>
 
-<blockquote><h2>... he then came to an end:</h2>
-
-<p>But Paulo, <code>morning</code> is just reducing the <code>hello</code> function surface, then exposing another function that takes one argument and forwards it to <code>hello</code>, plus passing a constant predefined argument.</p></blockquote>
+<blockquote>
+  <h2 id="he-then-came-to-an-end">… he then came to an end:</h2>
+  <p>But Paulo, <code>morning</code> is just reducing the <code>hello</code> function surface, then exposing another function that takes one argument and forwards it to <code>hello</code>, plus passing a constant predefined argument.</p>
+</blockquote>
 
 <p><strong>YES</strong>. That is it! But the most important question was: when should I use it?</p>
 
-<p><a href="http://blog.jayfields.com/2011/01/clojure-partial-and-comp.html">Partial functions</a> have a plenty use cases. To not make things "scientific" and keep then simple:</p>
+<p><a href="http://blog.jayfields.com/2011/01/clojure-partial-and-comp.html">Partial functions</a> have a plenty use cases. To not make things “scientific” and keep then simple:</p>
 
 <p>Imagine you are providing functions to someone else to query a database. You might create a base function that takes an enormous number arguments that actually assemble the queries. But you want to guarantee that certain fields/constraints/indexes are present on every query.</p>
 
@@ -152,6 +153,7 @@ morning("Brunovisk");
 <p>There are much more use cases for partial functions. A good motivation is to make your code more legible and elegant. A good post on it was published by Christopher Maier <a href="http://christophermaier.name/blog/2011/07/07/writing-elegant-clojure-code-using-higher-order-functions">right here</a>.</p>
 
 <p>Well, hope you liked the text and that it can help you faster understand things that may be left behind while studying it. See you!</p>
+
 
 </div>
 
@@ -177,6 +179,15 @@ morning("Brunovisk");
     
       <li>
         <h3>
+          <a href="/blog/2015/04/02/why-racket-is-awesome/">
+            Why Racket is Awesome
+            <small>02 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/07/07/going-back-to-go/">
             Going back to Go (golang)
             <small>07 Jul 2014</small>
@@ -189,15 +200,6 @@ morning("Brunovisk");
           <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
             Sliding Window events with Clojure
             <small>27 Apr 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
-            My Contribution to Puppet Forge
-            <small>21 Jan 2014</small>
           </a>
         </h3>
       </li>

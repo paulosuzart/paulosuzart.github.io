@@ -68,14 +68,13 @@
   <span class="post-date">11 Apr 2012</span>
   <p>This is a quick post to show an example of <a href="http://clojure.org">clojure</a> <code>comparator</code> for sorting a list with <code>sort</code>.</p>
 
-<p>At work a friend wrote dozen lines of java to sort a list of characters that represents t-shirt sizes. The sizes are: pp, p, m, mm, g, gg, a, aa. Where 'pp' is super small, 'p' small, 'm' medium, etc.</p>
+<p>At work a friend wrote dozen lines of java to sort a list of characters that represents t-shirt sizes. The sizes are: pp, p, m, mm, g, gg, a, aa. Where ‘pp’ is super small, ‘p’ small, ‘m’ medium, etc.</p>
 
 <p>Some shees have all the sizes available, some not. So imagine a shirt with just g, a, gg, p sizes availabe. The screen should show: p, g, gg, a.</p>
 
 <p>He requested me to do a clojure version of it. Here it goes.</p>
 
 <script src="https://gist.github.com/2351780.js"> </script>
-
 
 <p>The first useful function is <a href="http://clojuredocs.org/clojure_core/clojure.core/map-indexed"><code>map-indexed</code></a>. Since the order of sizes is not natural, we associate numbers to them given we know the size order. So <code>sizes</code> becomes <code>{:a 6, :gg 5, :g 4, :pp 0, :m 2, :mm 3, :aa 7, :p 1}</code>.</p>
 
@@ -88,6 +87,7 @@
 <p>Actually to let this code reusable, one can take the list of sizes instead of hard coding it. But this is an exercise for you.</p>
 
 <p><em>Thanks to USA guys, you are the top visitors here. Thank you very much.</em></p>
+
 
 </div>
 
@@ -113,6 +113,15 @@
     
       <li>
         <h3>
+          <a href="/blog/2015/04/02/why-racket-is-awesome/">
+            Why Racket is Awesome
+            <small>02 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/07/07/going-back-to-go/">
             Going back to Go (golang)
             <small>07 Jul 2014</small>
@@ -125,15 +134,6 @@
           <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
             Sliding Window events with Clojure
             <small>27 Apr 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
-            My Contribution to Puppet Forge
-            <small>21 Jan 2014</small>
           </a>
         </h3>
       </li>

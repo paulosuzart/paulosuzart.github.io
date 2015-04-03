@@ -66,9 +66,9 @@
       <div class="post">
   <h1>Going back to Go (golang)</h1>
   <span class="post-date">07 Jul 2014</span>
-  <h1>Intro</h1>
+  <h1 id="intro">Intro</h1>
 
-<p>Hi people, a while ago I made a clear expression of my kinda frustration with clojure ecosystem in the clojure mailling list. I'm not going to share the link here because my post itself was confusing and answers even more.</p>
+<p>Hi people, a while ago I made a clear expression of my kinda frustration with clojure ecosystem in the clojure mailling list. I’m not going to share the link here because my post itself was confusing and answers even more.</p>
 
 <p>In summary the furstration comes from TOO TOO TOO MUCH <code>'[ANN]'</code> posts on the list as if it was open source and more specifically, few of them are really bringing value to clojure as other languages have strong libs/tools.</p>
 
@@ -77,21 +77,20 @@
 <p>After that, I stopped with Go and went deep in clojure. But the destiny brought me back to Go (I can write about later). I could write a lot about Why Go, but you can find good <a href="http://nathany.com/why-go/">articles</a> and <a href="http://www.gophercon.com/speakers/">videos</a> out there. In summary I would say:</p>
 
 <ul>
-<li> Native clean <a href="http://www.golang-book.com/10/index.htm">concurrency</a> model: Golang routines and channels are amazing abstractions for writing concurrent code, making your brain free to mix and match your logic instead of having it busy with concurrency challenges.</li>
-<li> Pragmatic - Go has no method overloading, no interface implementation keyword (just write the same methods defined in a interface and you are done), no reserved words for public/private/etc (low case for private, upper for public functions and attributes).</li>
-<li> <a href="http://spf13.com/post/go-pointers-vs-references">Pointes and references</a> - This will make things even faster with lesser copies between invocations, etc.</li>
-<li> Single binary - No classpath, etc. Build your code in a single binary file with no dependecies. It is just an executable.</li>
-<li> Simple - The language itself is very simple. Easy to understand even if written by others.</li>
-<li> Backed by Google - I used to have more crazy times when I would use anything (including any lib announced in a <code>'[ANN]'</code> post in a mailing list), but it is not sustainable. No maintanance, no support, no clear future are few characteristics of this type of lib. <strong>Share code on Github is not doing open source</strong>. Go is backed by Google, what makes it with longer and responsible life.</li>
-<li> Performance - Golang is super fast. See <a href="http://www.techempower.com/benchmarks/#section=data-r9&amp;hw=peak&amp;test=json&amp;s=2&amp;l=co4&amp;p=3s-0&amp;w=trv3">this comparison</a> for example.</li>
+  <li>Native clean <a href="http://www.golang-book.com/10/index.htm">concurrency</a> model: Golang routines and channels are amazing abstractions for writing concurrent code, making your brain free to mix and match your logic instead of having it busy with concurrency challenges.</li>
+  <li>Pragmatic - Go has no method overloading, no interface implementation keyword (just write the same methods defined in a interface and you are done), no reserved words for public/private/etc (low case for private, upper for public functions and attributes).</li>
+  <li><a href="http://spf13.com/post/go-pointers-vs-references">Pointes and references</a> - This will make things even faster with lesser copies between invocations, etc.</li>
+  <li>Single binary - No classpath, etc. Build your code in a single binary file with no dependecies. It is just an executable.</li>
+  <li>Simple - The language itself is very simple. Easy to understand even if written by others.</li>
+  <li>Backed by Google - I used to have more crazy times when I would use anything (including any lib announced in a <code>'[ANN]'</code> post in a mailing list), but it is not sustainable. No maintanance, no support, no clear future are few characteristics of this type of lib. <strong>Share code on Github is not doing open source</strong>. Go is backed by Google, what makes it with longer and responsible life.</li>
+  <li>Performance - Golang is super fast. See <a href="http://www.techempower.com/benchmarks/#section=data-r9&amp;hw=peak&amp;test=json&amp;s=2&amp;l=co4&amp;p=3s-0&amp;w=trv3">this comparison</a> for example.</li>
 </ul>
 
+<h1 id="what-am-i-doing">What Am I doing?</h1>
 
-<h1>What Am I doing?</h1>
+<p>I’m writing some kind of tracking system built with [go standard lib](http://golang.org/pkg/, <a href="http://www.gorillatoolkit.org/">Gorilla HTTP Toolkit</a> and <a href="https://github.com/boltdb/bolt">BoltDB</a>. I’ll not share any of my code now, hope I can share the whole tool that is 60% done and evolving fast.</p>
 
-<p>I'm writing some kind of tracking system built with <a href="http://golang.org/pkg/,%20[Gorilla%20HTTP%20Toolkit](http://www.gorillatoolkit.org/">go standard lib</a> and <a href="https://github.com/boltdb/bolt">BoltDB</a>. I'll not share any of my code now, hope I can share the whole tool that is 60% done and evolving fast.</p>
-
-<p>BoltDB is <em>"pure Go key/value store"</em> with the goals of providing <em>"a simple, fast, and reliable database for projects that don't require a full database server such as Postgres or MySQL"</em>.</p>
+<p>BoltDB is <em>“pure Go key/value store”</em> with the goals of providing <em>“a simple, fast, and reliable database for projects that don’t require a full database server such as Postgres or MySQL”</em>.</p>
 
 <p>I hit BoltDB while learning about <a href="http://codecapsule.com/2012/11/07/ikvs-implementing-a-key-value-store-table-of-contents/">Implementing a Key Value Storate</a>. It is a very interesting topic but I have no time - and possibily no brain - to implement mine. I then went for a simple persistent queue (like (Kestrel)[https://github.com/twitter/kestrel]), but I made the favor to myself of <code>rm -rf</code> my source code folder that had no git. Ok, it is already overtaken :(</p>
 
@@ -109,8 +108,7 @@
 <span class="c"># Write 56.84787703s  (56.847us/op) (17591 op/sec)</span>
 <span class="c"># Read  1.010560605s  (42ns/op) (23809523 op/sec)</span></code></pre></div>
 
-
-<p>If in the end can reach half of such throughtput after adding some logic on top fo BoltDB, I'll many times more than enough.</p>
+<p>If in the end can reach half of such throughtput after adding some logic on top fo BoltDB, I’ll many times more than enough.</p>
 
 <p>Just to not have a blog post without code. Lets take a look at sample extracted from real code:</p>
 
@@ -153,8 +151,7 @@
 <span class="lineno">37</span> <span class="c1">// somewhere else</span>
 <span class="lineno">38</span> <span class="nx">writerChan</span> <span class="o">&lt;-</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}{</span><span class="s">&quot;3212123&quot;</span><span class="p">,</span> <span class="s">&quot;1478812031&quot;</span><span class="p">,</span> <span class="nx">data</span><span class="p">}</span></code></pre></div>
 
-
-<p>Notice that there is a single channel consumed by a go routine. This is the guy that will interact with BoltDB. I'm also using keys that can be ordered while using <code>ForEach</code> to iterate over a Bucket of tracked data.</p>
+<p>Notice that there is a single channel consumed by a go routine. This is the guy that will interact with BoltDB. I’m also using keys that can be ordered while using <code>ForEach</code> to iterate over a Bucket of tracked data.</p>
 
 <p>Notice how simple it is to create a go routine at the line. And even easier it is to create a channel. Not only that, the BoltDB API is straightforward as you can see.</p>
 
@@ -163,6 +160,7 @@
 <p>Ok, hope I can finish this project as soon as possible so I can share more thoughts and lessons learned.</p>
 
 <p>Cheers!</p>
+
 
 </div>
 
@@ -188,6 +186,15 @@
     
       <li>
         <h3>
+          <a href="/blog/2015/04/02/why-racket-is-awesome/">
+            Why Racket is Awesome
+            <small>02 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
             Sliding Window events with Clojure
             <small>27 Apr 2014</small>
@@ -200,15 +207,6 @@
           <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
             My Contribution to Puppet Forge
             <small>21 Jan 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2013/12/15/puppet-good-pattern/">
-            Puppet good pattern?
-            <small>15 Dec 2013</small>
           </a>
         </h3>
       </li>

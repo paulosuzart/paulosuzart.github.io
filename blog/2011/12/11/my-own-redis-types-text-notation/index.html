@@ -71,15 +71,14 @@
 <p>Here it is:</p>
 
 <ul>
-<li><code>$</code> means provided by some interaction with redis.</li>
-<li><code>*</code> means provided by user.</li>
-<li><code>key</code> represents a redis KEY with the value set by <code>SET</code>.</li>
-<li><code>(listkey)</code> represents a redis LIST with elements manipulated by <code>LPUSH</code> and so on.</li>
-<li><code>{hashkey [key values]}</code> represents a redis <code>HASH</code> with data set by <code>HSET</code> or <code>HMSET</code>.</li>
-<li><code>#{setkey data}</code> represents a set or sorted set.</li>
-<li><code>as $varname</code> may be used for situations where <code>INCR</code> is used to generate an ID.</li>
+  <li><code>$</code> means provided by some interaction with redis.</li>
+  <li><code>*</code> means provided by user.</li>
+  <li><code>key</code> represents a redis KEY with the value set by <code>SET</code>.</li>
+  <li><code>(listkey)</code> represents a redis LIST with elements manipulated by <code>LPUSH</code> and so on.</li>
+  <li><code>{hashkey [key values]}</code> represents a redis <code>HASH</code> with data set by <code>HSET</code> or <code>HMSET</code>.</li>
+  <li><code>#{setkey data}</code> represents a set or sorted set.</li>
+  <li><code>as $varname</code> may be used for situations where <code>INCR</code> is used to generate an ID.</li>
 </ul>
-
 
 <p>The last post user creation process may be written as:</p>
 
@@ -99,7 +98,8 @@
 (users:send:mail somemailhere@gmail.com)
 </code></pre>
 
-<p>It is the form I'm using as doc strings in a namespace. It looks great with <a href="http://www.fogus.me/fun/marginalia/">Marginalia</a>.</p>
+<p>It is the form I’m using as doc strings in a namespace. It looks great with <a href="http://www.fogus.me/fun/marginalia/">Marginalia</a>.</p>
+
 
 </div>
 
@@ -125,6 +125,15 @@
     
       <li>
         <h3>
+          <a href="/blog/2015/04/02/why-racket-is-awesome/">
+            Why Racket is Awesome
+            <small>02 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/07/07/going-back-to-go/">
             Going back to Go (golang)
             <small>07 Jul 2014</small>
@@ -137,15 +146,6 @@
           <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
             Sliding Window events with Clojure
             <small>27 Apr 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
-            My Contribution to Puppet Forge
-            <small>21 Jan 2014</small>
           </a>
         </h3>
       </li>

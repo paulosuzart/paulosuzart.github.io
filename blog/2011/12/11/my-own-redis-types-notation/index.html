@@ -70,7 +70,7 @@
 
 <p>You interact with redis through its protocol. They are divided by commands that you can apply to its different data structures. These structures are Key, String, Hashes, Lists, Sets, Sorted Sets and channels (this one used for <a href="http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">pub/sub pattern</a>).</p>
 
-<p>Since redis is key-value, it means you can store only keys with values. Right? It may sound bad at the beginning, but you get the way as you try. I'm just a newbe in redis world and I'm feeling comfortable with it.</p>
+<p>Since redis is key-value, it means you can store only keys with values. Right? It may sound bad at the beginning, but you get the way as you try. I’m just a newbe in redis world and I’m feeling comfortable with it.</p>
 
 <p>So, due to its key-value nature you should create some structures around you main structure to help you query your data. Suppose you are using a redis <code>HASH</code> to store user information. In a javascript notation:</p>
 
@@ -89,7 +89,7 @@
 <pre><code>SADD messages:welcome 21
 </code></pre>
 
-<p>Thus, your system queries a <code>SET</code> identified by <code>messages:welcome</code> key to check if it should show a welcome message to the user. And finally, at the moment of user's creation, your system wants to send some information through mail also in a back ground process. Again a helper structure.</p>
+<p>Thus, your system queries a <code>SET</code> identified by <code>messages:welcome</code> key to check if it should show a welcome message to the user. And finally, at the moment of user’s creation, your system wants to send some information through mail also in a back ground process. Again a helper structure.</p>
 
 <pre><code>LPUSH users:send:mail somemailhere@gmail.com
 </code></pre>
@@ -100,13 +100,14 @@
 
 <p><img src="https://s3.amazonaws.com/suzart.blogs.posts/redislayout/Slide1.jpg" alt="redis Types Notation" /></p>
 
-<p>Now our user's creation process using the notation we have:</p>
+<p>Now our user’s creation process using the notation we have:</p>
 
 <p><img src="https://s3.amazonaws.com/suzart.blogs.posts/redislayout/Slide4.jpg" alt="User's creation interactions" /></p>
 
 <p>It is simple and is helping a lot. Another good thing I started to do is to write queries in plain english (portuguese actually :)) to help identify which types of queries a structure is helping me to answer. To see a text version of it, visit this <a href="http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-text-notation/">new post</a>.</p>
 
-<p>I'm using <a href="https://github.com/mmcgrana/clj-redis/">clj-redis</a> interact with redis.</p>
+<p>I’m using <a href="https://github.com/mmcgrana/clj-redis/">clj-redis</a> interact with redis.</p>
+
 
 </div>
 
@@ -132,6 +133,15 @@
     
       <li>
         <h3>
+          <a href="/blog/2015/04/02/why-racket-is-awesome/">
+            Why Racket is Awesome
+            <small>02 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/blog/2014/07/07/going-back-to-go/">
             Going back to Go (golang)
             <small>07 Jul 2014</small>
@@ -144,15 +154,6 @@
           <a href="/blog/2014/04/27/sliding-window-events-with-clojure/">
             Sliding Window events with Clojure
             <small>27 Apr 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/blog/2014/01/21/my-contribution-to-puppet-forge/">
-            My Contribution to Puppet Forge
-            <small>21 Jan 2014</small>
           </a>
         </h3>
       </li>
