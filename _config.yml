@@ -11,4 +11,5 @@ permalink:    /blog/:year/:month/:day/:title/
 highlighter:  pygments
 paginate:     5
 tracking_id : 'UA-26676810-1'
-disqus_short_name: paulosuzartblog      
+disqus_short_name: paulosuzartblog
+layouts: ./_layouts
