@@ -10,5 +10,5 @@ rm -rf *
 cp -r /tmp/blog_site .
 cd blog_site
 cp -r . ../
+cd ..
 rm -rf blog_site
-

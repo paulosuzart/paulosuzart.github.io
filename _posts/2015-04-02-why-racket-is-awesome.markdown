@@ -6,6 +6,8 @@ comments: true
 categories: [racket]
 ---
 
+**UPDATE: ** Just because I posted yesterday that Rust was a unstable with nightly releases, the guys just posted today (2015 April 3rd) the [Beta release](http://blog.rust-lang.org/2015/04/03/Rust-1.0-beta.html).
+
 Finally 1st post of the year! Well, not that much to say lately. But here a piece of my sensations while playing with [Racket](http://racket-lang.org/) last two weeks.
 
 How I started looking at it
