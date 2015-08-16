@@ -14,9 +14,9 @@ Apply
 =====
 To a beginner it might be not that easy to imagine how they will find room for using `apply`. They think it will take millon years until it become useful. Wrong!
 
-After listening to some "newbysh" considerations I came across te following code in Java Script, a well known language:
+After listening to some "newbysh" considerations I came across the following code in Java Script, a well known language:
 
-```javascript
+{% highlight javascript %}
 // Imagine a function returning this
 var pessoa = [21, "paulo", "red"];
 
@@ -41,7 +41,7 @@ var apply = function(fn, args) {
       str += ",";
     }
   }
-  
+
   str += ");";
   console.log(str);
   eval(str);
@@ -49,7 +49,7 @@ var apply = function(fn, args) {
 
 // And the output is the same:
 // => Person with name paulo and age 21 and cor red
-```
+{% endhighlight %}
 After reading this snippet. He instantaneously understood everything and how helpful `apply` is. Wrapping up, ...
 
 > ## ... I told him:
@@ -59,9 +59,9 @@ For the second case it is easier to use [destructuring](http://clojure.org/speci
 
 Partial
 =======
-Believe me, there are plenty ways to explain this. From the most scientific to the most simplistic. I would say below you are going to the a simplistic like explannation. But enough to bootstrap you with your clojure code. 
-    
-``` javascript
+Believe me, there are plenty ways to explain this. From the most scientific to the most simplistic. I would say below you are going to the a simplistic like explannation. But enough to bootstrap you with your clojure code.
+
+{% highlight javascript %}
 var hello = function(saud, name) {
   console.log(saud + ", " + name);
 };
@@ -73,7 +73,7 @@ var morning = function(nome) {
 };
 
 morning("Brunovisk");
-```
+{% endhighlight %}
 
 After reading the snippet...
 
@@ -84,11 +84,10 @@ After reading the snippet...
 
 [Partial functions](http://blog.jayfields.com/2011/01/clojure-partial-and-comp.html) have a plenty use cases. To not make things "scientific" and keep then simple:
 
-Imagine you are providing functions to someone else to query a database. You might create a base function that takes an enormous number arguments that actually assemble the queries. But you want to guarantee that certain fields/constraints/indexes are present on every query. 
+Imagine you are providing functions to someone else to query a database. You might create a base function that takes an enormous number arguments that actually assemble the queries. But you want to guarantee that certain fields/constraints/indexes are present on every query.
 
 A good choice is to partially apply this base function with your prefixed well known safe arguments and then expose this produced function to your users.
 
 There are much more use cases for partial functions. A good motivation is to make your code more legible and elegant. A good post on it was published by Christopher Maier [right here](http://christophermaier.name/blog/2011/07/07/writing-elegant-clojure-code-using-higher-order-functions).
 
 Well, hope you liked the text and that it can help you faster understand things that may be left behind while studying it. See you!
-

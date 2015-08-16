@@ -6,7 +6,7 @@ comments: true
 categories: [web, perl]
 ---
 
-Few weeks ago I had to fix some [perl](http://www.perl.org) scripts. Actually make some HTTP requests, etc. 
+Few weeks ago I had to fix some [perl](http://www.perl.org) scripts. Actually make some HTTP requests, etc.
 
 That was actually my first contact with the language. Never tried before! How can it be? Well, I ended up finding an amazing community and ecosystem (mostly covered by [CPAN](http://www.perl.org/cpan.html)).
 
@@ -31,7 +31,7 @@ Another nice point is the project folder structure created by Dancer. If you are
 
 I can't open that much of the code I wrote in few nights. But I can guarantee it was funny and quick to write. A simple Http request handler is:
 
-``` perl
+{% highlight perl %}
 get '/job/:wok_id' => sub {
   my $job = mconfigs->find_one({wok_id => params->{'wok_id'}});
   template 'jobs/edit.tt', {
@@ -40,7 +40,7 @@ get '/job/:wok_id' => sub {
     server_port => config->{port},
   };
 };
-```
+{% endhighlight %}
 
 It is simple like that. You call the `get` providing the request path (notice the `:wok_id` path variable) and then your perl routine that handles the request. `mconfigs` is a simple routine that wraps the access to a MongoDB collection and a query.
 
@@ -51,19 +51,19 @@ The [template system](http://www.template-toolkit.org/index.html) is flexible an
 MongoDB and keep it fast
 ========================
 
-As I said: DO IT RIGHT NOW! So, set up a new database machine? Create schemas? No way! Get a ready to go mongo instance at (mongoHQ)[http://www.mongohq.com/home] and start coding right away. 
+As I said: DO IT RIGHT NOW! So, set up a new database machine? Create schemas? No way! Get a ready to go mongo instance at (mongoHQ)[http://www.mongohq.com/home] and start coding right away.
 
 The good part of it is no set up time, no administration time, and you can grow it as you go. Well, mongoHQ here was actually used for development and I don't intend to keep it once moving to production
 
 The benefits of mongo itself you can find around. What I want to highlight is the [aggregation](http://docs.mongodb.org/manual/aggregation/) framework in conjuntion with perl. The perl hash syntax perfectly fits mongo documents:
 
-``` perl
+{% highlight perl %}
   my $result = mexecutions->aggregate([
        {'$match' => {'alarm_enabled' => 1}},
        {'$group' => {'_id' =>  {'status' => '$status', 'wok_id'=> '$wok_id'},
                      'count' => {'$sum' => 1}}}
    ]);
-```
+{% endhighlight %}
 
 Using the aggregation framework you can easily break through any limitations when working without SQL statements with incredible performance.
 
@@ -80,5 +80,3 @@ Wrapping Up
 I'm passionate about clojure, and this blog won't change because this quick perl affair. But sincerely speaking, I haven't met any clojure equivalent for web yet. Fast to start, fast to develop, fast to test and fast to deploy. Plus strong community, plugins, etc.
 
 I'm not expert enough in perl, but it now has a nice place among my tools. I can imagne myself with front end perl stuff and crazy distributed async clojure in the back end.
-
-

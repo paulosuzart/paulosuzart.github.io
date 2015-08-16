@@ -11,7 +11,7 @@ reason, though. We are having great times at
 [Guiato](http://www.guiato.com.br).
 
 What I bring today is the set of tools I'm using nowadays for developing
-Grails and Clojure at work. 
+Grails and Clojure at work.
 
 Editor (gVim with Janus)
 ======
@@ -39,7 +39,7 @@ Get it up and running is fairly easy. Don't waste time, go set up yours.
 Just a note: Tagbar works perfect for clojure, but I work mainly with
 groovy and Grails, so you can set ctags to recognize `.groovy` content:
 
-``` bash ctags for groovy
+{% highlight bash %}
 --langdef=groovy
 --langmap=groovy:.groovy
 --regex-groovy=/^[ \t]*[(private|public|protected) ( \t)]*[A-Za-z0-9_<>]+[ \t]+([A-Za-z0-9_]+)[ \t]*\(.*\)[ \t]*{/\1/f,function,functions/
@@ -48,14 +48,14 @@ groovy and Grails, so you can set ctags to recognize `.groovy` content:
 --regex-groovy=/^[ \t]*def[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/u,public,public variables/
 --regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*class[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
 --regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*enum[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
-```
+{% endhighlight %}
 
 Search
 ======
 
 CtrlP is great, but you are not always with your vim open or with
 your project open. For this, linux offers grep and find. But waht is
-[beyond grep](http://beyondgrep.com/)? There is `ack-grep`! 
+[beyond grep](http://beyondgrep.com/)? There is `ack-grep`!
 
 Believe me you'll love it. It is extremely practical, fast and developer
 focused. So you don't even need to open gVim. Just seach, find edit and
@@ -65,10 +65,10 @@ The extra config for `ack-grep` is a new extension for groovy type and
 also support for [Puppet](https://puppetlabs.com/) manifests and
 templates.
 
-``` bash puppet types 
+{% highlight bash %}
 --type-add=groovy=.gsp
 --type-set=puppet=.pp,.erb
-```
+{% endhighlight %}
 
 Fishing the Shell
 ================
@@ -91,4 +91,3 @@ post](http://zogovic.com/post/37906589287/showing-git-branch-in-fish-shell-promp
 
 Well, hope you enjoy the tool set. Any news I'll let you know. Thanks
 for reading.
-

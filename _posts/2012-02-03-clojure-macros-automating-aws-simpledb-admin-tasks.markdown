@@ -12,7 +12,7 @@ I'm using macros to help me setting up a connection with [Amazon SimpleDB](http:
 
 SimpleDB hasn't a console, so you have interact with it using a pure html + js application provided by AWS, or do it by hand. I do prefer doing it by my own :). Then I created de following macro:
 
-``` clojure SimpleDB admin tasks 
+{% highlight clojure %}
 (defmacro boot-sdb []
 	'(do
 
@@ -26,13 +26,13 @@ SimpleDB hasn't a console, so you have interact with it using a pure html + js a
 		(require (quote [cemerick.rummage :as sdb]))
 	 	(require (quote [cemerick.rummage.encoding :as enc]))
 	 	(use (quote apix.util))
-	 	
+
 	 	(def *sdb* (sdb/create-client (env "AWS_KEYID") (env "AWS_KEY")))
 	 	(def *sdbconf* (assoc enc/keyword-strings :client *sdb*))
 	 	(println "Connected to SDB.")
 
 	 	(defn lsd [] (sdb/list-domains *sdbconf*))
-	 	
+
 
 	 	(defn mkd [d] (sdb/create-domain *sdbconf* d))
 
@@ -42,33 +42,33 @@ SimpleDB hasn't a console, so you have interact with it using a pure html + js a
 		 					(format "Total items [%s]: " d)
 		 					(:itemCount (sdb/domain-metadata *sdbconf* d))))
 
-		(defn sdb-help [] 
+		(defn sdb-help []
 			(println "Type '(lsd)' to list all domains")
 	 		(println "Type '(mkd domain-name)' to create a new domain")
-			(println "Type '(rmd domain-name)' to delete a domain")	
+			(println "Type '(rmd domain-name)' to delete a domain")
 			(println "Type '(countd domain)' to get the items count of domain")
 			(println "Type '(sdb-help)' to see this help again"))
-		
+
 		(sdb-help)))
-```
+{% endhighlight %}
 
 It saves the work of configuring the appropriate log levels as well as creating SimpleDB client using [rummage](https://github.com/cemerick/rummage) (a SimpleDB client by [@cemerick](twitter.com/cemerick)).
 
-And why a macro? Because in some extent you can see a macro as a code template, just like [Velocity](http://velocity.apache.org/) or [String Template](http://www.stringtemplate.org/). So what this macro does is just "typing" all this code on my REPL namespace, than the defined functions and vars are automatic available in the `user` namespace. 
+And why a macro? Because in some extent you can see a macro as a code template, just like [Velocity](http://velocity.apache.org/) or [String Template](http://www.stringtemplate.org/). So what this macro does is just "typing" all this code on my REPL namespace, than the defined functions and vars are automatic available in the `user` namespace.
 
 Using it is simple:
 
-``` clojure Using the macro
+{% highlight clojure %}
     (use 'the.macro.namespace)
     (boot-sdb)
     Connected to SDB.
     Type '(lsd)' to list all domains
     Type '(mkd domain-name)' to create a new domain
-    Type '(rmd domain-name)' to delete a domain 
+    Type '(rmd domain-name)' to delete a domain
     Type '(countd domain)' to get the items count of domain
     Type '(sdb-help)' to see this help again
     nil
-```
+{% endhighlight %}
 
 `(boot-sdb)` "types" all the code for you, then you can call the functions like `(lsd)` to get the list of domains in your SimpleDB.
 
@@ -77,4 +77,3 @@ If take a closer look you may notice a function call to `(env "AWS_KEYID")`. It 
 You can extend the macro to have any admin task you may need. Note that the `*sdbconf*` will become available, so you can call rummage directly without having to configure all again.
 
 That is it. Clojure is smart!
-

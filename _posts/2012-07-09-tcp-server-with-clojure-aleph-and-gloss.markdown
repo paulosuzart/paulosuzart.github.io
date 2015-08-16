@@ -3,7 +3,7 @@ layout: post
 title: "TCP Server with Clojure Aleph and Gloss"
 date: 2012-07-09 11:57
 comments: true
-categories: clojure 
+categories: clojure
 ---
 
 Hi Ho! Its been a long time without writing here. As you might know, I've just launched a new web/mobile [(Guiato)](http://www.guiato.com.br) platform to help retailers reach their customers with their existing brochures/pamphlets/flyers but now, electronically.
@@ -14,17 +14,16 @@ My team and I have a simple google docs with amazing funny statements - or facts
 
 I started creating a very simple protocol to allow clients to connect via telnet. So it is:
 
-``` bash Clacts Protocol
-
+{% highlight bash %}
 PUT <author> <via> <fact>
 LSA <author>|*
+{% endhighlight %}
 
-```
 We have two main commands, `PUT` and `LSA`. For `PUT`, author is the guy speaking, via is who noted it, and the fact is the statement itself. And for `LSA` command, you can pass the author's name and the system will return all the facts spoken by the author. `*` means you want to read all the facts.
 
 Any other command will be handled as error. Enter Gloss, a lib that allows you to draw how sequence of bytes will be converted to clojure data structures, and how clojure data will be converted to byte sequences. Here is the definition of Clacts the protocol:
 
-``` clojure Clacts Protocol with Gloss
+{% highlight clojure %}
 
 (def p (string :utf-8 :delimiters " "))
 (def lp (string :utf-8 :delimiters ["\r\n"]))
@@ -32,31 +31,31 @@ Any other command will be handled as error. Enter Gloss, a lib that allows you t
 (defcodec PUTC ["PUT" p p lp])
 (defcodec LSAC ["LSA" lp])
 (defcodec REPC ["REP" lp])
-(defcodec LSRC ["LSR" (string :utf-8 :suffix " ") 
-                      (string :utf-8 :suffix " ") 
-                      (string :utf-8 :suffix " ") 
+(defcodec LSRC ["LSR" (string :utf-8 :suffix " ")
+                      (string :utf-8 :suffix " ")
+                      (string :utf-8 :suffix " ")
                       (string :utf-8 :suffix "\r\n")])
 
 (defcodec ERRC (string :utf-8))
 
-(defcodec CMDS 
-  (header 
+(defcodec CMDS
+  (header
     p
     (fn [h] (condp = h
-    	"PUT" PUTC 
-    	"LSA" LSAC 
+    	"PUT" PUTC
+    	"LSA" LSAC
     	"REP" REPC
     	"LSR" LSRC
     	ERRC))
     (fn [b] (first b))))
 
-``` 
+{% endhighlight %}
 
 Gloss uses the concept of frames and codecs to model your bytes. As a shortcut, i'm using `p` and `lp` to identify parameters ended in `" "` and parameters ended in `\r\n`. That is, `p` and `lp` are frames that will be converted to strings, with UTF-8 encoding.
 
 Given the building block frames `p` and `lp` we can start to form the commands. We have `PUTC`, a codec that is composed by the word `PUT` plus two `p` frames and one `lp` frame. So this: `PUT Agustinho Brisola Estou acostumado a criar my propria cloud`, will be converted to: `["PUT" "Agustinho" "Brisolla" "Estou acostumado a criar minha propria cloud"]`. Bang! We have bytes straight to a clojure vector. And testing it is pretty straight forward. Look:
 
-``` clojure Testing codecs
+{% highlight clojure %}
 (use 'gloss.core 'gloss.io)
 (import java.nio.ByteBuffer)
 
@@ -66,13 +65,13 @@ Given the building block frames `p` and `lp` we can start to form the commands. 
 
 ;; ["PUT" "PUT" "Agustinho" "Brisolla Teste Fact"]
 
-```
+{% endhighlight %}
 
 There are actually more codecs (`REPC` and `LSRC`) to handle generic responses and `LSA` responses respectively. But once you understand the commands, the answers are natural consequences.
 
-Hell yeah! Neat and handy. But clients can actually use different commands, how to understand which command to decode an handle appropriately? 
+Hell yeah! Neat and handy. But clients can actually use different commands, how to understand which command to decode an handle appropriately?
 
-For these cases (and others for sure) Gloss allows you to define a `header`, which is some part of the frame that behaves as an indicative for the rest of the frames. In this case, look to the codec `CMDS`. It is composed by a header that, depending on its content, indicates the other commands. 
+For these cases (and others for sure) Gloss allows you to define a `header`, which is some part of the frame that behaves as an indicative for the rest of the frames. In this case, look to the codec `CMDS`. It is composed by a header that, depending on its content, indicates the other commands.
 
 The `head` function is a bit strange at first, but once you get it, you can go really far. `head` takes 3 args, *(i)* its own frame, *(ii)* a function that given the header it points to the right codec for the rest of the message, and *(iii)* another function that given the body of a frame, extracts the value of the header. Easy?
 
@@ -82,9 +81,9 @@ Note the default value for `ERRC`. This is for the cases where some smart user t
 
 Great, but we have to handle the requests coming from telnet clients. Now it is Aleph time:
 
-``` clojure Aleph TCP Server
+{% highlight clojure %}
 
-(defn handler 
+(defn handler
   "TCP Handler. Decodes the issued command and calls the appropriate
   function to excetion some action."
   [ch ci]
@@ -99,7 +98,7 @@ Great, but we have to handle the requests coming from telnet clients. Now it is 
 
 (start-tcp-server handler {:port 10000})
 
-```
+{% endhighlight %}
 
 When you start the tcp server without defining the frame to handle, Aleph delivers to the `handler` a series of `ByteBuffers`, what is perfect for this case. The handler function decodes the frames against the `CMDS` codec and calls the correspondent function passing as argument the channel to respond to.
 
@@ -107,9 +106,9 @@ Not that there is a default function - `handle-err` being called in case of unkn
 
 The functions to list and put facts into the database use the same `CMDS` codec to encode reply messages. Look:
 
-``` clojure Inserting facts and replying
+{% highlight clojure %}
 
-(defn put-fact 
+(defn put-fact
   "Inserts the fact into db according to proto/PUTC.
   Takes the decoded data end the channel to respond."
   [data ch]
@@ -121,7 +120,7 @@ The functions to list and put facts into the database use the same `CMDS` codec 
        :fact   (last data)}))
   (enqueue ch (encode prt/CMDS ["REP" "Fact recorded!! Have fun with it."])))
 
-```
+{% endhighlight %}
 
 `REP` is a command encoded by `REPC` codec as defined above. The codec is defined by the header of the message (`REP`). What is pretty useful and saves your from using `if` to do that.
 
@@ -133,7 +132,7 @@ UPDATE 2012/08/03
 =================
 The great brain [@ztellman](http://twitter.com/ztellman), the creator of gloss, gave me a hand [pulling](https://github.com/paulosuzart/clact/pull/1) some changes in the code. What he suggested was to specify the frame for the server. So Aleph takes care of the protocol being encoded/decoded and you interact solely with clojure data structures. The change was:
 
-``` clojure Zach suggestions
+{% highlight clojure %}
 (start-tcp-server handler {:port (:port opts), :frame prt/CMDS})
 
 ;;what leads us to check for commands like this:
@@ -164,9 +163,8 @@ The great brain [@ztellman](http://twitter.com/ztellman), the creator of gloss, 
                      via author fact)]))
 
 ;; no need for manual encoding :)
-```
+{% endhighlight %}
 
 This is great because the best thing on every clojure lib is use pure clojure data structures to keep things uniform.
 
 Thanks to Zach for the precious tips.
-
