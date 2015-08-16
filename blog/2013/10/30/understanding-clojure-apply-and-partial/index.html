@@ -66,43 +66,42 @@
 <h1 id="apply">Apply</h1>
 <p>To a beginner it might be not that easy to imagine how they will find room for using <code>apply</code>. They think it will take millon years until it become useful. Wrong!</p>
 
-<p>After listening to some “newbysh” considerations I came across te following code in Java Script, a well known language:</p>
+<p>After listening to some “newbysh” considerations I came across the following code in Java Script, a well known language:</p>
 
-<p>```javascript
-// Imagine a function returning this
-var pessoa = [21, “paulo”, “red”];</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Imagine a function returning this</span>
+<span class="kd">var</span> <span class="nx">pessoa</span> <span class="o">=</span> <span class="p">[</span><span class="mi">21</span><span class="p">,</span> <span class="s2">&quot;paulo&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">];</span>
 
-<p>// And you have the following function to user
-var printer = function(age, name, color) {
-    console.log(“Person with name “ + name + “ and age “ + age + “ and cor “ + color);
-};</p>
+<span class="c1">// And you have the following function to user</span>
+<span class="kd">var</span> <span class="nx">printer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">age</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">color</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Person with name &quot;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot; and age &quot;</span> <span class="o">+</span> <span class="nx">age</span> <span class="o">+</span> <span class="s2">&quot; and cor &quot;</span> <span class="o">+</span> <span class="nx">color</span><span class="p">);</span>
+<span class="p">};</span>
 
-<p>// You’ll probably do this
-printer(pessoa[0], pessoa[1], “vermelho”);
-// =&gt; Person with name paulo and age 21 and cor red
-// But imagine you could do this:
-apply(printer, pessoa);</p>
+<span class="c1">// You&#39;ll probably do this</span>
+<span class="nx">printer</span><span class="p">(</span><span class="nx">pessoa</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">pessoa</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;vermelho&quot;</span><span class="p">);</span>
+<span class="c1">// =&gt; Person with name paulo and age 21 and cor red</span>
+<span class="c1">// But imagine you could do this:</span>
+<span class="nx">apply</span><span class="p">(</span><span class="nx">printer</span><span class="p">,</span> <span class="nx">pessoa</span><span class="p">);</span>
 
-<p>// This would be possible using the following apply function</p>
+<span class="c1">// This would be possible using the following apply function</span>
 
-<p>var apply = function(fn, args) {
-  var str = “fn(“;
-  for (x = 0; x &lt; args.length; x++)  {
-    str = str + “args[“+x+”]”;
-    if (x &lt; args.length - 1) {
-      str += “,”;
-    }
-  }</p>
+<span class="kd">var</span> <span class="nx">apply</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="s2">&quot;fn(&quot;</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">x</span><span class="o">++</span><span class="p">)</span>  <span class="p">{</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span> <span class="o">+</span> <span class="s2">&quot;args[&quot;</span><span class="o">+</span><span class="nx">x</span><span class="o">+</span><span class="s2">&quot;]&quot;</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">str</span> <span class="o">+=</span> <span class="s2">&quot;,&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 
-<p>str += “);”;
-  console.log(str);
-  eval(str);
-};</p>
+  <span class="nx">str</span> <span class="o">+=</span> <span class="s2">&quot;);&quot;</span><span class="p">;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">str</span><span class="p">);</span>
+  <span class="nb">eval</span><span class="p">(</span><span class="nx">str</span><span class="p">);</span>
+<span class="p">};</span>
 
-<p>// And the output is the same:
-// =&gt; Person with name paulo and age 21 and cor red
-```
-After reading this snippet. He instantaneously understood everything and how helpful <code>apply</code> is. Wrapping up, …</p>
+<span class="c1">// And the output is the same:</span>
+<span class="c1">// =&gt; Person with name paulo and age 21 and cor red</span></code></pre></div>
+
+<p>After reading this snippet. He instantaneously understood everything and how helpful <code>apply</code> is. Wrapping up, …</p>
 
 <blockquote>
   <h2 id="i-told-him">… I told him:</h2>
@@ -114,19 +113,17 @@ After reading this snippet. He instantaneously understood everything and how hel
 <h1 id="partial">Partial</h1>
 <p>Believe me, there are plenty ways to explain this. From the most scientific to the most simplistic. I would say below you are going to the a simplistic like explannation. But enough to bootstrap you with your clojure code.</p>
 
-<p>``` javascript
-var hello = function(saud, name) {
-  console.log(saud + “, “ + name);
-};</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">hello</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">saud</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">saud</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">);</span>
+<span class="p">};</span>
 
-<p>hello(“ola”, “brunolandia”);</p>
+<span class="nx">hello</span><span class="p">(</span><span class="s2">&quot;ola&quot;</span><span class="p">,</span> <span class="s2">&quot;brunolandia&quot;</span><span class="p">);</span>
 
-<p>var morning = function(nome) {
-  hello(“Bom dia”, nome);
-};</p>
+<span class="kd">var</span> <span class="nx">morning</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">nome</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">hello</span><span class="p">(</span><span class="s2">&quot;Bom dia&quot;</span><span class="p">,</span> <span class="nx">nome</span><span class="p">);</span>
+<span class="p">};</span>
 
-<p>morning(“Brunovisk”);
-```</p>
+<span class="nx">morning</span><span class="p">(</span><span class="s2">&quot;Brunovisk&quot;</span><span class="p">);</span></code></pre></div>
 
 <p>After reading the snippet…</p>
 
@@ -146,7 +143,6 @@ var hello = function(saud, name) {
 <p>There are much more use cases for partial functions. A good motivation is to make your code more legible and elegant. A good post on it was published by Christopher Maier <a href="http://christophermaier.name/blog/2011/07/07/writing-elegant-clojure-code-using-higher-order-functions">right here</a>.</p>
 
 <p>Well, hope you liked the text and that it can help you faster understand things that may be left behind while studying it. See you!</p>
-
 
 </div>
 

@@ -67,22 +67,20 @@
 
 <p>To do the conditional evaluation, I decided to add an extra key to <code>:immutant</code> entry in my project definition. The entry <code>:env</code> is an <a href="http://immutant.org/documentation/current/initialization.html#sec-3-1">arbitrary configuration value</a>. Lets take a look:</p>
 
-<p><code>clojure Silly Project
-(defproject tserver "0.1.0-SNAPSHOT"
-  :description "A foo project"
-  :url "http://foo.com/"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.4.0"]
-                 [compojure "1.0.2"]
-                 ;... and many other dependecies
-  :jvm-opts ["-Xmx2g" "-server"]
-  :immutant {:init "tserver.init/init"} ;; our custo immutant init function
-  :profiles {:dev {:immutant {:context-path "/"
-                              :nrepl-port 4242
-                              :lein-profiles [:dev]
-                              :env :dev}}}) ;:dev will identify which config file to load
-</code></p>
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defproject </span><span class="nv">tserver</span> <span class="s">&quot;0.1.0-SNAPSHOT&quot;</span>
+  <span class="ss">:description</span> <span class="s">&quot;A foo project&quot;</span>
+  <span class="ss">:url</span> <span class="s">&quot;http://foo.com/&quot;</span>
+  <span class="ss">:license</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Eclipse Public License&quot;</span>
+            <span class="ss">:url</span> <span class="s">&quot;http://www.eclipse.org/legal/epl-v10.html&quot;</span><span class="p">}</span>
+  <span class="ss">:dependencies</span> <span class="p">[[</span><span class="nv">org.clojure/clojure</span> <span class="s">&quot;1.4.0&quot;</span><span class="p">]</span>
+                 <span class="p">[</span><span class="nv">compojure</span> <span class="s">&quot;1.0.2&quot;</span><span class="p">]</span>
+                 <span class="c1">;... and many other dependecies</span>
+  <span class="ss">:jvm-opts</span> <span class="p">[</span><span class="s">&quot;-Xmx2g&quot;</span> <span class="s">&quot;-server&quot;</span><span class="p">]</span>
+  <span class="ss">:immutant</span> <span class="p">{</span><span class="ss">:init</span> <span class="s">&quot;tserver.init/init&quot;</span><span class="p">}</span> <span class="c1">;; our custo immutant init function</span>
+  <span class="ss">:profiles</span> <span class="p">{</span><span class="ss">:dev</span> <span class="p">{</span><span class="ss">:immutant</span> <span class="p">{</span><span class="ss">:context-path</span> <span class="s">&quot;/&quot;</span>
+                              <span class="ss">:nrepl-port</span> <span class="mi">4242</span>
+                              <span class="ss">:lein-profiles</span> <span class="p">[</span><span class="ss">:dev</span><span class="p">]</span>
+                              <span class="ss">:env</span> <span class="ss">:dev</span><span class="p">}}})</span> <span class="c1">;:dev will identify which config file to load</span></code></pre></div>
 
 <p>In this sample <code>project.clj</code> you find <code>:immutant</code> directly under the project definition. This key is used to, regardless of the environment, inform immutant which funtion to call when your app starts up. In this case <code>tserver.init/init</code>, that we will further analyze.</p>
 
@@ -99,69 +97,62 @@ One of them is the use of <a href="http://clojuredocs.org/clojure_core/clojure.c
 
 <p>The <code>init</code> funtion here will simply call the <code>load-config</code>, that is in charge of loading the config file. Look:</p>
 
-<p>``` clojure Silly Project
-(ns tserver.init
-  (:use [clojure.tools.logging :only (info error debug)]))</p>
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">ns </span><span class="nv">tserver.init</span>
+  <span class="p">(</span><span class="ss">:use</span> <span class="p">[</span><span class="nv">clojure.tools.logging</span> <span class="ss">:only</span> <span class="p">(</span><span class="nf">info</span> <span class="nv">error</span> <span class="nv">debug</span><span class="p">)]))</span>
 
-<p>(defn setup-config-ns [e]
-	(binding [<em>ns</em> <em>ns</em>]
-      (in-ns ‘tserver.config)
-      (refer-clojure)
-      (use ‘[clojure.main :only (load-script)])
-      (require ‘[immutant.messaging :as msg]
-               ‘[immutant.web :as web]
-               ‘[immutant.util :as util])))</p>
+<span class="p">(</span><span class="kd">defn </span><span class="nv">setup-config-ns</span> <span class="p">[</span><span class="nv">e</span><span class="p">]</span>
+	<span class="p">(</span><span class="nb">binding </span><span class="p">[</span><span class="nv">*ns*</span> <span class="nv">*ns*</span><span class="p">]</span>
+      <span class="p">(</span><span class="nb">in-ns </span><span class="ss">&#39;tserver.config</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">refer-clojure</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">use</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">clojure.main</span> <span class="ss">:only</span> <span class="p">(</span><span class="nf">load-script</span><span class="p">)])</span>
+      <span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">immutant.messaging</span> <span class="ss">:as</span> <span class="nv">msg</span><span class="p">]</span>
+               <span class="o">&#39;</span><span class="p">[</span><span class="nv">immutant.web</span> <span class="ss">:as</span> <span class="nv">web</span><span class="p">]</span>
+               <span class="o">&#39;</span><span class="p">[</span><span class="nv">immutant.util</span> <span class="ss">:as</span> <span class="nv">util</span><span class="p">])))</span>
 
-<p>(defn load-config 
-  “Attempts to evaluate the specified env file defined by <code>:env</code> 
-  in the <code>project.clj</code>. <code>:env</code> is a immutant custom config.
-  <code>:env</code> MUST be a keyword: Ex.: :dev, :prod :office
-  Uses :dev by default.
-  Note: The absence of the requrested file will prevent the server to start.
-  These siles MUST be located at `src/tserver/config/%s.clj”
-  [] 
-  (binding [<em>ns</em> <em>ns</em>]
-    (in-ns ‘tserver.config)
-    (let [ev (get-in (immutant.registry/get :config) [:env] :dev)
-    	    config-file (format “src/tserver/config/%s.clj” (name ev))]
-  	  (setup-config-ns ev)
-      (info “Using config file “ config-file)
-  	  (load-file config-file)
-  	  (immutant.registry/put :env ev))))</p>
+<span class="p">(</span><span class="kd">defn </span><span class="nv">load-config</span>
+  <span class="s">&quot;Attempts to evaluate the specified env file defined by `:env`</span>
+<span class="s">  in the `project.clj`. `:env` is a immutant custom config.</span>
+<span class="s">  `:env` MUST be a keyword: Ex.: :dev, :prod :office</span>
+<span class="s">  Uses :dev by default.</span>
+<span class="s">  Note: The absence of the requrested file will prevent the server to start.</span>
+<span class="s">  These siles MUST be located at `src/tserver/config/%s.clj&quot;</span>
+  <span class="p">[]</span>
+  <span class="p">(</span><span class="nb">binding </span><span class="p">[</span><span class="nv">*ns*</span> <span class="nv">*ns*</span><span class="p">]</span>
+    <span class="p">(</span><span class="nb">in-ns </span><span class="ss">&#39;tserver.config</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">ev</span> <span class="p">(</span><span class="nf">get-in</span> <span class="p">(</span><span class="nf">immutant.registry/get</span> <span class="ss">:config</span><span class="p">)</span> <span class="p">[</span><span class="ss">:env</span><span class="p">]</span> <span class="ss">:dev</span><span class="p">)</span>
+    	    <span class="nv">config-file</span> <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;src/tserver/config/%s.clj&quot;</span> <span class="p">(</span><span class="nb">name </span><span class="nv">ev</span><span class="p">))]</span>
+  	  <span class="p">(</span><span class="nf">setup-config-ns</span> <span class="nv">ev</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">info</span> <span class="s">&quot;Using config file &quot;</span> <span class="nv">config-file</span><span class="p">)</span>
+  	  <span class="p">(</span><span class="nb">load-file </span><span class="nv">config-file</span><span class="p">)</span>
+  	  <span class="p">(</span><span class="nf">immutant.registry/put</span> <span class="ss">:env</span> <span class="nv">ev</span><span class="p">))))</span>
 
-<p>(defn init []
-  ;;may do some stuff before
-  (load-config)) ;;may do some stuff after
-```</p>
+<span class="p">(</span><span class="kd">defn </span><span class="nv">init</span> <span class="p">[]</span>
+  <span class="c1">;;may do some stuff before</span>
+  <span class="p">(</span><span class="nf">load-config</span><span class="p">))</span> <span class="c1">;;may do some stuff after</span></code></pre></div>
 
 <p>And finally, our config file containing the required configurations. It can be anything you need.</p>
 
-<p>``` clojure Silly Project
-(defn handler 
-    [r] ((build-routes) r))</p>
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">handler</span>
+    <span class="p">[</span><span class="nv">r</span><span class="p">]</span> <span class="p">((</span><span class="nf">build-routes</span><span class="p">)</span> <span class="nv">r</span><span class="p">))</span>
 
-<p>(web/start handler
-  :reload true)</p>
+<span class="p">(</span><span class="nf">web/start</span> <span class="nv">handler</span>
+  <span class="ss">:reload</span> <span class="nv">true</span><span class="p">)</span>
 
-<p>(msg/start “/queue/delivery.status”)</p>
+<span class="p">(</span><span class="nf">msg/start</span> <span class="s">&quot;/queue/delivery.status&quot;</span><span class="p">)</span>
 
-<p>(msg/respond “/queue/delivery.status” handle-delivery-status)</p>
+<span class="p">(</span><span class="nf">msg/respond</span> <span class="s">&quot;/queue/delivery.status&quot;</span> <span class="nv">handle-delivery-status</span><span class="p">)</span>
 
-<p>(register-job #’import-job)
-(register-job #’check-import)
-;register-job is function not provided here
-;since the intention is tho show the configuration solution
-```</p>
+<span class="p">(</span><span class="nf">register-job</span> <span class="o">#</span><span class="ss">&#39;import-job</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">register-job</span> <span class="o">#</span><span class="ss">&#39;check-import</span><span class="p">)</span>
+<span class="c1">;register-job is function not provided here</span>
+<span class="c1">;since the intention is tho show the configuration solution</span></code></pre></div>
 
 <p>Now, to deploy and start the app with the given profile we simply do:</p>
 
-<p><code>bash
-lein with-profile dev immutant deploy
-lein immutant run
-</code></p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">lein with-profile dev immutant deploy
+lein immutant run</code></pre></div>
 
 <p>Voila! This will load your <code>dev.clj</code> file and set up your queues, jobs, web-context, whatever you want. This is useful, and I would risk to say mandatory today. You probably have sereval environments where your app resides before going to prodution, and each of them with different names, addresses, pool sizes, queue names, database to connect, etc. And you can easily give to your app the intelligence to load what is more appropriate.</p>
-
 
 </div>
 

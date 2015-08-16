@@ -93,16 +93,14 @@ is your code outlook similar to what popular IDEs offer.</li>
 <p>Just a note: Tagbar works perfect for clojure, but I work mainly with
 groovy and Grails, so you can set ctags to recognize <code>.groovy</code> content:</p>
 
-<p><code>bash ctags for groovy
---langdef=groovy
---langmap=groovy:.groovy
---regex-groovy=/^[ \t]*[(private|public|protected) ( \t)]*[A-Za-z0-9_&lt;&gt;]+[ \t]+([A-Za-z0-9_]+)[ \t]*\(.*\)[ \t]*{/\1/f,function,functions/
---regex-groovy=/^[ \t]*def[ \t]+([A-Za-z0-9_]+)[ \t]*\=[ \t]*\{/\1/f,function,functions/
---regex-groovy=/^[ \t]*private def[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/v,private,private variables/
---regex-groovy=/^[ \t]*def[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/u,public,public variables/
---regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*class[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
---regex-groovy=/^[ \t]*[abstract ( \t)]*[(private|public) ( \t)]*enum[ \t]+([A-Za-z0-9_]+)[ \t]*/\1/c,class,classes/
-</code></p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">--langdef<span class="o">=</span>groovy
+--langmap<span class="o">=</span>groovy:.groovy
+--regex-groovy<span class="o">=</span>/^<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*<span class="o">[(</span>private<span class="p">|</span>public<span class="p">|</span>protected<span class="o">)</span> <span class="o">(</span> <span class="se">\t</span><span class="o">)]</span>*<span class="o">[</span>A-Za-z0-9_&lt;&gt;<span class="o">]</span>+<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>+<span class="o">([</span>A-Za-z0-9_<span class="o">]</span>+<span class="o">)[</span> <span class="se">\t</span><span class="o">]</span>*<span class="se">\(</span>.*<span class="se">\)</span><span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*<span class="o">{</span>/<span class="se">\1</span>/f,function,functions/
+--regex-groovy<span class="o">=</span>/^<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*def<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>+<span class="o">([</span>A-Za-z0-9_<span class="o">]</span>+<span class="o">)[</span> <span class="se">\t</span><span class="o">]</span>*<span class="se">\=</span><span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*<span class="se">\{</span>/<span class="se">\1</span>/f,function,functions/
+--regex-groovy<span class="o">=</span>/^<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*private def<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>+<span class="o">([</span>A-Za-z0-9_<span class="o">]</span>+<span class="o">)[</span> <span class="se">\t</span><span class="o">]</span>*/<span class="se">\1</span>/v,private,private variables/
+--regex-groovy<span class="o">=</span>/^<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*def<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>+<span class="o">([</span>A-Za-z0-9_<span class="o">]</span>+<span class="o">)[</span> <span class="se">\t</span><span class="o">]</span>*/<span class="se">\1</span>/u,public,public variables/
+--regex-groovy<span class="o">=</span>/^<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*<span class="o">[</span>abstract <span class="o">(</span> <span class="se">\t</span><span class="o">)]</span>*<span class="o">[(</span>private<span class="p">|</span>public<span class="o">)</span> <span class="o">(</span> <span class="se">\t</span><span class="o">)]</span>*class<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>+<span class="o">([</span>A-Za-z0-9_<span class="o">]</span>+<span class="o">)[</span> <span class="se">\t</span><span class="o">]</span>*/<span class="se">\1</span>/c,class,classes/
+--regex-groovy<span class="o">=</span>/^<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>*<span class="o">[</span>abstract <span class="o">(</span> <span class="se">\t</span><span class="o">)]</span>*<span class="o">[(</span>private<span class="p">|</span>public<span class="o">)</span> <span class="o">(</span> <span class="se">\t</span><span class="o">)]</span>*enum<span class="o">[</span> <span class="se">\t</span><span class="o">]</span>+<span class="o">([</span>A-Za-z0-9_<span class="o">]</span>+<span class="o">)[</span> <span class="se">\t</span><span class="o">]</span>*/<span class="se">\1</span>/c,class,classes/</code></pre></div>
 
 <h1 id="search">Search</h1>
 
@@ -118,10 +116,8 @@ commit!</p>
 also support for <a href="https://puppetlabs.com/">Puppet</a> manifests and
 templates.</p>
 
-<p><code>bash puppet types 
---type-add=groovy=.gsp
---type-set=puppet=.pp,.erb
-</code></p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">--type-add<span class="o">=</span><span class="nv">groovy</span><span class="o">=</span>.gsp
+--type-set<span class="o">=</span><span class="nv">puppet</span><span class="o">=</span>.pp,.erb</code></pre></div>
 
 <h1 id="fishing-the-shell">Fishing the Shell</h1>
 
@@ -142,7 +138,6 @@ post</a>.</p>
 
 <p>Well, hope you enjoy the tool set. Any news I’ll let you know. Thanks
 for reading.</p>
-
 
 </div>
 

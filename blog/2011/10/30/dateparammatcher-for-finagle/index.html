@@ -65,48 +65,45 @@
 
 <p>During this project I needed to extract from the query string, a param to be parsed to a twitter.util.Time. I ended up with a Param Matcher to be used my a pattern match agains the requested path. The use of this Param Patcher is:</p>
 
-<p><code>scala Using the DateParamMatcher
-//...
-Path(request.path) :? request.params match {
-       case Root / "myPath" :? RequestTime(requestTimeParam)  =&gt; //do something
-//..
-}
-//Where RequestTime is defined as
- object RequestTime extends DateParamMatcher("requestTimeParam")
-</code>
-The source of DateParamMatcher is the following.
-``` scala Param Matcher for twitter.util.Time
-import com.twitter.util.Time._
-import com.twitter.util.Time
-import java.text.ParseException
-import com.twitter.finagle.http.path._
-import com.twitter.finagle.http.ParamMap</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">//...</span>
+<span class="nc">Path</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="o">)</span> <span class="o">:?</span> <span class="n">request</span><span class="o">.</span><span class="n">params</span> <span class="k">match</span> <span class="o">{</span>
+       <span class="k">case</span> <span class="nc">Root</span> <span class="o">/</span> <span class="s">&quot;myPath&quot;</span> <span class="o">:?</span> <span class="nc">RequestTime</span><span class="o">(</span><span class="n">requestTimeParam</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="c1">//do something</span>
+<span class="c1">//..</span>
+<span class="o">}</span>
+<span class="c1">//Where RequestTime is defined as</span>
+ <span class="k">object</span> <span class="nc">RequestTime</span> <span class="k">extends</span> <span class="nc">DateParamMatcher</span><span class="o">(</span><span class="s">&quot;requestTimeParam&quot;</span><span class="o">)</span></code></pre></div>
 
-<p>/**
- * Extractor that takes a request parameter and converts it to a {twitter.util.Time}.
- * The date format should conform with {twitter.util.Time} default format.
- */
-abstract class DateParamMatcher(name: String) {</p>
+<p>The source of DateParamMatcher is the following.</p>
 
-<p>def unapply(params: ParamMap): Option[Time] = params.get(name) flatMap { value =&gt;
-    try {
-      Some(at(value))
-    } catch {
-      case ex: ParseException =&gt;
-        None
-    }
-  }
-}</p>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">import</span> <span class="nn">com.twitter.util.Time._</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Time</span>
+<span class="k">import</span> <span class="nn">java.text.ParseException</span>
+<span class="k">import</span> <span class="nn">com.twitter.finagle.http.path._</span>
+<span class="k">import</span> <span class="nn">com.twitter.finagle.http.ParamMap</span>
 
-<p>```
-Finagle also provides an abstract <code>com.twitter.finagle.http.path.ParamMatcher</code> as well as <code>LongParamMatcher</code> and <code>IntParamMatcher</code> in the same package. They are actually Scala  Extractors (very well explained <a href="http://codemonkeyism.com/scala-goodness-extractors/">here</a> by @codemonkeyism). This is a practical way to extract values from a query string and put it available at your code already parsed.</p>
+<span class="cm">/**</span>
+<span class="cm"> * Extractor that takes a request parameter and converts it to a {twitter.util.Time}.</span>
+<span class="cm"> * The date format should conform with {twitter.util.Time} default format.</span>
+<span class="cm"> */</span>
+<span class="k">abstract</span> <span class="k">class</span> <span class="nc">DateParamMatcher</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="n">unapply</span><span class="o">(</span><span class="n">params</span><span class="k">:</span> <span class="kt">ParamMap</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Time</span><span class="o">]</span> <span class="k">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">name</span><span class="o">)</span> <span class="n">flatMap</span> <span class="o">{</span> <span class="n">value</span> <span class="k">=&gt;</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="nc">Some</span><span class="o">(</span><span class="n">at</span><span class="o">(</span><span class="n">value</span><span class="o">))</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="n">ex</span><span class="k">:</span> <span class="kt">ParseException</span> <span class="o">=&gt;</span>
+        <span class="nc">None</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<p>Finagle also provides an abstract <code>com.twitter.finagle.http.path.ParamMatcher</code> as well as <code>LongParamMatcher</code> and <code>IntParamMatcher</code> in the same package. They are actually Scala  Extractors (very well explained <a href="http://codemonkeyism.com/scala-goodness-extractors/">here</a> by @codemonkeyism). This is a practical way to extract values from a query string and put it available at your code already parsed.</p>
 
 <p>Note that if the param named <code>requestTimeParam</code> is not present or carries a invalid value for <code>Time</code> in the query string the <code>None</code> value is returned.</p>
 
 <p>Although easy to build and extract params from query string and requested path, it is not a Finagle strength. It is kinda limited. A better abstraction is offered by <a href="https://github.com/unfiltered/unfiltered">Unfiltered</a>(another <a href="http://twitter.com/n8han">@n8han’s</a> great job).</p>
 
 <p>Hope you enjoy it.</p>
-
 
 </div>
 

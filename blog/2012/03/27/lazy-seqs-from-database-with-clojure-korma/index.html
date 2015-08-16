@@ -87,12 +87,10 @@
 
 <p>Just to play around, try:</p>
 
-<p><code>clojure Playing lazy
-    (defn until-ten 
-        ([] (until-ten 0))
-        ([n] (when (&lt;= n 10) (cons n (lazy-seq (until-ten (inc n)))))))
-    (until-ten)
-</code></p>
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">until-ten</span>
+        <span class="p">([]</span> <span class="p">(</span><span class="nf">until-ten</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="p">([</span><span class="nv">n</span><span class="p">]</span> <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nb">&lt;= </span><span class="nv">n</span> <span class="mi">10</span><span class="p">)</span> <span class="p">(</span><span class="nb">cons </span><span class="nv">n</span> <span class="p">(</span><span class="nf">lazy-seq</span> <span class="p">(</span><span class="nf">until-ten</span> <span class="p">(</span><span class="nb">inc </span><span class="nv">n</span><span class="p">)))))))</span>
+    <span class="p">(</span><span class="nf">until-ten</span><span class="p">)</span></code></pre></div>
 
 <p>It returns from 0 to 10, being a finite lazy sequence just like the source data set. One can use <code>take-while</code> to limit the results of a lazy-seq. You can compute really big sets using the laziness approach.</p>
 
@@ -102,15 +100,13 @@
 
 <p><em>A way to solve this bizarre code is using <a href="http://clojuredocs.org/clojure_core/clojure.core/doseq"><code>doseq</code></a> instead of <code>map</code> or <code>pmap</code>. It is a function that can bind each value of a <code>seq</code> and executes its body:</em></p>
 
-<p>``` clojure Changing to <code>doseq</code>
-    ;;using until-ten
-    (doseq [i (until-ten)]
-        (println “Printing “ i))</p>
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="c1">;;using until-ten</span>
+    <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">i</span> <span class="p">(</span><span class="nf">until-ten</span><span class="p">)]</span>
+        <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Printing &quot;</span> <span class="nv">i</span><span class="p">))</span>
 
-<pre><code>;;using korma
-(doseq [page (extract-every fetch-every 20)]
-    (persist page)) ``` 
-</code></pre>
+    <span class="c1">;;using korma</span>
+    <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">page</span> <span class="p">(</span><span class="nf">extract-every</span> <span class="nv">fetch-every</span> <span class="mi">20</span><span class="p">)]</span>
+        <span class="p">(</span><span class="nf">persist</span> <span class="nv">page</span><span class="p">))</span></code></pre></div>
 
 <p><em>In this case, <code>doseq</code> does not retains the head of sequences, so there is no <code>seq</code> with tons being produced.</em></p>
 

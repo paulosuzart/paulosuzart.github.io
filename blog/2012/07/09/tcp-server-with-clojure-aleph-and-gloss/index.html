@@ -67,59 +67,49 @@
 
 <p>I started creating a very simple protocol to allow clients to connect via telnet. So it is:</p>
 
-<p>``` bash Clacts Protocol</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">PUT &lt;author&gt; &lt;via&gt; &lt;fact&gt;
+LSA &lt;author&gt;<span class="p">|</span>*</code></pre></div>
 
-<p>PUT <author> <via> <fact>
-LSA <author>|*</author></fact></via></author></p>
-
-<p>```
-We have two main commands, <code>PUT</code> and <code>LSA</code>. For <code>PUT</code>, author is the guy speaking, via is who noted it, and the fact is the statement itself. And for <code>LSA</code> command, you can pass the author’s name and the system will return all the facts spoken by the author. <code>*</code> means you want to read all the facts.</p>
+<p>We have two main commands, <code>PUT</code> and <code>LSA</code>. For <code>PUT</code>, author is the guy speaking, via is who noted it, and the fact is the statement itself. And for <code>LSA</code> command, you can pass the author’s name and the system will return all the facts spoken by the author. <code>*</code> means you want to read all the facts.</p>
 
 <p>Any other command will be handled as error. Enter Gloss, a lib that allows you to draw how sequence of bytes will be converted to clojure data structures, and how clojure data will be converted to byte sequences. Here is the definition of Clacts the protocol:</p>
 
-<p>``` clojure Clacts Protocol with Gloss</p>
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="nv">p</span> <span class="p">(</span><span class="nf">string</span> <span class="ss">:utf-8</span> <span class="ss">:delimiters</span> <span class="s">&quot; &quot;</span><span class="p">))</span>
+<span class="p">(</span><span class="k">def </span><span class="nv">lp</span> <span class="p">(</span><span class="nf">string</span> <span class="ss">:utf-8</span> <span class="ss">:delimiters</span> <span class="p">[</span><span class="s">&quot;\r\n&quot;</span><span class="p">]))</span>
 
-<p>(def p (string :utf-8 :delimiters “ “))
-(def lp (string :utf-8 :delimiters [“\r\n”]))</p>
+<span class="p">(</span><span class="nf">defcodec</span> <span class="nv">PUTC</span> <span class="p">[</span><span class="s">&quot;PUT&quot;</span> <span class="nv">p</span> <span class="nv">p</span> <span class="nv">lp</span><span class="p">])</span>
+<span class="p">(</span><span class="nf">defcodec</span> <span class="nv">LSAC</span> <span class="p">[</span><span class="s">&quot;LSA&quot;</span> <span class="nv">lp</span><span class="p">])</span>
+<span class="p">(</span><span class="nf">defcodec</span> <span class="nv">REPC</span> <span class="p">[</span><span class="s">&quot;REP&quot;</span> <span class="nv">lp</span><span class="p">])</span>
+<span class="p">(</span><span class="nf">defcodec</span> <span class="nv">LSRC</span> <span class="p">[</span><span class="s">&quot;LSR&quot;</span> <span class="p">(</span><span class="nf">string</span> <span class="ss">:utf-8</span> <span class="ss">:suffix</span> <span class="s">&quot; &quot;</span><span class="p">)</span>
+                      <span class="p">(</span><span class="nf">string</span> <span class="ss">:utf-8</span> <span class="ss">:suffix</span> <span class="s">&quot; &quot;</span><span class="p">)</span>
+                      <span class="p">(</span><span class="nf">string</span> <span class="ss">:utf-8</span> <span class="ss">:suffix</span> <span class="s">&quot; &quot;</span><span class="p">)</span>
+                      <span class="p">(</span><span class="nf">string</span> <span class="ss">:utf-8</span> <span class="ss">:suffix</span> <span class="s">&quot;\r\n&quot;</span><span class="p">)])</span>
 
-<p>(defcodec PUTC [“PUT” p p lp])
-(defcodec LSAC [“LSA” lp])
-(defcodec REPC [“REP” lp])
-(defcodec LSRC [“LSR” (string :utf-8 :suffix “ “) 
-                      (string :utf-8 :suffix “ “) 
-                      (string :utf-8 :suffix “ “) 
-                      (string :utf-8 :suffix “\r\n”)])</p>
+<span class="p">(</span><span class="nf">defcodec</span> <span class="nv">ERRC</span> <span class="p">(</span><span class="nf">string</span> <span class="ss">:utf-8</span><span class="p">))</span>
 
-<p>(defcodec ERRC (string :utf-8))</p>
-
-<p>(defcodec CMDS 
-  (header 
-    p
-    (fn [h] (condp = h
-    	“PUT” PUTC 
-    	“LSA” LSAC 
-    	“REP” REPC
-    	“LSR” LSRC
-    	ERRC))
-    (fn [b] (first b))))</p>
-
-<p>```</p>
+<span class="p">(</span><span class="nf">defcodec</span> <span class="nv">CMDS</span>
+  <span class="p">(</span><span class="nf">header</span>
+    <span class="nv">p</span>
+    <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">h</span><span class="p">]</span> <span class="p">(</span><span class="nf">condp</span> <span class="nb">= </span><span class="nv">h</span>
+    	<span class="s">&quot;PUT&quot;</span> <span class="nv">PUTC</span>
+    	<span class="s">&quot;LSA&quot;</span> <span class="nv">LSAC</span>
+    	<span class="s">&quot;REP&quot;</span> <span class="nv">REPC</span>
+    	<span class="s">&quot;LSR&quot;</span> <span class="nv">LSRC</span>
+    	<span class="nv">ERRC</span><span class="p">))</span>
+    <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">b</span><span class="p">]</span> <span class="p">(</span><span class="nb">first </span><span class="nv">b</span><span class="p">))))</span></code></pre></div>
 
 <p>Gloss uses the concept of frames and codecs to model your bytes. As a shortcut, i’m using <code>p</code> and <code>lp</code> to identify parameters ended in <code>" "</code> and parameters ended in <code>\r\n</code>. That is, <code>p</code> and <code>lp</code> are frames that will be converted to strings, with UTF-8 encoding.</p>
 
 <p>Given the building block frames <code>p</code> and <code>lp</code> we can start to form the commands. We have <code>PUTC</code>, a codec that is composed by the word <code>PUT</code> plus two <code>p</code> frames and one <code>lp</code> frame. So this: <code>PUT Agustinho Brisola Estou acostumado a criar my propria cloud</code>, will be converted to: <code>["PUT" "Agustinho" "Brisolla" "Estou acostumado a criar minha propria cloud"]</code>. Bang! We have bytes straight to a clojure vector. And testing it is pretty straight forward. Look:</p>
 
-<p>``` clojure Testing codecs
-(use ‘gloss.core ‘gloss.io)
-(import java.nio.ByteBuffer)</p>
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">use</span> <span class="ss">&#39;gloss.core</span> <span class="ss">&#39;gloss.io</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">import </span><span class="nv">java.nio.ByteBuffer</span><span class="p">)</span>
 
-<p>(def buffer (java.nio.ByteBuffer/wrap (.getBytes “PUT Agustinho Brisolla Teste Fact\r\n”)))</p>
+<span class="p">(</span><span class="k">def </span><span class="nv">buffer</span> <span class="p">(</span><span class="nf">java.nio.ByteBuffer/wrap</span> <span class="p">(</span><span class="nf">.getBytes</span> <span class="s">&quot;PUT Agustinho Brisolla Teste Fact\r\n&quot;</span><span class="p">)))</span>
 
-<p>(decode PUTC buffer)</p>
+<span class="p">(</span><span class="nf">decode</span> <span class="nv">PUTC</span> <span class="nv">buffer</span><span class="p">)</span>
 
-<p>;; [“PUT” “PUT” “Agustinho” “Brisolla Teste Fact”]</p>
-
-<p>```</p>
+<span class="c1">;; [&quot;PUT&quot; &quot;PUT&quot; &quot;Agustinho&quot; &quot;Brisolla Teste Fact&quot;]</span></code></pre></div>
 
 <p>There are actually more codecs (<code>REPC</code> and <code>LSRC</code>) to handle generic responses and <code>LSA</code> responses respectively. But once you understand the commands, the answers are natural consequences.</p>
 
@@ -135,24 +125,20 @@ We have two main commands, <code>PUT</code> and <code>LSA</code>. For <code>PUT<
 
 <p>Great, but we have to handle the requests coming from telnet clients. Now it is Aleph time:</p>
 
-<p>``` clojure Aleph TCP Server</p>
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">handler</span>
+  <span class="s">&quot;TCP Handler. Decodes the issued command and calls the appropriate</span>
+<span class="s">  function to excetion some action.&quot;</span>
+  <span class="p">[</span><span class="nv">ch</span> <span class="nv">ci</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">receive-all</span> <span class="nv">ch</span>
+    <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">b</span><span class="p">]</span>
+      <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">deced</span> <span class="p">(</span><span class="nf">decode</span> <span class="nv">prt/CMDS</span> <span class="nv">b</span><span class="p">)]</span>
+        <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Processing command: &quot;</span> <span class="nv">deced</span><span class="p">)</span>
+        <span class="p">(</span><span class="nf">condp</span> <span class="nb">= </span><span class="p">(</span><span class="nb">first </span><span class="nv">deced</span><span class="p">)</span>
+          <span class="s">&quot;PUT&quot;</span> <span class="p">(</span><span class="nf">put-fact</span> <span class="p">(</span><span class="nb">rest </span><span class="nv">deced</span><span class="p">)</span> <span class="nv">ch</span><span class="p">)</span>
+          <span class="s">&quot;LSA&quot;</span> <span class="p">(</span><span class="nf">list-facts</span> <span class="p">(</span><span class="nb">second </span><span class="nv">deced</span><span class="p">)</span> <span class="nv">ch</span><span class="p">)</span>
+          <span class="p">(</span><span class="nf">handle-err</span> <span class="nv">ch</span> <span class="nv">ci</span><span class="p">))))))</span>
 
-<p>(defn handler 
-  “TCP Handler. Decodes the issued command and calls the appropriate
-  function to excetion some action.”
-  [ch ci]
-  (receive-all ch
-    (fn [b]
-      (let [deced (decode prt/CMDS b)]
-        (println “Processing command: “ deced)
-        (condp = (first deced)
-          “PUT” (put-fact (rest deced) ch)
-          “LSA” (list-facts (second deced) ch)
-          (handle-err ch ci))))))</p>
-
-<p>(start-tcp-server handler {:port 10000})</p>
-
-<p>```</p>
+<span class="p">(</span><span class="nf">start-tcp-server</span> <span class="nv">handler</span> <span class="p">{</span><span class="ss">:port</span> <span class="mi">10000</span><span class="p">})</span></code></pre></div>
 
 <p>When you start the tcp server without defining the frame to handle, Aleph delivers to the <code>handler</code> a series of <code>ByteBuffers</code>, what is perfect for this case. The handler function decodes the frames against the <code>CMDS</code> codec and calls the correspondent function passing as argument the channel to respond to.</p>
 
@@ -160,21 +146,17 @@ We have two main commands, <code>PUT</code> and <code>LSA</code>. For <code>PUT<
 
 <p>The functions to list and put facts into the database use the same <code>CMDS</code> codec to encode reply messages. Look:</p>
 
-<p>``` clojure Inserting facts and replying</p>
-
-<p>(defn put-fact 
-  “Inserts the fact into db according to proto/PUTC.
-  Takes the decoded data end the channel to respond.”
-  [data ch]
-  (with-connection db
-    (insert-record :facts
-      {:date   (str (System/currentTimeMillis))
-       :author (first data)
-       :via    (second data)
-       :fact   (last data)}))
-  (enqueue ch (encode prt/CMDS [“REP” “Fact recorded!! Have fun with it.”])))</p>
-
-<p>```</p>
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">put-fact</span>
+  <span class="s">&quot;Inserts the fact into db according to proto/PUTC.</span>
+<span class="s">  Takes the decoded data end the channel to respond.&quot;</span>
+  <span class="p">[</span><span class="nv">data</span> <span class="nv">ch</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">with-connection</span> <span class="nv">db</span>
+    <span class="p">(</span><span class="nf">insert-record</span> <span class="ss">:facts</span>
+      <span class="p">{</span><span class="ss">:date</span>   <span class="p">(</span><span class="nb">str </span><span class="p">(</span><span class="nf">System/currentTimeMillis</span><span class="p">))</span>
+       <span class="ss">:author</span> <span class="p">(</span><span class="nb">first </span><span class="nv">data</span><span class="p">)</span>
+       <span class="ss">:via</span>    <span class="p">(</span><span class="nb">second </span><span class="nv">data</span><span class="p">)</span>
+       <span class="ss">:fact</span>   <span class="p">(</span><span class="nb">last </span><span class="nv">data</span><span class="p">)}))</span>
+  <span class="p">(</span><span class="nf">enqueue</span> <span class="nv">ch</span> <span class="p">(</span><span class="nf">encode</span> <span class="nv">prt/CMDS</span> <span class="p">[</span><span class="s">&quot;REP&quot;</span> <span class="s">&quot;Fact recorded!! Have fun with it.&quot;</span><span class="p">])))</span></code></pre></div>
 
 <p><code>REP</code> is a command encoded by <code>REPC</code> codec as defined above. The codec is defined by the header of the message (<code>REP</code>). What is pretty useful and saves your from using <code>if</code> to do that.</p>
 
@@ -185,43 +167,40 @@ We have two main commands, <code>PUT</code> and <code>LSA</code>. For <code>PUT<
 <h1 id="update-20120803">UPDATE 2012/08/03</h1>
 <p>The great brain <a href="http://twitter.com/ztellman">@ztellman</a>, the creator of gloss, gave me a hand <a href="https://github.com/paulosuzart/clact/pull/1">pulling</a> some changes in the code. What he suggested was to specify the frame for the server. So Aleph takes care of the protocol being encoded/decoded and you interact solely with clojure data structures. The change was:</p>
 
-<p>``` clojure Zach suggestions
-(start-tcp-server handler {:port (:port opts), :frame prt/CMDS})</p>
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">start-tcp-server</span> <span class="nv">handler</span> <span class="p">{</span><span class="ss">:port</span> <span class="p">(</span><span class="ss">:port</span> <span class="nv">opts</span><span class="p">)</span>, <span class="ss">:frame</span> <span class="nv">prt/CMDS</span><span class="p">})</span>
 
-<p>;;what leads us to check for commands like this:</p>
+<span class="c1">;;what leads us to check for commands like this:</span>
 
-<p>(receive-all ch
-    (fn [cmd]
-      (println “Processing command: “ cmd “From “ ci)
-      (condp = (first cmd)
-        “PUT” (put-fact (rest cmd) ch)
-        “LSA” (list-facts (second cmd) ch)
-        (handle-err ch ci)))))</p>
+<span class="p">(</span><span class="nf">receive-all</span> <span class="nv">ch</span>
+    <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">cmd</span><span class="p">]</span>
+      <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Processing command: &quot;</span> <span class="nv">cmd</span> <span class="s">&quot;From &quot;</span> <span class="nv">ci</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">condp</span> <span class="nb">= </span><span class="p">(</span><span class="nb">first </span><span class="nv">cmd</span><span class="p">)</span>
+        <span class="s">&quot;PUT&quot;</span> <span class="p">(</span><span class="nf">put-fact</span> <span class="p">(</span><span class="nb">rest </span><span class="nv">cmd</span><span class="p">)</span> <span class="nv">ch</span><span class="p">)</span>
+        <span class="s">&quot;LSA&quot;</span> <span class="p">(</span><span class="nf">list-facts</span> <span class="p">(</span><span class="nb">second </span><span class="nv">cmd</span><span class="p">)</span> <span class="nv">ch</span><span class="p">)</span>
+        <span class="p">(</span><span class="nf">handle-err</span> <span class="nv">ch</span> <span class="nv">ci</span><span class="p">)))))</span>
 
-<p>;; instead of the previous version manually decoding bytes:</p>
+<span class="c1">;; instead of the previous version manually decoding bytes:</span>
 
-<p>(receive-all ch
-  (fn [b]
-    (let [deced (decode prt/CMDS b)]
-      (println “Processing command: “ deced)
-      (condp = (first deced)
-        “PUT” (put-fact (rest deced) ch)
-        “LSA” (list-facts (second deced) ch)
-        (handle-err ch ci))))))</p>
+<span class="p">(</span><span class="nf">receive-all</span> <span class="nv">ch</span>
+  <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">b</span><span class="p">]</span>
+    <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">deced</span> <span class="p">(</span><span class="nf">decode</span> <span class="nv">prt/CMDS</span> <span class="nv">b</span><span class="p">)]</span>
+      <span class="p">(</span><span class="nb">println </span><span class="s">&quot;Processing command: &quot;</span> <span class="nv">deced</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">condp</span> <span class="nb">= </span><span class="p">(</span><span class="nb">first </span><span class="nv">deced</span><span class="p">)</span>
+        <span class="s">&quot;PUT&quot;</span> <span class="p">(</span><span class="nf">put-fact</span> <span class="p">(</span><span class="nb">rest </span><span class="nv">deced</span><span class="p">)</span> <span class="nv">ch</span><span class="p">)</span>
+        <span class="s">&quot;LSA&quot;</span> <span class="p">(</span><span class="nf">list-facts</span> <span class="p">(</span><span class="nb">second </span><span class="nv">deced</span><span class="p">)</span> <span class="nv">ch</span><span class="p">)</span>
+        <span class="p">(</span><span class="nf">handle-err</span> <span class="nv">ch</span> <span class="nv">ci</span><span class="p">))))))</span>
 
-<p>;;the same applies for sending response back to the client:</p>
+<span class="c1">;;the same applies for sending response back to the client:</span>
 
-<p>(enqueue broad-put [“REP”
-                    (format “####Fact recorded by %s!! By %s: %s.”
-                     via author fact)]))</p>
+<span class="p">(</span><span class="nf">enqueue</span> <span class="nv">broad-put</span> <span class="p">[</span><span class="s">&quot;REP&quot;</span>
+                    <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;####Fact recorded by %s!! By %s: %s.&quot;</span>
+                     <span class="nv">via</span> <span class="nv">author</span> <span class="nv">fact</span><span class="p">)]))</span>
 
-<p>;; no need for manual encoding :)
-```</p>
+<span class="c1">;; no need for manual encoding :)</span></code></pre></div>
 
 <p>This is great because the best thing on every clojure lib is use pure clojure data structures to keep things uniform.</p>
 
 <p>Thanks to Zach for the precious tips.</p>
-
 
 </div>
 

@@ -85,16 +85,14 @@
 
 <p>I can’t open that much of the code I wrote in few nights. But I can guarantee it was funny and quick to write. A simple Http request handler is:</p>
 
-<p><code>perl
-get '/job/:wok_id' =&gt; sub {
-  my $job = mconfigs-&gt;find_one({wok_id =&gt; params-&gt;{'wok_id'}});
-  template 'jobs/edit.tt', {
-    job =&gt; $job,
-    server_host =&gt; config-&gt;{server},
-    server_port =&gt; config-&gt;{port},
-  };
-};
-</code></p>
+<div class="highlight"><pre><code class="language-perl" data-lang="perl"><span class="n">get</span> <span class="s">&#39;/job/:wok_id&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{</span>
+  <span class="k">my</span> <span class="nv">$job</span> <span class="o">=</span> <span class="n">mconfigs</span><span class="o">-&gt;</span><span class="n">find_one</span><span class="p">({</span><span class="n">wok_id</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">-&gt;</span><span class="p">{</span><span class="s">&#39;wok_id&#39;</span><span class="p">}});</span>
+  <span class="n">template</span> <span class="s">&#39;jobs/edit.tt&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="n">job</span> <span class="o">=&gt;</span> <span class="nv">$job</span><span class="p">,</span>
+    <span class="n">server_host</span> <span class="o">=&gt;</span> <span class="n">config</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">server</span><span class="p">},</span>
+    <span class="n">server_port</span> <span class="o">=&gt;</span> <span class="n">config</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">port</span><span class="p">},</span>
+  <span class="p">};</span>
+<span class="p">};</span></code></pre></div>
 
 <p>It is simple like that. You call the <code>get</code> providing the request path (notice the <code>:wok_id</code> path variable) and then your perl routine that handles the request. <code>mconfigs</code> is a simple routine that wraps the access to a MongoDB collection and a query.</p>
 
@@ -110,13 +108,11 @@ get '/job/:wok_id' =&gt; sub {
 
 <p>The benefits of mongo itself you can find around. What I want to highlight is the <a href="http://docs.mongodb.org/manual/aggregation/">aggregation</a> framework in conjuntion with perl. The perl hash syntax perfectly fits mongo documents:</p>
 
-<p><code>perl
-  my $result = mexecutions-&gt;aggregate([
-       {'$match' =&gt; {'alarm_enabled' =&gt; 1}},
-       {'$group' =&gt; {'_id' =&gt;  {'status' =&gt; '$status', 'wok_id'=&gt; '$wok_id'},
-                     'count' =&gt; {'$sum' =&gt; 1}}}
-   ]);
-</code></p>
+<div class="highlight"><pre><code class="language-perl" data-lang="perl"><span class="k">my</span> <span class="nv">$result</span> <span class="o">=</span> <span class="n">mexecutions</span><span class="o">-&gt;</span><span class="n">aggregate</span><span class="p">([</span>
+       <span class="p">{</span><span class="s">&#39;$match&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="s">&#39;alarm_enabled&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">}},</span>
+       <span class="p">{</span><span class="s">&#39;$group&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="s">&#39;_id&#39;</span> <span class="o">=&gt;</span>  <span class="p">{</span><span class="s">&#39;status&#39;</span> <span class="o">=&gt;</span> <span class="s">&#39;$status&#39;</span><span class="p">,</span> <span class="s">&#39;wok_id&#39;</span><span class="o">=&gt;</span> <span class="s">&#39;$wok_id&#39;</span><span class="p">},</span>
+                     <span class="s">&#39;count&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="s">&#39;$sum&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">}}}</span>
+   <span class="p">]);</span></code></pre></div>
 
 <p>Using the aggregation framework you can easily break through any limitations when working without SQL statements with incredible performance.</p>
 
@@ -131,7 +127,6 @@ get '/job/:wok_id' =&gt; sub {
 <p>I’m passionate about clojure, and this blog won’t change because this quick perl affair. But sincerely speaking, I haven’t met any clojure equivalent for web yet. Fast to start, fast to develop, fast to test and fast to deploy. Plus strong community, plugins, etc.</p>
 
 <p>I’m not expert enough in perl, but it now has a nice place among my tools. I can imagne myself with front end perl stuff and crazy distributed async clojure in the back end.</p>
-
 
 </div>
 

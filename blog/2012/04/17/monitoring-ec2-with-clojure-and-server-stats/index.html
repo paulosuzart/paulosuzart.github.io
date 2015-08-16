@@ -72,73 +72,70 @@
 
 <h2 id="the-config-file">The config file</h2>
 
-<p>``` clojure server-stats.cfg</p>
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">import </span><span class="nv">org.apache.commons.mail.SimpleEmail</span><span class="p">)</span>
 
-<p>(import org.apache.commons.mail.SimpleEmail)</p>
 
-<p>(defn send-mail [alert-msg server-name cmd-output]
-    (doto (SimpleEmail.)
-     ;; … my email configs
-      (.send)))</p>
+<span class="p">(</span><span class="kd">defn </span><span class="nv">send-mail</span> <span class="p">[</span><span class="nv">alert-msg</span> <span class="nv">server-name</span> <span class="nv">cmd-output</span><span class="p">]</span>
+    <span class="p">(</span><span class="nb">doto </span><span class="p">(</span><span class="nf">SimpleEmail.</span><span class="p">)</span>
+     <span class="c1">;; ... my email configs</span>
+      <span class="p">(</span><span class="nf">.send</span><span class="p">)))</span>
 
-<p>(add-alert-handler email [alert-msg server-name cmd-output]
-  (send-mail alert-msg server-name cmd-output))</p>
+<span class="p">(</span><span class="nf">add-alert-handler</span> <span class="nv">email</span> <span class="p">[</span><span class="nv">alert-msg</span> <span class="nv">server-name</span> <span class="nv">cmd-output</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">send-mail</span> <span class="nv">alert-msg</span> <span class="nv">server-name</span> <span class="nv">cmd-output</span><span class="p">))</span>
 
-<p>(set-ssh-username “ec2-user”)</p>
+<span class="p">(</span><span class="nf">set-ssh-username</span> <span class="s">&quot;ec2-user&quot;</span><span class="p">)</span>
 
-<p>(add-server-group web-servers
-  [“myserver.mydomain.com”])</p>
+<span class="p">(</span><span class="nf">add-server-group</span> <span class="nv">web-servers</span>
+  <span class="p">[</span><span class="s">&quot;myserver.mydomain.com&quot;</span><span class="p">])</span>
 
-<p>(add-cmd disk 
-  {:doc “Get the disk usage using df”
-   :cmd “df -h”
-   :servers [web-servers]
-   :alerts [{:column “Use%”
-             :value-type percent
-             :handlers [email]
-             :msg “Disk space over 55% full”
-             :trigger (&gt; 55)}]})</p>
+<span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">disk</span>
+  <span class="p">{</span><span class="ss">:doc</span> <span class="s">&quot;Get the disk usage using df&quot;</span>
+   <span class="ss">:cmd</span> <span class="s">&quot;df -h&quot;</span>
+   <span class="ss">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+   <span class="ss">:alerts</span> <span class="p">[{</span><span class="ss">:column</span> <span class="s">&quot;Use%&quot;</span>
+             <span class="ss">:value-type</span> <span class="nv">percent</span>
+             <span class="ss">:handlers</span> <span class="p">[</span><span class="nv">email</span><span class="p">]</span>
+             <span class="ss">:msg</span> <span class="s">&quot;Disk space over 55% full&quot;</span>
+             <span class="ss">:trigger</span> <span class="p">(</span><span class="nb">&gt; </span><span class="mi">55</span><span class="p">)}]})</span>
 
-<p>(add-cmd is-nginx 
-  {:doc “Is nginx Running?”
-   :servers [web-servers]
-   :cmd “[[ -z <code>ps aux | grep nginx</code> ]] &amp;&amp; echo ‘false’ || echo ‘true’”
-   :alerts [{:value-type bool
-             :msg “Nginx is not running”
-             :handlers [email]
-             :trigger (= false)}]})</p>
+<span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">is-nginx</span>
+  <span class="p">{</span><span class="ss">:doc</span> <span class="s">&quot;Is nginx Running?&quot;</span>
+   <span class="ss">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+   <span class="ss">:cmd</span> <span class="s">&quot;[[ -z `ps aux | grep nginx` ]] &amp;&amp; echo &#39;false&#39; || echo &#39;true&#39;&quot;</span>
+   <span class="ss">:alerts</span> <span class="p">[{</span><span class="ss">:value-type</span> <span class="nv">bool</span>
+             <span class="ss">:msg</span> <span class="s">&quot;Nginx is not running&quot;</span>
+             <span class="ss">:handlers</span> <span class="p">[</span><span class="nv">email</span><span class="p">]</span>
+             <span class="ss">:trigger</span> <span class="p">(</span><span class="nb">= </span><span class="nv">false</span><span class="p">)}]})</span>
 
-<p>(add-cmd app-log
-  {:doc “Get last 20 entries in todays app-servers log”
-   :servers [web-servers]
-   :cmd “tail -20 /home/ec2-user/artifactory-2.5.1.1/logs/access.log”})</p>
+<span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">app-log</span>
+  <span class="p">{</span><span class="ss">:doc</span> <span class="s">&quot;Get last 20 entries in todays app-servers log&quot;</span>
+   <span class="ss">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+   <span class="ss">:cmd</span> <span class="s">&quot;tail -20 /home/ec2-user/artifactory-2.5.1.1/logs/access.log&quot;</span><span class="p">})</span>
 
-<p>(add-cmd http-errors
-  {:doc “Show recent non-200s requests”
-   :servers [web-servers]
-   :cmd “tail -200 /var/log/nginx/error.log”})</p>
+<span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">http-errors</span>
+  <span class="p">{</span><span class="ss">:doc</span> <span class="s">&quot;Show recent non-200s requests&quot;</span>
+   <span class="ss">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+   <span class="ss">:cmd</span> <span class="s">&quot;tail -200 /var/log/nginx/error.log&quot;</span><span class="p">})</span>
 
-<p>(add-cmd is-artifactory
-  {:doc “Is Artifactory Running?”
-   :servers [web-servers]
-   :cmd “[[ -z <code>ps aux | grep org.artifactory.standalone.main.Main</code> ]] &amp;&amp; echo ‘false’ || echo ‘true’”
-   :alerts [{:value-type bool
-             :msg “Artifactory is not running”
-             :handlers [email]
-             :trigger (= false)
-             :mute-for 1860000}]})</p>
+<span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">is-artifactory</span>
+  <span class="p">{</span><span class="ss">:doc</span> <span class="s">&quot;Is Artifactory Running?&quot;</span>
+   <span class="ss">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+   <span class="ss">:cmd</span> <span class="s">&quot;[[ -z `ps aux | grep org.artifactory.standalone.main.Main` ]] &amp;&amp; echo &#39;false&#39; || echo &#39;true&#39;&quot;</span>
+   <span class="ss">:alerts</span> <span class="p">[{</span><span class="ss">:value-type</span> <span class="nv">bool</span>
+             <span class="ss">:msg</span> <span class="s">&quot;Artifactory is not running&quot;</span>
+             <span class="ss">:handlers</span> <span class="p">[</span><span class="nv">email</span><span class="p">]</span>
+             <span class="ss">:trigger</span> <span class="p">(</span><span class="nb">= </span><span class="nv">false</span><span class="p">)</span>
+             <span class="ss">:mute-for</span> <span class="mi">1860000</span><span class="p">}]})</span>
 
-<p>(add-cmd is-bamboo
-  {:doc “Is bamboo Running?”
-   :servers [web-servers]
-   :cmd “[[ -z <code>ps aux | grep com.attlassian.bamboo.server.Server</code> ]] &amp;&amp; echo ‘false’ || echo ‘true’”
-   :alerts [{:value-type bool
-             :msg “Bamboo is not running”
-             :handlers [email]
-             :trigger (= false)
-             :mute-for 1860000}]})</p>
-
-<p>```</p>
+<span class="p">(</span><span class="nf">add-cmd</span> <span class="nv">is-bamboo</span>
+  <span class="p">{</span><span class="ss">:doc</span> <span class="s">&quot;Is bamboo Running?&quot;</span>
+   <span class="ss">:servers</span> <span class="p">[</span><span class="nv">web-servers</span><span class="p">]</span>
+   <span class="ss">:cmd</span> <span class="s">&quot;[[ -z `ps aux | grep com.attlassian.bamboo.server.Server` ]] &amp;&amp; echo &#39;false&#39; || echo &#39;true&#39;&quot;</span>
+   <span class="ss">:alerts</span> <span class="p">[{</span><span class="ss">:value-type</span> <span class="nv">bool</span>
+             <span class="ss">:msg</span> <span class="s">&quot;Bamboo is not running&quot;</span>
+             <span class="ss">:handlers</span> <span class="p">[</span><span class="nv">email</span><span class="p">]</span>
+             <span class="ss">:trigger</span> <span class="p">(</span><span class="nb">= </span><span class="nv">false</span><span class="p">)</span>
+             <span class="ss">:mute-for</span> <span class="mi">1860000</span><span class="p">}]})</span></code></pre></div>
 
 <p>Almost all the commands were borrowed from the sample <code>cfg</code> file. A small but important detail is the key <code>:mute-for</code> in alerts. As you can see, the above link to server-stats points to my fork of it.</p>
 
@@ -154,57 +151,34 @@
 
 <p>Of course you can’t spend your time issuing ssh commands by hand. So, there are four <code>cron</code> entries for scheduled ssh interactions:</p>
 
-<p>``` bash crontab</p>
-
-<table>
-  <tbody>
-    <tr>
-      <td>0 7 * * * SSH_AUTH_SOCK=”$(find /tmp/keyring<em>/ -type s -user paulosuzart -group paulosuzart  -name ‘ssh</em>’</td>
-      <td>head -n 1)” ~/workspace/p/Server-Stats/run.sh disk -log</td>
-    </tr>
-    <tr>
-      <td><em>/10 * * * * SSH_AUTH_SOCK=”$(find /tmp/keyring</em>/ -type s -user paulosuzart -group paulosuzart  -name ‘ssh*’</td>
-      <td>head -n 1)” ~/workspace/p/Server-Stats/run.sh is-nginx -log</td>
-    </tr>
-    <tr>
-      <td><em>/30 * * * * SSH_AUTH_SOCK=”$(find /tmp/keyring</em>/ -type s -user paulosuzart -group paulosuzart  -name ‘ssh*’</td>
-      <td>head -n 1)” ~/workspace/p/Server-Stats/run.sh is-artifactory -log</td>
-    </tr>
-    <tr>
-      <td><em>/30 * * * * SSH_AUTH_SOCK=”$(find /tmp/keyring</em>/ -type s -user paulosuzart -group paulosuzart  -name ‘ssh*’</td>
-      <td>head -n 1)” ~/workspace/p/Server-Stats/run.sh is-bamboo -log</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>```</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="m">0</span> <span class="m">7</span> * * * <span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name &#39;ssh*&#39; | head -n 1)&quot;</span> ~/workspace/p/Server-Stats/run.sh disk -log
+*/10 * * * * <span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name &#39;ssh*&#39; | head -n 1)&quot;</span> ~/workspace/p/Server-Stats/run.sh is-nginx -log
+*/30 * * * * <span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name &#39;ssh*&#39; | head -n 1)&quot;</span> ~/workspace/p/Server-Stats/run.sh is-artifactory -log
+*/30 * * * * <span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;$(find /tmp/keyring*/ -type s -user paulosuzart -group paulosuzart  -name &#39;ssh*&#39; | head -n 1)&quot;</span> ~/workspace/p/Server-Stats/run.sh is-bamboo -log</code></pre></div>
 
 <p>The <code>run.sh</code> is pretty simple. Just wraps <code>java -jar</code> to server-stats. Some times I want to log the ssh output, so I can pass the <code>-log</code> option and the output goes to <code>log/cmd</code>.</p>
 
-<p>``` bash run.sh
-#!/bin/bash
-# Wraps the start of server-stats. If -log is passed, will save
-# the resulting execution to log/cmd
-# paulosuzart@gmail.com</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+<span class="c"># Wraps the start of server-stats. If -log is passed, will save</span>
+<span class="c"># the resulting execution to log/cmd</span>
+<span class="c"># paulosuzart@gmail.com</span>
 
-<h1 id="java--jar-should-run-from-inside-the-server-stats-dir">java -jar should run from inside the server-stats dir</h1>
-<p>cd ~/workspace/p/Server-Stats</p>
+<span class="c"># java -jar should run from inside the server-stats dir</span>
+<span class="nb">cd</span> ~/workspace/p/Server-Stats
 
-<p>if [ -z $1 ]; then
-  echo “usage: run cmd [-log]”
-  exit 2
-fi</p>
+<span class="k">if</span> <span class="o">[</span> -z <span class="nv">$1</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nb">echo</span> <span class="s2">&quot;usage: run cmd [-log]&quot;</span>
+  <span class="nb">exit </span>2
+<span class="k">fi</span>
 
-<p>COMM=”java -jar server-stats-0.1-standalone.jar -a $1”
-if [[ ! -z $2 &amp;&amp; “-log”=$2 ]]; then
-  echo “logging to log/$1.out”
-  $COMM=$COMM:” &gt; log/$1.out”
-fi</p>
+<span class="nv">COMM</span><span class="o">=</span><span class="s2">&quot;java -jar server-stats-0.1-standalone.jar -a $1&quot;</span>
+<span class="k">if</span> <span class="o">[[</span> ! -z <span class="nv">$2</span> <span class="o">&amp;&amp;</span> <span class="s2">&quot;-log&quot;</span><span class="o">=</span><span class="nv">$2</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nb">echo</span> <span class="s2">&quot;logging to log/$1.out&quot;</span>
+  <span class="nv">$COMM</span><span class="o">=</span><span class="nv">$COMM</span>:<span class="s2">&quot; &gt; log/$1.out&quot;</span>
+<span class="k">fi</span>
 
-<p>echo $COMM
-$COMM</p>
-
-<p>```</p>
+<span class="nb">echo</span> <span class="nv">$COMM</span>
+<span class="nv">$COMM</span></code></pre></div>
 
 <p>Don’t ask me why, but <code>ssh</code> does not behave the way you except when called from a <code>cron</code> command. But I managed to find <a href="http://webcache.googleusercontent.com/search?q=cache:7h4hOIGZG-wJ:www.codealpha.net/163/cron-ssh-and-rsync-and-key-with-passphrase-ubuntu/+&amp;cd=1&amp;hl=en&amp;ct=clnk&amp;client=ubuntu">this article</a> that helped a lot.</p>
 
@@ -219,7 +193,6 @@ $COMM</p>
 <h2 id="update">Update</h2>
 
 <p>This post was republished <a href="http://www.dzone.com">Dzone</a>. See <a href="http://architects.dzone.com/articles/how-monitoring-ec2-clojure-and">here</a>.</p>
-
 
 </div>
 
