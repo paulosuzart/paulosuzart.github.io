@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    How Much Functional Are You? &middot; 
+    my blog at github.io
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26676810-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <h1><a href="/">Paulo Suzart</a></h1>
+        <p>Functional programming (mostly with clojure), virtualization and cloud computing.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="https://github.com/paulosuzart">Codes</a>,
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="post">
+  <h1>How Much Functional Are You?</h1>
+  <span class="post-date">21 Aug 2015</span>
+  <p>Whats up? Fine? Well, I don’t know exactly why but I ended up reading the <a href="https://github.com/milessabin/shapeless/wiki/Feature-overview:-shapeless-1.2.4">Feature Overview</a> doc of the great <a href="https://github.com/milessabin/shapeless">Shapeless</a> <a href="http://scala-lang.org">Scala</a> lib.</p>
+
+<p>I think it was when reading more about Scala implicits. Anyway, Shapeless and also <a href="http://eed3si9n.com/learning-scalaz/index.html">ScalaZ tutorials</a> docs put a huge attention to Scala type system and who to build extensible stuff using implicits and the power of the type system itself.</p>
+
+<p>Red them and you will notices couple concepts frequently very often mentioned like Monads <em>(no, I’ll not write a tutorial on it)</em>, Functors, Applicative, Type classes, etc. But how many times you went that deep? I personally know “Functional Programmers” that never ever talked or read about such things even sort of evangelizing functional programming.</p>
+
+<p>4 years ago I wrote a <a href="https://codemountain.wordpress.com/2011/01/01/5-things-to-a-functional-brain/">blog post (pt_BR)</a> stating 5 things to have a functional brain, of course that list was very limited:</p>
+
+<ol>
+  <li>Lambda Calculus</li>
+  <li>Say What, not How</li>
+  <li>Understand partially applied functions</li>
+  <li>Immutability is natural</li>
+  <li>Recursion is not strange</li>
+</ol>
+
+<p>Today, with all my words I add: <strong>Know Haskell</strong>. You may say: I’m learning Clojure or Scala, so why <a href="http://haskell.org">haskell</a>?</p>
+
+<p>Ok, more precisely read <a href="http://learnyouahaskell.com/">Learn You a Haskell for Great Good!</a> book. But I mean, read right now (if you haven’t)! Scala tried to bring as much haskell as possible to the JVM (call me crazy, but this is what it is), and the aforementioned libs are the stretchers of Scala’s type system in order to produce the same power of haskell in the JVM.</p>
+
+<p>Of course I played with that. You’ll sell a lot of things stuffed in this <strike>Hacker Rank</strike> <a href="http://yuanhsh.iteye.com/blog/2200515">Good Node</a> challenge.</p>
+
+<p>This is not a perfect solution, mainly because I tried to put as much learned concepts as possible in the same place. So if you don’t read this book and go deeper into certain concepts you’ll simply not understand some expressions like <code>&lt;$&gt;</code>, <code>&lt;*&gt;</code> that lies in the heart of Applicative and Functors.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Go beyond composing functions, applying <code>map</code> against lists and passing functions around. As haskell is certainly the source of all this, you will learn / understand / see sense in libs like shapeless and scalaz much much faster.</p>
+
+<p><a href="http://haskell.org">haskell.org</a> offers a huge amount of resources on functional programming, from more kinda math perspective to more practical guides.</p>
+
+<p>To start, simply <code>apt-get install haskell-platform</code> and if you use <a href="https://atom.io/">Atom.io</a>, there are some astonishing packages for haskell that gives you full support for context aware code completion, lint, plus compile errors.</p>
+
+<p>If you code Scala like you code Java, or just don’t go beyond basics, you have a Ferrari in your garage, but uses your old 1962 Volks to go out. Think about it.</p>
+
+<p>Here the code:
+<script src="https://gist.github.com/f9c1e498c79ee3d7098c.js"> </script></p>
+
+<p><em>WARNING: I’m definitely not the best haskell programmer out there. Don’t use this code as a reference, but as a way to step into what haskell code looks like.</em></p>
+
+</div>
+
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = "paulosuzartblog"; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/blog/2015/05/30/give-kotlin-and-quasar-a-try/">
+            Give Kotlin And Quasar a Try
+            <small>30 May 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/2015/04/02/why-racket-is-awesome/">
+            Why Racket is Awesome
+            <small>02 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/blog/2014/07/07/going-back-to-go/">
+            Going back to Go (golang)
+            <small>07 Jul 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>
