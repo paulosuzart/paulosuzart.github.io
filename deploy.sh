@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/zsh
 CURRENT_DIR=`pwd`
 mkdir /tmp/blog_source
 cp -r . /tmp/blog_source
