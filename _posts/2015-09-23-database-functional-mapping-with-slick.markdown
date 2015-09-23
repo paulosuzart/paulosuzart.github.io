@@ -74,8 +74,8 @@ Generates an SQL:
 select x2."content", x2."host", x2."user_id",
        x2."team_id", x2."seq_number", x2."content_hash",
        x2."comment", x2."deleted", x2."tag", x2."starred",
-       x2."id" from "groups" x3, "teams" x4,
-       "commands" x2
+       x2."id"
+from "groups" x3, "teams" x4, "commands" x2
 where ((x3."name" = ?) and ((x4."name" = ?) and
       (x4."group_id" = x3."id"))) and
       (((x2."team_id" = x4."id") and (x2."seq_number" = ?))
@@ -122,3 +122,5 @@ This is far from being a tutorial or complete example of Slick. But gives you a 
 Notices it doesn't provide any caching. You would have to implement yourself. Slicks also offer the possibility to generate code from an existing database, but I personally don't like this approach.
 
 Take care!
+
+**important**: `>>>` and `some` comes from [Scalaz](https://github.com/scalaz/scalaz)
