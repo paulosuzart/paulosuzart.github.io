@@ -115,8 +115,8 @@
 <div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">select</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;content&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;host&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;user_id&quot;</span><span class="p">,</span>
        <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;team_id&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;seq_number&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;content_hash&quot;</span><span class="p">,</span>
        <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;comment&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;deleted&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;tag&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;starred&quot;</span><span class="p">,</span>
-       <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;id&quot;</span> <span class="k">from</span> <span class="ss">&quot;groups&quot;</span> <span class="n">x3</span><span class="p">,</span> <span class="ss">&quot;teams&quot;</span> <span class="n">x4</span><span class="p">,</span>
-       <span class="ss">&quot;commands&quot;</span> <span class="n">x2</span>
+       <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;id&quot;</span>
+<span class="k">from</span> <span class="ss">&quot;groups&quot;</span> <span class="n">x3</span><span class="p">,</span> <span class="ss">&quot;teams&quot;</span> <span class="n">x4</span><span class="p">,</span> <span class="ss">&quot;commands&quot;</span> <span class="n">x2</span>
 <span class="k">where</span> <span class="p">((</span><span class="n">x3</span><span class="p">.</span><span class="ss">&quot;name&quot;</span> <span class="o">=</span> <span class="o">?</span><span class="p">)</span> <span class="k">and</span> <span class="p">((</span><span class="n">x4</span><span class="p">.</span><span class="ss">&quot;name&quot;</span> <span class="o">=</span> <span class="o">?</span><span class="p">)</span> <span class="k">and</span>
       <span class="p">(</span><span class="n">x4</span><span class="p">.</span><span class="ss">&quot;group_id&quot;</span> <span class="o">=</span> <span class="n">x3</span><span class="p">.</span><span class="ss">&quot;id&quot;</span><span class="p">)))</span> <span class="k">and</span>
       <span class="p">(((</span><span class="n">x2</span><span class="p">.</span><span class="ss">&quot;team_id&quot;</span> <span class="o">=</span> <span class="n">x4</span><span class="p">.</span><span class="ss">&quot;id&quot;</span><span class="p">)</span> <span class="k">and</span> <span class="p">(</span><span class="n">x2</span><span class="p">.</span><span class="ss">&quot;seq_number&quot;</span> <span class="o">=</span> <span class="o">?</span><span class="p">))</span>
@@ -156,6 +156,8 @@
 <p>Notices it doesn’t provide any caching. You would have to implement yourself. Slicks also offer the possibility to generate code from an existing database, but I personally don’t like this approach.</p>
 
 <p>Take care!</p>
+
+<p><strong>important</strong>: <code>&gt;&gt;&gt;</code> and <code>some</code> comes from <a href="https://github.com/scalaz/scalaz">Scalaz</a></p>
 
 </div>
 
