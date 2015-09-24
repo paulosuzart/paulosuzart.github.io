@@ -123,4 +123,4 @@ Notices it doesn't provide any caching. You would have to implement yourself. Sl
 
 Take care!
 
-**important**: `>>>` and `some` comes from [Scalaz](https://github.com/scalaz/scalaz)
+**important**: `>>>` and `some` comes from [Scalaz](https://github.com/scalaz/scalaz). `Logger` and `dbConfig` comes from the play! project app.
