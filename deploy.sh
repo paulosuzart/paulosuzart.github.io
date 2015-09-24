@@ -1,4 +1,4 @@
-#! /bin/zsh
+#! /bin/bash
 CURRENT_DIR=`pwd`
 mkdir /tmp/blog_source
 cp -r . /tmp/blog_source
@@ -12,6 +12,5 @@ cd blog_site
 cp -r . ../
 cd ..
 rm -rf blog_site
-gaa
-gcmsg "$(git --no-pager log -1 --pretty=%B jekkyl)"
+git commit -am "$(git --no-pager log -1 --pretty=%B jekkyl)"
 git push origin master
