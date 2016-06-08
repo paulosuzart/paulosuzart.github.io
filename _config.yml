@@ -12,3 +12,6 @@ highlighter:  pygments
 paginate:     8
 tracking_id : 'UA-26676810-1'
 disqus_short_name: paulosuzartblog
+gems:
+  - jekyll-gist
+  - jekyll-paginate
