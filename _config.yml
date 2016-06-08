@@ -1,0 +1,17 @@
+title:        Paulo Suzart
+tagline:      'my blog at github.io'
+description:  'Functional programming and a bit of a lot.'
+url:          http://paulosuzart.github.io
+version:      1.1.1
+author:
+  name:       'Paulo Suzart'
+  email:      'paulosuzart@gmail.com'
+markdown: kramdown
+permalink:    /blog/:year/:month/:day/:title/
+highlighter:  pygments
+paginate:     8
+tracking_id : 'UA-26676810-1'
+disqus_short_name: paulosuzartblog
+gems:
+  - jekyll-gist
+  - jekyll-paginate
