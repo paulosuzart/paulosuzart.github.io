@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "CRUD like Redux Abstraction"
-date: 2016-12-11 22:25
+date: 2016-12-12 10:22
 comments: true
 categories: [react, redux, es6, nodejs]
 ---
