@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "One year as remoter"
-date: 2016-06-06 08:30
+date: 2016-12-11 22:25
 comments: true
 categories: [remoter]
 ---
