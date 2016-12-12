@@ -6,7 +6,7 @@ comments: true
 categories: [remoter]
 ---
 
-Ok, you are used to *long time without posting*, so no need to repeat it! Anyway, as you know we half accirentally moved to Colombia last year, and not it's been one year since we left São Paulo, Brazil.
+Ok, you are used to *long time without posting*, so no need to repeat it! Anyway, as you know we half accidentally moved to Colombia last year, and now it's been a year since we left São Paulo, Brazil.
 
 I'ts been quite great experiente, but in this post I'll talk about how it is like to be working as a remoter. 
 
