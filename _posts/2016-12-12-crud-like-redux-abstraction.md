@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "One year as remoter"
+title: "CRUD like Redux Abstraction"
 date: 2016-12-11 22:25
 comments: true
 categories: [react, redux, es6, nodejs]
