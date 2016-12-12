@@ -14,7 +14,7 @@ Remoter
 ===
 
 I've worked with a dedicated team of 4 + me, plus a total of 22 people in a office with me as the only remoter of the company. More recently, had the chance to work with a team of 8 in 4 different timezones. 
-The tools used are pretty simple:
+Here are some tools and findings:
 
 A Chat
 ---
@@ -45,7 +45,7 @@ For the other we almost had no video call, what was the opposite of the previous
 Bring your own tasks doesn't work
 ---
 
-We are sometimes tempted to let people record their job using tools like asana and trello by themselves. Well, they won't. And if you have a minimal clear specification for a project, open the tasks/issues yourself and make the team go through each taks until the project is delivered.
+We are sometimes tempted to let people record their job using tools like Asana and Trello by themselves. Well, they won't. And if you have a minimal clear specification for a project, open the tasks/issues yourself and make the team go through each taks until the project is delivered.
 
 Previously creatting tasks give people a sense of compromise and mission!
 
@@ -72,19 +72,25 @@ So is Yammer, or anything like that. Use enterprise social network as a central 
 Conclusion
 ===
 
-We kown remote working and specially remote teams are perfectly doable, but with the wrong tools/approach/people, this is a recipe for a disaster. Newcomes to remote work are likely to see it in a too romantic fashion and ruin everything. We need to be realistic! 
+We kown remote working and specially remote teams are perfectly doable, but with the wrong tools/approach/people, this is a recipe for a disaster. Newcomers to remote work are likely to see it in a too romantic fashion and ruin everything. We need to be realistic! 
 
 You need to be disciplined and **show** you are. If you work at home but keep your TV on, your preferred smartphone game on, or your wife/husband Interrupting you all the time, please give up.
 
-If you thing you can predict/suppose people emotions while reading what they wrote, well, you can't. So if you are super emotional person your are likely to create more problems than helping team to solve them.
+If you think you can predict/suppose people emotions while reading what they wrote, well, you can't. Then if you are super emotional person your are likely to create more problems than helping team to solve them.
 
 Here a list of tools I believe is almost universal for remote jobs:
 
    1. Concluence - please document all your shit here
    1. Jira - No, project specific issue trackers (like availabe at [Github](https://github.com)/[Bit Bucket](bitbucket.org)) are not enough. It's **way common** to have projects that uses microservices fashion approach, and even if it's not about microservices, a modern app requires more than 2, 3 even 5 different repos. 
    1. Slack. This is a chat, suppose this is people talking to each other as they would do in real word, so please don't trust this as if it was your bible or the source of truth.
-   1. Hangouts/Skype/[Appear.in](appear.in) for video calls. A camera in the office (if there is a office) will cause more harm to privacy than help you collaborate. So schedule your calls and create wikipage summaries for calls. If you think it's waste of time to document all calls, keep a single project page with decisions and path changes.
+   1. Hangouts/Skype/[Appear.in](appear.in) for video calls. A camera in the office (if there is a office) will cause more harm to privacy than help you to collaborate. Please schedule your calls and create wiki pages for summarizing them. If you think it's waste of time to document all calls, keep a single project page with decisions and path changes.
 
+
+Things to keep distance:
+
+   1. Google docs - While important piece for creating documents, presentations, sheets, don't expect to collaborate daily tasks using it. Keep project documentation in confluence
+   1. Whats App - No comments 
+   1. *Chat is your life* approach - This you destroy your project and everything will be just disconnected 
 
 That is it. Hope a can continue to learn and improve remoting skills. Anything I should learn, I share with you! 
 
