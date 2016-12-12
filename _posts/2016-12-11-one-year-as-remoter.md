@@ -74,7 +74,7 @@ Conclusion
 
 We kown remote working and specially remote teams are perfectly doable, but with the wrong tools/approach/people, this is a recipe for a disaster. Newcomers to remote work are likely to see it in a too romantic fashion and ruin everything. We need to be realistic! 
 
-You need to be disciplined and **show** you are. If you work at home but keep your TV on, your preferred smartphone game on, or your wife/husband Interrupting you all the time, please give up.
+You need to be disciplined and **show** you are. If you work at home but keep your TV on, your preferred smartphone game on, or your wife/husband Interrupting you all the time, please work on it before join a remote team.
 
 If you think you can predict/suppose people emotions while reading what they wrote, well, you can't. Then if you are super emotional person your are likely to create more problems than helping team to solve them.
 
