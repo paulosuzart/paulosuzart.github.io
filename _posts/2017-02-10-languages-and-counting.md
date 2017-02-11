@@ -127,7 +127,7 @@ The [template mixins](https://dlang.org/spec/template-mixin.html) of the languag
 
 **15. C++** - #option 4
 
-I'm new to CPP, actually. But it's been a while since I felt to productive. I'm working on a project where part of it is written in Node, and a very code part is written in C++ using [Poco](https://pocoproject.org/).
+I'm new to CPP, actually. But it's been a while since I felt so productive. I'm working on a project where part of it is written in Node, and a very code part is written in C++ using [Poco](https://pocoproject.org/).
 
 Why? Well, the world is written in C/C++. No matter how cool your language is, no matter how in the hype you are, your shit will always be run on top of it!
 
