@@ -10,11 +10,11 @@ As mentioned in my [previous post](http://paulosuzart.github.io/blog/2017/02/10/
 
 While we don't have any decision, let's talk about D and Why I ended up building an entire server in C++.
 
-We were looking for a compiled language with powerfull type system for OO purposes (That's why dropped [Go](https://golang.org/)), that wasn't Java. With Scala going down the hill, there was few options that could make any sense. They were D or C++. 
+We were looking for a compiled language with powerful type system for OO purposes (That's why dropped [Go](https://golang.org/)), that wasn't Java. With Scala going down the hill, there was few options that could make any sense. They were D or C++. 
 
 C++ has a myth that it is complex and hard (well, it might be sometimes), so we picked up D!
 
-The language is simply awesome! If you read the [Language Reference](https://dlang.org/spec/spec.html) up get instantlly on fire. It also has [DUB](https://code.dlang.org/), a sort of poor cousing of [NPM], [Cargo](https://crates.io/) or [hex](https://hex.pm/). Just add your dependencies, and run `dub`. That is all, your all will be compiled to native code and you can run it. Take a look at this `dub.json` file, the main projec descriptor:
+The language is simply awesome! If you read the [Language Reference](https://dlang.org/spec/spec.html) up get instantlly on fire. It also has [DUB](https://code.dlang.org/), a sort of poor cousing of [NPM], [Cargo](https://crates.io/) or [hex](https://hex.pm/). Just add your dependencies, and run `dub`. That is all, your code will be compiled to native code and you can run it. Take a look at this `dub.json` file, the main projec descriptor:
 
 {% highlight json %}
 
@@ -42,9 +42,9 @@ The language is simply awesome! If you read the [Language Reference](https://dla
 
 For a compiled language that needs to have libs linked, etc. This is really great stuff.
 
-D comes with a Template system for generic programming (Like Java Generics or C++ templates, but more porwerful perhaps). It extends to code generation at compile time, allowing a small code base that can produce huge codebases saving a lot of repetition. There are many cases where you have to repeat, over and over again the same code. Suppose this real case of a visitor that goes trough a AST, gets the children of eath node, then visits them. You can easily reach dozens of repetitions.
+D comes with a Template system for generic programming (Like Java Generics or C++ templates, but more powerful perhaps). It extends to code generation at compile time, allowing a small code base that can produce huge codebases saving a lot of repetition. There are many cases where you have to repeat, over and over again the same code. Suppose this real case of a visitor that goes through a AST, gets the children of eath node, then visits them. You can easily reach dozens of repetitions.
 
-The gist below shows a visitor base class `BaseGraphQLVisitor`. It visits a `Node`, gets it's children, iterates over it an then calls `visitNameOfTheNodeTypeHere`. The more you have types, the more you have to type to produce such visitor.
+The gist below shows a visitor base class `BaseGraphQLVisitor`. It visits a `Node`, gets its children, iterates over it an then calls `visitNameOfTheNodeTypeHere`. The more you have types, the more you have to type to produce such visitor.
 
 Check it ou and try to understand what is going on:
 
@@ -69,11 +69,11 @@ void visitDocument(ParseTree tree) {
 The frustration
 ---
 
-It's not totally related to the language, which is awesome. Unfortunatelly the ecosystem is limited, there are pleny `0.*` version libs. I don't know why people fear to reach `1.0`. So it quickly became hard to see future when you need good integrations with existing Database, HTTP, IDE, etc.
+It's not totally related to the language, which is awesome. Unfortunately the ecosystem is limited, there are pleny `0.*` version libs. I don't know why people fear to reach `1.0`. So it quickly became hard to see future when you need good integrations with existing Database, HTTP, IDE, etc.
 
 They are trying. See [Vibed](https://vibed.org/) and [Eclipse DDT](https://github.com/DDT-IDE/DDT). But we need more than this for real projects with real money involved.
 
-There is also a company kinda sponsoring DConf, that are clreary bringing some retarded ideology to the conference, what may put minorities privilegies before technical skills. A huge risk for any sane evolution of the language and the ecosystem.
+There is also a company kinda sponsoring DConf, that are clearly bringing some retarded ideology to the conference, what may put minorities privileges before technical skills. A huge risk for any sane evolution of the language and the ecosystem.
 
 Then C++
 ---
@@ -89,10 +89,5 @@ I just use GCC, and haven't had time to try other compilers.
 Conclusion
 ---
 
-When you have real money involved, don't play. Not that we were kid playing or being heckless, we really believed we could go end to end using D, but so far it's not the case. In the end, one thing we won't be worried is performance (of course if we don't do shit in our code). D has Gc, and supposedly supports coding with it disabled, but lets try it another round.
-
-
-
-
-
+When you have real money involved, don't play. Not that we were kid playing or being reckless, we really believed we could go end to end using D, but so far it's not the case. In the end, one thing we won't be worried is performance (of course if we don't do shit in our code). D has Gc, and supposedly supports coding with it disabled, but lets try it another round.
 
