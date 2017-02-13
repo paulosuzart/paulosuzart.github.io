@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "After D comes C++"
-date: 2017-02-10 10:22
+date: 2017-02-11 10:22
 comments: true
 categories: [programming D C++]
 ---

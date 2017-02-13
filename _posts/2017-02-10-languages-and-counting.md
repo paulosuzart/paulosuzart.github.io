@@ -21,7 +21,7 @@ I had the chance to put Scala in production using [Play Framework](https://www.p
 
 Why don't I pursue or stimulate Scala use anymore? There are hundreds of post on the internet explaining why Scala have failed, so I don't need to add any extra content to them. I'm pretty convinced, for example, that, if Play Framework hadn't be ported to Scala, it would be *TODAY* competing with frameworks like Django and Rails. I'm not here to try to predict anything, I've just got real insights from real usage of it and, I'm ok if you want go for it, I'm just out.
 
-I alseo technically reviewd a [Book on Scala and Lift Web](https://www.packtpub.com/application-development/lift-application-development-cookbook) (that is also pretty much dead BTW).
+I've also technically reviewd a [Book on Scala and Lift Web](https://www.packtpub.com/application-development/lift-application-development-cookbook) (that is also pretty much dead BTW).
 
 **3. Clojure**
 
@@ -32,6 +32,8 @@ I couldn't really put any Clojure into production. Actually my colleagues said I
 I like as a language, but Java interoperability where sort of ugly. Furthermore, there were absolutely no killing app for Clojure. I was a member of the Clojure mailing list and *ALL* there I saw were posts prefixed with _[ANN]_ to announce some tiny poorly tested, poorly documented, non maintained wannabe library. I got tire of this, to be fair. And started to code/play less and less with Clojure.
 
 We had some guys creating a Pedestal framework with lots of craziness, well, useless. I heard they dropped good part of what they were doing to provide just the http framework these days.
+
+I also technically reviewd a [Book on Clojure for Domain-specific Languages](https://www.amazon.com/Clojure-Domain-specific-Languages-Ryan-Kelker/dp/1782166505).
 
 Today the only thing I can tell is [Immutant](http://immutant.org/) and [Datomic](http://www.datomic.com/).
 
