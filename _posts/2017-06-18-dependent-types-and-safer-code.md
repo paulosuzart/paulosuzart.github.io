@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Dependent Types And Safer Code"
-date: 2017-02-11 10:22
+date: 2017-06-18 13:22
 comments: true
 categories: [programming idris fp]
 ---
