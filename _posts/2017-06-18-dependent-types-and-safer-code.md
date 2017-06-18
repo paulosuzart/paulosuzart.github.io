@@ -12,7 +12,7 @@ I'd heard about [Idris](idris-lang.org) long ago, but after joining this server 
 
 In the gist you see the defintion of `printf`:
 
-{% highlight idris %}
+{% highlight haskell %}
   -- ...
   -- More code before this line, check the original gist
   printf : (s : String) -> interpFormat ( formatString s )
@@ -29,7 +29,7 @@ As you can see, `printf` takes a `Int` and a `String` as argument *(besides the 
 
 This is the power of Idris Dependent Types playing here. At compile, all the next parameters are calculated by applying a sucession of functions to `s`, the formatting pattern. This is possible because types and values are both first class citzens in this lang. Thus, the combination of `interpFormat` and `formatString` have the intention to form a mini AST (Abstract Syntax Tree) of types according to this sum recursive type:
 
-{% highlight idris %}
+{% highlight haskell %}
 data Format
   = FInt Format
   | FString Format
