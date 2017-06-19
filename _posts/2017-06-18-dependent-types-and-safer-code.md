@@ -6,7 +6,7 @@ comments: true
 categories: [programming idris fp]
 ---
 
-I've recently joinned a [Discrod Functional Programming Server](https://discordapp.com). No, it is not a framework for developing servers using functional programming languages. Instead, a mix of IRC and Slack for discussing several functional langs. If you want to watch and participate in nice discussion and tips about clojure, elixir, elm, erlang, haskell, idris, lisp, ocaml, racket, and scala, join the server [right here](https://discord.gg/jeaFVYE).
+I've recently joinned a [Discord Functional Programming Server](https://discordapp.com). No, it is not a framework for developing servers using functional programming languages. Instead, a mix of IRC and Slack for discussing several functional langs. If you want to watch and participate in nice discussion and tips about clojure, elixir, elm, erlang, haskell, idris, lisp, ocaml, racket, and scala, join the server [right here](https://discord.gg/jeaFVYE).
 
 I'd heard about [Idris](idris-lang.org) long ago, but after joining this server I was surprised by a very active channel, the #idris channel. And one of the latest messages presented a [gist](https://gist.github.com/chrisdone/672efcd784528b7d0b7e17ad9c115292) with Type Dependent `printf` function. At first may sound like a silly thing, but that was a nice opportunity to expand my mind around Type Dependent code beyond what is taught in the [Idris Tutorial](http://docs.idris-lang.org/en/latest/tutorial/index.html).
 
