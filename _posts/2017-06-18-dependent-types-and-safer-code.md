@@ -37,7 +37,7 @@ data Format
   | FEnd
 {% endhighlight %}
 
-Pay attention to Format making reference to itself. So, having `%d%s` as pattern, computes a `Format` containing (*not sure if 'containing' is the best expression to explain this*) a `Int String FEnd`. This is then interpreted by `interpFormat` that prodiuces the arity and input types of `printf`. In this case `Int -> String -> String`. Amazing! 
+Pay attention to Format making reference to itself. So, having `%d%s` as pattern, computes a `Format` containing (*not sure if 'containing' is the best expression to explain this*) a `Int String FEnd`. This is then interpreted by `interpFormat` that produces the arity and input types of `printf`. In this case `Int -> String -> String`. Amazing! 
 
 If you clone the gist, add a main method and try to run `printf "%d: %s" "woops" 6` the code won't compile, printing a sounding error:
 
