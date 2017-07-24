@@ -10,6 +10,8 @@ Hello hello! After a quick incursion into the world of <s>Rust</s> language, I'm
 
 The balance since last year when I started to work on a [tracking system written](http://paulosuzart.github.io/blog/2014/07/07/going-back-to-go/) in Go is: I didn't finish it (as if it is novelty). Also,  I had the opportunity to deliver a [danjgo](https://www.djangoproject.com/) system to production with easy. I might return with the tracking stuff but not written in Go.
 
+<!--more-->
+
 Kotlin
 ---
 

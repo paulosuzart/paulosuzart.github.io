@@ -13,7 +13,7 @@ That was actually my first contact with the language. Never tried before! How ca
 By ecosystem, I mean libs and tools out there. Couldn't be different since it was created in 1987 (I was just a kid)!
 
 So, I needed to develop something simple yet powerful enough to be further extended with new features. But the main requirement was: DO IT RIGHT NOW!
-
+<!--more-->
 Ok, I could have chosen [Grails](http://www.grails.org) (my daily job), but know what? I even had time for JVM startup time. Same applies to anything on JVM, even clojure web stuff. I could also have chosen [python](http://python.org/) with [Flask](http://flask.pocoo.org/) and would be great. But what I was going to add to my toolset?
 
 Enter Perl Dancer

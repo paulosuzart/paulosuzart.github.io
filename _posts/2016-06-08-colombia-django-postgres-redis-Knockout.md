@@ -11,6 +11,8 @@ Good News
 
 Hello from Colombia! Yes, we came to Colombia in order to my wife delivery our baby. Awesome! I'm also investing some resources on a new company: [Panda Team](http://www.pandateam.com.br/en). This is a quite old dream, to have my own small company and work hard to help customers succeed in their business. Visit us!
 
+<!--more-->
+
 Now the post
 ===
 

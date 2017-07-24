@@ -3,12 +3,14 @@ layout: post
 title: "Database Functional Mapping with Slick"
 date: 2015-09-23 00:22
 comments: true
-categories: [fp scala]
+categories: [fp, scala]
 ---
 
 [Typesafe](http://www.typesafe.com/) guys certainly gave nice shots embracing projects like [play!](playframework.com), [akka](http://akka.io) and [Slick](http://slick.typesafe.com/).
 
 After finally swallowing the huge change they did on play! itself since its release 1.2.4, I've been heavily playing with play! 2.4.3. I like the ability to use different persistent frameworks, but so far, it comes with the cost of sparse documentation and lack of focus on a single well understood solution and all the caveats.
+
+<!--more-->
 
 Anyway. Want to share some playground with Slick combined with the power of [Futures](http://docs.scala-lang.org/overviews/core/futures.html) and functional composition itself. Slick is very powerful and works basically pretending it operates on lists of objects, but behind the scenes it simply generates **type safe** sql statements.
 

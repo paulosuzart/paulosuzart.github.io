@@ -14,7 +14,7 @@ It lies in the virtualization context. You can read more at [docker
 documentation](http://docs.docker.io/en/latest/). And from my point of
 view, it comes to kill some important challenges me and you have been
 facing over years when talking about delivering software.
-
+<!--more-->
 
 PaaS
 ====

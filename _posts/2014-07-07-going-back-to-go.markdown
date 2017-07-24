@@ -12,6 +12,7 @@ Intro
 Hi people, a while ago I made a clear expression of my kinda frustration with clojure ecosystem in the clojure mailling list. I'm not going to share the link here because my post itself was confusing and answers even more.
 
 In summary the furstration comes from TOO TOO TOO MUCH `'[ANN]'` posts on the list as if it was open source and more specifically, few of them are really bringing value to clojure as other languages have strong libs/tools.
+<!--more-->
 
 Ok, lets move on. Back in 2011 I wrote a very simple tool called [gb](https://github.com/paulosuzart/gb) just for the sake of learning [Go](http://golang.org). In the end it is quite good code and useful if you want to build and use it. It is inspired by [Apache Benchmark](http://httpd.apache.org/docs/2.2/programs/ab.html) with less features.
 

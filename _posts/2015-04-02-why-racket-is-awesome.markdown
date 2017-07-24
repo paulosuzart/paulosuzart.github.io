@@ -10,6 +10,7 @@ categories: [racket]
 
 Finally 1st post of the year! Well, not that much to say lately. But here a piece of my sensations while playing with [Racket](http://racket-lang.org/) last two weeks.
 
+<!--more-->
 How I started looking at it
 ----
 

@@ -12,6 +12,8 @@ As I bloged at [codemountain](http://codemountain.wordpress.com/2011/10/14/twitt
 
 During this project I needed to extract from the query string, a param to be parsed to a twitter.util.Time. I ended up with a Param Matcher to be used my a pattern match agains the requested path. The use of this Param Patcher is:
 
+<!--more-->
+
 {% highlight scala %}
 //...
 Path(request.path) :? request.params match {

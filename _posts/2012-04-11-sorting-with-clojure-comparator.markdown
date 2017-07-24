@@ -11,7 +11,7 @@ This is a quick post to show an example of [clojure](http://clojure.org) `compar
 At work a friend wrote dozen lines of java to sort a list of characters that represents t-shirt sizes. The sizes are: pp, p, m, mm, g, gg, a, aa. Where 'pp' is super small, 'p' small, 'm' medium, etc. 
 
 Some shees have all the sizes available, some not. So imagine a shirt with just g, a, gg, p sizes availabe. The screen should show: p, g, gg, a.
-
+<!--more-->
 He requested me to do a clojure version of it. Here it goes.
 
 {% gist 2351780 %}

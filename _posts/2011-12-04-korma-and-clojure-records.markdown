@@ -24,6 +24,8 @@ Consider the following entities:
 	    (database mydb))
 {% endhighlight %}
 
+<!--more-->
+
 `email` is the representation of the email table in a mysql database. Note that you don't need to specify any fields. It is optional. In this case, both entities will return the column's name as map keys in a given select. Let's see:
 
 {% highlight clojure %}

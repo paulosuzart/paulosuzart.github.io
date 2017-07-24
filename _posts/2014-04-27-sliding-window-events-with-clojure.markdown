@@ -11,7 +11,7 @@ Hello all, I'm back to [clojure](http://clojuredocs.org) posts again. :)
 I was looking for a sliding window processing of events. This is something very common in the world of [Complex Event Processing](http://en.wikipedia.org/wiki/Complex_event_processing) that can be roughly translated to querying events adding a time dimension to the query.
 
 We can easily find some great products/libs namely: The excelent [Oracle CEP](http://www.oracle.com/technetwork/middleware/complex-event-processing/overview/complex-event-processing-088095.html), [Jboss Drools Fusion](http://drools.jboss.org/drools-fusion.html), [Esper](http://esper.codehaus.org/), and the very useful [Clojure Werkz](http://clojurewerkz.org/) [EEP, Embedded Event Processing](https://github.com/clojurewerkz/eep).
-
+<!--more-->
 Excepting EEP, all the others are very complete. They offer a DSL so you can query and aggregate streams of events in a very intuitive manner. But I was looking for something veeeery simple like **EEP**.
 
 EEP comes with some basic sliding window buffers. Be it based on size, be it based on time. The point with time based windows on EEP, is that they are basically a buffer waiting for some time to be elapsed before it sends all the entries to a handler. So in this case it is not so suitable for answering questions like: *"How much my e-commerce sold in the last 4 minutes?"*

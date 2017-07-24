@@ -12,6 +12,8 @@ You interact with redis through its protocol. They are divided by commands that 
 
 Since redis is key-value, it means you can store only keys with values. Right? It may sound bad at the beginning, but you get the way as you try. I'm just a newbe in redis world and I'm feeling comfortable with it.
 
+<!--more-->
+
 So, due to its key-value nature you should create some structures around you main structure to help you query your data. Suppose you are using a redis `HASH` to store user information. In a javascript notation:
 
 	HMSET  users:21 name Abraão mail somemailhere@gmail.com status pending-mail-confirmation

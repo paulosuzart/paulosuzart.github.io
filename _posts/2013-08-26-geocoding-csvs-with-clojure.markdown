@@ -15,7 +15,7 @@ Well, I had this feeling after freeing up my team of writing and writing the sam
 > Ultimate Geo is the final definitive geocoding app. The motivation behind it was: We have different CSVs full of address in the most crazy combinations. Some of them has the street, number, site, phone. while others have same columns in a different order, etc. This led us to keep creating (actually adjusting) our geocode scripts. Now it is over.
 
 Of course it may not fit everyone's needs. But helped my scenario a lot.
-
+<!--more-->
 After atending the [(sp (first meetup))](http://www.meetup.com/clj-sp/events/132201232/) I polished this small project called [`ultimate-geo`](https://github.com/paulosuzart/ultimate-geo), given I mentioned it while talking to people.
 
 A general explannation of how `ultimate-geo` works can be found on its project page, but by didactic reasons, here a more detailed explanation:

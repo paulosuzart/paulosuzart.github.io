@@ -13,6 +13,8 @@ Yes they are 15. I started my passion for programming languages almost 10 years 
 
 Here a present you them in a loose chronological order.
 
+<!--more-->
+
 **2. Scala**
 
 I quickly started writing about [Scala](https://www.scala-lang.org/). Even had 18 blog posts on it in [my old blog (portuguese only)](https://codemountain.wordpress.com/category/scala/). And prepared a presentation available on [slide share](http://fr.slideshare.net/paulosuzart/scala-uma-breve-breve-mesmo-introduo). That was an amazing exciting time, I'd just escaped from the Java island I was trapped in. I could see the world.

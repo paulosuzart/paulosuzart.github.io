@@ -11,7 +11,7 @@ Intro
 Before going further, please take a look at [Parallel SSH and system monitoring in Clojure](http://info.rjmetrics.com/blog/bid/54114/Parallel-SSH-and-system-monitoring-in-Clojure).
 
 Combining my need for monitoring an EC2 instance running [nginx](http://nginx.org), [bamboo](http://www.atlassian.com/software/bamboo/overview) and [artifactory](http://www.jfrog.com/products.php), with my will to code in clojure, I have decided to use [server-stats](https://github.com/paulosuzart/Server-Stats) to basic monitor my server via ssh.
-
+<!--more-->
 EC2 supports interactions using SSH without need its `.pem` file if you add your public key to it. Take a look [here](http://craiccomputing.blogspot.com.br/2009/07/rails-git-capistrano-ec2-and-ssh.html) to see how.
 
 These are dead simple commands and of course you should use more serious ones for critical services.

@@ -1,17 +1,32 @@
 title:        Paulo Suzart
 tagline:      'my blog at github.io'
 description:  'Functional programming and a bit of a lot.'
-url:          http://paulosuzart.github.io
 version:      1.1.1
-author:
+owner:
   name:       'Paulo Suzart'
-  email:      'paulosuzart@gmail.com'
+  job:        'FP and more'
+  github:     'github.com/paulosuzart'
+  bio:        'back end developer | machine Learning professional wannabe'
+  linkedin:   'https://www.linkedin.com/in/paulosuzart/'
+  disqus-shortname: paulosuzartblog
+  disqus_short_name: paulosuzartblog
+  google:
+    analytics: 'UA-26676810-1'
 markdown: kramdown
 permalink:    /blog/:year/:month/:day/:title/
 highlighter:  pygments
-paginate:     8
+paginate: 8
+paginate_path: "/pages/page:num/"
 tracking_id : 'UA-26676810-1'
 disqus_short_name: paulosuzartblog
 gems:
   - jekyll-gist
   - jekyll-paginate
+
+excerpt_separator: <!--more-->
+kramdown:
+  auto_ids: true
+  footnote_nr: 1
+  entity_output: as_char
+  toc_levels: 1..6
+  enable_coderay: false

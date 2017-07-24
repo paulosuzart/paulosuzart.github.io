@@ -3,10 +3,12 @@ layout: post
 title: "How Much Functional Are You?"
 date: 2015-08-21 00:22
 comments: true
-categories: [fp haskell scala]
+categories: [fp, haskell, scala]
 ---
 
 Whats up? Fine? Well, I don't know exactly why but I ended up reading the [Feature Overview](https://github.com/milessabin/shapeless/wiki/Feature-overview:-shapeless-1.2.4) doc of the great [Shapeless](https://github.com/milessabin/shapeless) [Scala](http://scala-lang.org) lib.
+
+<!--more-->
 
 I think it was when reading more about Scala implicits. Anyway, Shapeless and also [ScalaZ tutorials](http://eed3si9n.com/learning-scalaz/index.html) docs put a huge attention to Scala type system and who to build extensible stuff using implicits and the power of the type system itself.
 

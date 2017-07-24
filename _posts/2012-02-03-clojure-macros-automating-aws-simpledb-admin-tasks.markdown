@@ -12,6 +12,8 @@ I'm using macros to help me setting up a connection with [Amazon SimpleDB](http:
 
 SimpleDB hasn't a console, so you have interact with it using a pure html + js application provided by AWS, or do it by hand. I do prefer doing it by my own :). Then I created de following macro:
 
+<!--more-->
+
 {% highlight clojure %}
 (defmacro boot-sdb []
 	'(do

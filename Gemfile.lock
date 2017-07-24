@@ -134,7 +134,8 @@ PLATFORMS
 DEPENDENCIES
   github-pages
   jekyll-gist
+  jekyll-paginate
   pygments.rb
 
 BUNDLED WITH
-   1.12.0.rc
+   1.15.1

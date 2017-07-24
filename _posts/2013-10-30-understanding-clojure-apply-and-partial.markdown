@@ -9,7 +9,7 @@ categories: clojure
 Hi guys, a really introductory post on [Clojure](http://clojure.org) `apply` and `partial`functions. I need to confess that I didn't take a look around to see how people are usually explaining these functions. For sure there are better ways to explain it even usingJavascript, but remember: it was used to teach a beginne, so no purism here.
 
 Anyway. These sample `js` codes come from the explanation I gave to a colleague at work. And pretty much worked to illustrate both cases.
-
+<!--more-->
 Apply
 =====
 To a beginner it might be not that easy to imagine how they will find room for using `apply`. They think it will take millon years until it become useful. Wrong!

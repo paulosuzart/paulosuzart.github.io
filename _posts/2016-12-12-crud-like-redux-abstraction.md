@@ -12,6 +12,8 @@ I recently played the role of a front end developer. You know, I'm not one in a 
    - [Redux](http://redux.js.org/)  - a predictable state container for JavaScript apps
    - [Material-UI](www.material-ui.com) - A set of React Components that Implement Google's Material Design
 
+<!--more-->
+
 This combo is pretty high level and you end up with a `package.json` like this:
 
 

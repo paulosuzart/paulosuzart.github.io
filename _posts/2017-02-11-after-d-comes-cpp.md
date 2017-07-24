@@ -3,7 +3,7 @@ layout: post
 title: "After D comes C++"
 date: 2017-02-11 10:22
 comments: true
-categories: [programming D C++]
+categories: [programming, D, C++]
 ---
 
 As mentioned in my [previous post](http://paulosuzart.github.io/blog/2017/02/10/languages-and-counting/), we may be openning our GraphQL Grammar (using [PEGGED](https://github.com/PhilippeSigaud/Pegged)), and interpreter to generate compatible pure D Abstract Syntax Tree.
@@ -13,6 +13,8 @@ While we don't have any decision, let's talk about D and Why I ended up building
 We were looking for a compiled language with powerful type system for OO purposes (That's why dropped [Go](https://golang.org/)), that wasn't Java. With Scala going down the hill, there was few options that could make any sense. They were D or C++. 
 
 C++ has a myth that it is complex and hard (well, it might be sometimes), so we picked up D!
+
+<!--more-->
 
 The language is simply awesome! If you read the [Language Reference](https://dlang.org/spec/spec.html) up get instantlly on fire. It also has [DUB](https://code.dlang.org/), a sort of poor cousing of [NPM], [Cargo](https://crates.io/) or [hex](https://hex.pm/). Just add your dependencies, and run `dub`. That is all, your code will be compiled to native code and you can run it. Take a look at this `dub.json` file, the main projec descriptor:
 

@@ -10,7 +10,7 @@ Hi all! First note:
 [Puppet](http://puppetlabs.com/) definitely goes beyond what is written here. Also, I'm far from being a puppet specialist, and after posting about [Ansible](http://www.ansibleworks.com/), I'm writing about puppet because it is my main tool.
 
 While translating a Ansible playbook once used to setup a developer machine - if I can call it rewrite - I found myself often using the same patter: Using `create_resources` [function](http://docs.puppetlabs.com/references/latest/function.html#createresources) + pure hashmaps. 
-
+<!--more-->
 What a hell?
 
 Well, while defining nodes you use puppet resources to install lots os packages and configure them. Eg.: Create [postgres](http://www.postgresql.org/) databases, install [GVM](http://gvmtool.net/) packages, etc. Then the need "iterate every new package/database and install/create it".

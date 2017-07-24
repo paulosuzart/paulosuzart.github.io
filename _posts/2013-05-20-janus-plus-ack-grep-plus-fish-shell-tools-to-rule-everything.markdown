@@ -16,7 +16,7 @@ Grails and Clojure at work.
 Editor (gVim with Janus)
 ======
 I used [Sublimetext](http://www.sublimetext.com/) for almost two years at home and at work. I really like it, but if I understood well, the version 3 is available for purchasing only. And, you know, you have a `vim` editor. Why not?
-
+<!--more-->
 Ok, pure `vi` is too much for most people, so put some sauce and you have
 a Sublimetext like `vim` editor, or even more powerful. Just use [Janus](https://github.com/carlhuda/janus) for it and combine with gVim.
 

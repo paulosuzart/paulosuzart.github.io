@@ -9,7 +9,7 @@ categories: clojure
 Hi Ho! Its been a long time without writing here. As you might know, I've just launched a new web/mobile [(Guiato)](http://www.guiato.com.br) platform to help retailers reach their customers with their existing brochures/pamphlets/flyers but now, electronically.
 
 It was as a 4 months adventure, including 20 days in Germany to plan and bring all the platform to Brazil. But now it is time to clojure a bit more. And we are just beginning.
-
+<!--more-->
 My team and I have a simple google docs with amazing funny statements - or facts - we say. But it is too much sophisticated, so I decided to write our own system (Clacts) to register and read this facts using [Clojure](http://clojure.org), [Aleph](https://github.com/ztellman/aleph/wiki) as TCP server, [Gloss](https://github.com/ztellman/gloss/wiki) for encoding/decoding messages and [SQLite](http://www.sqlite.org/) for storing facts. Amazing! Isn't it? :) Well at last it was funny.
 
 I started creating a very simple protocol to allow clients to connect via telnet. So it is:

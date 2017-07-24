@@ -17,6 +17,8 @@ Here it is:
 * `#{setkey data}` represents a set or sorted set.
 * `as $varname` may be used for situations where `INCR` is used to generate an ID.
 
+<!--more-->
+
 The last post user creation process may be written as:
 
 	users:next as $uid

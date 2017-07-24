@@ -1,28 +1,22 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<html lang="en">
 
-  {% include head.html %}
+{% include head.html %}
 
-  <body>
-
-    <header class="masthead">
-      <div class="masthead-inner">
-        <h1><a href="/">{{ site.title }}</a></h1>
-        <p>{{ site.description }}</p>
-
-        <div class="colophon">
-          <ul class="colophon-links">
-            <li>
-              <a href="https://github.com/paulosuzart">My Github</a>
-            </li>
-          </ul>
-        </div>
+<body>
+  <div class="row">
+    <div class="col s12 m3">
+      <div class="table cover">
+        {% include sidebar.html %}
       </div>
-    </header>
-
-    <div class="content container">
-      {{ content }}
     </div>
-
-  </body>
+    <div class="col s12 m9">
+      <div class="post-listing">
+        {{ content }}
+        {% include footer.html %}
+      </div>
+    </div>
+  </div>
+  {% include js.html %}
+</body>
 </html>

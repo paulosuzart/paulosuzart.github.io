@@ -13,7 +13,7 @@ Well, this time we will explore the [clojure's](http://clojure.org) ability to [
 This is such an amazing feature, but you should be careful. Don't start reading anyones files and evaluating them into your app. Be wise and use it for specific situation like this: I wanted to load a bunch of configurations (and even funtion calls) depending on the environment my app is running.
 
 To do the conditional evaluation, I decided to add an extra key to `:immutant` entry in my project definition. The entry `:env` is an [arbitrary configuration value](http://immutant.org/documentation/current/initialization.html#sec-3-1). Lets take a look:
-
+<!--more-->
 {% highlight clojure %}
 (defproject tserver "0.1.0-SNAPSHOT"
   :description "A foo project"

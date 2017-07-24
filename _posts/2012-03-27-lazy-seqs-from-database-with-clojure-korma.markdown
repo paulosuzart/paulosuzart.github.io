@@ -9,7 +9,7 @@ categories: clojure
 As you may know, I've started in a new company last early this month. It is being a huge change in all aspects, technology, people, process, environment, etc.
 
 Well, this week I wanted to migrate some data (900k rows) from a [MySQL](http://mysql.com/) database to a [Postgres](www.postgresql.org) one. [@felipejcruz](twitter.com/felipejcruz) recommended [py-mysql2pgsql](http://pypi.python.org/pypi/py-mysql2pgsql), but I wasn't able to put it to run with dependency - or whatever that messages were - errors. Then I tried [SQLFairy](http://sqlfairy.sourceforge.net/), but does not migrate data, just the schema ddl and other cool features (worthy features).
-
+<!--more-->
 I ended up doing this administrative task with [clojure](http://clojure.org/) and [korma](http://sqlkorma.com/), with few functional concepts to handle the entire data set as if it was in memory.
 
 The flow is: select everything from mysql, insert every thing into postgres. No transformation, no mapping, just select, insert. Take a look at the code:
