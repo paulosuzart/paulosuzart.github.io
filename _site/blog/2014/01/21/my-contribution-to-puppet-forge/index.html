@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>My Contribution to Puppet Forge</title>
+  <meta name="description" content="Happy new year! This time I would like to share with you that I’ve just shared a Puppet module at Puppet Forge. That is awesome!As you may know, I’m using pu...">
+
+  <!-- CSS files -->
+  <link rel="stylesheet" href="http://localhost:4000/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://localhost:4000/css/main.css">
+
+  <link rel="canonical" href="http://localhost:4000/blog/2014/01/21/my-contribution-to-puppet-forge/">
+  <link rel="alternate" type="application/rss+xml" title="Paulo Suzart" href="http://localhost:4000/feed.xml" />
+
+  <!-- Icons -->
+  <!-- 16x16 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+  <!-- 32x32 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+</head>
+
+
+<body>
+  <div class="row">
+    <div class="col s12 m3">
+      <div class="table cover">
+        
+
+<div class="cover-card table-cell table-middle">
+  
+  <a href="http://localhost:4000/" class="author_name">Paulo Suzart</a>
+  <span class="author_job">FP and more</span>
+  <span class="author_bio mbm">back end developer | machine Learning professional wannabe</span>
+  <nav class="nav">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="http://localhost:4000/">home</a>
+      </li>
+       
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/archive/">Archive</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/categories/">Categories</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/tags/">Tags</a>
+          </li>
+        
+        
+        
+           
+        
+           
+        
+           
+        
+          
+    </ul>
+  </nav>
+  <script type="text/javascript">
+  // based on http://stackoverflow.com/a/10300743/280842
+  function gen_mail_to_link(hs, subject) {
+    var lhs,rhs;
+    var p = hs.split('@');
+    lhs = p[0];
+    rhs = p[1];
+    document.write("<a class=\"social-link-item\" target=\"_blank\" href=\"mailto");
+    document.write(":" + lhs + "@");
+    document.write(rhs + "?subject=" + subject + "\"><i class=\"fa fa-fw fa-envelope\"></i><\/a>");
+  }
+</script>
+<div class="social-links">
+  <ul>
+    
+    
+    
+    
+    <li><a href="http://linkedin.com/in/https://www.linkedin.com/in/paulosuzart/" class="social-link-item" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
+    
+    
+    
+    
+    <li><a href="http://github.com/github.com/paulosuzart" class="social-link-item" target="_blank"><i class="fa fa-fw fa-github"></i></a></li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </ul>
+</div>
+
+</div>
+
+      </div>
+    </div>
+    <div class="col s12 m9">
+      <div class="post-listing">
+        <a class="btn" href= "http://localhost:4000/" >
+  Home
+</a>
+
+
+
+<div id="post">
+  <header class="post-header">
+    <h1 title="My Contribution to Puppet Forge">My Contribution to Puppet Forge</h1>
+    <span class="post-meta">
+      <span class="post-date">
+        21 JAN 2014
+      </span>
+      •
+      <span class="read-time" title="Estimated read time">
+  
+  
+    2 mins read
+  
+</span>
+
+    </span>
+
+  </header>
+
+  <article class="post-content">
+    <p>Happy new year! This time I would like to share with you that I’ve just shared a <a href="http://puppetlabs.com/puppet/puppet-open-source">Puppet</a> <a href="https://forge.puppetlabs.com/paulosuzart/gvm">module</a> at <a href="http://forge.puppetlabs.com/">Puppet Forge</a>. That is awesome!</p>
+
+<p>As you may know, I’m using puppet to manage my own manage resources. You can find all these manifestes my git hub at <a href="https://github.com/paulosuzart/puppet">https://github.com/paulosuzart/puppet</a>. There you’ll basically see some resources to setup, update and keep a bunch of packages and and configurations. That sort of thing you don’t wanna miss next time you format your laptop, or when you evolve the current one.
+<!--more-->
+Examples are installation of postgresql, postgis, git, change your prompt, configure your git, install clojure lein, create python virtual env and its packages, install and update <a href="http://gvmtool.net/">GVM</a> packages.</p>
+
+<p>Well, as many other communities, puppet users can share their code with anyone interested on it. For example, my manifests uses really nice community modules such as <a href="http://forge.puppetlabs.com/puppetlabs/apt">apt</a>, <a href="http://forge.puppetlabs.com/maestrodev/wget">wget</a> and many others.</p>
+
+<p>After looking for a module to install GVM and its packages, I’ve found nothing. At this point I had created my own module that I than decided to share.</p>
+
+<p>The process of <a href="http://docs.puppetlabs.com/puppet/latest/reference/modules_publishing.html">creating and publishing a module</a> is quite straightforward. So anyone can share modules, but good to be responsible and take care of compatibility, etc. Any way, this is up to you either user or not a community module.</p>
+
+<h2 id="what-was-used">What was used</h2>
+
+<p>The module itself relies on <code>wget</code> to grab the GVM setup file from the internet, and then install it and download packages needed by the user. So it is mostly <a href="http://docs.puppetlabs.com/references/latest/type.html#exec"><code>exec</code></a> commands.</p>
+
+<p>The most interesting part is how to prevent some <code>exec</code> block to run. Below you see a piece of <code>package.pp</code> that is responsible for setting a given package as default. But this step is not needed if a the package is already the default.</p>
+
+<p>To prevent it to run, one can use <code>unless</code> attribute from <code>exec</code> command. It basically runs some piece of code that should return 0 to allow this <code>exec</code> to be ran.</p>
+
+<figure class="highlight"><pre><code class="language-puppet" data-lang="puppet"><span></span><span class="nc">exec</span> <span class="p">{</span><span class="s2">&quot;gvm default $name&quot;</span> <span class="p">:</span>
+  <span class="nt">environment</span> <span class="p">=&gt;</span> <span class="s2">&quot;HOME=$user_home&quot;</span><span class="p">,</span>
+  <span class="nt">command</span>     <span class="p">=&gt;</span> <span class="s2">&quot;bash -c &#39;$gvm_init &amp;&amp; gvm default $name $version&#39;&quot;</span><span class="p">,</span>
+  <span class="nt">user</span>        <span class="p">=&gt;</span> <span class="nv">$owner</span><span class="p">,</span>
+  <span class="nt">path</span>        <span class="p">=&gt;</span> <span class="s1">&#39;/usr/bin:/usr/sbin:/bin&#39;</span><span class="p">,</span>
+  <span class="nt">logoutput</span>   <span class="p">=&gt;</span> <span class="ss">true</span><span class="p">,</span>
+  <span class="nt">unless</span>      <span class="p">=&gt;</span> <span class="s2">&quot;test </span><span class="se">\&quot;</span><span class="s2">$version</span><span class="se">\&quot;</span><span class="s2"> = </span><span class="se">\$</span><span class="s2">(find $user_home/.gvm/$name -type l -printf &#39;%p -&gt; %l</span><span class="se">\\</span><span class="s2">n&#39;| awk &#39;{print </span><span class="se">\$</span><span class="s2">3}&#39; | awk -F&#39;/&#39; &#39;{print </span><span class="se">\$</span><span class="s2">NF}&#39;)&quot;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Sometimes you have to find the most crazy commands to prevent something to run. But good that you go deep into linux. In this case, GVM creates a <code>symlink</code> from the package version to a folder named <code>current</code> under the installed package folder. So, if such link exists for the given <code>$verion</code>, it is already the default verion and not needed to run this resource.</p>
+
+<p>This project you can find on this Github repo: <a href="https://github.com/paulosuzart/gvm">https://github.com/paulosuzart/gvm</a>. Hope people in the community can use and contribute.</p>
+
+  </article>
+</div>
+
+<div class="share-buttons">
+  <h6>Share on: </h6>
+  <ul>
+    <li>
+      <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/blog/2014/01/21/my-contribution-to-puppet-forge/" class="twitter btn" title="Share on Twitter"><i class="fa fa-twitter"></i><span> Twitter</span></a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/blog/2014/01/21/my-contribution-to-puppet-forge/" class="facebook btn" title="Share on Facebook"><i class="fa fa-facebook"></i><span> Facebook</span></a>
+    </li>
+    <li>
+      <a href="https://plus.google.com/share?url=http://localhost:4000/blog/2014/01/21/my-contribution-to-puppet-forge/" class="google-plus btn" title="Share on Google Plus"><i class="fa fa-google-plus"></i><span> Google+</span></a>
+    </li>
+    <li>
+      <a href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/blog/2014/01/21/my-contribution-to-puppet-forge/" class="hacker-news btn" title="Share on Hacker News"><i class="fa fa-hacker-news"></i><span> Hacker News</span></a>
+    </li>
+    <li>
+      <a href="https://www.reddit.com/submit?url=http://localhost:4000/blog/2014/01/21/my-contribution-to-puppet-forge/" class="reddit btn" title="Share on Reddit"><i class="fa fa-reddit"></i><span> Reddit</span></a>
+    </li>
+  </ul>
+</div><!-- end share-buttons -->
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'paulosuzartblog';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+        <footer>
+  &copy; 2017 Paulo Suzart. Powered by <a href="http://jekyllrb.com/">Jekyll</a>, <a href="http://github.com/renyuanz/leonids/">leonids theme</a> made with <i class="fa fa-heart heart-icon"></i>
+</footer>
+
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="http://localhost:4000/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="http://localhost:4000/js/main.js"></script>
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26676810-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>

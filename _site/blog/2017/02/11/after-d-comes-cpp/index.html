@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>After D comes C++</title>
+  <meta name="description" content="As mentioned in my previous post, we may be openning our GraphQL Grammar (using PEGGED), and interpreter to generate compatible pure D Abstract Syntax Tree.W...">
+
+  <!-- CSS files -->
+  <link rel="stylesheet" href="http://localhost:4000/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://localhost:4000/css/main.css">
+
+  <link rel="canonical" href="http://localhost:4000/blog/2017/02/11/after-d-comes-cpp/">
+  <link rel="alternate" type="application/rss+xml" title="Paulo Suzart" href="http://localhost:4000/feed.xml" />
+
+  <!-- Icons -->
+  <!-- 16x16 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+  <!-- 32x32 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+</head>
+
+
+<body>
+  <div class="row">
+    <div class="col s12 m3">
+      <div class="table cover">
+        
+
+<div class="cover-card table-cell table-middle">
+  
+  <a href="http://localhost:4000/" class="author_name">Paulo Suzart</a>
+  <span class="author_job">FP and more</span>
+  <span class="author_bio mbm">back end developer | machine Learning professional wannabe</span>
+  <nav class="nav">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="http://localhost:4000/">home</a>
+      </li>
+       
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/archive/">Archive</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/categories/">Categories</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/tags/">Tags</a>
+          </li>
+        
+        
+        
+           
+        
+           
+        
+           
+        
+          
+    </ul>
+  </nav>
+  <script type="text/javascript">
+  // based on http://stackoverflow.com/a/10300743/280842
+  function gen_mail_to_link(hs, subject) {
+    var lhs,rhs;
+    var p = hs.split('@');
+    lhs = p[0];
+    rhs = p[1];
+    document.write("<a class=\"social-link-item\" target=\"_blank\" href=\"mailto");
+    document.write(":" + lhs + "@");
+    document.write(rhs + "?subject=" + subject + "\"><i class=\"fa fa-fw fa-envelope\"></i><\/a>");
+  }
+</script>
+<div class="social-links">
+  <ul>
+    
+    
+    
+    
+    <li><a href="http://linkedin.com/in/https://www.linkedin.com/in/paulosuzart/" class="social-link-item" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
+    
+    
+    
+    
+    <li><a href="http://github.com/github.com/paulosuzart" class="social-link-item" target="_blank"><i class="fa fa-fw fa-github"></i></a></li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </ul>
+</div>
+
+</div>
+
+      </div>
+    </div>
+    <div class="col s12 m9">
+      <div class="post-listing">
+        <a class="btn" href= "http://localhost:4000/" >
+  Home
+</a>
+
+
+
+<div id="post">
+  <header class="post-header">
+    <h1 title="After D comes C++">After D comes C++</h1>
+    <span class="post-meta">
+      <span class="post-date">
+        11 FEB 2017
+      </span>
+      •
+      <span class="read-time" title="Estimated read time">
+  
+  
+    5 mins read
+  
+</span>
+
+    </span>
+
+  </header>
+
+  <article class="post-content">
+    <p>As mentioned in my <a href="http://paulosuzart.github.io/blog/2017/02/10/languages-and-counting/">previous post</a>, we may be openning our GraphQL Grammar (using <a href="https://github.com/PhilippeSigaud/Pegged">PEGGED</a>), and interpreter to generate compatible pure D Abstract Syntax Tree.</p>
+
+<p>While we don’t have any decision, let’s talk about D and Why I ended up building an entire server in C++.</p>
+
+<p>We were looking for a compiled language with powerful type system for OO purposes (That’s why dropped <a href="https://golang.org/">Go</a>), that wasn’t Java. With Scala going down the hill, there was few options that could make any sense. They were D or C++.</p>
+
+<p>C++ has a myth that it is complex and hard (well, it might be sometimes), so we picked up D!</p>
+
+<!--more-->
+
+<p>The language is simply awesome! If you read the <a href="https://dlang.org/spec/spec.html">Language Reference</a> up get instantlly on fire. It also has <a href="https://code.dlang.org/">DUB</a>, a sort of poor cousing of [NPM], <a href="https://crates.io/">Cargo</a> or <a href="https://hex.pm/">hex</a>. Just add your dependencies, and run <code>dub</code>. That is all, your code will be compiled to native code and you can run it. Take a look at this <code>dub.json</code> file, the main projec descriptor:</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span></span><span class="p">{</span>
+	<span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;graphqld&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;authors&quot;</span><span class="p">:</span> <span class="p">[</span>
+		<span class="s2">&quot;Paulo Suzart&quot;</span>
+	<span class="p">],</span>
+	
+	<span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+		<span class="nt">&quot;pegged&quot;</span><span class="p">:</span> <span class="s2">&quot;~&gt;0.3.3&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;accessors&quot;</span><span class="p">:</span> <span class="s2">&quot;~&gt;1.0.0&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;d-unit&quot;</span><span class="p">:</span> <span class="s2">&quot;~&gt;0.8.1&quot;</span><span class="p">,</span>
+		<span class="nt">&quot;ddbc&quot;</span><span class="p">:</span> <span class="s2">&quot;~&gt;0.3.2&quot;</span>
+	<span class="p">},</span>
+	<span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;D Graphql Server&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;copyright&quot;</span><span class="p">:</span> <span class="s2">&quot;Copyright © 2016, Paulo Suzart&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;license&quot;</span><span class="p">:</span> <span class="s2">&quot;proprietary&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;-ddoxFilterArgs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;--ex&quot;</span><span class="p">,</span> <span class="s2">&quot;pegged&quot;</span><span class="p">]</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>For a compiled language that needs to have libs linked, etc. This is really great stuff.</p>
+
+<p>D comes with a Template system for generic programming (Like Java Generics or C++ templates, but more powerful perhaps). It extends to code generation at compile time, allowing a small code base that can produce huge codebases saving a lot of repetition. There are many cases where you have to repeat, over and over again the same code. Suppose this real case of a visitor that goes through a AST, gets the children of eath node, then visits them. You can easily reach dozens of repetitions.</p>
+
+<p>The gist below shows a visitor base class <code>BaseGraphQLVisitor</code>. It visits a <code>Node</code>, gets its children, iterates over it an then calls <code>visitNameOfTheNodeTypeHere</code>. The more you have types, the more you have to type to produce such visitor.</p>
+
+<p>Check it ou and try to understand what is going on:</p>
+
+<noscript><pre>400: Invalid request
+</pre></noscript>
+<script src="https://gist.github.com/b4a4f41d011d5950829248b5a6b944a6.js"> </script>
+
+<p>Look at the <code>BaseGraphQLVisitor</code>, due to the nature of the language, it holds  a map of <code>strings</code> mapping to sort of lambda functions (called delegates). If you pay extra attention, notice there is absolute no function in the class body. No, they are not inherited from a parent class, instead, they are generated at compile time. See <code>visitDocument</code>, <code>visitDefinition</code> and so on.</p>
+
+<p>Watch the line 74 where the generated code is “inserted” in. <code>GenerateVisitMethods</code> is a string that looks like normal code <em>because I’m using <code>q</code> for quoting it instead of the usual quoting (“ “)</em>. What it does is to call a mixin template that will generate, for each element in the passed argument array a function that looks like:</p>
+
+<figure class="highlight"><pre><code class="language-d" data-lang="d"><span></span><span class="kt">void</span> <span class="n">visitDocument</span><span class="p">(</span><span class="n">ParseTree</span> <span class="n">tree</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">tree</span><span class="p">.</span><span class="n">name</span> <span class="p">!=</span> <span class="s">&quot;GraphQL.Document&quot;</span><span class="p">)</span>
+		<span class="k">return</span><span class="p">;</span>
+	<span class="n">visitNode</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><code>visitNode</code> is a function already provided in the class, that is called by the generated code. This is gold as the number of types increases. Of course this is just a case, but it’s infinite what you can do with mixin templates.</p>
+
+<h2 id="the-frustration">The frustration</h2>
+
+<p>It’s not totally related to the language, which is awesome. Unfortunately the ecosystem is limited, there are pleny <code>0.*</code> version libs. I don’t know why people fear to reach <code>1.0</code>. So it quickly became hard to see future when you need good integrations with existing Database, HTTP, IDE, etc.</p>
+
+<p>They are trying. See <a href="https://vibed.org/">Vibed</a> and <a href="https://github.com/DDT-IDE/DDT">Eclipse DDT</a>. But we need more than this for real projects with real money involved.</p>
+
+<p>There is also a company kinda sponsoring DConf, that are clearly bringing some retarded ideology to the conference, what may put minorities privileges before technical skills. A huge risk for any sane evolution of the language and the ecosystem.</p>
+
+<h2 id="then-c">Then C++</h2>
+
+<p>Given that we need to build such a service that is almost invisible <em>due to it’s performance requirements</em>, we simply jumped to C++. Got IDEs? Sure! <a href="https://www.jetbrains.com/clion/">CLion is great</a>. Got Libs? Well, it wouldn’t fit here, but just take a look at <a href="http://www.boost.org/">Boost</a> and <a href="https://pocoproject.org">POCO</a>.</p>
+
+<p>What about package managers. Yest we have, see <a href="https://www.conan.io/">Conan</a>. Got Build Tool? Of course, dear: <a href="https://cmake.org">CMake</a>.</p>
+
+<p>Ok ok, you need test libs, right? Here you have <a href="https://github.com/philsquared/Catch">Catch</a> and <a href="https://github.com/google/googletest">Google Test</a>. Not only that, just check out the <a href="https://code.facebook.com/">Facebook open source projects</a>, most of them are pure C++ 11, or C++ 14.</p>
+
+<p>I just use GCC, and haven’t had time to try other compilers.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>When you have real money involved, don’t play. Not that we were kid playing or being reckless, we really believed we could go end to end using D, but so far it’s not the case. In the end, one thing we won’t be worried is performance (of course if we don’t do shit in our code). D has Gc, and supposedly supports coding with it disabled, but lets try it another round.</p>
+
+
+  </article>
+</div>
+
+<div class="share-buttons">
+  <h6>Share on: </h6>
+  <ul>
+    <li>
+      <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/blog/2017/02/11/after-d-comes-cpp/" class="twitter btn" title="Share on Twitter"><i class="fa fa-twitter"></i><span> Twitter</span></a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/blog/2017/02/11/after-d-comes-cpp/" class="facebook btn" title="Share on Facebook"><i class="fa fa-facebook"></i><span> Facebook</span></a>
+    </li>
+    <li>
+      <a href="https://plus.google.com/share?url=http://localhost:4000/blog/2017/02/11/after-d-comes-cpp/" class="google-plus btn" title="Share on Google Plus"><i class="fa fa-google-plus"></i><span> Google+</span></a>
+    </li>
+    <li>
+      <a href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/blog/2017/02/11/after-d-comes-cpp/" class="hacker-news btn" title="Share on Hacker News"><i class="fa fa-hacker-news"></i><span> Hacker News</span></a>
+    </li>
+    <li>
+      <a href="https://www.reddit.com/submit?url=http://localhost:4000/blog/2017/02/11/after-d-comes-cpp/" class="reddit btn" title="Share on Reddit"><i class="fa fa-reddit"></i><span> Reddit</span></a>
+    </li>
+  </ul>
+</div><!-- end share-buttons -->
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'paulosuzartblog';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+        <footer>
+  &copy; 2017 Paulo Suzart. Powered by <a href="http://jekyllrb.com/">Jekyll</a>, <a href="http://github.com/renyuanz/leonids/">leonids theme</a> made with <i class="fa fa-heart heart-icon"></i>
+</footer>
+
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="http://localhost:4000/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="http://localhost:4000/js/main.js"></script>
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26676810-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>

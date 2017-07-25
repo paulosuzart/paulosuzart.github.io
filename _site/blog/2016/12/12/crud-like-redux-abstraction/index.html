@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>CRUD like Redux Abstraction</title>
+  <meta name="description" content="I recently played the role of a front end developer. You know, I’m not one in a broad sense. I have not my head wrapped around CSS and visual stuff. But I ma...">
+
+  <!-- CSS files -->
+  <link rel="stylesheet" href="http://localhost:4000/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://localhost:4000/css/main.css">
+
+  <link rel="canonical" href="http://localhost:4000/blog/2016/12/12/crud-like-redux-abstraction/">
+  <link rel="alternate" type="application/rss+xml" title="Paulo Suzart" href="http://localhost:4000/feed.xml" />
+
+  <!-- Icons -->
+  <!-- 16x16 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+  <!-- 32x32 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+</head>
+
+
+<body>
+  <div class="row">
+    <div class="col s12 m3">
+      <div class="table cover">
+        
+
+<div class="cover-card table-cell table-middle">
+  
+  <a href="http://localhost:4000/" class="author_name">Paulo Suzart</a>
+  <span class="author_job">FP and more</span>
+  <span class="author_bio mbm">back end developer | machine Learning professional wannabe</span>
+  <nav class="nav">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="http://localhost:4000/">home</a>
+      </li>
+       
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/archive/">Archive</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/categories/">Categories</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/tags/">Tags</a>
+          </li>
+        
+        
+        
+           
+        
+           
+        
+           
+        
+          
+    </ul>
+  </nav>
+  <script type="text/javascript">
+  // based on http://stackoverflow.com/a/10300743/280842
+  function gen_mail_to_link(hs, subject) {
+    var lhs,rhs;
+    var p = hs.split('@');
+    lhs = p[0];
+    rhs = p[1];
+    document.write("<a class=\"social-link-item\" target=\"_blank\" href=\"mailto");
+    document.write(":" + lhs + "@");
+    document.write(rhs + "?subject=" + subject + "\"><i class=\"fa fa-fw fa-envelope\"></i><\/a>");
+  }
+</script>
+<div class="social-links">
+  <ul>
+    
+    
+    
+    
+    <li><a href="http://linkedin.com/in/https://www.linkedin.com/in/paulosuzart/" class="social-link-item" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
+    
+    
+    
+    
+    <li><a href="http://github.com/github.com/paulosuzart" class="social-link-item" target="_blank"><i class="fa fa-fw fa-github"></i></a></li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </ul>
+</div>
+
+</div>
+
+      </div>
+    </div>
+    <div class="col s12 m9">
+      <div class="post-listing">
+        <a class="btn" href= "http://localhost:4000/" >
+  Home
+</a>
+
+
+
+<div id="post">
+  <header class="post-header">
+    <h1 title="CRUD like Redux Abstraction">CRUD like Redux Abstraction</h1>
+    <span class="post-meta">
+      <span class="post-date">
+        12 DEC 2016
+      </span>
+      •
+      <span class="read-time" title="Estimated read time">
+  
+  
+    6 mins read
+  
+</span>
+
+    </span>
+
+  </header>
+
+  <article class="post-content">
+    <p>I recently played the role of a front end developer. You know, I’m not one in a broad sense. I have not my head wrapped around CSS and visual stuff. But I made it reasonably well using the following toolkit:</p>
+
+<ul>
+  <li><a href="https://facebook.github.io/react/">ReactJS</a> - A javascript library for building user interfaces</li>
+  <li><a href="http://redux.js.org/">Redux</a>  - a predictable state container for JavaScript apps</li>
+  <li><a href="www.material-ui.com">Material-UI</a> - A set of React Components that Implement Google’s Material Design</li>
+</ul>
+
+<!--more-->
+
+<p>This combo is pretty high level and you end up with a <code>package.json</code> like this:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span>    <span class="s2">&quot;devDependencies&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;babel-jest&quot;</span><span class="o">:</span> <span class="s2">&quot;^17.0.2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;babel-preset-es2015&quot;</span><span class="o">:</span> <span class="s2">&quot;^6.18.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;babel-preset-react&quot;</span><span class="o">:</span> <span class="s2">&quot;^6.16.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;jest&quot;</span><span class="o">:</span> <span class="s2">&quot;^17.0.3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;react-scripts&quot;</span><span class="o">:</span> <span class="s2">&quot;0.7.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;react-test-renderer&quot;</span><span class="o">:</span> <span class="s2">&quot;^15.4.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;redux-mock-store&quot;</span><span class="o">:</span> <span class="s2">&quot;^1.2.1&quot;</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;dependencies&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;es6-promise&quot;</span><span class="o">:</span> <span class="s2">&quot;^4.0.5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;firebase&quot;</span><span class="o">:</span> <span class="s2">&quot;^3.5.3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;flexboxgrid&quot;</span><span class="o">:</span> <span class="s2">&quot;^6.3.1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;formsy-material-ui&quot;</span><span class="o">:</span> <span class="s2">&quot;^0.5.3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;formsy-react&quot;</span><span class="o">:</span> <span class="s2">&quot;^0.18.1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;isomorphic-fetch&quot;</span><span class="o">:</span> <span class="s2">&quot;^2.2.1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;jquery&quot;</span><span class="o">:</span> <span class="s2">&quot;^3.1.1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lodash&quot;</span><span class="o">:</span> <span class="s2">&quot;^4.17.2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;material-ui&quot;</span><span class="o">:</span> <span class="s2">&quot;^0.16.1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;query-string&quot;</span><span class="o">:</span> <span class="s2">&quot;^4.2.3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;react&quot;</span><span class="o">:</span> <span class="s2">&quot;^15.3.2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;react-addons-css-transition-group&quot;</span><span class="o">:</span> <span class="s2">&quot;^15.3.2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;react-dom&quot;</span><span class="o">:</span> <span class="s2">&quot;^15.3.2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;react-flip-move&quot;</span><span class="o">:</span> <span class="s2">&quot;^2.6.4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;react-materialize&quot;</span><span class="o">:</span> <span class="s2">&quot;^0.17.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;react-redux&quot;</span><span class="o">:</span> <span class="s2">&quot;^4.4.5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;react-router&quot;</span><span class="o">:</span> <span class="s2">&quot;^3.0.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;react-tap-event-plugin&quot;</span><span class="o">:</span> <span class="s2">&quot;^1.0.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;redux&quot;</span><span class="o">:</span> <span class="s2">&quot;^3.6.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;redux-thunk&quot;</span><span class="o">:</span> <span class="s2">&quot;^2.1.0&quot;</span>
+  <span class="p">},</span></code></pre></figure>
+
+<p>Most of it was generated by <a href="https://github.com/facebookincubator/create-react-app">Create React App</a> because to me it is so much to setup, that I picked up the easy way. You can use <a href="https://webpack.github.io/">Webpack</a> - <em>I once used to setup/build a Angular 2 app</em> - but it’s totally non standardized and every example on the internet just look totally different from each other.</p>
+
+<p>From this <code>package.json</code> above, I would like to quickly highlight <a href="https://www.npmjs.com/package/redux-thunk">redux-thunk</a>, <a href="https://lodash.com/">Lodash</a> and <a href="https://www.npmjs.com/package/isomorphic-fetch">isomorphic-fetch</a>. They are must have for every Redux/React apps!</p>
+
+<h2 id="redux">Redux</h2>
+
+<p>The main point of this post is Redux (<strong>Hold on, it’s not another Redux introduction, if you want to understand it <a href="https://hackernoon.com/redux-step-by-step-a-simple-and-robust-workflow-for-real-life-apps-1fdf7df46092#.jgxynut50">see this blog post by Tal Kol</a></strong>). I like it and should use it every app with ReactJS from now on, there are couple alternatives that I haven’t tried, like <a href="http://fluxible.io/">Fluxible</a>, <a href="http://alt.js.org/">Alt</a> and <a href="https://facebook.github.io/relay/">Relay</a>. But Redux is good to go as long you are ready to write tons of code.</p>
+
+<p>The repetition from Redux came into play when I had to fetch different entities from the server and for all of them, keep track of at least 3 states: <code>LOADING</code>, <code>RECEIVE</code> and <code>FAILED</code>. You can call it with different names, but they express something like this.</p>
+
+<p>If you are familiar with Redux you know it will requrie a reducer <code>case</code>, an action creator function, and a action type constant. And of course the same series of dispatch for every entity your are trying to load form the server. Something like:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span> <span class="c1">// Suppose this is a thunk for fetching things from the server</span>
+<span class="k">return</span> <span class="nx">async</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="nx">dispatch</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;ENTITY_LOADING&#39;</span> <span class="p">})</span>
+        <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchService</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">token</span><span class="p">,</span> <span class="nx">pk</span><span class="p">)</span>
+        <span class="nx">dispatch</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;ENTITY_RECEIVE&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">response</span><span class="p">})</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Exception in Fetcher Redux &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">entity</span><span class="p">)</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">ex</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">ex</span> <span class="k">instanceof</span> <span class="nx">LoginRequired</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">dispatch</span><span class="p">(</span><span class="nx">loginFailed</span><span class="p">(</span><span class="s1">&#39;Falha na Autenticação&#39;</span><span class="p">))</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">dispatch</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;ENTITY_FAILED&#39;</span><span class="p">,</span> <span class="nx">pk</span><span class="o">:</span> <span class="nx">pk</span><span class="p">})</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This pattern repeats all over the app. The abstraction code is pretty big, please refer to the full source at <a href="https://gist.github.com/paulosuzart/e6d9e24c58e099e2f5c6d9b59591a253">THIS GIST</a>. It’s called <code>ReduxFetcher</code>.</p>
+
+<p>To summarise it, the code creates action type names out of <code>entity</code> argument. I’ve also used specific action type names for every operation.</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span>    <span class="c1">// ...</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">listingActionType</span> <span class="o">=</span> <span class="sb">`</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">actionPrefix</span><span class="si">}</span><span class="sb">_</span><span class="si">${</span><span class="nx">entity</span><span class="si">}</span><span class="sb">_LIST_LOAD`</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">listingFailedActionType</span> <span class="o">=</span> <span class="sb">`</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">actionPrefix</span><span class="si">}</span><span class="sb">_</span><span class="si">${</span><span class="nx">entity</span><span class="si">}</span><span class="sb">_LIST_FAILED`</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">listingReceiveActionType</span> <span class="o">=</span> <span class="sb">`</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">actionPrefix</span><span class="si">}</span><span class="sb">_</span><span class="si">${</span><span class="nx">entity</span><span class="si">}</span><span class="sb">_LIST_RECEIVE`</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">loadingActionType</span> <span class="o">=</span> <span class="sb">`</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">actionPrefix</span><span class="si">}</span><span class="sb">_</span><span class="si">${</span><span class="nx">entity</span><span class="si">}</span><span class="sb">_LOAD`</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">failedActionType</span> <span class="o">=</span> <span class="sb">`</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">actionPrefix</span><span class="si">}</span><span class="sb">_</span><span class="si">${</span><span class="nx">entity</span><span class="si">}</span><span class="sb">_FAILED`</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">receiveActionType</span> <span class="o">=</span> <span class="sb">`</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">actionPrefix</span><span class="si">}</span><span class="sb">_</span><span class="si">${</span><span class="nx">entity</span><span class="si">}</span><span class="sb">_RECEIVE`</span>
+
+    <span class="c1">// ...</span></code></pre></figure>
+
+<p>And action creators that refer to these actions when needed:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span>    <span class="c1">// ...</span>
+
+    <span class="nx">listFailure</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">dispatch</span><span class="p">({</span>
+            <span class="nx">type</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">listingFailedActionType</span>
+        <span class="p">})</span>
+    <span class="p">}</span>
+
+    <span class="nx">listReceive</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">dispatch</span><span class="p">({</span>
+            <span class="nx">type</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">listingReceiveActionType</span><span class="p">,</span>
+            <span class="nx">data</span><span class="o">:</span> <span class="nx">data</span>
+        <span class="p">})</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ...</span></code></pre></figure>
+
+<p>Finally, the abstraction provides <code>fetch</code>, <code>filter</code>, <code>list</code> and <code>update</code> dynamic actions. See the list implementaion:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span></span>   <span class="nx">list</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">async</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">try</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">listing</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span>
+                <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">listService</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">token</span><span class="p">)</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">listReceive</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span>
+            <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Exception in Fetcher Redux &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">entity</span><span class="p">)</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">ex</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">ex</span> <span class="k">instanceof</span> <span class="nx">LoginRequired</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">dispatch</span><span class="p">(</span><span class="nx">loginFailed</span><span class="p">(</span><span class="s1">&#39;Falha na Autenticação&#39;</span><span class="p">))</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">listFailure</span><span class="p">(</span><span class="nx">dispatch</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+    <span class="p">}</span></code></pre></figure>
+
+<p>The result was a high level of code being reused for 8 entities. The abstrated actions can also be wired to componetes using <a href="https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options">mapdispatchToProps</a> and used as any function inside components.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Redux is awesome, I feel I do better Flux than used to do MVC in the old times of JSP, Spring, Struts, JSF, etc. You feel not only that you understood whole Flux, but also you are able to fully implemented it.</p>
+
+<p>Of course my abstraction got a problem, it is mine in the sense that it was written/designed to work with my application. After finishing the project I realized there are couple options out there to do what I did:</p>
+
+<ul>
+  <li><a href="https://github.com/Versent/redux-crud">reux-crud</a></li>
+  <li><a href="https://www.npmjs.com/package/redux-crud-async">redux-crud-async</a></li>
+  <li><a href="https://www.npmjs.com/package/redux-entity">redux-entity</a></li>
+  <li><a href="https://feeble.js.org/">Feeble</a> - not exactly the same thing, but the same approach</li>
+</ul>
+
+<p>It was ok for me to find those libs only at the end of the project (went live already), it gave me the sensation that I wasn’t so wrong trying to aggregate and centralize these Redux pieces in the same place.</p>
+
+<p>Hope you liked! Cheers!</p>
+
+  </article>
+</div>
+
+<div class="share-buttons">
+  <h6>Share on: </h6>
+  <ul>
+    <li>
+      <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/blog/2016/12/12/crud-like-redux-abstraction/" class="twitter btn" title="Share on Twitter"><i class="fa fa-twitter"></i><span> Twitter</span></a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/blog/2016/12/12/crud-like-redux-abstraction/" class="facebook btn" title="Share on Facebook"><i class="fa fa-facebook"></i><span> Facebook</span></a>
+    </li>
+    <li>
+      <a href="https://plus.google.com/share?url=http://localhost:4000/blog/2016/12/12/crud-like-redux-abstraction/" class="google-plus btn" title="Share on Google Plus"><i class="fa fa-google-plus"></i><span> Google+</span></a>
+    </li>
+    <li>
+      <a href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/blog/2016/12/12/crud-like-redux-abstraction/" class="hacker-news btn" title="Share on Hacker News"><i class="fa fa-hacker-news"></i><span> Hacker News</span></a>
+    </li>
+    <li>
+      <a href="https://www.reddit.com/submit?url=http://localhost:4000/blog/2016/12/12/crud-like-redux-abstraction/" class="reddit btn" title="Share on Reddit"><i class="fa fa-reddit"></i><span> Reddit</span></a>
+    </li>
+  </ul>
+</div><!-- end share-buttons -->
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'paulosuzartblog';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+        <footer>
+  &copy; 2017 Paulo Suzart. Powered by <a href="http://jekyllrb.com/">Jekyll</a>, <a href="http://github.com/renyuanz/leonids/">leonids theme</a> made with <i class="fa fa-heart heart-icon"></i>
+</footer>
+
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="http://localhost:4000/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="http://localhost:4000/js/main.js"></script>
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26676810-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>

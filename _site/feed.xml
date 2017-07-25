@@ -1,0 +1,991 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Paulo Suzart</title>
+    <description>Functional programming and a bit of a lot.</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Mon, 24 Jul 2017 19:50:15 -0500</pubDate>
+    <lastBuildDate>Mon, 24 Jul 2017 19:50:15 -0500</lastBuildDate>
+    <generator>Jekyll v3.4.5</generator>
+    
+      <item>
+        <title>Dependent Types And Safer Code</title>
+        <description>&lt;p&gt;I’ve recently joinned a &lt;a href=&quot;https://discordapp.com&quot;&gt;Discord Functional Programming Server&lt;/a&gt;. No, it is not a framework for developing servers using functional programming languages. Instead, a mix of IRC and Slack for discussing several functional langs. If you want to watch and participate in nice discussion and tips about clojure, elixir, elm, erlang, haskell, idris, lisp, ocaml, racket, and scala, join the server &lt;a href=&quot;https://discord.gg/jeaFVYE&quot;&gt;right here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I’d heard about &lt;a href=&quot;idris-lang.org&quot;&gt;Idris&lt;/a&gt; long ago, but after joining this server I was surprised by a very active channel, the #idris channel. And one of the latest messages presented a &lt;a href=&quot;https://gist.github.com/chrisdone/672efcd784528b7d0b7e17ad9c115292&quot;&gt;gist&lt;/a&gt; with Type Dependent &lt;code&gt;printf&lt;/code&gt; function. At first may sound like a silly thing, but that was a nice opportunity to expand my mind around Type Dependent code beyond what is taught in the &lt;a href=&quot;http://docs.idris-lang.org/en/latest/tutorial/index.html&quot;&gt;Idris Tutorial&lt;/a&gt;.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;In the gist you see the defintion of &lt;code&gt;printf&lt;/code&gt;:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haskell&quot; data-lang=&quot;haskell&quot;&gt;&lt;span&gt;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;-- ...&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;-- More code before this line, check the original gist&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;interpFormat&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;formatString&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  
+  &lt;span class=&quot;c1&quot;&gt;-- Add a main here to show something. Continue reading&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IO&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;printLn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;%d%s&amp;quot;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;hello!&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;-- outputs&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;-- &amp;quot;5hello!&amp;quot; : String&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;As you can see, &lt;code&gt;printf&lt;/code&gt; takes a &lt;code&gt;Int&lt;/code&gt; and a &lt;code&gt;String&lt;/code&gt; as argument &lt;em&gt;(besides the formating pattern as first &lt;code&gt;String&lt;/code&gt; arg)&lt;/em&gt;. But what you actually read is this function taking a formatting pattern and another parameter of type &lt;code&gt;interpFormat ( formatString s )&lt;/code&gt;. Crazy hun?&lt;/p&gt;
+
+&lt;p&gt;This is the power of Idris Dependent Types playing here. At compile, all the next parameters are calculated by applying a sucession of functions to &lt;code&gt;s&lt;/code&gt;, the formatting pattern. This is possible because types and values are both first class citzens in this lang. Thus, the combination of &lt;code&gt;interpFormat&lt;/code&gt; and &lt;code&gt;formatString&lt;/code&gt; have the intention to form a mini AST (Abstract Syntax Tree) of types according to this sum recursive type:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haskell&quot; data-lang=&quot;haskell&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Format&lt;/span&gt;
+  &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;FInt&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Format&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;FString&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Format&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;FOther&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Char&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Format&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;FEnd&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Pay attention to Format making reference to itself. So, having &lt;code&gt;%d%s&lt;/code&gt; as pattern, computes a &lt;code&gt;Format&lt;/code&gt; containing (&lt;em&gt;not sure if ‘containing’ is the best expression to explain this&lt;/em&gt;) a &lt;code&gt;Int String FEnd&lt;/code&gt;. This is then interpreted by &lt;code&gt;interpFormat&lt;/code&gt; that produces the arity and input types of &lt;code&gt;printf&lt;/code&gt;. In this case &lt;code&gt;Int -&amp;gt; String -&amp;gt; String&lt;/code&gt;. Amazing!&lt;/p&gt;
+
+&lt;p&gt;If you clone the gist, add a main method and try to run &lt;code&gt;printf &quot;%d: %s&quot; &quot;woops&quot; 6&lt;/code&gt; the code won’t compile, printing a sounding error:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;&lt;/span&gt;Printf.idr:52:17-18:When checking right hand side of main with expected &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;
+        IO &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+
+When checking an application of &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; Prelude.Interactive.printLn:
+        Type mismatch between
+                String &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Type of &lt;span class=&quot;s2&quot;&gt;&amp;quot;woops&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        and
+                Int &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Expected &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Holes: Printf.main&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;It is not a uncommon situation. Take for example clojure (&lt;em&gt;WARN: I’m not comparing languages nor saying one is better than the other&lt;/em&gt;) and try the following code:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;defn &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;format&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;%5d&amp;quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;&amp;quot;    1&amp;quot;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;;; printed ok&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;3&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;IllegalFormatConversionException&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;java.lang.String&lt;/span&gt;  &lt;span class=&quot;nv&quot;&gt;java.util.Formatter$FormatSpecifier.failConversion&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Formatter.java&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:4302&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;format&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;%5d&amp;quot;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;d&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;IllegalFormatConversionException&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;java.lang.String&lt;/span&gt;  &lt;span class=&quot;nv&quot;&gt;java.util.Formatter$FormatSpecifier.failConversion&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Formatter.java&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:4302&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;All you have is runtime error. Don’t be decived. You may be tempted to believe this is happening because clojure is dynamic, no compile involved. Let’s try this with Java for example:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;%s = %d&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;joe&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;#&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Yes, the code above compiles! And when you run it you get &lt;code&gt;Exception in thread &quot;main&quot; java.util.IllegalFormatConversionException: d != java.lang.String&lt;/code&gt;. The beautiful exception named &lt;code&gt;IllegalFormatConvensionException&lt;/code&gt; derives from &lt;code&gt;RuntimeException&lt;/code&gt;, what of course makes it impossible to bd detected at compile time.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;At first I was too skeptical to even try Idris and all this Dependent Type thing. But it is useful and may produce more flexible and safer software. There are other languages that explore compile time programming like &lt;a href=&quot;https://github.com/dlang&quot;&gt;D&lt;/a&gt;, but this is single and much more powerful.&lt;/p&gt;
+
+&lt;p&gt;Another side note on Idris (&lt;em&gt;Actually its documentation&lt;/em&gt;) is how light and smooth they present the concepts, examples, etc. You end up filling you’ve learned a bit more of Haskell with out the heavy explanations of any Haskell tutorial out there.&lt;/p&gt;
+
+&lt;p&gt;Happy Idris!&lt;/p&gt;
+</description>
+        <pubDate>Sun, 18 Jun 2017 13:22:00 -0500</pubDate>
+        <link>http://localhost:4000/blog/2017/06/18/dependent-types-and-safer-code/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2017/06/18/dependent-types-and-safer-code/</guid>
+        
+        
+        <category>programming</category>
+        
+        <category>idris</category>
+        
+        <category>fp</category>
+        
+      </item>
+    
+      <item>
+        <title>After D comes C++</title>
+        <description>&lt;p&gt;As mentioned in my &lt;a href=&quot;http://paulosuzart.github.io/blog/2017/02/10/languages-and-counting/&quot;&gt;previous post&lt;/a&gt;, we may be openning our GraphQL Grammar (using &lt;a href=&quot;https://github.com/PhilippeSigaud/Pegged&quot;&gt;PEGGED&lt;/a&gt;), and interpreter to generate compatible pure D Abstract Syntax Tree.&lt;/p&gt;
+
+&lt;p&gt;While we don’t have any decision, let’s talk about D and Why I ended up building an entire server in C++.&lt;/p&gt;
+
+&lt;p&gt;We were looking for a compiled language with powerful type system for OO purposes (That’s why dropped &lt;a href=&quot;https://golang.org/&quot;&gt;Go&lt;/a&gt;), that wasn’t Java. With Scala going down the hill, there was few options that could make any sense. They were D or C++.&lt;/p&gt;
+
+&lt;p&gt;C++ has a myth that it is complex and hard (well, it might be sometimes), so we picked up D!&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;The language is simply awesome! If you read the &lt;a href=&quot;https://dlang.org/spec/spec.html&quot;&gt;Language Reference&lt;/a&gt; up get instantlly on fire. It also has &lt;a href=&quot;https://code.dlang.org/&quot;&gt;DUB&lt;/a&gt;, a sort of poor cousing of [NPM], &lt;a href=&quot;https://crates.io/&quot;&gt;Cargo&lt;/a&gt; or &lt;a href=&quot;https://hex.pm/&quot;&gt;hex&lt;/a&gt;. Just add your dependencies, and run &lt;code&gt;dub&lt;/code&gt;. That is all, your code will be compiled to native code and you can run it. Take a look at this &lt;code&gt;dub.json&lt;/code&gt; file, the main projec descriptor:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;graphqld&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;quot;authors&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+		&lt;span class=&quot;s2&quot;&gt;&amp;quot;Paulo Suzart&amp;quot;&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+	
+	&lt;span class=&quot;nt&quot;&gt;&amp;quot;dependencies&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;quot;pegged&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;~&amp;gt;0.3.3&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;quot;accessors&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;~&amp;gt;1.0.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;quot;d-unit&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;~&amp;gt;0.8.1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;quot;ddbc&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;~&amp;gt;0.3.2&amp;quot;&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;quot;description&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;D Graphql Server&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;quot;copyright&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Copyright © 2016, Paulo Suzart&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;quot;license&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;proprietary&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;quot;-ddoxFilterArgs&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;--ex&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;pegged&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;For a compiled language that needs to have libs linked, etc. This is really great stuff.&lt;/p&gt;
+
+&lt;p&gt;D comes with a Template system for generic programming (Like Java Generics or C++ templates, but more powerful perhaps). It extends to code generation at compile time, allowing a small code base that can produce huge codebases saving a lot of repetition. There are many cases where you have to repeat, over and over again the same code. Suppose this real case of a visitor that goes through a AST, gets the children of eath node, then visits them. You can easily reach dozens of repetitions.&lt;/p&gt;
+
+&lt;p&gt;The gist below shows a visitor base class &lt;code&gt;BaseGraphQLVisitor&lt;/code&gt;. It visits a &lt;code&gt;Node&lt;/code&gt;, gets its children, iterates over it an then calls &lt;code&gt;visitNameOfTheNodeTypeHere&lt;/code&gt;. The more you have types, the more you have to type to produce such visitor.&lt;/p&gt;
+
+&lt;p&gt;Check it ou and try to understand what is going on:&lt;/p&gt;
+
+&lt;noscript&gt;&lt;pre&gt;400: Invalid request
+&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/b4a4f41d011d5950829248b5a6b944a6.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;Look at the &lt;code&gt;BaseGraphQLVisitor&lt;/code&gt;, due to the nature of the language, it holds  a map of &lt;code&gt;strings&lt;/code&gt; mapping to sort of lambda functions (called delegates). If you pay extra attention, notice there is absolute no function in the class body. No, they are not inherited from a parent class, instead, they are generated at compile time. See &lt;code&gt;visitDocument&lt;/code&gt;, &lt;code&gt;visitDefinition&lt;/code&gt; and so on.&lt;/p&gt;
+
+&lt;p&gt;Watch the line 74 where the generated code is “inserted” in. &lt;code&gt;GenerateVisitMethods&lt;/code&gt; is a string that looks like normal code &lt;em&gt;because I’m using &lt;code&gt;q&lt;/code&gt; for quoting it instead of the usual quoting (“ “)&lt;/em&gt;. What it does is to call a mixin template that will generate, for each element in the passed argument array a function that looks like:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-d&quot; data-lang=&quot;d&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visitDocument&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ParseTree&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;GraphQL.Document&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;visitNode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;code&gt;visitNode&lt;/code&gt; is a function already provided in the class, that is called by the generated code. This is gold as the number of types increases. Of course this is just a case, but it’s infinite what you can do with mixin templates.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-frustration&quot;&gt;The frustration&lt;/h2&gt;
+
+&lt;p&gt;It’s not totally related to the language, which is awesome. Unfortunately the ecosystem is limited, there are pleny &lt;code&gt;0.*&lt;/code&gt; version libs. I don’t know why people fear to reach &lt;code&gt;1.0&lt;/code&gt;. So it quickly became hard to see future when you need good integrations with existing Database, HTTP, IDE, etc.&lt;/p&gt;
+
+&lt;p&gt;They are trying. See &lt;a href=&quot;https://vibed.org/&quot;&gt;Vibed&lt;/a&gt; and &lt;a href=&quot;https://github.com/DDT-IDE/DDT&quot;&gt;Eclipse DDT&lt;/a&gt;. But we need more than this for real projects with real money involved.&lt;/p&gt;
+
+&lt;p&gt;There is also a company kinda sponsoring DConf, that are clearly bringing some retarded ideology to the conference, what may put minorities privileges before technical skills. A huge risk for any sane evolution of the language and the ecosystem.&lt;/p&gt;
+
+&lt;h2 id=&quot;then-c&quot;&gt;Then C++&lt;/h2&gt;
+
+&lt;p&gt;Given that we need to build such a service that is almost invisible &lt;em&gt;due to it’s performance requirements&lt;/em&gt;, we simply jumped to C++. Got IDEs? Sure! &lt;a href=&quot;https://www.jetbrains.com/clion/&quot;&gt;CLion is great&lt;/a&gt;. Got Libs? Well, it wouldn’t fit here, but just take a look at &lt;a href=&quot;http://www.boost.org/&quot;&gt;Boost&lt;/a&gt; and &lt;a href=&quot;https://pocoproject.org&quot;&gt;POCO&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;What about package managers. Yest we have, see &lt;a href=&quot;https://www.conan.io/&quot;&gt;Conan&lt;/a&gt;. Got Build Tool? Of course, dear: &lt;a href=&quot;https://cmake.org&quot;&gt;CMake&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Ok ok, you need test libs, right? Here you have &lt;a href=&quot;https://github.com/philsquared/Catch&quot;&gt;Catch&lt;/a&gt; and &lt;a href=&quot;https://github.com/google/googletest&quot;&gt;Google Test&lt;/a&gt;. Not only that, just check out the &lt;a href=&quot;https://code.facebook.com/&quot;&gt;Facebook open source projects&lt;/a&gt;, most of them are pure C++ 11, or C++ 14.&lt;/p&gt;
+
+&lt;p&gt;I just use GCC, and haven’t had time to try other compilers.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;When you have real money involved, don’t play. Not that we were kid playing or being reckless, we really believed we could go end to end using D, but so far it’s not the case. In the end, one thing we won’t be worried is performance (of course if we don’t do shit in our code). D has Gc, and supposedly supports coding with it disabled, but lets try it another round.&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 11 Feb 2017 10:22:00 -0500</pubDate>
+        <link>http://localhost:4000/blog/2017/02/11/after-d-comes-cpp/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2017/02/11/after-d-comes-cpp/</guid>
+        
+        
+        <category>programming</category>
+        
+        <category>D</category>
+        
+        <category>C++</category>
+        
+      </item>
+    
+      <item>
+        <title>15 languages and counting</title>
+        <description>&lt;p&gt;Hello there, happy new year! In this post I’ll talk about the programming languages I got involved somehow (either for serious playing or serious business).&lt;/p&gt;
+
+&lt;p&gt;Yes they are 15. I started my passion for programming languages almost 10 years ago with Scala. At that time I had been working with Java for 4 years. To be fair, the only existing language in my mind was Java. Then Scala comes into play.&lt;/p&gt;
+
+&lt;p&gt;Here a present you them in a loose chronological order.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;&lt;strong&gt;2. Scala&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I quickly started writing about &lt;a href=&quot;https://www.scala-lang.org/&quot;&gt;Scala&lt;/a&gt;. Even had 18 blog posts on it in &lt;a href=&quot;https://codemountain.wordpress.com/category/scala/&quot;&gt;my old blog (portuguese only)&lt;/a&gt;. And prepared a presentation available on &lt;a href=&quot;http://fr.slideshare.net/paulosuzart/scala-uma-breve-breve-mesmo-introduo&quot;&gt;slide share&lt;/a&gt;. That was an amazing exciting time, I’d just escaped from the Java island I was trapped in. I could see the world.&lt;/p&gt;
+
+&lt;p&gt;I had the chance to put Scala in production using &lt;a href=&quot;https://www.playframework.com&quot;&gt;Play Framework&lt;/a&gt; 2.4 + &lt;a href=&quot;http://slick.lightbend.com/&quot;&gt;Slick&lt;/a&gt; from mapping a Postgres database. It still running by the time of writing.&lt;/p&gt;
+
+&lt;p&gt;Why don’t I pursue or stimulate Scala use anymore? There are hundreds of post on the internet explaining why Scala have failed, so I don’t need to add any extra content to them. I’m pretty convinced, for example, that, if Play Framework hadn’t be ported to Scala, it would be &lt;em&gt;TODAY&lt;/em&gt; competing with frameworks like Django and Rails. I’m not here to try to predict anything, I’ve just got real insights from real usage of it and, I’m ok if you want go for it, I’m just out.&lt;/p&gt;
+
+&lt;p&gt;I’ve also technically reviewd a &lt;a href=&quot;https://www.packtpub.com/application-development/lift-application-development-cookbook&quot;&gt;Book on Scala and Lift Web&lt;/a&gt; (that is also pretty much dead BTW).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3. Clojure&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This very blog has lot’s of &lt;a href=&quot;https://clojure.org/&quot;&gt;Clojure&lt;/a&gt; posts. I felt in love with clojure in 2009, right after learning Scala. I’ts possible to see some &lt;a href=&quot;github.com/paulosuzart&quot;&gt;git repos on clojure&lt;/a&gt; in my github account. I enjoyed it so so much, I can still remember that times. Very good sensation.&lt;/p&gt;
+
+&lt;p&gt;I couldn’t really put any Clojure into production. Actually my colleagues said I was sort of freaky to be able to program in such a thing (I know that is nothing special about it, bit lisp like langs are not so common in Brazil). So, impossible to find someone interested in Clojure, not to mention a experienced Clojure developer to hire.&lt;/p&gt;
+
+&lt;p&gt;I like as a language, but Java interoperability where sort of ugly. Furthermore, there were absolutely no killing app for Clojure. I was a member of the Clojure mailing list and &lt;em&gt;ALL&lt;/em&gt; there I saw were posts prefixed with &lt;em&gt;[ANN]&lt;/em&gt; to announce some tiny poorly tested, poorly documented, non maintained wannabe library. I got tire of this, to be fair. And started to code/play less and less with Clojure.&lt;/p&gt;
+
+&lt;p&gt;We had some guys creating a Pedestal framework with lots of craziness, well, useless. I heard they dropped good part of what they were doing to provide just the http framework these days.&lt;/p&gt;
+
+&lt;p&gt;I also technically reviewd a &lt;a href=&quot;https://www.amazon.com/Clojure-Domain-specific-Languages-Ryan-Kelker/dp/1782166505&quot;&gt;Book on Clojure for Domain-specific Languages&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Today the only thing I can tell is &lt;a href=&quot;http://immutant.org/&quot;&gt;Immutant&lt;/a&gt; and &lt;a href=&quot;http://www.datomic.com/&quot;&gt;Datomic&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;There are some dynamic language consequences for using Clojure, you can find on the internet.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;4. Racket&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Then Oracle buys Sun, and I thought I had to be prepared for a total dismantling of JVM ecosystem, and started looking for a lisp lang outside JVM and found &lt;a href=&quot;https://racket-lang.org/&quot;&gt;Racket&lt;/a&gt;. At this point I had read &lt;a href=&quot;http://landoflisp.com/&quot;&gt;Land of Lisp&lt;/a&gt; and was supper excited about it. I also couldn’t put anything to production using Racket, but played seriouslly with it &lt;a href=&quot;https://gist.github.com/paulosuzart/4c730a14ff9b3fff6fac&quot;&gt;using threads and sockets&lt;/a&gt; in a coding challenge for fun at work.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;5. Go Lang&lt;/strong&gt; - option #3&lt;/p&gt;
+
+&lt;p&gt;This is my first project using Go, a &lt;a href=&quot;https://github.com/paulosuzart/gb&quot;&gt;distributed load testing&lt;/a&gt; tool similar to Apache benchmark. Man, how I liked Go lang. I still like it and play from time to time. It’s amazing how fast its ecosystem grew up. Of course having a huge company behind it helps a lot.&lt;/p&gt;
+
+&lt;p&gt;For me, one of the master pieces written in Go is &lt;a href=&quot;https://github.com/boltdb/bolt&quot;&gt;BoltDB&lt;/a&gt;, check it out.&lt;/p&gt;
+
+&lt;p&gt;Go is my third language of choice today, although I don’t have any of it in production. The only drawback, or sort of “limitation” is its typesystem, what makes it perfect for semi-low level programming, but it would bite you for writing complex Object hierarchies.&lt;/p&gt;
+
+&lt;p&gt;This is my option number 3 after python and Node.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;6. Groovy&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I wasn’t brought to Groovy for my passion for programming languages, instead because of a real job. As a CTO at Guiato, we had several systems in Groovy and even put a &lt;a href=&quot;http://vertx.io/&quot;&gt;Vertx.io&lt;/a&gt; cluster to production using pure Groovy verticles. It’s been 5 years since I first touched Groovy in a Grails app.&lt;/p&gt;
+
+&lt;p&gt;I like it, in fact it’s been showing a steady growth as the best dynamic lang on top of JVM. The only thing I don’t like in the Grails ecosystem is: Grails! :D&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;7. Rust&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Unfortunately I left few tracks behind (intentionally erased) from my contact with Rust. I’ve helped a memcached client adding a hash ring to it, so it was able to support multiple servers. Also started creating a process manager ala supervisord.&lt;/p&gt;
+
+&lt;p&gt;People tried to put their political preferences over technical skills, what makes it’s community dangerous. I also had a blog on rust giving lots of cool deep tips in the language.&lt;/p&gt;
+
+&lt;p&gt;Leaving rust was good, although backed by a big company, the forced mentality of embedding memory management into the type system can bring crazy syntax and almost impossible understanding.&lt;/p&gt;
+
+&lt;p&gt;The only track I have is &lt;a href=&quot;https://github.com/paulosuzart/currency_watcher&quot;&gt;this repo&lt;/a&gt;, I guess.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;8. Kotlin&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/paulosuzart/krust-pm&quot;&gt;Kurst-pm&lt;/a&gt; was my single shot with Kotlin using the - &lt;em&gt;never 1.0 reaching&lt;/em&gt; - lib &lt;a href=&quot;http://docs.paralleluniverse.co/quasar/&quot;&gt;Quasar&lt;/a&gt;. It’s a cool language, but if I had to use it, I would just go for Java 8 and we are fine. This sounds like a needless language a good (high sized company) created just to stay in the game of companies backing languages.&lt;/p&gt;
+
+&lt;p&gt;Kotlin has been showing nice support for Android development, though.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;9. Python&lt;/strong&gt; - option #1&lt;/p&gt;
+
+&lt;p&gt;I always wanted to code in &lt;a href=&quot;https://www.python.org/&quot;&gt;Python&lt;/a&gt;, it is a such a cool and stable language! Now I have at least two systems (Django) in production deployed to Heroku (besides a lots of utility scripts). I truly like the language and it is my primary option for any new project especially the kind of project you have in venture buildings: low precision of scope and intense prototyping. Not that python is a prototype language, instead its mature and modern ecosystem allows you to drastically change requirements with less effort.&lt;/p&gt;
+
+&lt;p&gt;For me the master pieces of python are Django, and any data science related tool (including ML and computer vision).&lt;/p&gt;
+
+&lt;p&gt;These days people like to attack python saying nobody adopts python 3. Well, this takes time and is a normal thing to happen. The language and ecosystem are solid and will rock on for a long time yet.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;10. Perl&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I had the chance to create a (not deployed to prod) monitoring system. You can read more details here in this blog post: &lt;a href=&quot;http://paulosuzart.github.io/blog/2013/09/20/ultrafast-web-development-with-perl-plus-bootstrap-plus-mongodb/&quot;&gt;Ultrafast web development with Perl + Bootstrap + MongoDB&lt;/a&gt;. In fact it’s fast to prototype and develop using Perl. But I don’t know, just didn’t want to follow on with the language, specially for its craz support for OO and a crazy new Perl version.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;11. Haskell&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I’ve read few awesome books like &lt;a href=&quot;http://learnyouahaskell.com&quot;&gt;Learn You a Haskell&lt;/a&gt;. Take some time to read it and expand your knowledge on functional programming, it totally pays of. I have a post on Haskell in this very blog, you can read it &lt;a href=&quot;http://paulosuzart.github.io/blog/2015/08/21/how-much-functional-are-you/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Although I like the language, there is a exaggeration towards FP purity that makes applying the language on average professionals team, a impossible task. I keep Haskell around just for playing and studying Type Classes, for example.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;12. Java Script ES6 / Node JS&lt;/strong&gt; - option #2&lt;/p&gt;
+
+&lt;p&gt;Well, if you ever created a web app, you’ve coded in js. But with the expansion of the language to the back end was really cool thing. Right now I’m working for a company where good part of back end services we write in Node.JS, and even front end with ReactJs.
+Node has proven to be a rock solid platform for modern app. You start quickly and just move on.&lt;/p&gt;
+
+&lt;p&gt;There is the dynamic language challenges involved, but it is part of the game. There are huge improvements in the ES6 version, though.&lt;/p&gt;
+
+&lt;p&gt;It’s master pieces are the V8 itself, and some testing libs that I love like &lt;a href=&quot;http://paulosuzart.github.io/blog/2015/08/21/how-much-functional-are-you/&quot;&gt;Chai&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This is my option number two, after python.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;13. Elixir&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This is a pretty cool language. I’ve studied it a lot and made a very simple service using Phoenix. You can find the code in this &lt;a href=&quot;https://github.com/paulosuzart/versicle&quot;&gt;repo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Although I like it, deploying it to production requires a new range of knowledge (specially Erlang production knowledge) that make its adoption more or less fast. It also needs to prove its value. It’s a relative new language.&lt;/p&gt;
+
+&lt;p&gt;People need to understand they need to get real reasons to use a language and not write articles giving reasons that you can easily reduce to: “you it just because I think it is cool”. Dynamic languages comes with a price, one of then is how lazy a developer can become, not to mention the maintenance and evolution of such systems. I’ll personally wait a bit more before try to move anything written in Elixir to production.&lt;/p&gt;
+
+&lt;p&gt;They - the language creators - are doing a great job.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;14. D&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;What a hell?&lt;/em&gt; Yes, &lt;a href=&quot;https://dlang.org/&quot;&gt;D language&lt;/a&gt; has been arond the corner for more than a decade. But the ingredient I think it has, and makes it so invisible these days is the same Clojure, Scala, Elixir and many others have: lack of a big company backing it.&lt;/p&gt;
+
+&lt;p&gt;Not that a Big Company is the guarantee of success (see Dart), but it will for sure help create a good ecosystem.&lt;/p&gt;
+
+&lt;p&gt;I’ve just written a GraphQL interpreter in D &lt;em&gt;(likely to be open to the community by my company)&lt;/em&gt;. Although I liked the language and wanted to keep it in my tool belt the lack of libs, ide support, etc, makes it very difficult to create large systems. We, for example, stopped when we reached 8k lines of code, and as we approached more and more the features we were crafting, we saw how hard it was becoming to advance.&lt;/p&gt;
+
+&lt;p&gt;There are a strange thing in the language related to reflection. &lt;code&gt;.classinfo&lt;/code&gt; for objects instantiated via interface returns something, and when invoked in a object from a class, returns pretty inconsistent ilogic results.&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&quot;https://dlang.org/spec/template-mixin.html&quot;&gt;template mixins&lt;/a&gt; of the language makes you save your finger typing. It’s brilliant! But hard to debug as you may end up concatenating strings to create a program that writes program in compile time.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;15. C++&lt;/strong&gt; - #option 4&lt;/p&gt;
+
+&lt;p&gt;I’m new to CPP, actually. But it’s been awhile since I felt so productive. I’m working on a project where part of it is written in Node, and a very code part is written in C++ using &lt;a href=&quot;https://pocoproject.org/&quot;&gt;Poco&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Why? Well, the world is written in C/C++. No matter how cool your language is, no matter how in the hype you are, your shit will always be run on top of it!&lt;/p&gt;
+
+&lt;p&gt;C++ 14 and 17 are here to stay and to tell you can be cool, safe and powerful after 30 years. The new languages on the block gave C++ very good chance to observe what worked, what failed and now this definitely part of my toolbelt.&lt;/p&gt;
+
+&lt;p&gt;Please take a look at this amazing IDE for C++, &lt;a href=&quot;https://www.jetbrains.com/clion/&quot;&gt;CLion&lt;/a&gt; by Jet Brains. It you make you cry of awe. Ant it uses &lt;a href=&quot;https://cmake.org/&quot;&gt;CMake&lt;/a&gt; as its build sytem.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;There are other languages that I’ve played seriously like &lt;a href=&quot;http://www.ocaml.org/&quot;&gt;OCaml&lt;/a&gt;, and some I don’t remember now.&lt;/p&gt;
+
+&lt;p&gt;You might be asking why this list started with &lt;strong&gt;2&lt;/strong&gt;, this is because the number &lt;strong&gt;1&lt;/strong&gt; is Java, my first language.&lt;/p&gt;
+
+&lt;p&gt;Well, you don’t need to be able to write code in so many different languages to pay your bills. You are good to go with two or 3 of them, and will be a good professional. But, learning more languages helps opening your mind to new ways of thinking and new ways of finding solutions, indeed.&lt;/p&gt;
+
+&lt;p&gt;In my next years I’ll increase and strengthen my relation with Python, Go and C++ as my primary languages. So, let’s take a break of new ones. It’s been almost 10 years of hard learning new languages with enough depth to join full time projects on them.&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 10 Feb 2017 10:22:00 -0500</pubDate>
+        <link>http://localhost:4000/blog/2017/02/10/languages-and-counting/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2017/02/10/languages-and-counting/</guid>
+        
+        
+        <category>programming</category>
+        
+      </item>
+    
+      <item>
+        <title>CRUD like Redux Abstraction</title>
+        <description>&lt;p&gt;I recently played the role of a front end developer. You know, I’m not one in a broad sense. I have not my head wrapped around CSS and visual stuff. But I made it reasonably well using the following toolkit:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://facebook.github.io/react/&quot;&gt;ReactJS&lt;/a&gt; - A javascript library for building user interfaces&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://redux.js.org/&quot;&gt;Redux&lt;/a&gt;  - a predictable state container for JavaScript apps&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;www.material-ui.com&quot;&gt;Material-UI&lt;/a&gt; - A set of React Components that Implement Google’s Material Design&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;This combo is pretty high level and you end up with a &lt;code&gt;package.json&lt;/code&gt; like this:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span&gt;&lt;/span&gt;    &lt;span class=&quot;s2&quot;&gt;&amp;quot;devDependencies&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;babel-jest&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^17.0.2&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;babel-preset-es2015&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^6.18.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;babel-preset-react&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^6.16.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;jest&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^17.0.3&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;react-scripts&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;0.7.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;react-test-renderer&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^15.4.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;redux-mock-store&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^1.2.1&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&amp;quot;dependencies&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;es6-promise&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^4.0.5&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;firebase&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^3.5.3&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;flexboxgrid&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^6.3.1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;formsy-material-ui&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^0.5.3&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;formsy-react&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^0.18.1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;isomorphic-fetch&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^2.2.1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;jquery&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^3.1.1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;lodash&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^4.17.2&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;material-ui&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^0.16.1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;query-string&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^4.2.3&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;react&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^15.3.2&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;react-addons-css-transition-group&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^15.3.2&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;react-dom&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^15.3.2&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;react-flip-move&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^2.6.4&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;react-materialize&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^0.17.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;react-redux&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^4.4.5&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;react-router&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^3.0.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;react-tap-event-plugin&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^1.0.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;redux&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^3.6.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;redux-thunk&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;^2.1.0&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Most of it was generated by &lt;a href=&quot;https://github.com/facebookincubator/create-react-app&quot;&gt;Create React App&lt;/a&gt; because to me it is so much to setup, that I picked up the easy way. You can use &lt;a href=&quot;https://webpack.github.io/&quot;&gt;Webpack&lt;/a&gt; - &lt;em&gt;I once used to setup/build a Angular 2 app&lt;/em&gt; - but it’s totally non standardized and every example on the internet just look totally different from each other.&lt;/p&gt;
+
+&lt;p&gt;From this &lt;code&gt;package.json&lt;/code&gt; above, I would like to quickly highlight &lt;a href=&quot;https://www.npmjs.com/package/redux-thunk&quot;&gt;redux-thunk&lt;/a&gt;, &lt;a href=&quot;https://lodash.com/&quot;&gt;Lodash&lt;/a&gt; and &lt;a href=&quot;https://www.npmjs.com/package/isomorphic-fetch&quot;&gt;isomorphic-fetch&lt;/a&gt;. They are must have for every Redux/React apps!&lt;/p&gt;
+
+&lt;h2 id=&quot;redux&quot;&gt;Redux&lt;/h2&gt;
+
+&lt;p&gt;The main point of this post is Redux (&lt;strong&gt;Hold on, it’s not another Redux introduction, if you want to understand it &lt;a href=&quot;https://hackernoon.com/redux-step-by-step-a-simple-and-robust-workflow-for-real-life-apps-1fdf7df46092#.jgxynut50&quot;&gt;see this blog post by Tal Kol&lt;/a&gt;&lt;/strong&gt;). I like it and should use it every app with ReactJS from now on, there are couple alternatives that I haven’t tried, like &lt;a href=&quot;http://fluxible.io/&quot;&gt;Fluxible&lt;/a&gt;, &lt;a href=&quot;http://alt.js.org/&quot;&gt;Alt&lt;/a&gt; and &lt;a href=&quot;https://facebook.github.io/relay/&quot;&gt;Relay&lt;/a&gt;. But Redux is good to go as long you are ready to write tons of code.&lt;/p&gt;
+
+&lt;p&gt;The repetition from Redux came into play when I had to fetch different entities from the server and for all of them, keep track of at least 3 states: &lt;code&gt;LOADING&lt;/code&gt;, &lt;code&gt;RECEIVE&lt;/code&gt; and &lt;code&gt;FAILED&lt;/code&gt;. You can call it with different names, but they express something like this.&lt;/p&gt;
+
+&lt;p&gt;If you are familiar with Redux you know it will requrie a reducer &lt;code&gt;case&lt;/code&gt;, an action creator function, and a action type constant. And of course the same series of dispatch for every entity your are trying to load form the server. Something like:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span&gt;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Suppose this is a thunk for fetching things from the server&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;ENTITY_LOADING&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fetchService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;localStorage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;pk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;ENTITY_RECEIVE&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Exception in Fetcher Redux &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ex&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;LoginRequired&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;loginFailed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Falha na Autenticação&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;ENTITY_FAILED&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;pk&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;pk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;This pattern repeats all over the app. The abstraction code is pretty big, please refer to the full source at &lt;a href=&quot;https://gist.github.com/paulosuzart/e6d9e24c58e099e2f5c6d9b59591a253&quot;&gt;THIS GIST&lt;/a&gt;. It’s called &lt;code&gt;ReduxFetcher&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To summarise it, the code creates action type names out of &lt;code&gt;entity&lt;/code&gt; argument. I’ve also used specific action type names for every operation.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span&gt;&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listingActionType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;actionPrefix&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;_LIST_LOAD`&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listingFailedActionType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;actionPrefix&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;_LIST_FAILED`&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listingReceiveActionType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;actionPrefix&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;_LIST_RECEIVE`&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;loadingActionType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;actionPrefix&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;_LOAD`&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;failedActionType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;actionPrefix&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;_FAILED`&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;receiveActionType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;actionPrefix&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;_RECEIVE`&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;And action creators that refer to these actions when needed:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span&gt;&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+
+    &lt;span class=&quot;nx&quot;&gt;listFailure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listingFailedActionType&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nx&quot;&gt;listReceive&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listingReceiveActionType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Finally, the abstraction provides &lt;code&gt;fetch&lt;/code&gt;, &lt;code&gt;filter&lt;/code&gt;, &lt;code&gt;list&lt;/code&gt; and &lt;code&gt;update&lt;/code&gt; dynamic actions. See the list implementaion:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span&gt;&lt;/span&gt;   &lt;span class=&quot;nx&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;localStorage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listReceive&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Exception in Fetcher Redux &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;entity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ex&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;LoginRequired&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;loginFailed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Falha na Autenticação&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listFailure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The result was a high level of code being reused for 8 entities. The abstrated actions can also be wired to componetes using &lt;a href=&quot;https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options&quot;&gt;mapdispatchToProps&lt;/a&gt; and used as any function inside components.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Redux is awesome, I feel I do better Flux than used to do MVC in the old times of JSP, Spring, Struts, JSF, etc. You feel not only that you understood whole Flux, but also you are able to fully implemented it.&lt;/p&gt;
+
+&lt;p&gt;Of course my abstraction got a problem, it is mine in the sense that it was written/designed to work with my application. After finishing the project I realized there are couple options out there to do what I did:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/Versent/redux-crud&quot;&gt;reux-crud&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.npmjs.com/package/redux-crud-async&quot;&gt;redux-crud-async&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.npmjs.com/package/redux-entity&quot;&gt;redux-entity&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://feeble.js.org/&quot;&gt;Feeble&lt;/a&gt; - not exactly the same thing, but the same approach&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It was ok for me to find those libs only at the end of the project (went live already), it gave me the sensation that I wasn’t so wrong trying to aggregate and centralize these Redux pieces in the same place.&lt;/p&gt;
+
+&lt;p&gt;Hope you liked! Cheers!&lt;/p&gt;
+</description>
+        <pubDate>Mon, 12 Dec 2016 10:22:00 -0500</pubDate>
+        <link>http://localhost:4000/blog/2016/12/12/crud-like-redux-abstraction/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2016/12/12/crud-like-redux-abstraction/</guid>
+        
+        
+        <category>react</category>
+        
+        <category>redux</category>
+        
+        <category>es6</category>
+        
+        <category>nodejs</category>
+        
+      </item>
+    
+      <item>
+        <title>One year as remoter</title>
+        <description>&lt;p&gt;Ok, you are used to &lt;em&gt;long time without posting&lt;/em&gt;, so no need to repeat it! Anyway, as you know we half accidentally moved to Colombia last year, and now it’s been a year since we left São Paulo, Brazil.&lt;/p&gt;
+
+&lt;p&gt;I’ts been quite great experiente, but in this post I’ll talk about how it is like to be working as a remoter. 
+&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;remoter&quot;&gt;Remoter&lt;/h1&gt;
+
+&lt;p&gt;I’ve worked with a dedicated team of 4 + me, plus a total of 22 people in a office with me as the only remoter of the company. More recently, had the chance to work with a team of 8 in 4 different timezones. 
+Here are some tools and findings:&lt;/p&gt;
+
+&lt;h2 id=&quot;a-chat&quot;&gt;A Chat&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.hipchat.com/&quot;&gt;Hipchat&lt;/a&gt; is pretty useful tool, specially because mentionning someone offline will activate the person via email. Slack was also used but it doesn’t activate users using different channels. The result is that conversations rapidly grow and If you don’t reread the entire chats of channels you are left behind. Not only that, &lt;strong&gt;important decisions and changes are left behind&lt;/strong&gt;. So how do we succeeded?&lt;/p&gt;
+
+&lt;p&gt;Well, Chats don’t replace old style email with &lt;code&gt;cced&lt;/code&gt; people. Don’t rely on chat history to communicate important decisions, project paths, direction changes. Make it visible via email and additionally store it in your wiki (&lt;a href=&quot;https://www.atlassian.com/software/confluence&quot;&gt;Conflunce&lt;/a&gt; like). If you, while working in the same office as your colleagues, you send emails, don’t stop doing it if your work with a remote team.&lt;/p&gt;
+
+&lt;p&gt;Don’t expect people to reread chat history to find themselves if a important decision was made while they were offline.&lt;/p&gt;
+
+&lt;h2 id=&quot;gtd-not-enough&quot;&gt;GTD? not enough&lt;/h2&gt;
+
+&lt;p&gt;Tools like &lt;a href=&quot;https://trello.com&quot;&gt;Trello&lt;/a&gt; and &lt;a href=&quot;https://asana.com&quot;&gt;Asana&lt;/a&gt; are pretty popular, but they are not fit for &lt;strong&gt;every&lt;/strong&gt; scenario. For these two cases I had Trello perfectly working for one case, but neither Asana nor Trello working for the other.&lt;/p&gt;
+
+&lt;p&gt;Trellos is very tyring with card only view, Asana is tyring with list only view (and a poor descritpion/comment editor with no right to format what you are writing). Again we see people loosing interest in collaborating via these tools because they are simply ergonomically unconfortable, or because they know knowledge is lost among so many tasks. There is no follow up, no knowledge/decision broadcast.&lt;/p&gt;
+
+&lt;p&gt;Not only that, if only the IT team uses it, people from the business side may not realize we finished a request/feature. The old Issue Tracker is the best options for many scenarios. Even worse, if they request feature/changes using chats &lt;strong&gt;chances are we never realize they’ve asked a thing!&lt;/strong&gt; The result is probably people disagreeing/arguing they said something in a chat channel but the coworker hadn’t seen it.&lt;/p&gt;
+
+&lt;h2 id=&quot;always-on-camera-is-weird&quot;&gt;Always-On Camera is weird&lt;/h2&gt;
+
+&lt;p&gt;For one of these cases, we’ve set a always on camera in the officer while I let open my lap top cam. Well, in the end we typed more than talked using the camera. A periodic video call showed to be more appropriate, less intimidating, less privacy disruptive than a always on camera.&lt;/p&gt;
+
+&lt;p&gt;For the other we almost had no video call, what was the opposite of the previous approach. A balanced will bring some benefit.&lt;/p&gt;
+
+&lt;h2 id=&quot;bring-your-own-tasks-doesnt-work&quot;&gt;Bring your own tasks doesn’t work&lt;/h2&gt;
+
+&lt;p&gt;We are sometimes tempted to let people record their job using tools like Asana and Trello by themselves. Well, they won’t. And if you have a minimal clear specification for a project, open the tasks/issues yourself and make the team go through each taks until the project is delivered.&lt;/p&gt;
+
+&lt;p&gt;Previously creatting tasks give people a sense of compromise and mission!&lt;/p&gt;
+
+&lt;h2 id=&quot;text-only-spec-can-be-enriched&quot;&gt;Text only spec can be enriched&lt;/h2&gt;
+
+&lt;p&gt;If you have the opportunity to work with tools like &lt;a href=&quot;https://cucumber.io/&quot;&gt;Cucumber&lt;/a&gt; or &lt;a href=&quot;http://pythonhosted.org/behave/&quot;&gt;Python Behave&lt;/a&gt;, do it!&lt;/p&gt;
+
+&lt;p&gt;Text only spec are not executble, so if a developer leave something behind, it will be left behind. The bigger the specification, bigger the chance someone to leave something behind. That’s why you’ll also likely have a business analyst or a product owner (not someone from the business not able to access his/her own smartphone settings, but a real technical professional product owner for God’s sake!).&lt;/p&gt;
+
+&lt;h2 id=&quot;video-calls-without-a-summary-emailwiki-page-is-useless&quot;&gt;Video calls without a summary email/wiki page is useless&lt;/h2&gt;
+
+&lt;p&gt;Of course we have such quick calls that it doesn’t justify documenting it or sharing with others. Let’s call in taks calls. But if you have a more general weekly call, document it! Or don’t waste your time talking about topics will be lost as soon the call is ended.&lt;/p&gt;
+
+&lt;h2 id=&quot;social-network-are-not-projectremote-tools&quot;&gt;Social network are not project/remote tools&lt;/h2&gt;
+
+&lt;p&gt;Recently Facebook came up with Workplace, a supposedly working tool. I’ts likely you or your company are thristy to use it just because it was made by Facebook. Well, in fact this is just facebook. How can you ever be productive or do anything related to work using facebook? You can’t. This is shit, keep out.&lt;/p&gt;
+
+&lt;p&gt;So is Yammer, or anything like that. Use enterprise social network as a central point of broadcast, and some of them are useless for this purpose. They are whate they are, useless.&lt;/p&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;We kown remote working and specially remote teams are perfectly doable, but with the wrong tools/approach/people, this is a recipe for a disaster. Newcomers to remote work are likely to see it in a too romantic fashion and ruin everything. We need to be realistic!&lt;/p&gt;
+
+&lt;p&gt;You need to be disciplined and &lt;strong&gt;show&lt;/strong&gt; you are. If you work at home but keep your TV on, your preferred smartphone game on, or your wife/husband Interrupting you all the time, please work on it before join a remote team.&lt;/p&gt;
+
+&lt;p&gt;If you think you can predict/suppose people emotions while reading what they wrote, well, you can’t. Then if you are super emotional person your are likely to create more problems than helping team to solve them.&lt;/p&gt;
+
+&lt;p&gt;Here a list of tools I believe is almost universal for remote jobs:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Concluence - please document all your shit here&lt;/li&gt;
+  &lt;li&gt;Jira - No, project specific issue trackers (like availabe at &lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt;/&lt;a href=&quot;bitbucket.org&quot;&gt;Bit Bucket&lt;/a&gt;) are not enough. It’s &lt;strong&gt;way common&lt;/strong&gt; to have projects that uses microservices fashion approach, and even if it’s not about microservices, a modern app requires more than 2, 3 even 5 different repos.&lt;/li&gt;
+  &lt;li&gt;Slack. This is a chat, suppose this is people talking to each other as they would do in real word, so please don’t trust this as if it was your bible or the source of truth.&lt;/li&gt;
+  &lt;li&gt;Hangouts/Skype/&lt;a href=&quot;appear.in&quot;&gt;Appear.in&lt;/a&gt; for video calls. A camera in the office (if there is a office) will cause more harm to privacy than help you to collaborate. Please schedule your calls and create wiki pages for summarizing them. If you think it’s waste of time to document all calls, keep a single project page with decisions and path changes.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Things to keep distance:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Google docs - While important piece for creating documents, presentations, sheets, don’t expect to collaborate daily tasks using it. Keep project documentation in confluence&lt;/li&gt;
+  &lt;li&gt;Whats App - No comments&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Chat is your life&lt;/em&gt; approach - This you destroy your project and everything will be just disconnected&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;That is it. Hope a can continue to learn and improve remoting skills. Anything I should learn, I share with you!&lt;/p&gt;
+
+&lt;p&gt;Happy 2017!&lt;/p&gt;
+</description>
+        <pubDate>Sun, 11 Dec 2016 22:25:00 -0500</pubDate>
+        <link>http://localhost:4000/blog/2016/12/11/one-year-as-remoter/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2016/12/11/one-year-as-remoter/</guid>
+        
+        
+        <category>remoter</category>
+        
+      </item>
+    
+      <item>
+        <title>Django + Postgres + Redis + Knockout.js. Nice shot!</title>
+        <description>&lt;h1 id=&quot;good-news&quot;&gt;Good News&lt;/h1&gt;
+
+&lt;p&gt;Hello from Colombia! Yes, we came to Colombia in order to my wife delivery our baby. Awesome! I’m also investing some resources on a new company: &lt;a href=&quot;http://www.pandateam.com.br/en&quot;&gt;Panda Team&lt;/a&gt;. This is a quite old dream, to have my own small company and work hard to help customers succeed in their business. Visit us!&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h1 id=&quot;now-the-post&quot;&gt;Now the post&lt;/h1&gt;
+
+&lt;p&gt;&lt;em&gt;This is a kinda translation from our &lt;a href=&quot;http://www.pandateam.com.br/blog/&quot;&gt;blog&lt;/a&gt; at Panda Team website. Enjoy&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Crafting web apps, specially user facing web apps, are in a constant demand. Be it either an enterprise or startup, you’ll need a bunch of them. But what development stack to use with so many options?&lt;/p&gt;
+
+&lt;p&gt;For sure you need to take into account the requirements and restrictions of each scenario, but many of the restrictions came with the lack of knowledge on beyond mature alternatives that can bring benefit with &lt;strong&gt;agility&lt;/strong&gt;, &lt;strong&gt;simplicity&lt;/strong&gt; and: &lt;strong&gt;your project live in a blink of an eye!&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;After years developing software, I’ve been recommending a sort of development kit that should cover most of needs in modern applications. Not only in terms of UIX, but mainly for apps that go live with less friction.&lt;/p&gt;
+
+&lt;p&gt;Lets get to know the components of this stack:&lt;/p&gt;
+
+&lt;h2 id=&quot;django&quot;&gt;Django&lt;/h2&gt;
+
+&lt;p&gt;This framework isn’t new actually. Launched in 2005, and there goes 10+ years of maturity. Nowadays it is a framework that leaves behind most of the frameworks commonly used in enterprise environments. We can state some of the main advantages of &lt;a href=&quot;https://www.djangoproject.com/&quot;&gt;Django&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Short bootstrap and auto-reload time that always work allows for a more smooth development pace, without stress. Its template system simply works without being a burden. And what to tell about the test suit already available in the framework by default?&lt;/p&gt;
+
+&lt;p&gt;Django has a pretty consistent and extensive ecosystem like good ORM, safe automatic migrations among others.&lt;/p&gt;
+
+&lt;h2 id=&quot;postgresql&quot;&gt;PostgreSQL&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.postgresql.org/&quot;&gt;Postgres&lt;/a&gt; is a sturdy open source database with very good performance. It is interesting to see companies like &lt;a href=&quot;https://www.heroku.com/postgres&quot;&gt;Heroku offering&lt;/a&gt; Postgres as a product.&lt;/p&gt;
+
+&lt;p&gt;It has features that are not always used, but come at hand in many situations. They are the json storage and full text search capabilities.&lt;/p&gt;
+
+&lt;p&gt;Combined with Django, it is possible to develop at full speed with automatic schema creation, migrations (DDL and DML).&lt;/p&gt;
+
+&lt;p&gt;But there are few scenarios where our next component can handle better. Lest see.&lt;/p&gt;
+
+&lt;h2 id=&quot;redis&quot;&gt;Redis&lt;/h2&gt;
+
+&lt;p&gt;It is quite common to use session, cache and queues even for small apps. &lt;a href=&quot;http://redis.io/&quot;&gt;Redis&lt;/a&gt; is noSQL database that is perfect for this sort of requirements.&lt;/p&gt;
+
+&lt;p&gt;And again, the Django community provides solid libs that, in tandem with its pluggable session and cache storages are easy to integrate into your project.&lt;/p&gt;
+
+&lt;h2 id=&quot;knockoutjs&quot;&gt;Knockout.js&lt;/h2&gt;
+
+&lt;p&gt;For SPA (Singla Page Applications) or not, few js frameworks are so lightweight yet powerful like &lt;a href=&quot;http://knockoutjs.com/&quot;&gt;Knockout.js&lt;/a&gt;. Knockout reduces the complexity with nested DOM dependencies and disticnt related objects.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion-with-caution&quot;&gt;Conclusion &lt;strong&gt;With Caution&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;This combination presented here is by no means the silver bullet. But I confess that many of challenges that I’ve faced this stack could have solved the questions with one or two more libs.&lt;/p&gt;
+
+&lt;p&gt;I could personaly verify the success of this kit combined with some other DevOps tools. Then you reach almost non existent friction level in your IT.&lt;/p&gt;
+
+&lt;p&gt;Consider trying this combination, and if you need a hand, tell me.&lt;/p&gt;
+
+&lt;p&gt;Cheers!&lt;/p&gt;
+</description>
+        <pubDate>Mon, 06 Jun 2016 08:30:00 -0500</pubDate>
+        <link>http://localhost:4000/blog/2016/06/06/colombia-django-postgres-redis-Knockout/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2016/06/06/colombia-django-postgres-redis-Knockout/</guid>
+        
+        
+        <category>python</category>
+        
+      </item>
+    
+      <item>
+        <title>Database Functional Mapping with Slick</title>
+        <description>&lt;p&gt;&lt;a href=&quot;http://www.typesafe.com/&quot;&gt;Typesafe&lt;/a&gt; guys certainly gave nice shots embracing projects like &lt;a href=&quot;playframework.com&quot;&gt;play!&lt;/a&gt;, &lt;a href=&quot;http://akka.io&quot;&gt;akka&lt;/a&gt; and &lt;a href=&quot;http://slick.typesafe.com/&quot;&gt;Slick&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;After finally swallowing the huge change they did on play! itself since its release 1.2.4, I’ve been heavily playing with play! 2.4.3. I like the ability to use different persistent frameworks, but so far, it comes with the cost of sparse documentation and lack of focus on a single well understood solution and all the caveats.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;Anyway. Want to share some playground with Slick combined with the power of &lt;a href=&quot;http://docs.scala-lang.org/overviews/core/futures.html&quot;&gt;Futures&lt;/a&gt; and functional composition itself. Slick is very powerful and works basically pretending it operates on lists of objects, but behind the scenes it simply generates &lt;strong&gt;type safe&lt;/strong&gt; sql statements.&lt;/p&gt;
+
+&lt;h2 id=&quot;futures-and-composition&quot;&gt;Futures and composition&lt;/h2&gt;
+
+&lt;p&gt;Look at the following sniped. This &lt;code&gt;Command&lt;/code&gt; case class is kinda big to paste here, so it is cut. Same for the find method fo this DAO class.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-scala&quot; data-lang=&quot;scala&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//Holds data after loaded from/to database&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deleted&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+                   &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Option&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+                   &lt;span class=&quot;o&quot;&gt;...)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;//Maps a table from the database&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Commands&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aTag&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Tag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aTag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;commands&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;//Represents the collection like interface we&amp;#39;ll be working on&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;lazy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commands&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TableQuery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Commands&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;findAndDelete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;_&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;finder&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;CommandFinderQuery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Future&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;//... Believe it will find a command&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delete&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Future&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Future&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flatMap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commands&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deleted&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nc&quot;&gt;Logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;debug&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updateStatement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;dbConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;So, the &lt;code&gt;delete&lt;/code&gt; function takes a &lt;code&gt;Future[Command]&lt;/code&gt;, that is, someone before it will actually find a command and give it to this function. All &lt;code&gt;delete&lt;/code&gt; should do is to prepare a query using &lt;code&gt;filter&lt;/code&gt; on &lt;code&gt;commands&lt;/code&gt; table using the familiar &lt;code&gt;filter&lt;/code&gt; approach.&lt;/p&gt;
+
+&lt;p&gt;Notice however, that after filtering, there is a &lt;code&gt;map&lt;/code&gt;. This means we will only consider the field whose name is &lt;code&gt;deleted&lt;/code&gt;. Couple lines below you see &lt;code&gt;dbConfig.db.run(q.update(true))&lt;/code&gt;. And this is the point where the sql &lt;code&gt;UPDATE&lt;/code&gt; command is really submitted to the database.&lt;/p&gt;
+
+&lt;p&gt;Since we are using &lt;code&gt;flatMap&lt;/code&gt; on Future[Command], this then produces a new future of type &lt;code&gt;Future[Int]&lt;/code&gt; that will hold the number of affected rows once it is completed.&lt;/p&gt;
+
+&lt;p&gt;Now take a look at &lt;code&gt;findAndDelete&lt;/code&gt;. It composes the &lt;code&gt;find&lt;/code&gt; function and the &lt;code&gt;delete&lt;/code&gt;, so it is easy for any caller to just call it instead of chain the execution every time.&lt;/p&gt;
+
+&lt;h2 id=&quot;for-comprehension&quot;&gt;For comprehension&lt;/h2&gt;
+
+&lt;p&gt;Slick also offers a monadic approach for querying multiple tables. For example, the for comprehension below:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-scala&quot; data-lang=&quot;scala&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;group&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groups&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groupName&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;team&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;teams&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;team&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;teamName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;team&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;groupId&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;cmd&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commands&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cmd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;teamId&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;team&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cmd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;seqNumber&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commandSeq&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cmd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deleted&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cmd&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Generates an SQL:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;host&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;user_id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;team_id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;seq_number&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;content_hash&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;comment&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;deleted&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;tag&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;starred&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&amp;quot;groups&amp;quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&amp;quot;teams&amp;quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&amp;quot;commands&amp;quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;name&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;name&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;group_id&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;(((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;team_id&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;seq_number&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;&amp;quot;deleted&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;This is very interesting and shows that the &lt;code&gt;for&lt;/code&gt; notation will not overload your database but simply collaborate to create the query you want.&lt;/p&gt;
+
+&lt;h2 id=&quot;promising-and-returning-objects-with-persisted-id&quot;&gt;Promising and returning objects with persisted Id&lt;/h2&gt;
+
+&lt;p&gt;Please don’t take the following code as canonical, it was just my requirements that led me to do this. But imagine you want to add a new &lt;code&gt;Command&lt;/code&gt; to the database. Instead of returning the number of affected rows or the new id only, you want a copy of the &lt;code&gt;Command&lt;/code&gt; object with the id filled:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-scala&quot; data-lang=&quot;scala&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;++(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Future&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;savedPromise&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;insertAction&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commands&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;returning&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commands&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;
+  &lt;span class=&quot;nc&quot;&gt;Logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;debug&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;insertAction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;statements&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mkString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;insertF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dbConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;insertAction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;insertF&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onFailure&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;debug&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s&amp;quot;Insert new command failed with : &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMessage&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;savedPromise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;failure&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;insertF&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onSuccess&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;savedId&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;savedPromise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;success&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;copy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;savedId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;some&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;savedPromise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;future&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;This is simply amazing. Notice the &lt;code&gt;returning&lt;/code&gt; function that will make the insertAction returns a &lt;code&gt;Long&lt;/code&gt; upon execution. Remember we want to deliver back a &lt;code&gt;Command&lt;/code&gt;, not the produced id. The solution is to subscribe to this future inside &lt;code&gt;++&lt;/code&gt;, and once it is completed, you deliver the new immutable &lt;code&gt;Command&lt;/code&gt;: &lt;code&gt;savedPromise.success(command.copy(id = savedId.some))&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;end&quot;&gt;End&lt;/h2&gt;
+
+&lt;p&gt;This is far from being a tutorial or complete example of Slick. But gives you a direction of what kind of constructs you can combine. The guys at &lt;a href=&quot;http://underscore.io/blog/&quot;&gt;Underscode.io&lt;/a&gt; got deeper posts. But so far, Slick shows to be a very mature solution when it comes to persistence with Scala and relational databases.&lt;/p&gt;
+
+&lt;p&gt;Notices it doesn’t provide any caching. You would have to implement yourself. Slicks also offer the possibility to generate code from an existing database, but I personally don’t like this approach.&lt;/p&gt;
+
+&lt;p&gt;Take care!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;important&lt;/strong&gt;: &lt;code&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/code&gt; and &lt;code&gt;some&lt;/code&gt; comes from &lt;a href=&quot;https://github.com/scalaz/scalaz&quot;&gt;Scalaz&lt;/a&gt;. &lt;code&gt;Logger&lt;/code&gt; and &lt;code&gt;dbConfig&lt;/code&gt; comes from the play! project app.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 23 Sep 2015 00:22:00 -0500</pubDate>
+        <link>http://localhost:4000/blog/2015/09/23/database-functional-mapping-with-slick/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015/09/23/database-functional-mapping-with-slick/</guid>
+        
+        
+        <category>fp</category>
+        
+        <category>scala</category>
+        
+      </item>
+    
+      <item>
+        <title>How Much Functional Are You?</title>
+        <description>&lt;p&gt;Whats up? Fine? Well, I don’t know exactly why but I ended up reading the &lt;a href=&quot;https://github.com/milessabin/shapeless/wiki/Feature-overview:-shapeless-1.2.4&quot;&gt;Feature Overview&lt;/a&gt; doc of the great &lt;a href=&quot;https://github.com/milessabin/shapeless&quot;&gt;Shapeless&lt;/a&gt; &lt;a href=&quot;http://scala-lang.org&quot;&gt;Scala&lt;/a&gt; lib.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;I think it was when reading more about Scala implicits. Anyway, Shapeless and also &lt;a href=&quot;http://eed3si9n.com/learning-scalaz/index.html&quot;&gt;ScalaZ tutorials&lt;/a&gt; docs put a huge attention to Scala type system and who to build extensible stuff using implicits and the power of the type system itself.&lt;/p&gt;
+
+&lt;p&gt;Red them and you will notices couple concepts frequently very often mentioned like Monads &lt;em&gt;(no, I’ll not write a tutorial on it)&lt;/em&gt;, Functors, Applicative, Type classes, etc. But how many times you went that deep? I personally know “Functional Programmers” that never ever talked or read about such things even sort of evangelizing functional programming.&lt;/p&gt;
+
+&lt;p&gt;4 years ago I wrote a &lt;a href=&quot;https://codemountain.wordpress.com/2011/01/01/5-things-to-a-functional-brain/&quot;&gt;blog post (pt_BR)&lt;/a&gt; stating 5 things to have a functional brain, of course that list was very limited:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Lambda Calculus&lt;/li&gt;
+  &lt;li&gt;Say What, not How&lt;/li&gt;
+  &lt;li&gt;Understand partially applied functions&lt;/li&gt;
+  &lt;li&gt;Immutability is natural&lt;/li&gt;
+  &lt;li&gt;Recursion is not strange&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Today, with all my words I add: &lt;strong&gt;Know Haskell&lt;/strong&gt;. You may say: I’m learning Clojure or Scala, so why &lt;a href=&quot;http://haskell.org&quot;&gt;haskell&lt;/a&gt;?&lt;/p&gt;
+
+&lt;p&gt;Ok, more precisely read &lt;a href=&quot;http://learnyouahaskell.com/&quot;&gt;Learn You a Haskell for Great Good!&lt;/a&gt; book. But I mean, read right now (if you haven’t)! Scala tried to bring as much haskell as possible to the JVM (call me crazy, but this is what it is), and the aforementioned libs are the stretchers of Scala’s type system in order to produce the same power of haskell in the JVM.&lt;/p&gt;
+
+&lt;p&gt;Of course I played with that. You’ll sell a lot of things stuffed in this &lt;strike&gt;Hacker Rank&lt;/strike&gt; &lt;a href=&quot;http://yuanhsh.iteye.com/blog/2200515&quot;&gt;Good Node&lt;/a&gt; challenge.&lt;/p&gt;
+
+&lt;p&gt;This is not a perfect solution, mainly because I tried to put as much learned concepts as possible in the same place. So if you don’t read this book and go deeper into certain concepts you’ll simply not understand some expressions like &lt;code&gt;&amp;lt;$&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;*&amp;gt;&lt;/code&gt; that lies in the heart of Applicative and Functors.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Go beyond composing functions, applying &lt;code&gt;map&lt;/code&gt; against lists and passing functions around. As haskell is certainly the source of all this, you will learn / understand / see sense in libs like shapeless and scalaz much much faster.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://haskell.org&quot;&gt;haskell.org&lt;/a&gt; offers a huge amount of resources on functional programming, from more kinda math perspective to more practical guides.&lt;/p&gt;
+
+&lt;p&gt;To start, simply &lt;code&gt;apt-get install haskell-platform&lt;/code&gt; and if you use &lt;a href=&quot;https://atom.io/&quot;&gt;Atom.io&lt;/a&gt;, there are some astonishing packages for haskell that gives you full support for context aware code completion, lint, plus compile errors.&lt;/p&gt;
+
+&lt;p&gt;If you code Scala like you code Java, or just don’t go beyond basics, you have a Ferrari in your garage, but uses your old 1962 Volks to go out. Think about it.&lt;/p&gt;
+
+&lt;p&gt;Here the code:&lt;/p&gt;
+&lt;noscript&gt;&lt;pre&gt;400: Invalid request
+&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/f9c1e498c79ee3d7098c.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;&lt;em&gt;WARNING: I’m definitely not the best haskell programmer out there. Don’t use this code as a reference, but as a way to step into what haskell code looks like.&lt;/em&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 21 Aug 2015 00:22:00 -0500</pubDate>
+        <link>http://localhost:4000/blog/2015/08/21/how-much-functional-are-you/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015/08/21/how-much-functional-are-you/</guid>
+        
+        
+        <category>fp</category>
+        
+        <category>haskell</category>
+        
+        <category>scala</category>
+        
+      </item>
+    
+      <item>
+        <title>Give Kotlin And Quasar a Try</title>
+        <description>&lt;p&gt;Hello hello! After a quick incursion into the world of &lt;s&gt;Rust&lt;/s&gt; language, I’m back!&lt;/p&gt;
+
+&lt;p&gt;The balance since last year when I started to work on a &lt;a href=&quot;http://paulosuzart.github.io/blog/2014/07/07/going-back-to-go/&quot;&gt;tracking system written&lt;/a&gt; in Go is: I didn’t finish it (as if it is novelty). Also,  I had the opportunity to deliver a &lt;a href=&quot;https://www.djangoproject.com/&quot;&gt;danjgo&lt;/a&gt; system to production with easy. I might return with the tracking stuff but not written in Go.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;kotlin&quot;&gt;Kotlin&lt;/h2&gt;
+
+&lt;p&gt;Ok, so I’m here to give my 2 cents on a Language that I - have to admit - ignored for a long time. A language that was launched ~5 years ago, when &lt;a href=&quot;http://www.scala-lang.org/&quot;&gt;Scala&lt;/a&gt; was taking over: &lt;a href=&quot;kotlinlang.org&quot;&gt;Kotlin&lt;/a&gt;. You can find better details about why Kotlin in &lt;a href=&quot;http://blog.jetbrains.com/&quot;&gt;their blog&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To be precise, yesterday they &lt;a href=&quot;http://blog.jetbrains.com/kotlin/2015/05/kotlin-m12-is-out/&quot;&gt;launched the M12&lt;/a&gt; with relevant changes. The good thing is that those guys are not afraid of improving the language and deprecate things for good reasons.&lt;/p&gt;
+
+&lt;p&gt;Kotlin can compile to JVM, JavaScript and Android. What makes it a powerful language able to cover almost all areas you are deliverying code. Not only that, here a non-exhaustive list of characteristics that attracted me:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Serious crafters&lt;/strong&gt;. These guys are building a &lt;strong&gt;language&lt;/strong&gt;, different from other groups that are creating a language as a masquerade just to embed a bunch of social experiments and social ideas behind them&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Incredible interop with Java&lt;/strong&gt; without bizzarre workarounds. That is why Kotlin can take advantage of all Java libs without having to reinvent the wheel using the language.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Statically&lt;/strong&gt; typed, compiled. I’ve been working with Groovy (Grails) for at least 3 years. You can say &lt;em&gt;“you can write tests to give you some safety”&lt;/em&gt;, ok, I respect, but I had to pay the price of dynamicity in production. What is not cheap.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Null is welcome, but without NPE&lt;/strong&gt;. Some languages wind their optinal values in a object (&lt;code&gt;Option&lt;/code&gt;, &lt;code&gt;Some&lt;/code&gt;, &lt;code&gt;Either&lt;/code&gt;, etc). Kotlin uses the concept of &lt;a href=&quot;http://kotlinlang.org/docs/reference/null-safety.html&quot;&gt;Null Safety&lt;/a&gt; where you give a hint to inform if a value can be null, so the compile prevents accidental code without forcing you to write defensive code&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Lambdas&lt;/strong&gt; - Needless to comment&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://kotlinlang.org/docs/reference/inline-functions.html&quot;&gt;&lt;strong&gt;Inlining&lt;/strong&gt;&lt;/a&gt; - This is a super important direction to go. Hope that with Java 9, we developers become more responsible and active int terms of how compiler treats our code&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Data Classes&lt;/strong&gt; - Imagine a very concise and short way to code a class that just holds values, but providing &lt;code&gt;equals&lt;/code&gt;, &lt;code&gt;hashcode&lt;/code&gt;, &lt;code&gt;toString&lt;/code&gt; and &lt;code&gt;copy&lt;/code&gt; automatically. &lt;a href=&quot;http://kotlinlang.org/docs/reference/data-classes.html&quot;&gt;Data classes&lt;/a&gt; are the answer&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Native delegation&lt;/strong&gt; - I can’t count how many times I had to use a delegate but doing everything by hand. Kotlin supports this pattern directly, &lt;a href=&quot;http://kotlinlang.org/docs/reference/delegation.html&quot;&gt;take a look here&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;a href=&quot;http://kotlinlang.org/docs/reference/exceptions.html&quot;&gt;No checked exceptions&lt;/a&gt;&lt;/strong&gt; \o/ -The compile never complies if you don’t &lt;code&gt;throw&lt;/code&gt; an exception.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And how could I feel the language? Simple: writing a project with it. That is why I ported a &lt;code&gt;systemd&lt;/code&gt; like process monitor from &lt;s&gt;Rust&lt;/s&gt; to Kotlin. Krust-pm can be found in this &lt;a href=&quot;https://github.com/paulosuzart/krust-pm/tree/master&quot;&gt;Github&lt;/a&gt; repo.&lt;/p&gt;
+
+&lt;h2 id=&quot;quasar&quot;&gt;Quasar&lt;/h2&gt;
+
+&lt;p&gt;Another excelent piece of software is &lt;a href=&quot;http://www.paralleluniverse.co/quasar/&quot;&gt;Quasar from Parallel Universe&lt;/a&gt;. I played with it using the &lt;a href=&quot;https://github.com/puniverse/pulsar&quot;&gt;Pulsar Clojure&lt;/a&gt; wrapper a while ago. And nothing better than interop with Java to really stretch Kotlin.&lt;/p&gt;
+
+&lt;p&gt;Quasar provides light Fibers and Actors to JVM and the &lt;a href=&quot;http://blog.paralleluniverse.co/2015/05/29/quasar-pulsar-0-7-0/&quot;&gt;release 0.7.0&lt;/a&gt; also got released yesterday. So, lets check.&lt;/p&gt;
+
+&lt;p&gt;If you open krust-pm project you’ll see that at least two classes extends from &lt;a href=&quot;http://docs.paralleluniverse.co/quasar/javadoc/co/paralleluniverse/actors/behaviors/ProxyServerActor.html&quot;&gt;ProxyServerActor&lt;/a&gt;.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot; data-lang=&quot;kotlin&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ProcessManager&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ProxyServerActor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;krust-pm&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+                         &lt;span class=&quot;n&quot;&gt;ProcessManagerTrait&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//...&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ManagedProcess&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                     &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;cmd&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                     &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;maxRetries&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                     &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;initScale&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                     &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;env&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                     &lt;span class=&quot;n&quot;&gt;ProxyServerActor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ManagedProcessTrait&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;c1&quot;&gt;//...&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;actorA&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ManagedProcess&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;good_sleeper&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                              &lt;span class=&quot;s&quot;&gt;&amp;quot;./src/main/resources/sleeper.py&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                              &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                              &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                              &lt;span class=&quot;n&quot;&gt;mapOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;()).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spawn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ManagedProcessTrait&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;actorB&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ProcessManager&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spawn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ProcessManagerTrait&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;actorB&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;manage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;actorA&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// manage actorA is sent as a message to the actorB&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;ProxyActor is part of the excellent builtin &lt;a href=&quot;http://docs.paralleluniverse.co/quasar/&quot;&gt;Behavior&lt;/a&gt; Actors provided. This specific one creates a proxy of your class, that immediately becomes an actor without having to implement &lt;code&gt;doRun&lt;/code&gt; or create a loop and pattern matching incoming messages. This is super, but might add a neglible overhead.&lt;/p&gt;
+
+&lt;p&gt;There are other provided behaviors like &lt;code&gt;Server&lt;/code&gt;, &lt;code&gt;EventSource&lt;/code&gt; and the great &lt;a href=&quot;http://docs.paralleluniverse.co/quasar/javadoc/co/paralleluniverse/actors/behaviors/FiniteStateMachineActor.html&quot;&gt;FiniteStateMachine&lt;/a&gt; that I want to taste.&lt;/p&gt;
+
+&lt;p&gt;So, the next great thing about Galaxy is the &lt;a href=&quot;http://docs.paralleluniverse.co/quasar/javadoc/co/paralleluniverse/strands/Strand.html&quot;&gt;Strand&lt;/a&gt; abstraction. Krust-pm, due to the nature o Java system process handling, employs a thread per managed process instance. And to keep a single uniform API around a thread that manages a process or any other fiber that can do anything different, I used the &lt;code&gt;of&lt;/code&gt; static method from Strand to instantiate directly from a thread.&lt;/p&gt;
+
+&lt;p&gt;Quasar also offers the ability to &lt;a href=&quot;http://docs.paralleluniverse.co/quasar/javadoc/co/paralleluniverse/actors/behaviors/Supervisor.html&quot;&gt;supervise actors&lt;/a&gt; and take actions accordingly. Another important thing is the custom configuration for &lt;a href=&quot;http://docs.paralleluniverse.co/quasar/javadoc/co/paralleluniverse/actors/MailboxConfig.html&quot;&gt;Actor Mailboxes&lt;/a&gt; and configurable &lt;a href=&quot;http://docs.paralleluniverse.co/quasar/javadoc/co/paralleluniverse/fibers/FiberScheduler.html&quot;&gt;FiberScheduler&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Moreover, if you are interested in distributing Actors across machines, there is a natural integration with &lt;a href=&quot;http://docs.paralleluniverse.co/quasar/#enabling-clustering&quot;&gt;Galaxy&lt;/a&gt; available.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Both Quasar and Kotlin are proving themselves as great tools to keep in mind when developing your next solution. Kotlin because it is statically typed, better than java and still flexible enough to foster elegant, expressive and intuitive code.&lt;/p&gt;
+
+&lt;p&gt;And Quasa because it doesn’t impose any crazy concept like other Actor libs out there, also, it offers great abstractions and a straight to the point API.&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 30 May 2015 10:31:00 -0500</pubDate>
+        <link>http://localhost:4000/blog/2015/05/30/give-kotlin-and-quasar-a-try/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015/05/30/give-kotlin-and-quasar-a-try/</guid>
+        
+        
+        <category>kotlin</category>
+        
+      </item>
+    
+      <item>
+        <title>Why Racket is Awesome</title>
+        <description>&lt;p&gt;**UPDATE: ** Just because I posted yesterday that Rust was a unstable with nightly releases, the guys just posted today (2015 April 3rd) the &lt;a href=&quot;http://blog.rust-lang.org/2015/04/03/Rust-1.0-beta.html&quot;&gt;Beta release&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Finally 1st post of the year! Well, not that much to say lately. But here a piece of my sensations while playing with &lt;a href=&quot;http://racket-lang.org/&quot;&gt;Racket&lt;/a&gt; last two weeks.&lt;/p&gt;
+
+&lt;!--more--&gt;
+&lt;p&gt;How I started looking at it
+—-&lt;/p&gt;
+
+&lt;p&gt;My first visit to Racket was possibly in the old times of version 4. But now with 6.1.1, the thing is such mature work.&lt;/p&gt;
+
+&lt;p&gt;Well, after a long time &lt;a href=&quot;http://www.reddit.com/r/Clojure/comments/2r63gt/why_did_you_stop_using_clojure/cnkez0i&quot;&gt;far from&lt;/a&gt; &lt;a href=&quot;http://clojure.org/&quot;&gt;Clojure&lt;/a&gt;, at work we got some spare time so we could use it for tiny hackathons (a lot tiny BTW). We define silly scenarios where one could build using anything.&lt;/p&gt;
+
+&lt;p&gt;First I’d decided to go with &lt;a href=&quot;https://ocaml.org/&quot;&gt;OCaml&lt;/a&gt;, just to taste it. Sour! I mean, it is a good language but documentation is frustrating, libraries documentation even worse. Ok, so went for &lt;a href=&quot;http://www.rust-lang.org/&quot;&gt;Rust&lt;/a&gt;, that is a good promise and should become one of my languages once it gets out of alpha stage: it is hard to compile libs with nightly builds, everything brakes, etc.&lt;/p&gt;
+
+&lt;p&gt;But Rust is being crafter along with solid libraries like &lt;a href=&quot;http://hyperium.github.io/hyper/hyper/index.html&quot;&gt;Hyper&lt;/a&gt;. Man, this is great. But lets wait things mature a bit.&lt;/p&gt;
+
+&lt;p&gt;So, now what? Clojure? No. Racket!&lt;/p&gt;
+
+&lt;p&gt;If I was a language creator/contributor I would feel ashamed with this brilliant documentation since I couldn’t produce such quality writings. Period.&lt;/p&gt;
+
+&lt;p&gt;Just take a look at &lt;a href=&quot;http://docs.racket-lang.org/&quot;&gt;http://docs.racket-lang.org/&lt;/a&gt;. See? You just want to start coding right now.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-ive-found&quot;&gt;What I’ve found&lt;/h2&gt;
+
+&lt;p&gt;Of course, good languages has more than good documentation. My experiments covered &lt;a href=&quot;http://docs.racket-lang.org/reference/input-and-output.html&quot;&gt;Input/Output&lt;/a&gt; and &lt;a href=&quot;http://docs.racket-lang.org/reference/concurrency.html&quot;&gt;Concurrency and Parallelism&lt;/a&gt;. And there couldn’t exist more concise concepts and API.&lt;/p&gt;
+
+&lt;p&gt;Threads are light and also got &lt;a href=&quot;http://docs.racket-lang.org/reference/threads.html#%28part._threadmbox%29&quot;&gt;Mailboxes&lt;/a&gt;, IO got &lt;a href=&quot;http://docs.racket-lang.org/reference/port-lib.html#%28part._.Port_.Events%29&quot;&gt;Events&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Command args line handling? No lib, just use Racket like in this &lt;a href=&quot;https://gist.github.com/paulosuzart/4c730a14ff9b3fff6fac#file-guess-server-rkt-L73&quot;&gt;small example&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You also have &lt;a href=&quot;http://docs.racket-lang.org/guide/cmdline-tools.html#%28part._compile%29&quot;&gt;raco&lt;/a&gt; and &lt;a href=&quot;http://docs.racket-lang.org/drracket/index.html&quot;&gt;DrRacket&lt;/a&gt;, a complete editor that shows you arrows pointing from which module functions come from, also the uses of a function in your code and a &lt;a href=&quot;http://docs.racket-lang.org/drracket/debugger.html&quot;&gt;Graphical Debug Interface&lt;/a&gt; and much more. This is not a complete overview of this language (I have no nuts to do such thing).&lt;/p&gt;
+
+&lt;p&gt;Another good thing is that Racket doesn’t need a huge decision table to make you pick you the right construct for holding data (struct, deftype, recors, etc, etc, etc). This is straightforward and pragmatic. Use &lt;code&gt;structs&lt;/code&gt;, be happy.&lt;/p&gt;
+
+&lt;p&gt;When it comes to performance, Java and &lt;a href=&quot;http://benchmarksgame.alioth.debian.org/u64/compare.php?lang=clojure&amp;amp;lang2=racket&quot;&gt;Clojure&lt;/a&gt; win. I don’t really know how much effort Racket guys put on this. And for lots of scenarios it makes no difference.&lt;/p&gt;
+
+&lt;p&gt;Have I told you Racket can also produce beatyful desktop apps? Take a look &lt;a href=&quot;http://docs.racket-lang.org/gui/index.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-now&quot;&gt;What now?&lt;/h2&gt;
+
+&lt;p&gt;Ok, I’ll definitely try to have more Racket in my life. It brought me back the charm of LISP. I read &lt;a href=&quot;http://www.amazon.com/Land-Lisp-Learn-Program-Game/dp/1593272812/ref=sr_1_1?s=books&amp;amp;ie=UTF8&amp;amp;qid=1428021425&amp;amp;sr=1-1&amp;amp;keywords=land+of+lisp&quot;&gt;Land of LISP&lt;/a&gt; few years ago, now it may be time to read &lt;a href=&quot;http://www.amazon.com/dp/1593274912/ref=cm_sw_su_dp&quot;&gt;Realm of Racket&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This post is not teaching you anything but shares my findings so far. If you want to see some &lt;strong&gt;code&lt;/strong&gt; you can access this &lt;a href=&quot;https://gist.github.com/paulosuzart/96197abdbf68b078545c&quot;&gt;currency-watcher.rkt&lt;/a&gt; that is silly program to query a currency conversion API and report to HipChat if things change a lot. And this second &lt;a href=&quot;https://gist.github.com/paulosuzart/4c730a14ff9b3fff6fac&quot;&gt;Gist&lt;/a&gt; shows a multi thread/serialization/socket playing with three &lt;code&gt;.rkt&lt;/code&gt; files.&lt;/p&gt;
+
+&lt;p&gt;You can also follow their Youtube channel &lt;a href=&quot;https://www.youtube.com/channel/UC8uSLYDanXDnP9Yn8UrTNzQ&quot;&gt;Racket Lang&lt;/a&gt; to find good videos.&lt;/p&gt;
+
+&lt;p&gt;Good Luck!&lt;/p&gt;
+</description>
+        <pubDate>Thu, 02 Apr 2015 22:31:00 -0500</pubDate>
+        <link>http://localhost:4000/blog/2015/04/02/why-racket-is-awesome/</link>
+        <guid isPermaLink="true">http://localhost:4000/blog/2015/04/02/why-racket-is-awesome/</guid>
+        
+        
+        <category>racket</category>
+        
+      </item>
+    
+  </channel>
+</rss>

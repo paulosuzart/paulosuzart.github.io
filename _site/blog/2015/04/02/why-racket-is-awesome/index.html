@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Why Racket is Awesome</title>
+  <meta name="description" content="**UPDATE: ** Just because I posted yesterday that Rust was a unstable with nightly releases, the guys just posted today (2015 April 3rd) the Beta release.Fin...">
+
+  <!-- CSS files -->
+  <link rel="stylesheet" href="http://localhost:4000/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://localhost:4000/css/main.css">
+
+  <link rel="canonical" href="http://localhost:4000/blog/2015/04/02/why-racket-is-awesome/">
+  <link rel="alternate" type="application/rss+xml" title="Paulo Suzart" href="http://localhost:4000/feed.xml" />
+
+  <!-- Icons -->
+  <!-- 16x16 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+  <!-- 32x32 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+</head>
+
+
+<body>
+  <div class="row">
+    <div class="col s12 m3">
+      <div class="table cover">
+        
+
+<div class="cover-card table-cell table-middle">
+  
+  <a href="http://localhost:4000/" class="author_name">Paulo Suzart</a>
+  <span class="author_job">FP and more</span>
+  <span class="author_bio mbm">back end developer | machine Learning professional wannabe</span>
+  <nav class="nav">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="http://localhost:4000/">home</a>
+      </li>
+       
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/archive/">Archive</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/categories/">Categories</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/tags/">Tags</a>
+          </li>
+        
+        
+        
+           
+        
+           
+        
+           
+        
+          
+    </ul>
+  </nav>
+  <script type="text/javascript">
+  // based on http://stackoverflow.com/a/10300743/280842
+  function gen_mail_to_link(hs, subject) {
+    var lhs,rhs;
+    var p = hs.split('@');
+    lhs = p[0];
+    rhs = p[1];
+    document.write("<a class=\"social-link-item\" target=\"_blank\" href=\"mailto");
+    document.write(":" + lhs + "@");
+    document.write(rhs + "?subject=" + subject + "\"><i class=\"fa fa-fw fa-envelope\"></i><\/a>");
+  }
+</script>
+<div class="social-links">
+  <ul>
+    
+    
+    
+    
+    <li><a href="http://linkedin.com/in/https://www.linkedin.com/in/paulosuzart/" class="social-link-item" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
+    
+    
+    
+    
+    <li><a href="http://github.com/github.com/paulosuzart" class="social-link-item" target="_blank"><i class="fa fa-fw fa-github"></i></a></li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </ul>
+</div>
+
+</div>
+
+      </div>
+    </div>
+    <div class="col s12 m9">
+      <div class="post-listing">
+        <a class="btn" href= "http://localhost:4000/" >
+  Home
+</a>
+
+
+
+<div id="post">
+  <header class="post-header">
+    <h1 title="Why Racket is Awesome">Why Racket is Awesome</h1>
+    <span class="post-meta">
+      <span class="post-date">
+        2 APR 2015
+      </span>
+      •
+      <span class="read-time" title="Estimated read time">
+  
+  
+    3 mins read
+  
+</span>
+
+    </span>
+
+  </header>
+
+  <article class="post-content">
+    <p>**UPDATE: ** Just because I posted yesterday that Rust was a unstable with nightly releases, the guys just posted today (2015 April 3rd) the <a href="http://blog.rust-lang.org/2015/04/03/Rust-1.0-beta.html">Beta release</a>.</p>
+
+<p>Finally 1st post of the year! Well, not that much to say lately. But here a piece of my sensations while playing with <a href="http://racket-lang.org/">Racket</a> last two weeks.</p>
+
+<!--more-->
+<p>How I started looking at it
+—-</p>
+
+<p>My first visit to Racket was possibly in the old times of version 4. But now with 6.1.1, the thing is such mature work.</p>
+
+<p>Well, after a long time <a href="http://www.reddit.com/r/Clojure/comments/2r63gt/why_did_you_stop_using_clojure/cnkez0i">far from</a> <a href="http://clojure.org/">Clojure</a>, at work we got some spare time so we could use it for tiny hackathons (a lot tiny BTW). We define silly scenarios where one could build using anything.</p>
+
+<p>First I’d decided to go with <a href="https://ocaml.org/">OCaml</a>, just to taste it. Sour! I mean, it is a good language but documentation is frustrating, libraries documentation even worse. Ok, so went for <a href="http://www.rust-lang.org/">Rust</a>, that is a good promise and should become one of my languages once it gets out of alpha stage: it is hard to compile libs with nightly builds, everything brakes, etc.</p>
+
+<p>But Rust is being crafter along with solid libraries like <a href="http://hyperium.github.io/hyper/hyper/index.html">Hyper</a>. Man, this is great. But lets wait things mature a bit.</p>
+
+<p>So, now what? Clojure? No. Racket!</p>
+
+<p>If I was a language creator/contributor I would feel ashamed with this brilliant documentation since I couldn’t produce such quality writings. Period.</p>
+
+<p>Just take a look at <a href="http://docs.racket-lang.org/">http://docs.racket-lang.org/</a>. See? You just want to start coding right now.</p>
+
+<h2 id="what-ive-found">What I’ve found</h2>
+
+<p>Of course, good languages has more than good documentation. My experiments covered <a href="http://docs.racket-lang.org/reference/input-and-output.html">Input/Output</a> and <a href="http://docs.racket-lang.org/reference/concurrency.html">Concurrency and Parallelism</a>. And there couldn’t exist more concise concepts and API.</p>
+
+<p>Threads are light and also got <a href="http://docs.racket-lang.org/reference/threads.html#%28part._threadmbox%29">Mailboxes</a>, IO got <a href="http://docs.racket-lang.org/reference/port-lib.html#%28part._.Port_.Events%29">Events</a>.</p>
+
+<p>Command args line handling? No lib, just use Racket like in this <a href="https://gist.github.com/paulosuzart/4c730a14ff9b3fff6fac#file-guess-server-rkt-L73">small example</a>.</p>
+
+<p>You also have <a href="http://docs.racket-lang.org/guide/cmdline-tools.html#%28part._compile%29">raco</a> and <a href="http://docs.racket-lang.org/drracket/index.html">DrRacket</a>, a complete editor that shows you arrows pointing from which module functions come from, also the uses of a function in your code and a <a href="http://docs.racket-lang.org/drracket/debugger.html">Graphical Debug Interface</a> and much more. This is not a complete overview of this language (I have no nuts to do such thing).</p>
+
+<p>Another good thing is that Racket doesn’t need a huge decision table to make you pick you the right construct for holding data (struct, deftype, recors, etc, etc, etc). This is straightforward and pragmatic. Use <code>structs</code>, be happy.</p>
+
+<p>When it comes to performance, Java and <a href="http://benchmarksgame.alioth.debian.org/u64/compare.php?lang=clojure&amp;lang2=racket">Clojure</a> win. I don’t really know how much effort Racket guys put on this. And for lots of scenarios it makes no difference.</p>
+
+<p>Have I told you Racket can also produce beatyful desktop apps? Take a look <a href="http://docs.racket-lang.org/gui/index.html">here</a>.</p>
+
+<h2 id="what-now">What now?</h2>
+
+<p>Ok, I’ll definitely try to have more Racket in my life. It brought me back the charm of LISP. I read <a href="http://www.amazon.com/Land-Lisp-Learn-Program-Game/dp/1593272812/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1428021425&amp;sr=1-1&amp;keywords=land+of+lisp">Land of LISP</a> few years ago, now it may be time to read <a href="http://www.amazon.com/dp/1593274912/ref=cm_sw_su_dp">Realm of Racket</a></p>
+
+<p>This post is not teaching you anything but shares my findings so far. If you want to see some <strong>code</strong> you can access this <a href="https://gist.github.com/paulosuzart/96197abdbf68b078545c">currency-watcher.rkt</a> that is silly program to query a currency conversion API and report to HipChat if things change a lot. And this second <a href="https://gist.github.com/paulosuzart/4c730a14ff9b3fff6fac">Gist</a> shows a multi thread/serialization/socket playing with three <code>.rkt</code> files.</p>
+
+<p>You can also follow their Youtube channel <a href="https://www.youtube.com/channel/UC8uSLYDanXDnP9Yn8UrTNzQ">Racket Lang</a> to find good videos.</p>
+
+<p>Good Luck!</p>
+
+  </article>
+</div>
+
+<div class="share-buttons">
+  <h6>Share on: </h6>
+  <ul>
+    <li>
+      <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/blog/2015/04/02/why-racket-is-awesome/" class="twitter btn" title="Share on Twitter"><i class="fa fa-twitter"></i><span> Twitter</span></a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/blog/2015/04/02/why-racket-is-awesome/" class="facebook btn" title="Share on Facebook"><i class="fa fa-facebook"></i><span> Facebook</span></a>
+    </li>
+    <li>
+      <a href="https://plus.google.com/share?url=http://localhost:4000/blog/2015/04/02/why-racket-is-awesome/" class="google-plus btn" title="Share on Google Plus"><i class="fa fa-google-plus"></i><span> Google+</span></a>
+    </li>
+    <li>
+      <a href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/blog/2015/04/02/why-racket-is-awesome/" class="hacker-news btn" title="Share on Hacker News"><i class="fa fa-hacker-news"></i><span> Hacker News</span></a>
+    </li>
+    <li>
+      <a href="https://www.reddit.com/submit?url=http://localhost:4000/blog/2015/04/02/why-racket-is-awesome/" class="reddit btn" title="Share on Reddit"><i class="fa fa-reddit"></i><span> Reddit</span></a>
+    </li>
+  </ul>
+</div><!-- end share-buttons -->
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'paulosuzartblog';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+        <footer>
+  &copy; 2017 Paulo Suzart. Powered by <a href="http://jekyllrb.com/">Jekyll</a>, <a href="http://github.com/renyuanz/leonids/">leonids theme</a> made with <i class="fa fa-heart heart-icon"></i>
+</footer>
+
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="http://localhost:4000/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="http://localhost:4000/js/main.js"></script>
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26676810-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>

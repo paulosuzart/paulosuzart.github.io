@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Configuring Clojure Immutant by environment</title>
+  <meta name="description" content="Hi again! Not posting for too much long.Well, this time we will explore the clojure’s ability to load arbitrary files as code.This is such an amazing feature...">
+
+  <!-- CSS files -->
+  <link rel="stylesheet" href="http://localhost:4000/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://localhost:4000/css/main.css">
+
+  <link rel="canonical" href="http://localhost:4000/blog/2013/02/07/configuring-clojure-immutant-by-environment/">
+  <link rel="alternate" type="application/rss+xml" title="Paulo Suzart" href="http://localhost:4000/feed.xml" />
+
+  <!-- Icons -->
+  <!-- 16x16 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+  <!-- 32x32 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+</head>
+
+
+<body>
+  <div class="row">
+    <div class="col s12 m3">
+      <div class="table cover">
+        
+
+<div class="cover-card table-cell table-middle">
+  
+  <a href="http://localhost:4000/" class="author_name">Paulo Suzart</a>
+  <span class="author_job">FP and more</span>
+  <span class="author_bio mbm">back end developer | machine Learning professional wannabe</span>
+  <nav class="nav">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="http://localhost:4000/">home</a>
+      </li>
+       
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/archive/">Archive</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/categories/">Categories</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/tags/">Tags</a>
+          </li>
+        
+        
+        
+           
+        
+           
+        
+           
+        
+          
+    </ul>
+  </nav>
+  <script type="text/javascript">
+  // based on http://stackoverflow.com/a/10300743/280842
+  function gen_mail_to_link(hs, subject) {
+    var lhs,rhs;
+    var p = hs.split('@');
+    lhs = p[0];
+    rhs = p[1];
+    document.write("<a class=\"social-link-item\" target=\"_blank\" href=\"mailto");
+    document.write(":" + lhs + "@");
+    document.write(rhs + "?subject=" + subject + "\"><i class=\"fa fa-fw fa-envelope\"></i><\/a>");
+  }
+</script>
+<div class="social-links">
+  <ul>
+    
+    
+    
+    
+    <li><a href="http://linkedin.com/in/https://www.linkedin.com/in/paulosuzart/" class="social-link-item" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
+    
+    
+    
+    
+    <li><a href="http://github.com/github.com/paulosuzart" class="social-link-item" target="_blank"><i class="fa fa-fw fa-github"></i></a></li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </ul>
+</div>
+
+</div>
+
+      </div>
+    </div>
+    <div class="col s12 m9">
+      <div class="post-listing">
+        <a class="btn" href= "http://localhost:4000/" >
+  Home
+</a>
+
+
+
+<div id="post">
+  <header class="post-header">
+    <h1 title="Configuring Clojure Immutant by environment">Configuring Clojure Immutant by environment</h1>
+    <span class="post-meta">
+      <span class="post-date">
+        7 FEB 2013
+      </span>
+      •
+      <span class="read-time" title="Estimated read time">
+  
+  
+    5 mins read
+  
+</span>
+
+    </span>
+
+  </header>
+
+  <article class="post-content">
+    <p>Hi again! Not posting for too much long.</p>
+
+<p>Well, this time we will explore the <a href="http://clojure.org">clojure’s</a> ability to <a href="http://clojuredocs.org/clojure_core/clojure.core/load-file">load arbitrary files as code</a>.</p>
+
+<p>This is such an amazing feature, but you should be careful. Don’t start reading anyones files and evaluating them into your app. Be wise and use it for specific situation like this: I wanted to load a bunch of configurations (and even funtion calls) depending on the environment my app is running.</p>
+
+<p>To do the conditional evaluation, I decided to add an extra key to <code>:immutant</code> entry in my project definition. The entry <code>:env</code> is an <a href="http://immutant.org/documentation/current/initialization.html#sec-3-1">arbitrary configuration value</a>. Lets take a look:
+<!--more--></p>
+
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span></span><span class="p">(</span><span class="kd">defproject </span><span class="nv">tserver</span> <span class="s">&quot;0.1.0-SNAPSHOT&quot;</span>
+  <span class="ss">:description</span> <span class="s">&quot;A foo project&quot;</span>
+  <span class="ss">:url</span> <span class="s">&quot;http://foo.com/&quot;</span>
+  <span class="ss">:license</span> <span class="p">{</span><span class="ss">:name</span> <span class="s">&quot;Eclipse Public License&quot;</span>
+            <span class="ss">:url</span> <span class="s">&quot;http://www.eclipse.org/legal/epl-v10.html&quot;</span><span class="p">}</span>
+  <span class="ss">:dependencies</span> <span class="p">[[</span><span class="nv">org.clojure/clojure</span> <span class="s">&quot;1.4.0&quot;</span><span class="p">]</span>
+                 <span class="p">[</span><span class="nv">compojure</span> <span class="s">&quot;1.0.2&quot;</span><span class="p">]</span>
+                 <span class="c1">;... and many other dependecies</span>
+  <span class="ss">:jvm-opts</span> <span class="p">[</span><span class="s">&quot;-Xmx2g&quot;</span> <span class="s">&quot;-server&quot;</span><span class="p">]</span>
+  <span class="ss">:immutant</span> <span class="p">{</span><span class="ss">:init</span> <span class="s">&quot;tserver.init/init&quot;</span><span class="p">}</span> <span class="c1">;; our custo immutant init function</span>
+  <span class="ss">:profiles</span> <span class="p">{</span><span class="ss">:dev</span> <span class="p">{</span><span class="ss">:immutant</span> <span class="p">{</span><span class="ss">:context-path</span> <span class="s">&quot;/&quot;</span>
+                              <span class="ss">:nrepl-port</span> <span class="mi">4242</span>
+                              <span class="ss">:lein-profiles</span> <span class="p">[</span><span class="ss">:dev</span><span class="p">]</span>
+                              <span class="ss">:env</span> <span class="ss">:dev</span><span class="p">}}})</span> <span class="c1">;:dev will identify which config file to load</span></code></pre></figure>
+
+<p>In this sample <code>project.clj</code> you find <code>:immutant</code> directly under the project definition. This key is used to, regardless of the environment, inform immutant which funtion to call when your app starts up. In this case <code>tserver.init/init</code>, that we will further analyze.</p>
+
+<p>Pay attention to the <code>:env</code> entry. It is located under <code>:immutant</code> that is under <code>[:profiles :dev]</code>. Here enters a <a href="http://leiningen.org/">leiningen’s</a> <a href="https://github.com/technomancy/leiningen/blob/stable/doc/PROFILES.md">profiles feature</a>. Where you can even specify dependencies or anything you want by profile. In this case, the immutant config is being configured by profile.</p>
+
+<p><strong>Why not simply load a config per profile?</strong></p>
+
+<p>Because you can combine <em>n</em> profiles at the sime time. So, which one to use as the enviroment reference? That is why I decided to use an specific entry for that.</p>
+
+<p>Below the initial function being called by immutant. Here goes intereting stuff.
+One of them is the use of <a href="http://clojuredocs.org/clojure_core/clojure.core/in-ns"><code>in-ns</code></a>, <a href="http://clojuredocs.org/clojure_core/clojure.core/use"><code>use</code></a> and <a href="http://clojuredocs.org/clojure_core/clojure.core/require"><code>require</code></a>. This is awesome because I’m calling what could be “equivalent to a java import” in the middle of a clojure file, and even better: I’m doing this to another namespace that differs from the code that is actually calling the “imports”.</p>
+
+<p>So, <code>in-ns</code> will create the namespace <code>tserver.config</code> and “import” the appropriate functions and namespaces.</p>
+
+<p>The <code>init</code> funtion here will simply call the <code>load-config</code>, that is in charge of loading the config file. Look:</p>
+
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span></span><span class="p">(</span><span class="kd">ns </span><span class="nv">tserver.init</span>
+  <span class="p">(</span><span class="ss">:use</span> <span class="p">[</span><span class="nv">clojure.tools.logging</span> <span class="ss">:only</span> <span class="p">(</span><span class="nf">info</span> <span class="nv">error</span> <span class="nv">debug</span><span class="p">)]))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">setup-config-ns</span> <span class="p">[</span><span class="nv">e</span><span class="p">]</span>
+	<span class="p">(</span><span class="nb">binding </span><span class="p">[</span><span class="nv">*ns*</span> <span class="nv">*ns*</span><span class="p">]</span>
+      <span class="p">(</span><span class="nb">in-ns </span><span class="ss">&#39;tserver.config</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">refer-clojure</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">use</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">clojure.main</span> <span class="ss">:only</span> <span class="p">(</span><span class="nf">load-script</span><span class="p">)])</span>
+      <span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">immutant.messaging</span> <span class="ss">:as</span> <span class="nv">msg</span><span class="p">]</span>
+               <span class="o">&#39;</span><span class="p">[</span><span class="nv">immutant.web</span> <span class="ss">:as</span> <span class="nv">web</span><span class="p">]</span>
+               <span class="o">&#39;</span><span class="p">[</span><span class="nv">immutant.util</span> <span class="ss">:as</span> <span class="nv">util</span><span class="p">])))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">load-config</span>
+  <span class="s">&quot;Attempts to evaluate the specified env file defined by `:env`</span>
+<span class="s">  in the `project.clj`. `:env` is a immutant custom config.</span>
+<span class="s">  `:env` MUST be a keyword: Ex.: :dev, :prod :office</span>
+<span class="s">  Uses :dev by default.</span>
+<span class="s">  Note: The absence of the requrested file will prevent the server to start.</span>
+<span class="s">  These siles MUST be located at `src/tserver/config/%s.clj&quot;</span>
+  <span class="p">[]</span>
+  <span class="p">(</span><span class="nb">binding </span><span class="p">[</span><span class="nv">*ns*</span> <span class="nv">*ns*</span><span class="p">]</span>
+    <span class="p">(</span><span class="nb">in-ns </span><span class="ss">&#39;tserver.config</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">ev</span> <span class="p">(</span><span class="nf">get-in</span> <span class="p">(</span><span class="nf">immutant.registry/get</span> <span class="ss">:config</span><span class="p">)</span> <span class="p">[</span><span class="ss">:env</span><span class="p">]</span> <span class="ss">:dev</span><span class="p">)</span>
+    	    <span class="nv">config-file</span> <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;src/tserver/config/%s.clj&quot;</span> <span class="p">(</span><span class="nb">name </span><span class="nv">ev</span><span class="p">))]</span>
+  	  <span class="p">(</span><span class="nf">setup-config-ns</span> <span class="nv">ev</span><span class="p">)</span>
+      <span class="p">(</span><span class="nf">info</span> <span class="s">&quot;Using config file &quot;</span> <span class="nv">config-file</span><span class="p">)</span>
+  	  <span class="p">(</span><span class="nb">load-file </span><span class="nv">config-file</span><span class="p">)</span>
+  	  <span class="p">(</span><span class="nf">immutant.registry/put</span> <span class="ss">:env</span> <span class="nv">ev</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">init</span> <span class="p">[]</span>
+  <span class="c1">;;may do some stuff before</span>
+  <span class="p">(</span><span class="nf">load-config</span><span class="p">))</span> <span class="c1">;;may do some stuff after</span></code></pre></figure>
+
+<p>And finally, our config file containing the required configurations. It can be anything you need.</p>
+
+<figure class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span></span><span class="p">(</span><span class="kd">defn </span><span class="nv">handler</span>
+    <span class="p">[</span><span class="nv">r</span><span class="p">]</span> <span class="p">((</span><span class="nf">build-routes</span><span class="p">)</span> <span class="nv">r</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nf">web/start</span> <span class="nv">handler</span>
+  <span class="ss">:reload</span> <span class="nv">true</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nf">msg/start</span> <span class="s">&quot;/queue/delivery.status&quot;</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nf">msg/respond</span> <span class="s">&quot;/queue/delivery.status&quot;</span> <span class="nv">handle-delivery-status</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nf">register-job</span> <span class="o">#</span><span class="ss">&#39;import-job</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">register-job</span> <span class="o">#</span><span class="ss">&#39;check-import</span><span class="p">)</span>
+<span class="c1">;register-job is function not provided here</span>
+<span class="c1">;since the intention is tho show the configuration solution</span></code></pre></figure>
+
+<p>Now, to deploy and start the app with the given profile we simply do:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span></span>lein with-profile dev immutant deploy
+lein immutant run</code></pre></figure>
+
+<p>Voila! This will load your <code>dev.clj</code> file and set up your queues, jobs, web-context, whatever you want. This is useful, and I would risk to say mandatory today. You probably have sereval environments where your app resides before going to prodution, and each of them with different names, addresses, pool sizes, queue names, database to connect, etc. And you can easily give to your app the intelligence to load what is more appropriate.</p>
+
+  </article>
+</div>
+
+<div class="share-buttons">
+  <h6>Share on: </h6>
+  <ul>
+    <li>
+      <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/blog/2013/02/07/configuring-clojure-immutant-by-environment/" class="twitter btn" title="Share on Twitter"><i class="fa fa-twitter"></i><span> Twitter</span></a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/blog/2013/02/07/configuring-clojure-immutant-by-environment/" class="facebook btn" title="Share on Facebook"><i class="fa fa-facebook"></i><span> Facebook</span></a>
+    </li>
+    <li>
+      <a href="https://plus.google.com/share?url=http://localhost:4000/blog/2013/02/07/configuring-clojure-immutant-by-environment/" class="google-plus btn" title="Share on Google Plus"><i class="fa fa-google-plus"></i><span> Google+</span></a>
+    </li>
+    <li>
+      <a href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/blog/2013/02/07/configuring-clojure-immutant-by-environment/" class="hacker-news btn" title="Share on Hacker News"><i class="fa fa-hacker-news"></i><span> Hacker News</span></a>
+    </li>
+    <li>
+      <a href="https://www.reddit.com/submit?url=http://localhost:4000/blog/2013/02/07/configuring-clojure-immutant-by-environment/" class="reddit btn" title="Share on Reddit"><i class="fa fa-reddit"></i><span> Reddit</span></a>
+    </li>
+  </ul>
+</div><!-- end share-buttons -->
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'paulosuzartblog';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+        <footer>
+  &copy; 2017 Paulo Suzart. Powered by <a href="http://jekyllrb.com/">Jekyll</a>, <a href="http://github.com/renyuanz/leonids/">leonids theme</a> made with <i class="fa fa-heart heart-icon"></i>
+</footer>
+
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="http://localhost:4000/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="http://localhost:4000/js/main.js"></script>
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26676810-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>

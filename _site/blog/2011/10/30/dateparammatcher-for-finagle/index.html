@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>DateParamMatcher for Finagle</title>
+  <meta name="description" content="Twitter Finagle is an amazing framework for RPC communication, and my interest is its HTTP features for creating RESTful APIs.As I bloged at codemountain, I’...">
+
+  <!-- CSS files -->
+  <link rel="stylesheet" href="http://localhost:4000/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://localhost:4000/css/main.css">
+
+  <link rel="canonical" href="http://localhost:4000/blog/2011/10/30/dateparammatcher-for-finagle/">
+  <link rel="alternate" type="application/rss+xml" title="Paulo Suzart" href="http://localhost:4000/feed.xml" />
+
+  <!-- Icons -->
+  <!-- 16x16 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+  <!-- 32x32 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+</head>
+
+
+<body>
+  <div class="row">
+    <div class="col s12 m3">
+      <div class="table cover">
+        
+
+<div class="cover-card table-cell table-middle">
+  
+  <a href="http://localhost:4000/" class="author_name">Paulo Suzart</a>
+  <span class="author_job">FP and more</span>
+  <span class="author_bio mbm">back end developer | machine Learning professional wannabe</span>
+  <nav class="nav">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="http://localhost:4000/">home</a>
+      </li>
+       
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/archive/">Archive</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/categories/">Categories</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/tags/">Tags</a>
+          </li>
+        
+        
+        
+           
+        
+           
+        
+           
+        
+          
+    </ul>
+  </nav>
+  <script type="text/javascript">
+  // based on http://stackoverflow.com/a/10300743/280842
+  function gen_mail_to_link(hs, subject) {
+    var lhs,rhs;
+    var p = hs.split('@');
+    lhs = p[0];
+    rhs = p[1];
+    document.write("<a class=\"social-link-item\" target=\"_blank\" href=\"mailto");
+    document.write(":" + lhs + "@");
+    document.write(rhs + "?subject=" + subject + "\"><i class=\"fa fa-fw fa-envelope\"></i><\/a>");
+  }
+</script>
+<div class="social-links">
+  <ul>
+    
+    
+    
+    
+    <li><a href="http://linkedin.com/in/https://www.linkedin.com/in/paulosuzart/" class="social-link-item" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
+    
+    
+    
+    
+    <li><a href="http://github.com/github.com/paulosuzart" class="social-link-item" target="_blank"><i class="fa fa-fw fa-github"></i></a></li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </ul>
+</div>
+
+</div>
+
+      </div>
+    </div>
+    <div class="col s12 m9">
+      <div class="post-listing">
+        <a class="btn" href= "http://localhost:4000/" >
+  Home
+</a>
+
+
+
+<div id="post">
+  <header class="post-header">
+    <h1 title="DateParamMatcher for Finagle">DateParamMatcher for Finagle</h1>
+    <span class="post-meta">
+      <span class="post-date">
+        30 OCT 2011
+      </span>
+      •
+      <span class="read-time" title="Estimated read time">
+  
+  
+    2 mins read
+  
+</span>
+
+    </span>
+
+  </header>
+
+  <article class="post-content">
+    <p><a href="http://twitter.github.com/finagle">Twitter Finagle</a> is an amazing framework for RPC communication, and my interest is its HTTP features for creating RESTful APIs.</p>
+
+<p>As I bloged at <a href="http://codemountain.wordpress.com/2011/10/14/twitter-finagle-primeiras-impressoes/">codemountain</a>, I’m using finagle for a personal project. Don’t know how far it will go, but the facts is that I’m learning Finagle a lot.</p>
+
+<p>During this project I needed to extract from the query string, a param to be parsed to a twitter.util.Time. I ended up with a Param Matcher to be used my a pattern match agains the requested path. The use of this Param Patcher is:</p>
+
+<!--more-->
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="c1">//...</span>
+<span class="nc">Path</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="o">)</span> <span class="o">:?</span> <span class="n">request</span><span class="o">.</span><span class="n">params</span> <span class="k">match</span> <span class="o">{</span>
+       <span class="k">case</span> <span class="nc">Root</span> <span class="o">/</span> <span class="s">&quot;myPath&quot;</span> <span class="o">:?</span> <span class="nc">RequestTime</span><span class="o">(</span><span class="n">requestTimeParam</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="c1">//do something</span>
+<span class="c1">//..</span>
+<span class="o">}</span>
+<span class="c1">//Where RequestTime is defined as</span>
+ <span class="k">object</span> <span class="nc">RequestTime</span> <span class="k">extends</span> <span class="nc">DateParamMatcher</span><span class="o">(</span><span class="s">&quot;requestTimeParam&quot;</span><span class="o">)</span></code></pre></figure>
+
+<p>The source of DateParamMatcher is the following.</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="k">import</span> <span class="nn">com.twitter.util.Time._</span>
+<span class="k">import</span> <span class="nn">com.twitter.util.Time</span>
+<span class="k">import</span> <span class="nn">java.text.ParseException</span>
+<span class="k">import</span> <span class="nn">com.twitter.finagle.http.path._</span>
+<span class="k">import</span> <span class="nn">com.twitter.finagle.http.ParamMap</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * Extractor that takes a request parameter and converts it to a {twitter.util.Time}.</span>
+<span class="cm"> * The date format should conform with {twitter.util.Time} default format.</span>
+<span class="cm"> */</span>
+<span class="k">abstract</span> <span class="k">class</span> <span class="nc">DateParamMatcher</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="n">unapply</span><span class="o">(</span><span class="n">params</span><span class="k">:</span> <span class="kt">ParamMap</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Time</span><span class="o">]</span> <span class="k">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">name</span><span class="o">)</span> <span class="n">flatMap</span> <span class="o">{</span> <span class="n">value</span> <span class="k">=&gt;</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="nc">Some</span><span class="o">(</span><span class="n">at</span><span class="o">(</span><span class="n">value</span><span class="o">))</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="n">ex</span><span class="k">:</span> <span class="kt">ParseException</span> <span class="o">=&gt;</span>
+        <span class="nc">None</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>Finagle also provides an abstract <code>com.twitter.finagle.http.path.ParamMatcher</code> as well as <code>LongParamMatcher</code> and <code>IntParamMatcher</code> in the same package. They are actually Scala  Extractors (very well explained <a href="http://codemonkeyism.com/scala-goodness-extractors/">here</a> by @codemonkeyism). This is a practical way to extract values from a query string and put it available at your code already parsed.</p>
+
+<p>Note that if the param named <code>requestTimeParam</code> is not present or carries a invalid value for <code>Time</code> in the query string the <code>None</code> value is returned.</p>
+
+<p>Although easy to build and extract params from query string and requested path, it is not a Finagle strength. It is kinda limited. A better abstraction is offered by <a href="https://github.com/unfiltered/unfiltered">Unfiltered</a>(another <a href="http://twitter.com/n8han">@n8han’s</a> great job).</p>
+
+<p>Hope you enjoy it.</p>
+
+  </article>
+</div>
+
+<div class="share-buttons">
+  <h6>Share on: </h6>
+  <ul>
+    <li>
+      <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/blog/2011/10/30/dateparammatcher-for-finagle/" class="twitter btn" title="Share on Twitter"><i class="fa fa-twitter"></i><span> Twitter</span></a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/blog/2011/10/30/dateparammatcher-for-finagle/" class="facebook btn" title="Share on Facebook"><i class="fa fa-facebook"></i><span> Facebook</span></a>
+    </li>
+    <li>
+      <a href="https://plus.google.com/share?url=http://localhost:4000/blog/2011/10/30/dateparammatcher-for-finagle/" class="google-plus btn" title="Share on Google Plus"><i class="fa fa-google-plus"></i><span> Google+</span></a>
+    </li>
+    <li>
+      <a href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/blog/2011/10/30/dateparammatcher-for-finagle/" class="hacker-news btn" title="Share on Hacker News"><i class="fa fa-hacker-news"></i><span> Hacker News</span></a>
+    </li>
+    <li>
+      <a href="https://www.reddit.com/submit?url=http://localhost:4000/blog/2011/10/30/dateparammatcher-for-finagle/" class="reddit btn" title="Share on Reddit"><i class="fa fa-reddit"></i><span> Reddit</span></a>
+    </li>
+  </ul>
+</div><!-- end share-buttons -->
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'paulosuzartblog';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+        <footer>
+  &copy; 2017 Paulo Suzart. Powered by <a href="http://jekyllrb.com/">Jekyll</a>, <a href="http://github.com/renyuanz/leonids/">leonids theme</a> made with <i class="fa fa-heart heart-icon"></i>
+</footer>
+
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="http://localhost:4000/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="http://localhost:4000/js/main.js"></script>
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26676810-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>

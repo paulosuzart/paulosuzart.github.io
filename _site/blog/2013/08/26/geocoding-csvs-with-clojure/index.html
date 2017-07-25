@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Geocoding CSVs with Clojure</title>
+  <meta name="description" content="Hi! Nothing like delivering some value to your company using your preferred tool, hun?Well, I had this feeling after freeing up my team of writing and writin...">
+
+  <!-- CSS files -->
+  <link rel="stylesheet" href="http://localhost:4000/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://localhost:4000/css/main.css">
+
+  <link rel="canonical" href="http://localhost:4000/blog/2013/08/26/geocoding-csvs-with-clojure/">
+  <link rel="alternate" type="application/rss+xml" title="Paulo Suzart" href="http://localhost:4000/feed.xml" />
+
+  <!-- Icons -->
+  <!-- 16x16 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+  <!-- 32x32 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+</head>
+
+
+<body>
+  <div class="row">
+    <div class="col s12 m3">
+      <div class="table cover">
+        
+
+<div class="cover-card table-cell table-middle">
+  
+  <a href="http://localhost:4000/" class="author_name">Paulo Suzart</a>
+  <span class="author_job">FP and more</span>
+  <span class="author_bio mbm">back end developer | machine Learning professional wannabe</span>
+  <nav class="nav">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="http://localhost:4000/">home</a>
+      </li>
+       
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/archive/">Archive</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/categories/">Categories</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/tags/">Tags</a>
+          </li>
+        
+        
+        
+           
+        
+           
+        
+           
+        
+          
+    </ul>
+  </nav>
+  <script type="text/javascript">
+  // based on http://stackoverflow.com/a/10300743/280842
+  function gen_mail_to_link(hs, subject) {
+    var lhs,rhs;
+    var p = hs.split('@');
+    lhs = p[0];
+    rhs = p[1];
+    document.write("<a class=\"social-link-item\" target=\"_blank\" href=\"mailto");
+    document.write(":" + lhs + "@");
+    document.write(rhs + "?subject=" + subject + "\"><i class=\"fa fa-fw fa-envelope\"></i><\/a>");
+  }
+</script>
+<div class="social-links">
+  <ul>
+    
+    
+    
+    
+    <li><a href="http://linkedin.com/in/https://www.linkedin.com/in/paulosuzart/" class="social-link-item" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
+    
+    
+    
+    
+    <li><a href="http://github.com/github.com/paulosuzart" class="social-link-item" target="_blank"><i class="fa fa-fw fa-github"></i></a></li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </ul>
+</div>
+
+</div>
+
+      </div>
+    </div>
+    <div class="col s12 m9">
+      <div class="post-listing">
+        <a class="btn" href= "http://localhost:4000/" >
+  Home
+</a>
+
+
+
+<div id="post">
+  <header class="post-header">
+    <h1 title="Geocoding CSVs with Clojure">Geocoding CSVs with Clojure</h1>
+    <span class="post-meta">
+      <span class="post-date">
+        26 AUG 2013
+      </span>
+      •
+      <span class="read-time" title="Estimated read time">
+  
+  
+    2 mins read
+  
+</span>
+
+    </span>
+
+  </header>
+
+  <article class="post-content">
+    <p>Hi! Nothing like delivering some value to your company using your preferred tool, hun?</p>
+
+<p>Well, I had this feeling after freeing up my team of writing and writing the same thing again and again. As you can seen at <a href="https://github.com/paulosuzart/ultimate-geo">ultimate-geo project page</a>:</p>
+
+<blockquote>
+  <p>Ultimate Geo is the final definitive geocoding app. The motivation behind it was: We have different CSVs full of address in the most crazy combinations. Some of them has the street, number, site, phone. while others have same columns in a different order, etc. This led us to keep creating (actually adjusting) our geocode scripts. Now it is over.</p>
+</blockquote>
+
+<p>Of course it may not fit everyone’s needs. But helped my scenario a lot.
+<!--more-->
+After atending the <a href="http://www.meetup.com/clj-sp/events/132201232/">(sp (first meetup))</a> I polished this small project called <a href="https://github.com/paulosuzart/ultimate-geo"><code>ultimate-geo</code></a>, given I mentioned it while talking to people.</p>
+
+<p>A general explannation of how <code>ultimate-geo</code> works can be found on its project page, but by didactic reasons, here a more detailed explanation:</p>
+
+<ol>
+  <li>after parsing each line of a file</li>
+  <li>it binding each colum to named variables, so they can be latter referenced fo querying google and also for output. Works like in a prepared statement</li>
+  <li>then replaces <code>-query</code> parameter replacing named variables like <code>:country</code> or <code>:city</code> by their values mapped on step 2.</li>
+  <li>finally request google address information</li>
+  <li>and start generating results. Here few tricks are needed because goole can send back more than one results. So it filters the relevat result and pick the first one. From the same result it grabs the zip, if available.</li>
+</ol>
+
+<p>The image bellow depicts the flow of columns through this process:</p>
+
+<p><img src="http://github.com/paulosuzart/ultimate-geo/raw/master/ultimate.png" alt="ultimate-geo" /></p>
+
+<p>All happens lazily. So the code will not parse every single line, and then map all lines, and replace all values, etc. It happens as it goes. The main point to pay attention to is the write phase. This can pop up any exception during the process because it is the point that actually call all the chained lazy values.</p>
+
+<p>Another important piece is <a href="http://clojuredocs.org/clojure_core/clojure.core/pmap"><code>pmap</code></a> for steps 2, 3 and 4. It means the all he lines are processed in parallel for eatch step increasing the overall performance.</p>
+
+<p>Coding variable replacement was by far the funniest part. Check the <a href="https://github.com/paulosuzart/ultimate-geo/blob/master/test/geocoder/t_core.clj">project tests</a> and see how useful for other scenarios it can be:</p>
+
+<noscript><pre>400: Invalid request
+</pre></noscript>
+<script src="https://gist.github.com/6342437.js"> </script>
+
+<p>This works fine and is able to ignore <code>_</code> mapped columns, meaning they are not relevant and will not be used later.</p>
+
+<p>The tests were written using <a href="https://github.com/marick/Midje">Midje</a>. I like Midje and it helped a lot to refactor the code while writing it specially using <code>:autotest</code>. I do recommend a try even if you want to use the basics, like I did.</p>
+
+<p>This project uses other nice libs like <a href="https://github.com/davidsantiago/clojure-csv">clojure-csv</a> and <a href="https://github.com/clojure/tools.cli">clojure/toosl.cli</a> that can be presented later.</p>
+
+<p>Hope you liked the post. After the meetup I intend to post more often and focus on what were discussed during the meetings.</p>
+
+
+  </article>
+</div>
+
+<div class="share-buttons">
+  <h6>Share on: </h6>
+  <ul>
+    <li>
+      <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/blog/2013/08/26/geocoding-csvs-with-clojure/" class="twitter btn" title="Share on Twitter"><i class="fa fa-twitter"></i><span> Twitter</span></a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/blog/2013/08/26/geocoding-csvs-with-clojure/" class="facebook btn" title="Share on Facebook"><i class="fa fa-facebook"></i><span> Facebook</span></a>
+    </li>
+    <li>
+      <a href="https://plus.google.com/share?url=http://localhost:4000/blog/2013/08/26/geocoding-csvs-with-clojure/" class="google-plus btn" title="Share on Google Plus"><i class="fa fa-google-plus"></i><span> Google+</span></a>
+    </li>
+    <li>
+      <a href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/blog/2013/08/26/geocoding-csvs-with-clojure/" class="hacker-news btn" title="Share on Hacker News"><i class="fa fa-hacker-news"></i><span> Hacker News</span></a>
+    </li>
+    <li>
+      <a href="https://www.reddit.com/submit?url=http://localhost:4000/blog/2013/08/26/geocoding-csvs-with-clojure/" class="reddit btn" title="Share on Reddit"><i class="fa fa-reddit"></i><span> Reddit</span></a>
+    </li>
+  </ul>
+</div><!-- end share-buttons -->
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'paulosuzartblog';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+        <footer>
+  &copy; 2017 Paulo Suzart. Powered by <a href="http://jekyllrb.com/">Jekyll</a>, <a href="http://github.com/renyuanz/leonids/">leonids theme</a> made with <i class="fa fa-heart heart-icon"></i>
+</footer>
+
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="http://localhost:4000/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="http://localhost:4000/js/main.js"></script>
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26676810-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>

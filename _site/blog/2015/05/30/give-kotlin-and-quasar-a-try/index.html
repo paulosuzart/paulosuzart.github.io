@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Give Kotlin And Quasar a Try</title>
+  <meta name="description" content="Hello hello! After a quick incursion into the world of Rust language, I’m back!The balance since last year when I started to work on a tracking system writte...">
+
+  <!-- CSS files -->
+  <link rel="stylesheet" href="http://localhost:4000/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://localhost:4000/css/main.css">
+
+  <link rel="canonical" href="http://localhost:4000/blog/2015/05/30/give-kotlin-and-quasar-a-try/">
+  <link rel="alternate" type="application/rss+xml" title="Paulo Suzart" href="http://localhost:4000/feed.xml" />
+
+  <!-- Icons -->
+  <!-- 16x16 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+  <!-- 32x32 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+</head>
+
+
+<body>
+  <div class="row">
+    <div class="col s12 m3">
+      <div class="table cover">
+        
+
+<div class="cover-card table-cell table-middle">
+  
+  <a href="http://localhost:4000/" class="author_name">Paulo Suzart</a>
+  <span class="author_job">FP and more</span>
+  <span class="author_bio mbm">back end developer | machine Learning professional wannabe</span>
+  <nav class="nav">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="http://localhost:4000/">home</a>
+      </li>
+       
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/archive/">Archive</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/categories/">Categories</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/tags/">Tags</a>
+          </li>
+        
+        
+        
+           
+        
+           
+        
+           
+        
+          
+    </ul>
+  </nav>
+  <script type="text/javascript">
+  // based on http://stackoverflow.com/a/10300743/280842
+  function gen_mail_to_link(hs, subject) {
+    var lhs,rhs;
+    var p = hs.split('@');
+    lhs = p[0];
+    rhs = p[1];
+    document.write("<a class=\"social-link-item\" target=\"_blank\" href=\"mailto");
+    document.write(":" + lhs + "@");
+    document.write(rhs + "?subject=" + subject + "\"><i class=\"fa fa-fw fa-envelope\"></i><\/a>");
+  }
+</script>
+<div class="social-links">
+  <ul>
+    
+    
+    
+    
+    <li><a href="http://linkedin.com/in/https://www.linkedin.com/in/paulosuzart/" class="social-link-item" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
+    
+    
+    
+    
+    <li><a href="http://github.com/github.com/paulosuzart" class="social-link-item" target="_blank"><i class="fa fa-fw fa-github"></i></a></li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </ul>
+</div>
+
+</div>
+
+      </div>
+    </div>
+    <div class="col s12 m9">
+      <div class="post-listing">
+        <a class="btn" href= "http://localhost:4000/" >
+  Home
+</a>
+
+
+
+<div id="post">
+  <header class="post-header">
+    <h1 title="Give Kotlin And Quasar a Try">Give Kotlin And Quasar a Try</h1>
+    <span class="post-meta">
+      <span class="post-date">
+        30 MAY 2015
+      </span>
+      •
+      <span class="read-time" title="Estimated read time">
+  
+  
+    5 mins read
+  
+</span>
+
+    </span>
+
+  </header>
+
+  <article class="post-content">
+    <p>Hello hello! After a quick incursion into the world of <s>Rust</s> language, I’m back!</p>
+
+<p>The balance since last year when I started to work on a <a href="http://paulosuzart.github.io/blog/2014/07/07/going-back-to-go/">tracking system written</a> in Go is: I didn’t finish it (as if it is novelty). Also,  I had the opportunity to deliver a <a href="https://www.djangoproject.com/">danjgo</a> system to production with easy. I might return with the tracking stuff but not written in Go.</p>
+
+<!--more-->
+
+<h2 id="kotlin">Kotlin</h2>
+
+<p>Ok, so I’m here to give my 2 cents on a Language that I - have to admit - ignored for a long time. A language that was launched ~5 years ago, when <a href="http://www.scala-lang.org/">Scala</a> was taking over: <a href="kotlinlang.org">Kotlin</a>. You can find better details about why Kotlin in <a href="http://blog.jetbrains.com/">their blog</a>.</p>
+
+<p>To be precise, yesterday they <a href="http://blog.jetbrains.com/kotlin/2015/05/kotlin-m12-is-out/">launched the M12</a> with relevant changes. The good thing is that those guys are not afraid of improving the language and deprecate things for good reasons.</p>
+
+<p>Kotlin can compile to JVM, JavaScript and Android. What makes it a powerful language able to cover almost all areas you are deliverying code. Not only that, here a non-exhaustive list of characteristics that attracted me:</p>
+
+<ul>
+  <li><strong>Serious crafters</strong>. These guys are building a <strong>language</strong>, different from other groups that are creating a language as a masquerade just to embed a bunch of social experiments and social ideas behind them</li>
+  <li><strong>Incredible interop with Java</strong> without bizzarre workarounds. That is why Kotlin can take advantage of all Java libs without having to reinvent the wheel using the language.</li>
+  <li><strong>Statically</strong> typed, compiled. I’ve been working with Groovy (Grails) for at least 3 years. You can say <em>“you can write tests to give you some safety”</em>, ok, I respect, but I had to pay the price of dynamicity in production. What is not cheap.</li>
+  <li><strong>Null is welcome, but without NPE</strong>. Some languages wind their optinal values in a object (<code>Option</code>, <code>Some</code>, <code>Either</code>, etc). Kotlin uses the concept of <a href="http://kotlinlang.org/docs/reference/null-safety.html">Null Safety</a> where you give a hint to inform if a value can be null, so the compile prevents accidental code without forcing you to write defensive code</li>
+  <li><strong>Lambdas</strong> - Needless to comment</li>
+  <li><a href="http://kotlinlang.org/docs/reference/inline-functions.html"><strong>Inlining</strong></a> - This is a super important direction to go. Hope that with Java 9, we developers become more responsible and active int terms of how compiler treats our code</li>
+  <li><strong>Data Classes</strong> - Imagine a very concise and short way to code a class that just holds values, but providing <code>equals</code>, <code>hashcode</code>, <code>toString</code> and <code>copy</code> automatically. <a href="http://kotlinlang.org/docs/reference/data-classes.html">Data classes</a> are the answer</li>
+  <li><strong>Native delegation</strong> - I can’t count how many times I had to use a delegate but doing everything by hand. Kotlin supports this pattern directly, <a href="http://kotlinlang.org/docs/reference/delegation.html">take a look here</a>.</li>
+  <li><strong><a href="http://kotlinlang.org/docs/reference/exceptions.html">No checked exceptions</a></strong> \o/ -The compile never complies if you don’t <code>throw</code> an exception.</li>
+</ul>
+
+<p>And how could I feel the language? Simple: writing a project with it. That is why I ported a <code>systemd</code> like process monitor from <s>Rust</s> to Kotlin. Krust-pm can be found in this <a href="https://github.com/paulosuzart/krust-pm/tree/master">Github</a> repo.</p>
+
+<h2 id="quasar">Quasar</h2>
+
+<p>Another excelent piece of software is <a href="http://www.paralleluniverse.co/quasar/">Quasar from Parallel Universe</a>. I played with it using the <a href="https://github.com/puniverse/pulsar">Pulsar Clojure</a> wrapper a while ago. And nothing better than interop with Java to really stretch Kotlin.</p>
+
+<p>Quasar provides light Fibers and Actors to JVM and the <a href="http://blog.paralleluniverse.co/2015/05/29/quasar-pulsar-0-7-0/">release 0.7.0</a> also got released yesterday. So, lets check.</p>
+
+<p>If you open krust-pm project you’ll see that at least two classes extends from <a href="http://docs.paralleluniverse.co/quasar/javadoc/co/paralleluniverse/actors/behaviors/ProxyServerActor.html">ProxyServerActor</a>.</p>
+
+<figure class="highlight"><pre><code class="language-kotlin" data-lang="kotlin"><span></span><span class="k">class</span> <span class="nc">ProcessManager</span><span class="p">()</span> <span class="p">:</span> <span class="n">ProxyServerActor</span><span class="p">(</span><span class="s">&quot;krust-pm&quot;</span><span class="p">,</span> <span class="k">true</span><span class="p">),</span>
+                         <span class="n">ProcessManagerTrait</span> <span class="p">{</span>
+    <span class="c1">//...</span>
+<span class="p">}</span>
+<span class="k">class</span> <span class="nc">ManagedProcess</span><span class="p">(</span><span class="k">private</span> <span class="k">val</span> <span class="py">name</span> <span class="p">:</span> <span class="n">String</span><span class="p">,</span>
+                     <span class="k">private</span> <span class="k">val</span> <span class="py">cmd</span> <span class="p">:</span> <span class="n">String</span><span class="p">,</span>
+                     <span class="k">private</span> <span class="k">val</span> <span class="py">maxRetries</span> <span class="p">:</span> <span class="n">Int</span><span class="p">,</span>
+                     <span class="k">private</span> <span class="k">var</span> <span class="py">initScale</span> <span class="p">:</span> <span class="n">Int</span><span class="p">,</span>
+                     <span class="k">private</span> <span class="k">val</span> <span class="py">env</span> <span class="p">:</span> <span class="n">Map</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="p">&gt;)</span> <span class="p">:</span>
+                     <span class="n">ProxyServerActor</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="k">true</span><span class="p">),</span> <span class="n">ManagedProcessTrait</span> <span class="p">{</span>
+	<span class="c1">//...</span>
+<span class="p">}</span>
+
+<span class="k">val</span> <span class="py">actorA</span> <span class="p">=</span> <span class="n">ManagedProcess</span><span class="p">(</span><span class="s">&quot;good_sleeper&quot;</span><span class="p">,</span>
+                              <span class="s">&quot;./src/main/resources/sleeper.py&quot;</span><span class="p">,</span>
+                              <span class="m">3</span><span class="p">,</span>
+                              <span class="m">2</span><span class="p">,</span>
+                              <span class="n">mapOf</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span><span class="n">String</span><span class="p">&gt;()).</span><span class="n">spawn</span><span class="p">()</span> <span class="k">as</span> <span class="n">ManagedProcessTrait</span>
+
+<span class="k">val</span> <span class="py">actorB</span> <span class="p">=</span> <span class="n">ProcessManager</span><span class="p">().</span><span class="n">spawn</span><span class="p">()</span> <span class="k">as</span> <span class="n">ProcessManagerTrait</span>
+
+<span class="n">actorB</span><span class="p">.</span><span class="n">manage</span><span class="p">(</span><span class="n">actorA</span><span class="p">)</span> <span class="c1">// manage actorA is sent as a message to the actorB</span></code></pre></figure>
+
+<p>ProxyActor is part of the excellent builtin <a href="http://docs.paralleluniverse.co/quasar/">Behavior</a> Actors provided. This specific one creates a proxy of your class, that immediately becomes an actor without having to implement <code>doRun</code> or create a loop and pattern matching incoming messages. This is super, but might add a neglible overhead.</p>
+
+<p>There are other provided behaviors like <code>Server</code>, <code>EventSource</code> and the great <a href="http://docs.paralleluniverse.co/quasar/javadoc/co/paralleluniverse/actors/behaviors/FiniteStateMachineActor.html">FiniteStateMachine</a> that I want to taste.</p>
+
+<p>So, the next great thing about Galaxy is the <a href="http://docs.paralleluniverse.co/quasar/javadoc/co/paralleluniverse/strands/Strand.html">Strand</a> abstraction. Krust-pm, due to the nature o Java system process handling, employs a thread per managed process instance. And to keep a single uniform API around a thread that manages a process or any other fiber that can do anything different, I used the <code>of</code> static method from Strand to instantiate directly from a thread.</p>
+
+<p>Quasar also offers the ability to <a href="http://docs.paralleluniverse.co/quasar/javadoc/co/paralleluniverse/actors/behaviors/Supervisor.html">supervise actors</a> and take actions accordingly. Another important thing is the custom configuration for <a href="http://docs.paralleluniverse.co/quasar/javadoc/co/paralleluniverse/actors/MailboxConfig.html">Actor Mailboxes</a> and configurable <a href="http://docs.paralleluniverse.co/quasar/javadoc/co/paralleluniverse/fibers/FiberScheduler.html">FiberScheduler</a>.</p>
+
+<p>Moreover, if you are interested in distributing Actors across machines, there is a natural integration with <a href="http://docs.paralleluniverse.co/quasar/#enabling-clustering">Galaxy</a> available.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Both Quasar and Kotlin are proving themselves as great tools to keep in mind when developing your next solution. Kotlin because it is statically typed, better than java and still flexible enough to foster elegant, expressive and intuitive code.</p>
+
+<p>And Quasa because it doesn’t impose any crazy concept like other Actor libs out there, also, it offers great abstractions and a straight to the point API.</p>
+
+
+  </article>
+</div>
+
+<div class="share-buttons">
+  <h6>Share on: </h6>
+  <ul>
+    <li>
+      <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/blog/2015/05/30/give-kotlin-and-quasar-a-try/" class="twitter btn" title="Share on Twitter"><i class="fa fa-twitter"></i><span> Twitter</span></a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/blog/2015/05/30/give-kotlin-and-quasar-a-try/" class="facebook btn" title="Share on Facebook"><i class="fa fa-facebook"></i><span> Facebook</span></a>
+    </li>
+    <li>
+      <a href="https://plus.google.com/share?url=http://localhost:4000/blog/2015/05/30/give-kotlin-and-quasar-a-try/" class="google-plus btn" title="Share on Google Plus"><i class="fa fa-google-plus"></i><span> Google+</span></a>
+    </li>
+    <li>
+      <a href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/blog/2015/05/30/give-kotlin-and-quasar-a-try/" class="hacker-news btn" title="Share on Hacker News"><i class="fa fa-hacker-news"></i><span> Hacker News</span></a>
+    </li>
+    <li>
+      <a href="https://www.reddit.com/submit?url=http://localhost:4000/blog/2015/05/30/give-kotlin-and-quasar-a-try/" class="reddit btn" title="Share on Reddit"><i class="fa fa-reddit"></i><span> Reddit</span></a>
+    </li>
+  </ul>
+</div><!-- end share-buttons -->
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'paulosuzartblog';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+        <footer>
+  &copy; 2017 Paulo Suzart. Powered by <a href="http://jekyllrb.com/">Jekyll</a>, <a href="http://github.com/renyuanz/leonids/">leonids theme</a> made with <i class="fa fa-heart heart-icon"></i>
+</footer>
+
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="http://localhost:4000/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="http://localhost:4000/js/main.js"></script>
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26676810-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Database Functional Mapping with Slick</title>
+  <meta name="description" content="Typesafe guys certainly gave nice shots embracing projects like play!, akka and Slick.After finally swallowing the huge change they did on play! itself since...">
+
+  <!-- CSS files -->
+  <link rel="stylesheet" href="http://localhost:4000/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://localhost:4000/css/main.css">
+
+  <link rel="canonical" href="http://localhost:4000/blog/2015/09/23/database-functional-mapping-with-slick/">
+  <link rel="alternate" type="application/rss+xml" title="Paulo Suzart" href="http://localhost:4000/feed.xml" />
+
+  <!-- Icons -->
+  <!-- 16x16 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+  <!-- 32x32 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+</head>
+
+
+<body>
+  <div class="row">
+    <div class="col s12 m3">
+      <div class="table cover">
+        
+
+<div class="cover-card table-cell table-middle">
+  
+  <a href="http://localhost:4000/" class="author_name">Paulo Suzart</a>
+  <span class="author_job">FP and more</span>
+  <span class="author_bio mbm">back end developer | machine Learning professional wannabe</span>
+  <nav class="nav">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="http://localhost:4000/">home</a>
+      </li>
+       
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/archive/">Archive</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/categories/">Categories</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/tags/">Tags</a>
+          </li>
+        
+        
+        
+           
+        
+           
+        
+           
+        
+          
+    </ul>
+  </nav>
+  <script type="text/javascript">
+  // based on http://stackoverflow.com/a/10300743/280842
+  function gen_mail_to_link(hs, subject) {
+    var lhs,rhs;
+    var p = hs.split('@');
+    lhs = p[0];
+    rhs = p[1];
+    document.write("<a class=\"social-link-item\" target=\"_blank\" href=\"mailto");
+    document.write(":" + lhs + "@");
+    document.write(rhs + "?subject=" + subject + "\"><i class=\"fa fa-fw fa-envelope\"></i><\/a>");
+  }
+</script>
+<div class="social-links">
+  <ul>
+    
+    
+    
+    
+    <li><a href="http://linkedin.com/in/https://www.linkedin.com/in/paulosuzart/" class="social-link-item" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
+    
+    
+    
+    
+    <li><a href="http://github.com/github.com/paulosuzart" class="social-link-item" target="_blank"><i class="fa fa-fw fa-github"></i></a></li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </ul>
+</div>
+
+</div>
+
+      </div>
+    </div>
+    <div class="col s12 m9">
+      <div class="post-listing">
+        <a class="btn" href= "http://localhost:4000/" >
+  Home
+</a>
+
+
+
+<div id="post">
+  <header class="post-header">
+    <h1 title="Database Functional Mapping with Slick">Database Functional Mapping with Slick</h1>
+    <span class="post-meta">
+      <span class="post-date">
+        23 SEP 2015
+      </span>
+      •
+      <span class="read-time" title="Estimated read time">
+  
+  
+    6 mins read
+  
+</span>
+
+    </span>
+
+  </header>
+
+  <article class="post-content">
+    <p><a href="http://www.typesafe.com/">Typesafe</a> guys certainly gave nice shots embracing projects like <a href="playframework.com">play!</a>, <a href="http://akka.io">akka</a> and <a href="http://slick.typesafe.com/">Slick</a>.</p>
+
+<p>After finally swallowing the huge change they did on play! itself since its release 1.2.4, I’ve been heavily playing with play! 2.4.3. I like the ability to use different persistent frameworks, but so far, it comes with the cost of sparse documentation and lack of focus on a single well understood solution and all the caveats.</p>
+
+<!--more-->
+
+<p>Anyway. Want to share some playground with Slick combined with the power of <a href="http://docs.scala-lang.org/overviews/core/futures.html">Futures</a> and functional composition itself. Slick is very powerful and works basically pretending it operates on lists of objects, but behind the scenes it simply generates <strong>type safe</strong> sql statements.</p>
+
+<h2 id="futures-and-composition">Futures and composition</h2>
+
+<p>Look at the following sniped. This <code>Command</code> case class is kinda big to paste here, so it is cut. Same for the find method fo this DAO class.</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="c1">//Holds data after loaded from/to database</span>
+<span class="k">case</span> <span class="k">class</span> <span class="nc">Command</span><span class="o">(</span><span class="n">deleted</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span>
+                   <span class="n">id</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span><span class="o">,</span>
+                   <span class="o">...)</span>
+
+<span class="c1">//Maps a table from the database</span>
+<span class="k">class</span> <span class="nc">Commands</span><span class="o">(</span><span class="n">aTag</span><span class="k">:</span> <span class="kt">Tag</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Table</span><span class="o">[</span><span class="kt">Command</span><span class="o">](</span><span class="n">aTag</span><span class="o">,</span> <span class="s">&quot;commands&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+
+<span class="c1">//Represents the collection like interface we&#39;ll be working on</span>
+<span class="k">lazy</span> <span class="k">val</span> <span class="n">commands</span> <span class="k">=</span> <span class="nc">TableQuery</span><span class="o">[</span><span class="kt">Commands</span><span class="o">]</span>
+
+<span class="k">def</span> <span class="n">findAndDelete</span> <span class="k">=</span> <span class="n">find</span> <span class="k">_</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">delete</span> <span class="k">_</span>
+
+<span class="k">def</span> <span class="n">find</span><span class="o">(</span><span class="n">finder</span><span class="k">:</span> <span class="kt">CommandFinderQuery</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Command</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="c1">//... Believe it will find a command</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="n">delete</span><span class="o">(</span><span class="n">command</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Command</span><span class="o">])</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="n">command</span><span class="o">.</span><span class="n">flatMap</span> <span class="o">{</span> <span class="n">c</span> <span class="k">=&gt;</span>
+  <span class="k">val</span> <span class="n">q</span> <span class="k">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">id</span> <span class="o">===</span> <span class="n">c</span><span class="o">.</span><span class="n">id</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">deleted</span><span class="o">)</span>
+  <span class="nc">Logger</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="n">q</span><span class="o">.</span><span class="n">updateStatement</span><span class="o">)</span>
+  <span class="n">dbConfig</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="n">q</span><span class="o">.</span><span class="n">update</span><span class="o">(</span><span class="kc">true</span><span class="o">))</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>So, the <code>delete</code> function takes a <code>Future[Command]</code>, that is, someone before it will actually find a command and give it to this function. All <code>delete</code> should do is to prepare a query using <code>filter</code> on <code>commands</code> table using the familiar <code>filter</code> approach.</p>
+
+<p>Notice however, that after filtering, there is a <code>map</code>. This means we will only consider the field whose name is <code>deleted</code>. Couple lines below you see <code>dbConfig.db.run(q.update(true))</code>. And this is the point where the sql <code>UPDATE</code> command is really submitted to the database.</p>
+
+<p>Since we are using <code>flatMap</code> on Future[Command], this then produces a new future of type <code>Future[Int]</code> that will hold the number of affected rows once it is completed.</p>
+
+<p>Now take a look at <code>findAndDelete</code>. It composes the <code>find</code> function and the <code>delete</code>, so it is easy for any caller to just call it instead of chain the execution every time.</p>
+
+<h2 id="for-comprehension">For comprehension</h2>
+
+<p>Slick also offers a monadic approach for querying multiple tables. For example, the for comprehension below:</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="k">for</span> <span class="o">{</span>
+  <span class="n">group</span> <span class="k">&lt;-</span> <span class="n">groups</span> <span class="k">if</span> <span class="n">group</span><span class="o">.</span><span class="n">name</span> <span class="o">===</span> <span class="n">groupName</span>
+  <span class="n">team</span> <span class="k">&lt;-</span> <span class="n">teams</span> <span class="k">if</span> <span class="n">team</span><span class="o">.</span><span class="n">name</span> <span class="o">===</span> <span class="n">teamName</span> <span class="o">&amp;&amp;</span> <span class="n">team</span><span class="o">.</span><span class="n">groupId</span> <span class="o">===</span> <span class="n">group</span><span class="o">.</span><span class="n">id</span>
+  <span class="n">cmd</span> <span class="k">&lt;-</span> <span class="n">commands</span> <span class="k">if</span> <span class="n">cmd</span><span class="o">.</span><span class="n">teamId</span> <span class="o">===</span> <span class="n">team</span><span class="o">.</span><span class="n">id</span> <span class="o">&amp;&amp;</span> <span class="n">cmd</span><span class="o">.</span><span class="n">seqNumber</span> <span class="o">===</span> <span class="n">commandSeq</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">cmd</span><span class="o">.</span><span class="n">deleted</span>
+<span class="o">}</span> <span class="k">yield</span> <span class="n">cmd</span></code></pre></figure>
+
+<p>Generates an SQL:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span></span><span class="k">select</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;content&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;host&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;user_id&quot;</span><span class="p">,</span>
+       <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;team_id&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;seq_number&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;content_hash&quot;</span><span class="p">,</span>
+       <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;comment&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;deleted&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;tag&quot;</span><span class="p">,</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;starred&quot;</span><span class="p">,</span>
+       <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;id&quot;</span>
+<span class="k">from</span> <span class="ss">&quot;groups&quot;</span> <span class="n">x3</span><span class="p">,</span> <span class="ss">&quot;teams&quot;</span> <span class="n">x4</span><span class="p">,</span> <span class="ss">&quot;commands&quot;</span> <span class="n">x2</span>
+<span class="k">where</span> <span class="p">((</span><span class="n">x3</span><span class="p">.</span><span class="ss">&quot;name&quot;</span> <span class="o">=</span> <span class="o">?</span><span class="p">)</span> <span class="k">and</span> <span class="p">((</span><span class="n">x4</span><span class="p">.</span><span class="ss">&quot;name&quot;</span> <span class="o">=</span> <span class="o">?</span><span class="p">)</span> <span class="k">and</span>
+      <span class="p">(</span><span class="n">x4</span><span class="p">.</span><span class="ss">&quot;group_id&quot;</span> <span class="o">=</span> <span class="n">x3</span><span class="p">.</span><span class="ss">&quot;id&quot;</span><span class="p">)))</span> <span class="k">and</span>
+      <span class="p">(((</span><span class="n">x2</span><span class="p">.</span><span class="ss">&quot;team_id&quot;</span> <span class="o">=</span> <span class="n">x4</span><span class="p">.</span><span class="ss">&quot;id&quot;</span><span class="p">)</span> <span class="k">and</span> <span class="p">(</span><span class="n">x2</span><span class="p">.</span><span class="ss">&quot;seq_number&quot;</span> <span class="o">=</span> <span class="o">?</span><span class="p">))</span>
+      <span class="k">and</span> <span class="p">(</span><span class="k">not</span> <span class="n">x2</span><span class="p">.</span><span class="ss">&quot;deleted&quot;</span><span class="p">))</span></code></pre></figure>
+
+<p>This is very interesting and shows that the <code>for</code> notation will not overload your database but simply collaborate to create the query you want.</p>
+
+<h2 id="promising-and-returning-objects-with-persisted-id">Promising and returning objects with persisted Id</h2>
+
+<p>Please don’t take the following code as canonical, it was just my requirements that led me to do this. But imagine you want to add a new <code>Command</code> to the database. Instead of returning the number of affected rows or the new id only, you want a copy of the <code>Command</code> object with the id filled:</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="k">def</span> <span class="o">++(</span><span class="n">command</span><span class="k">:</span> <span class="kt">Command</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Command</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">savedPromise</span> <span class="k">=</span> <span class="nc">Promise</span><span class="o">[</span><span class="kt">Command</span><span class="o">]</span>
+
+  <span class="k">val</span> <span class="n">insertAction</span> <span class="k">=</span> <span class="n">commands</span> <span class="n">returning</span> <span class="n">commands</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">id</span><span class="o">)</span> <span class="o">+=</span> <span class="n">command</span>
+  <span class="nc">Logger</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="n">insertAction</span><span class="o">.</span><span class="n">statements</span><span class="o">.</span><span class="n">mkString</span><span class="o">)</span>
+  <span class="k">val</span> <span class="n">insertF</span> <span class="k">=</span> <span class="n">dbConfig</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="n">insertAction</span><span class="o">)</span>
+
+  <span class="n">insertF</span> <span class="n">onFailure</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="n">f</span> <span class="k">=&gt;</span> <span class="nc">Logger</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="s">s&quot;Insert new command failed with : </span><span class="si">${</span><span class="n">f</span><span class="o">.</span><span class="n">getMessage</span><span class="si">}</span><span class="s">&quot;</span><span class="o">)</span>
+      <span class="n">savedPromise</span><span class="o">.</span><span class="n">failure</span><span class="o">(</span><span class="n">f</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="n">insertF</span> <span class="n">onSuccess</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="n">savedId</span> <span class="k">=&gt;</span> <span class="n">savedPromise</span><span class="o">.</span><span class="n">success</span><span class="o">(</span><span class="n">command</span><span class="o">.</span><span class="n">copy</span><span class="o">(</span><span class="n">id</span> <span class="k">=</span> <span class="n">savedId</span><span class="o">.</span><span class="n">some</span><span class="o">))</span>
+  <span class="o">}</span>
+
+  <span class="n">savedPromise</span><span class="o">.</span><span class="n">future</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>This is simply amazing. Notice the <code>returning</code> function that will make the insertAction returns a <code>Long</code> upon execution. Remember we want to deliver back a <code>Command</code>, not the produced id. The solution is to subscribe to this future inside <code>++</code>, and once it is completed, you deliver the new immutable <code>Command</code>: <code>savedPromise.success(command.copy(id = savedId.some))</code></p>
+
+<h2 id="end">End</h2>
+
+<p>This is far from being a tutorial or complete example of Slick. But gives you a direction of what kind of constructs you can combine. The guys at <a href="http://underscore.io/blog/">Underscode.io</a> got deeper posts. But so far, Slick shows to be a very mature solution when it comes to persistence with Scala and relational databases.</p>
+
+<p>Notices it doesn’t provide any caching. You would have to implement yourself. Slicks also offer the possibility to generate code from an existing database, but I personally don’t like this approach.</p>
+
+<p>Take care!</p>
+
+<p><strong>important</strong>: <code>&gt;&gt;&gt;</code> and <code>some</code> comes from <a href="https://github.com/scalaz/scalaz">Scalaz</a>. <code>Logger</code> and <code>dbConfig</code> comes from the play! project app.</p>
+
+  </article>
+</div>
+
+<div class="share-buttons">
+  <h6>Share on: </h6>
+  <ul>
+    <li>
+      <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/blog/2015/09/23/database-functional-mapping-with-slick/" class="twitter btn" title="Share on Twitter"><i class="fa fa-twitter"></i><span> Twitter</span></a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/blog/2015/09/23/database-functional-mapping-with-slick/" class="facebook btn" title="Share on Facebook"><i class="fa fa-facebook"></i><span> Facebook</span></a>
+    </li>
+    <li>
+      <a href="https://plus.google.com/share?url=http://localhost:4000/blog/2015/09/23/database-functional-mapping-with-slick/" class="google-plus btn" title="Share on Google Plus"><i class="fa fa-google-plus"></i><span> Google+</span></a>
+    </li>
+    <li>
+      <a href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/blog/2015/09/23/database-functional-mapping-with-slick/" class="hacker-news btn" title="Share on Hacker News"><i class="fa fa-hacker-news"></i><span> Hacker News</span></a>
+    </li>
+    <li>
+      <a href="https://www.reddit.com/submit?url=http://localhost:4000/blog/2015/09/23/database-functional-mapping-with-slick/" class="reddit btn" title="Share on Reddit"><i class="fa fa-reddit"></i><span> Reddit</span></a>
+    </li>
+  </ul>
+</div><!-- end share-buttons -->
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'paulosuzartblog';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+        <footer>
+  &copy; 2017 Paulo Suzart. Powered by <a href="http://jekyllrb.com/">Jekyll</a>, <a href="http://github.com/renyuanz/leonids/">leonids theme</a> made with <i class="fa fa-heart heart-icon"></i>
+</footer>
+
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="http://localhost:4000/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="http://localhost:4000/js/main.js"></script>
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26676810-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>

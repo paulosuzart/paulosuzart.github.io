@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>My own REDIS types notation</title>
+  <meta name="description" content="One of the greatest NoSQL key-value databases I value most, is redis. It is simple, fast and tasty.You interact with redis through its protocol. They are div...">
+
+  <!-- CSS files -->
+  <link rel="stylesheet" href="http://localhost:4000/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://localhost:4000/css/main.css">
+
+  <link rel="canonical" href="http://localhost:4000/blog/2011/12/11/my-own-redis-types-notation/">
+  <link rel="alternate" type="application/rss+xml" title="Paulo Suzart" href="http://localhost:4000/feed.xml" />
+
+  <!-- Icons -->
+  <!-- 16x16 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.ico">
+  <!-- 32x32 -->
+  <link rel="shortcut icon" href="http://localhost:4000/favicon.png">
+</head>
+
+
+<body>
+  <div class="row">
+    <div class="col s12 m3">
+      <div class="table cover">
+        
+
+<div class="cover-card table-cell table-middle">
+  
+  <a href="http://localhost:4000/" class="author_name">Paulo Suzart</a>
+  <span class="author_job">FP and more</span>
+  <span class="author_bio mbm">back end developer | machine Learning professional wannabe</span>
+  <nav class="nav">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="http://localhost:4000/">home</a>
+      </li>
+       
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/archive/">Archive</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/categories/">Categories</a>
+          </li>
+        
+          
+        
+          <li class="nav-item">
+            <a href="http://localhost:4000/tags/">Tags</a>
+          </li>
+        
+        
+        
+           
+        
+           
+        
+           
+        
+          
+    </ul>
+  </nav>
+  <script type="text/javascript">
+  // based on http://stackoverflow.com/a/10300743/280842
+  function gen_mail_to_link(hs, subject) {
+    var lhs,rhs;
+    var p = hs.split('@');
+    lhs = p[0];
+    rhs = p[1];
+    document.write("<a class=\"social-link-item\" target=\"_blank\" href=\"mailto");
+    document.write(":" + lhs + "@");
+    document.write(rhs + "?subject=" + subject + "\"><i class=\"fa fa-fw fa-envelope\"></i><\/a>");
+  }
+</script>
+<div class="social-links">
+  <ul>
+    
+    
+    
+    
+    <li><a href="http://linkedin.com/in/https://www.linkedin.com/in/paulosuzart/" class="social-link-item" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
+    
+    
+    
+    
+    <li><a href="http://github.com/github.com/paulosuzart" class="social-link-item" target="_blank"><i class="fa fa-fw fa-github"></i></a></li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </ul>
+</div>
+
+</div>
+
+      </div>
+    </div>
+    <div class="col s12 m9">
+      <div class="post-listing">
+        <a class="btn" href= "http://localhost:4000/" >
+  Home
+</a>
+
+
+
+<div id="post">
+  <header class="post-header">
+    <h1 title="My own REDIS types notation">My own REDIS types notation</h1>
+    <span class="post-meta">
+      <span class="post-date">
+        11 DEC 2011
+      </span>
+      •
+      <span class="read-time" title="Estimated read time">
+  
+  
+    2 mins read
+  
+</span>
+
+    </span>
+
+  </header>
+
+  <article class="post-content">
+    <p>One of the greatest <a href="http://en.wikipedia.org/wiki/NoSQL">NoSQL</a> <a href="http://en.wikipedia.org/wiki/NoSQL#Key-value_store">key-value</a> databases I value most, is <a href="http://redis.io/">redis</a>. It is simple, fast and tasty.</p>
+
+<p>You interact with redis through its protocol. They are divided by commands that you can apply to its different data structures. These structures are Key, String, Hashes, Lists, Sets, Sorted Sets and channels (this one used for <a href="http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">pub/sub pattern</a>).</p>
+
+<p>Since redis is key-value, it means you can store only keys with values. Right? It may sound bad at the beginning, but you get the way as you try. I’m just a newbe in redis world and I’m feeling comfortable with it.</p>
+
+<!--more-->
+
+<p>So, due to its key-value nature you should create some structures around you main structure to help you query your data. Suppose you are using a redis <code>HASH</code> to store user information. In a javascript notation:</p>
+
+<pre><code>HMSET  users:21 name Abraão mail somemailhere@gmail.com status pending-mail-confirmation
+</code></pre>
+
+<p><code>HMSET</code> is a command to store all the <code>HASH</code> entries into a <code>HASH</code> identified by <code>user:21</code> key. And for some reason, your system get all users pending mail confirmation and send them a remember. There is no way to get all the users that has mail confirmation pending other than check every user status, what would be expensive. A helper structure may save you from this.</p>
+
+<pre><code>SADD users:pending:confirmation 21
+</code></pre>
+
+<p>Bingo. Now your background process can pick up users to remember mail confirmation from the <code>SET</code> identified by <code>users:pending:confirmation</code> key.</p>
+
+<p>Suppose you also want to show a welcome message to the user in the first time it visits you. You may use another helper structure.</p>
+
+<pre><code>SADD messages:welcome 21
+</code></pre>
+
+<p>Thus, your system queries a <code>SET</code> identified by <code>messages:welcome</code> key to check if it should show a welcome message to the user. And finally, at the moment of user’s creation, your system wants to send some information through mail also in a back ground process. Again a helper structure.</p>
+
+<pre><code>LPUSH users:send:mail somemailhere@gmail.com
+</code></pre>
+
+<p>Lot of thing to just create a user. Now imagine a big code base and even complex interactions with other helper structures like sorted sets to store information related to age, date, etc. It was my situation last week while interacting with redis.</p>
+
+<p>To make things clear and easy to remember and document. I created a simple, yet helpful (for me at least) notation to document redis structures and the sequence of interactions. Te symbols are:</p>
+
+<p><img src="https://s3.amazonaws.com/suzart.blogs.posts/redislayout/Slide1.jpg" alt="redis Types Notation" /></p>
+
+<p>Now our user’s creation process using the notation we have:</p>
+
+<p><img src="https://s3.amazonaws.com/suzart.blogs.posts/redislayout/Slide4.jpg" alt="User's creation interactions" /></p>
+
+<p>It is simple and is helping a lot. Another good thing I started to do is to write queries in plain english (portuguese actually :)) to help identify which types of queries a structure is helping me to answer. To see a text version of it, visit this <a href="http://paulosuzart.github.com/blog/2011/12/11/my-own-redis-types-text-notation/">new post</a>.</p>
+
+<p>I’m using <a href="https://github.com/mmcgrana/clj-redis/">clj-redis</a> interact with redis.</p>
+
+
+  </article>
+</div>
+
+<div class="share-buttons">
+  <h6>Share on: </h6>
+  <ul>
+    <li>
+      <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/blog/2011/12/11/my-own-redis-types-notation/" class="twitter btn" title="Share on Twitter"><i class="fa fa-twitter"></i><span> Twitter</span></a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/blog/2011/12/11/my-own-redis-types-notation/" class="facebook btn" title="Share on Facebook"><i class="fa fa-facebook"></i><span> Facebook</span></a>
+    </li>
+    <li>
+      <a href="https://plus.google.com/share?url=http://localhost:4000/blog/2011/12/11/my-own-redis-types-notation/" class="google-plus btn" title="Share on Google Plus"><i class="fa fa-google-plus"></i><span> Google+</span></a>
+    </li>
+    <li>
+      <a href="https://news.ycombinator.com/submitlink?u=http://localhost:4000/blog/2011/12/11/my-own-redis-types-notation/" class="hacker-news btn" title="Share on Hacker News"><i class="fa fa-hacker-news"></i><span> Hacker News</span></a>
+    </li>
+    <li>
+      <a href="https://www.reddit.com/submit?url=http://localhost:4000/blog/2011/12/11/my-own-redis-types-notation/" class="reddit btn" title="Share on Reddit"><i class="fa fa-reddit"></i><span> Reddit</span></a>
+    </li>
+  </ul>
+</div><!-- end share-buttons -->
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'paulosuzartblog';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+        <footer>
+  &copy; 2017 Paulo Suzart. Powered by <a href="http://jekyllrb.com/">Jekyll</a>, <a href="http://github.com/renyuanz/leonids/">leonids theme</a> made with <i class="fa fa-heart heart-icon"></i>
+</footer>
+
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="http://localhost:4000/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="http://localhost:4000/js/main.js"></script>
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-26676810-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>
