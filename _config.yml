@@ -6,7 +6,7 @@ owner:
   name:       'Paulo Suzart'
   job:        'FP and more'
   github:     'github.com/paulosuzart'
-  bio:        'back end developer | machine Learning professional wannabe'
+  bio:        'back end developer | functional programming fan'
   linkedin:   'https://www.linkedin.com/in/paulosuzart/'
   disqus-shortname: paulosuzartblog
   disqus_short_name: paulosuzartblog
@@ -14,9 +14,9 @@ owner:
     analytics: 'UA-26676810-1'
 markdown: kramdown
 permalink:    /blog/:year/:month/:day/:title/
-highlighter:  pygments
-paginate: 8
-paginate_path: '/blogs/page:num/'
+highlighter:  rouge
+# paginate: 8
+# paginate_path: '/blog/pages/page:num/'
 tracking_id : 'UA-26676810-1'
 disqus_short_name: paulosuzartblog
 gems:
