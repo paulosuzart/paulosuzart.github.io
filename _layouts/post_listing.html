@@ -2,7 +2,7 @@
 layout: default
 ---
 
-{% for post in site.posts %}
+{% for post in paginator.posts %}
 <section class="post">
   <header class="post-header">
     <p class="post-meta">
@@ -65,19 +65,17 @@ layout: default
 {% endfor %}
 
 <!-- Pagination links -->
-<div class="pagination">
-  {% if paginator.next_page %}
-    <a href="/blog/page{{paginator.next_page}}/" class="older">Older Posts</a>
-  {% else %}
-    <span class="next">Older Posts</span>
+  {% if paginator.total_pages > 1 %}
+  <ul class="pager">
+      {% if paginator.previous_page %}
+      <li class="previous">
+          <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Newer Posts</a>
+      </li>
+      {% endif %}
+      {% if paginator.next_page %}
+      <li class="next">
+          <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Older Posts &rarr;</a>
+      </li>
+      {% endif %}
+  </ul>
   {% endif %}
-  {% if paginator.previous_page %}
-    {% if paginator.page == 2 %}
-      <a href="/" class="newer">Newer Posts</a>
-    {% else %}
-      <a href="/blog/page{{paginator.previous_page}}/" class="newer">Newer Posts</a>
-    {% endif %}
-  {% else %}
-    <span class="previous">Newer Posts</span>
-  {% endif %}
-</div>
