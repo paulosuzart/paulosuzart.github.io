@@ -15,13 +15,13 @@ owner:
 markdown: kramdown
 permalink:    /blog/:year/:month/:day/:title/
 highlighter:  pygments
-# paginate: 8
-# paginate_path: '/blogs/pages/:num/'
+paginate: 8
+paginate_path: '/blogs/page:num/'
 tracking_id : 'UA-26676810-1'
 disqus_short_name: paulosuzartblog
 gems:
   - jekyll-gist
-  - jekyll-paginate-v2
+  - jekyll-paginate
 
 excerpt_separator: <!--more-->
 kramdown:
