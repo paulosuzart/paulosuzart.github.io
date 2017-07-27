@@ -105,16 +105,12 @@ Our mutation has a field `createHuman` that returs the ObjectType `Human` and as
 Conclusion
 ===
 
-GraphQL is here to stay in the same way REST like APIs won't die in the mid term. I'm currently working in a sort of Back end as a Service product and I believe this can be used not only between front-end <-> back end communication, but server <-> server communication with no harm.
+I've been working with GraphQL for the last 6 months, at least. And had the chance to create a Grammar for it using D language, and to implement a Query Generation engine in C++ using [libgraphqlparser](https://github.com/graphql/libgraphqlparser) and implement a Back end as a Service in Node.js (soon publicly available). After this time working with some low level and watching the market, I find I have some consistent impressions that I wanted to share.
 
-Sangria makes it easy to implement GraphQL servers where you have full control of the schema, but I need to work more to generate and resolve schemas dynamically where data will eventually go to a database.
+GraphQL is here to stay in the same way REST like APIs won't die in the mid term. I believe this can be used not only between front-end <-> back end communication, but server <-> server communication with no harm.
 
-I won't doubt more tools around GraphQL like full proxies that will be able to route GraphQL queries to different GraphQL servers after applying some process like deep authorization (when you check if the user has permission to interacti with a specific field of a Model), query depth limit, and aggregate results of non GraphQL services (like indexing with Algolia, or any other provider that talks REST) to the response, etc.
+Sangria makes it easy to implement GraphQL servers where you have full control of the schema, but I need to work more to generate and resolve schemas dynamically where data will eventually go to a database. But this post is not intented to be a extensive analysis of Sangria.
+
+I won't doubt more tools around GraphQL like full proxies that will be able to route GraphQL queries to different GraphQL servers after applying some process like deep authorization (when you check if the user has permission to interact with a specific field of a Object), query depth limit, and aggregate results of non GraphQL services (like indexing with Algolia, or any other provider that talks REST) to the response, etc. I think native GraphQL databases may be created and more and more data related tools like datagrids and caches may support it directly.
 
 Happy GraphQL!
-
-
-
-
-
-
