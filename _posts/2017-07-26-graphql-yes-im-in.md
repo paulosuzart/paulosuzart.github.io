@@ -11,7 +11,7 @@ categories: [graphql, clojure, scala, nodejs]
 In summary, GraphQL gives clients the power to decide what they want, including to fetch related data at  - virtually - any depth level. How they do that? The answer is a query language instead of meaningless JSON payloads and blind REST like endpoints.
 <!--more-->
 
-You may argue that frameworks like [sailsjs](sailsjs.com) and [loopback](loopback.io) offer the some flexibility but still using plain old json / rest endpoints. Yes, at some extent. But there are limitations that I'm safe to say they are insurmountable. With GraphQL language you have a white board to request what you want and the result will be as powerful as the GraphQL server wants to.
+You may argue that frameworks like [sailsjs](sailsjs.com) and [loopback](loopback.io) offer the some flexibility and yet using plain old json / rest endpoints. Yes, at some extent. But there are limitations that I'm safe to say they are insurmountable. With GraphQL language you have a white board to request what you want and the result will be as powerful as the GraphQL server wants to.
 
 If REST like endpoints always return all data, and client uses what they want we are in trouble. If your client uses 50% of the returned fields, you are wasting cpu cycles, network bandwidth and ultimatelly can be harming the user experience. There is also a commong scenario where your clientes need more data and you have to change your API, mobilize developers and do a new deployment just to now offer a new field to a client.
 
