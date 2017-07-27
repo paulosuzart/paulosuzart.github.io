@@ -3,7 +3,7 @@ layout: post
 title: "GraphQL, yes I'm in!"
 date: 2017-07-26 13:22
 comments: true
-categories: [graphql]
+categories: [graphql, clojure, scala, nodejs]
 ---
 
 [GraphQL](http://graphql.org) is without a shadow of a doubt the latest cool thing in the fields of providing a API. It's not a total novelty, given that it's been around since 2015 (publicly) and in theory, it's some how running on Facebook since 2012.
