@@ -24,7 +24,7 @@ Not sure if the therm comes after the emerging GraphQL awareness. But the is now
 
 - [Graph.cool](graph.cool) - They are by far the team leading the GraphQL in terms of educating their own market to show the power of what they offer. They also public lots of content and tools like [graphql-up](https://www.graph.cool/graphql-up/). By the way their web console is amazing and the integrations with Lambda and Auth0 Extend is amazing.
 - [Scaphold.io](scaphold.io) - This guys are also tough. They are very similar to Graph.cool and IMO they offer a better GraphQL Schema allowing good aggregations not only in the Model you are querying but also in related Models. They also have integrations to [Algolia](https://www.algolia.com), push notifications and Email sending. But they have a much poor web console for the service.
-- [Reindex](https://www.reindex.io) - This started as a product in the same model of both above, but now I see the web site presenting them like a consultancy on GraphQL
+- [Reindex](https://reindex.io/baas/) - Same approach above but uses [json5](http://json5.org) as Schema representation. Offers a different price model based on operations/month.
 
 Back end as a Service is emerging and many types of applications can take advantages of them. In the same wavelength of using services like Firebase (hosting, database, functions), I see the Back end as a Service with lot of potetial to continue to growth and become permanent in the making of digital initiatives that involves quick prototyping, flexibility and production ready solutions.
 
