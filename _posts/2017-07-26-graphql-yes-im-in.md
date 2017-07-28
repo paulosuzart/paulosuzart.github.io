@@ -15,7 +15,7 @@ You may argue that frameworks like [sailsjs](sailsjs.com) and [loopback](loopbac
 
 If REST like endpoints always return all data, and client uses what they want we are in trouble. If your client uses 50% of the returned fields, you are wasting cpu cycles, network bandwidth and ultimatelly can be harming the user experience. There is also a commong scenario where your clientes need more data and you have to change your API, mobilize developers and do a new deployment just to now offer a new field to a client.
 
-All these situations and more are nicely handled with GraphQL.
+The opposite is also true. A way too slim API may incur in more requests flowing from clients to server to complete extra needed data. All these situations and more are nicely handled with GraphQL.
 
 BaaS Back end as A Service
 ===
@@ -109,7 +109,7 @@ I've been working with GraphQL for the last 6 months, at least. And had the chan
 
 GraphQL is here to stay in the same way REST like APIs won't die in the mid term. I believe this can be used not only between front-end <-> back end communication, but server <-> server communication with no harm.
 
-Sangria makes it easy to implement GraphQL servers where you have full control of the schema, but I need to work more to generate and resolve schemas dynamically where data will eventually go to a database. But this post is not intented to be a extensive analysis of Sangria.
+Sangria makes it easy to implement GraphQL servers where you have full control of the schema, but I need to work more to generate and resolve schemas dynamically where data will eventually go to a database. But this **post is not intented to be a extensive analysis of Sangria at all**.
 
 I won't doubt more tools around GraphQL like full proxies that will be able to route GraphQL queries to different GraphQL servers after applying some process like deep authorization (when you check if the user has permission to interact with a specific field of a Object), query depth limit, and aggregate results of non GraphQL services (like indexing with Algolia, or any other provider that talks REST) to the response, etc. I think native GraphQL databases may be created and more and more data related tools like datagrids and caches may support it directly.
 
