@@ -6,12 +6,12 @@ comments: true
 categories: [graphql, scala]
 ---
 
-This is a sequel of [previous post Sangria without case classes](http://paulosuzart.github.io/blog/2017/07/28/sangria-without-case-classes/) where I'm exploring shapeless in conjunction with the awesome [Sangria](http://sangria-graphql.org) lib. Notice this is total exploration and chances are (actually very likely) that it is possible to do simpler code to achieve the same effect.
+This is a sequel of [previous post Sangria without case classes](http://paulosuzart.github.io/blog/2017/07/28/sangria-without-case-classes/) where I'm exploring shapeless in conjunction with the awesome [Sangria](http://sangria-graphql.org) lib. Mind this is total exploration and chances are (actually very likely) that it is possible to do simpler code to achieve the same effect.
 
-In this post we will see [shapeless](https://github.com/milessabin/shapeless) `HMap`s and again, use the [sangria-akka-http-example](https://github.com/sangria-graphql/sangria-akka-http-example/) as example.
+In this post we will see [shapeless](https://github.com/milessabin/shapeless) `HMap`s and again, use the [sangria-akka-http-example](https://github.com/sangria-graphql/sangria-akka-http-example/) as basis for our adventure.
 <!--more-->
 
-`HMap`s resembles C++ [POCO Dynamic Var](https://pocoproject.org/docs/Poco.Dynamic.Struct.html) lib. I'm not comparing exactly, but this allows you to create dynamic type safe structs at runtime. Of course the API is quite different and ~~ugly~~ if compared to what shapeless did taking advantage of the scala type system.
+`HMap`s resembles C++ [POCO Dynamic Var](https://pocoproject.org/docs/Poco.Dynamic.Struct.html) lib. I'm not comparing exactly, but this allows us to create dynamic type safe `struct`s at runtime. Of course the API is quite different and ~~ugly~~ if compared to what shapeless did taking advantage of the scala type system.
 
 For my scenario, I defined a parametrized class `class PersistentIS[K, V]` and just three implicits to start. Let's take a look:
 
@@ -32,7 +32,7 @@ For my scenario, I defined a parametrized class `class PersistentIS[K, V]` and j
 
 {% endhighlight %}
 
-The first mention of `HMap` happens with the implicit definition of the maping from `String` to a `PersistentIS` that happens to be wrapped in a `HMap`. That is, in order to create a instance of our map, we do like in the last line of the sample code above.
+Wow, looks like a bunch of empty classes. The first occurency of `HMap` is in the implicit definition of the maping from `String` to a `PersistentIS`, that happens to be wrapped in a `HMap`. In order to create a instance of our `PersistentIS[K, V]`, just do like in the last line of the sample code above.
 
 Now it is time to define our GraphQL `ObjectType`:
 
