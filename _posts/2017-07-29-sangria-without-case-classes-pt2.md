@@ -118,8 +118,8 @@ I wanted to remove the type parameter from `defaultResolve[String]` and use just
 Conclusion
 ===
 
-`HMaps` is quite powerful and using it caused no impact in the GrpahQL exposed API, everything works normal. This let us have a enver more dynamic behavior when compared to Records that requires a macro to generate the appropriate labeled `HList`, etc, etc.
+`HMaps` is quite powerful and using it caused no impact in the GrpahQL exposed API, everything works normal. It results in a even more dynamic behavior when compared to `Records` that requires a macro to generate the appropriate labeled `HList`, etc, etc.
 
-I'm ~~in love~~ with shapeless. This thing is simply mind blowing. I though I would be using `HLists` labeled some how. But not sure if possible due to the lack of information at compile time to get singleton types, etc. Well, need to investigate more and hope this investigation can lead to more posts.
+I'm ~~in love~~ with shapeless. This thing is simply mind blowing. I thought I would be using labeled `HLists` some how. But not sure if possible due to the lack of information at compile time to get singleton types, etc. Well, need to investigate more and hope this investigation can result in another post.
 
 Happy shapeless!
