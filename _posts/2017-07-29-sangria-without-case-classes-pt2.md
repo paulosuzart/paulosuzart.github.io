@@ -100,7 +100,7 @@ Here we go! A lot of code at first but in summary what is involved is a type cla
 
 {% endhighlight %}
 
-Ok I know, looks like lots of code and etc etc. But to be fair when you start working with type classes and concepts you also find in Haskell and [Cats](http://typelevel.org/cats/), you have a thinking shift. It is like you start to see code in multiple dimentions instead of the usual *roll from the top to the bottom of the file and you are ok to write, read and luckily understand code*.
+Ok I know, looks like lots of code and etc etc. But to be fair when you start working with type classes and concepts you also find in Haskell and [Cats](http://typelevel.org/cats/), you have a thinking shift. It is like you start to see code in multiple dimensions instead of the usual linear *roll from the top to the bottom of the file and you are ok to write, read and luckily understand code*.
 
 The code above is commented, so no extra info to add. Now the most confusing part - *must confess* - of the code. The `defaultResolve` signature:
 
