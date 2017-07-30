@@ -66,7 +66,7 @@ Now it is time to define our GraphQL `ObjectType`:
 
 There is a trick here. The resolvers are different and I'll show why and how in a minute. First take a look at the `age` resolve function. It is a normal Sangria way to resolve a field from a `Val` stored in the `Context` here named `ctx `. That is, the query resolver returns a Value of type `HMap[PersistentIS]` and this resolve function extracts the needed field from it.
 
-The point here is that we need to know the type of the result value (a `Int` for `age`) but also the same of the field. I wanted to get rid of both and use just `defaultResolve` but so far I couldn't wipe them. But at least the field name I managed to get rid of. **Not that the code that I'm showing below has the intention solely to get rid of the field name while extracting it from the HMap[PersistentIS]`, but allows for a mora dynamic configuration of GraphQL as well as its resolve functions**.
+The point is that we need to know the type of the result value (a `Int` for `age`) but also the same of the field. I wanted to get rid of both and use just `defaultResolve` but so far I couldn't wipe them. But at least the field name I managed to get rid of. **Not that the code that I'm showing below has the sole intention to get rid of the field name while extracting it from the `HMap[PersistentIS]`, but allows for a mora dynamic configuration of GraphQL as well as its resolve functions**.
 
 Here we go! A lot of code at first but in summary what is involved is a type class that defines a get method, instances of this type class for `Int` and `String`. And as a extra step the definition of the `defaultResolve[Res]`:
 
