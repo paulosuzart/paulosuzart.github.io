@@ -83,7 +83,7 @@ Here we go! A lot of code at first but in summary what is involved is a type cla
     // This allows for implicit resolution via PersistentGet[String, Int], for example
     def apply[K, V](implicit getter: PersistentGet[K, V]) = getter
 
-    // Helps instanciate a new PersistentGet[K, V], takes as parameter the function that does the actuall work
+    // Helps instantiate a new PersistentGet[K, V], takes as parameter the function that does the actuall work
     // against the HMap[PersistentIS]
     def instance[K, V](f: ((K, HMap[PersistentIS]) ⇒ V)) = new PersistentGet[K, V] {
       override def get(k: K, m: HMap[PersistentIS]): V = {
@@ -100,7 +100,7 @@ Here we go! A lot of code at first but in summary what is involved is a type cla
 
 {% endhighlight %}
 
-Ok I know, looks like lots of code and etc etc. But to be fair when you start working with type classes and concepts you also find in Haskell and [Cats](http://typelevel.org/cats/) this is a thinking shift. It is like you start to see code in multiple dimentions instead of the usual *roll from the top to the bottom of the file and you are ok to write, read and luckily understand code*.
+Ok I know, looks like lots of code and etc etc. But to be fair when you start working with type classes and concepts you also find in Haskell and [Cats](http://typelevel.org/cats/), you have a thinking shift. It is like you start to see code in multiple dimentions instead of the usual *roll from the top to the bottom of the file and you are ok to write, read and luckily understand code*.
 
 The code above is commented, so no extra info to add. Now the most confusing part - *must confess* - of the code. The `defaultResolve` signature:
 
