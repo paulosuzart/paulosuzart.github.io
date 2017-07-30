@@ -44,7 +44,7 @@ Sangria also offer a lots of libs that makes it easy to integrate it with marsha
 
 This makes things a lot harder to do with a compiled language like Java, Scala or even Go. I tried to implement part of the product I work on using Scala, and it is simply way too laborious process, despite of trying to use [shapeless](https://github.com/milessabin/shapeless). The whole thing escalates to a point where you will see yourself having to write code that is not part of your business at all.
 
-This is funny because GraphQL is **all about types** and implementing a dynamic schema generation becomes painful in typed languages. The point is that GraphQL types are described dynamically not embedded in the hosting language. I'm not saying this is impossible (actually, there are projects written in typed langs generating schemas from postgres catalog), but will require extra effort to the the same you do with your eyes cloded with a daynamic language.
+This is funny because GraphQL is **all about types** and implementing a dynamic schema generation becomes painful in typed languages. The point is that GraphQL types are described dynamically not embedded in the hosting language. I'm not saying this is impossible (actually, there are projects written in typed langs generating schemas from postgres catalog), but will require extra effort to the the same you do in a blink of an eye using a daynamic language.
 
 A bit of Sangria
 ===
