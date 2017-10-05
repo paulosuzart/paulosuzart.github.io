@@ -149,7 +149,7 @@ Conclusion
 
 **Warning!** the product that I mentioned in this post is, by the time of writing, in closed beta and its home page and documentation are preliminary.
 
-I like Facebook's Flow and for some scenarios, will be forced to continue using it. But for many others, TypeScripts is the best option IMO. As you team grows, your code base grows and as you release more to production, having support from types without compromising productivity is simply awesome.
+I like Facebook's Flow and for some scenarios, will be forced to continue using it. But for many others, TypeScripts is the best option IMO. As your team grows, your code base grows and as you release more to production, having support from types without compromising productivity is simply awesome.
 
 People that started their careers in the node.js world may dislike this position, but I can assure these conclusions come with relevant background, blood and sweat.
 
