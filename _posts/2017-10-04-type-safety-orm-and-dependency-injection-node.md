@@ -27,7 +27,7 @@ But this is a singular case where the server queries a arbitrary database with m
 
 For this case we used [TypeORM](http://typeorm.io/) and considering a lib in its early `0.1.0-alpha5.0`, I have seen few projects with such maturity and excellence in the Node world.
 
-It resembles Hibernate, but simpler and with a powerful [`QueryBuilder`](http://typeorm.io/#/select-query-builder) API that don't get on your way. Take the simple entity definition below as example.
+It resembles ~~Hibernate~~, but simpler and with a powerful [`QueryBuilder`](http://typeorm.io/#/select-query-builder) API that don't get on your way. Take the simple entity definition below as example.
 
 
 ``` typescript
@@ -64,13 +64,13 @@ export class Organization extends BaseEntity {
 const org = const Organization.findOneById(3);
 ```
 
-Check that by extending BaseEntity you can use Active Record like static methods, making it easy to use and manipulate data. Also pay attention to `@AfterInsert()` [decorator](https://www.typescriptlang.org/docs/handbook/decorators.html) that allows for modifying the entity itself before it is flushed to the database. More listeners available.
+Check that by extending `BaseEntity` you can use Active Record like static methods, making it easy to use and manipulate data. Also pay attention to `@AfterInsert()` [decorator](https://www.typescriptlang.org/docs/handbook/decorators.html) that allows for modifying the entity itself before it is flushed to the database. More listeners available.
 
 TypeORM also makes it easy to add common columns like the date of creation of a record and the date of last update by leveraging `@UpdateDateColumn()` and `@CreateDateColumn()`.
 
-## Migrations
+# Migrations
 
-Another super key point here is the ability to generate migrations. There are couple options out there like [Sequelize](http://docs.sequelizejs.com/) and [Loopback](https://loopback.io/) provide some good tools, but none of them compares to Django's migration capability, for example. This is not the case for TypeORM that is able to generate precise migrations.
+Another super key point here is the ability to generate migrations. There are couple options out there like [Sequelize](http://docs.sequelizejs.com/) and [Loopback](https://loopback.io/) provide some good tools, but none of them compares to [Django](https://docs.djangoproject.com/en/1.11/topics/migrations/)'s migration capability, for example. This is not the case for TypeORM that is able to generate precise migrations.
 
 By using `ts-node node_modules/.bin/typeorm migrations:generate -n Bootstrap`, TypeORM will generate a migration like this:
 
