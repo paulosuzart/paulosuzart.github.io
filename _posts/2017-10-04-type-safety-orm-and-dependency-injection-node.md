@@ -144,6 +144,14 @@ This is the good thing, you can step down and use javascript maps or any other "
 
 It also offers cool [Advanced Type](https://www.typescriptlang.org/docs/handbook/advanced-types.html) features like Intersection Types, Union Types, Nullable Types, String Literal Types and Discriminated Unions. These features make this language really powerful and expressive even looking like Java or C#.
 
+What else do I get? I would summarize other important points like:
+
+   - No `require`, just `import`
+   - Forward export. So you can re-export in a `index.ts` the local exports of other modules
+   - Turn off types at will. You may produce types that are hard to predict its shape, or it doesn't worth the effort, just use `any`
+   - Better IDE / Editor support
+   - Documentation that works. We've struggled to get decent code documentation generation for ES6 and Flow. But using [Typedoc](http://typedoc.org/) it simply works
+
 Conclusion
 ===
 
