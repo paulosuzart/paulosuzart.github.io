@@ -151,6 +151,7 @@ What else do I get? I would summarize other important points like:
    - Turn off types at will. You may produce types that are hard to predict its shape, or it doesn't worth the effort, just use `any`
    - Better IDE / Editor support
    - Documentation that works. We've struggled to get decent code documentation generation for ES6 and Flow. But using [Typedoc](http://typedoc.org/) it simply works
+   - [VSCode](https://code.visualstudio.com/) like a glove
 
 Conclusion
 ===
