@@ -16,7 +16,7 @@ Dependency Inject is pretty old and stable concept in Object Oriented systems. F
 
 Although pretty common in ecosystems like Java, It is worth it a try in Node.JS for sure. Me myself faced many situations where I had to work with singleton objects or take care of instantiating objects inside a request, etc, etc.
 
-`typedi` makes it easy to connect different objects with their own requirements. And for the impatient, the full code is available on [github repo](https://github.com/paulosuzart/btc_example).
+`typedi` makes it easy to connect different objects with their own requirements. *And for the impatient, the full code is available on* [github repo](https://github.com/paulosuzart/btc_example).
 
 # A Price Service
 
