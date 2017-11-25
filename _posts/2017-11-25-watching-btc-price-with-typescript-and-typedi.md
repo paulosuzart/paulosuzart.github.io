@@ -69,9 +69,9 @@ class App {
     @Inject(process.env.EXCHANGE || "cex.io")
     priceService: PriceService;
 
-    market: string;
+    private market: string;
 
-    lastPrice: number;
+    private lastPrice: number;
 
     constructor(market: string) {
         this.market = market;
