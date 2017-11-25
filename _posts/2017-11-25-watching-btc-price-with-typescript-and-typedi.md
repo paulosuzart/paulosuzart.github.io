@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Watching Bitcoin price with Typescript and Typedi"
+title: "Watching Bitcoing price with Typescript and Typedi"
 date: 2017-11-25 13:58
 comments: true
 categories: [ node.js, typescript, bitcoin ]
@@ -107,7 +107,7 @@ The `App` class provides just single public function called `watch` that is used
 
 # Cex.io Client, finally
 
-Now our Cex.io client. It ressembles the `BittrexService` as both implement `PriceService`: 
+Now our Cex.io client! It resembles the `BittrexService` as both implement `PriceService` and uses their REST API: 
 
 ``` typescript
 
