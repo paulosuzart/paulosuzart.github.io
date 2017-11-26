@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Watching Bitcoing price with Typescript and Typedi"
+title: "Watching Bitcoin price with Typescript and Typedi"
 date: 2017-11-25 13:58
 comments: true
 categories: [ node.js, typescript, bitcoin ]
