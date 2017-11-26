@@ -101,7 +101,7 @@ Wow, lots of code at once. Lets it breakdown starting by `appFactory` function. 
 
 This is a way to get a instance of the application via `typedi` and leave instantiation details to a factory function. In this case a factory that knows how to set up the target market.
 
-Now lies 11-12 show the injection of a instance of a `PriceService`. This is not known at compile time, instead we query the `process.env` for a variable named `EXCHANGE` and if not set, the default is used: `cex.io`. *Of course in real use we need to handle non existent implementations if for example if the user sets `EXCHANGE` to anything different than the supported exchanges*.
+Now lines 11-12 show the injection of a instance of a `PriceService`. This is not known at compile time, instead we query the `process.env` for a variable named `EXCHANGE` and if not set, the default is used: `cex.io`. *Of course in real use we need to handle non existent implementations if for example if the user sets `EXCHANGE` to anything different than the supported exchanges*.
 
 The `App` class provides just single public function called `watch` that is used to poll the selected exchange every 10 seconds.
 
