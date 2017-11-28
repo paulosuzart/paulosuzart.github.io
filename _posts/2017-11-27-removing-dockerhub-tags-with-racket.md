@@ -23,11 +23,11 @@ Again, there are thousand ways to implement this. I tried to use the concept of 
 So the smallest piece of code to implement our lazy stream of tags is a function that takes some repository information and the page it wants to fetch from DockerHub:
 
 ``` clojure
-(define (fetch-tags user repo token page)
-  (let* ([uri (string->url (format "https://hub.docker.com/v2/repositories/~a/~a/tags/?page=~a" user repo page))]
+(define (fetch-tags user repo token page-url)
+  (let* ([uri (string->url page-url)]
          [in (get-pure-port uri (with-auth-header token))]
          [tags-result (read-json in)])
-    (displayln (format "https://hub.docker.com/v2/repositories/~a/~a/tags/page=~a" user repo page))
+    (displayln page-url)
     tags-result))
 ```
 
