@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Removing dockerhub tags with racket"
+title: "Removing Dockerhub tags with Racket"
 date: 2017-11-27 18:00
 comments: true
 categories: [ docker, racket ]
