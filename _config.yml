@@ -22,6 +22,7 @@ disqus_short_name: paulosuzartblog
 gems:
   - jekyll-gist
   - jekyll-paginate
+  - jekyll-feed
 
 excerpt_separator: <!--more-->
 kramdown:

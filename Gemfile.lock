@@ -201,6 +201,7 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
+  jekyll-feed
   jekyll-gist
   jekyll-paginate
   pygments.rb
