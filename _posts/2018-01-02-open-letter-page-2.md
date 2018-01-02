@@ -43,3 +43,9 @@ There are just two of them but IT people ten to thing they all are going to be t
 Some of the behavior might include megalomania, demean other IT professionals and lack of broad vision due to his obstinacy to become the next Zuckerberg. 
 
 This is more frequent in the startup world and as result, startups think they are a club and that everybody in the world are begging to work for them. That's why you see all kinds of ridiculous interview processes, bizarre feedbacks and idolatry to things that won't prove a developer to be a good developer.
+
+You can also witness people thinking they are so good, so amazing that completely ignore their own teams. And what is the result of all that? They are just ordinary IT professionals that will end their careers running like crazy and bringing damage to others without achieving anything but a good bit of the frustration pie.
+
+Another common pattern is to mirror your career on someone working at Google. You start to watch all talks on youtube, and read blogs and write your blog. You want to be one of them, want to share how impressive your system or code are. And you start believing you are working for NetFlix, Facebook and alike. When the far you'll reach is working with Spring Boot deployed to a damn Tomcat.
+
+So, the lesson learned here is to be realistic with expectations. High expectations are good, unreal expectations are evil for you and people around you and we have more people on IT with unreal expectations that high expectations. It is simply impossible to every developer become a Zuckerbeg or Gates.
