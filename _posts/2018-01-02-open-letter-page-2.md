@@ -38,7 +38,7 @@ Now I want to add something on top of another statement:
 
 > Just remember though, we all know the names of Gates and Zuckerberg because there are only two of them: the odds are long, the glory is great, and it’s yours if you want it.
 
-There are just two of them but IT people ten to thing they all are going to be the next Zuckerberg. Well, they will not. And the late they realize it, the painful will be their frustration. And through the time they think they are the next Zuckerberg they behave badly.
+There are just two of them but IT people tend to think they all are going to be the next Zuckerberg. Well, they will not. And the late they realize it, the painful will be their frustration. And through the time they think they are the next Zuckerberg they behave badly.
 
 Some of the behavior might include megalomania, demean other IT professionals and lack of broad vision due to his obstinacy to become the next Zuckerberg. 
 
