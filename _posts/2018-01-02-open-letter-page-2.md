@@ -48,4 +48,5 @@ You can also witness people thinking they are so good, so amazing that completel
 
 Another common pattern is to mirror your career on someone working at Google. You start to watch all talks on youtube, and read blogs and write your blog. You want to be one of them, want to share how impressive your system or code are. And you start believing you are working for NetFlix, Facebook and alike. When the far you'll reach is working with Spring Boot deployed to a damn Tomcat.
 
-So, the lesson learned here is to be realistic with expectations. High expectations are good, unreal expectations are evil for you and people around you and we have more people on IT with unreal expectations that high expectations. It is simply impossible to every developer become a Zuckerbeg or Gates.
+So, the lesson learned here is to be realistic with expectations. High expectations are good, unreal expectations are evil for you and people around you and we have more people on IT with unreal expectations than people with high expectations. It is simply impossible for every developer to become a Zuckerbeg or Gates.
+
