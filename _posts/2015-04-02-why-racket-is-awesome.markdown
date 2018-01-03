@@ -18,7 +18,7 @@ Well, after a long time [far from](http://www.reddit.com/r/Clojure/comments/2r63
 
 First I'd decided to go with [OCaml](https://ocaml.org/), just to taste it. Sour! I mean, it is a good language but documentation is frustrating, libraries documentation even worse. Ok, so went for [Rust](http://www.rust-lang.org/), that is a good promise and should become one of my languages once it gets out of alpha stage: it is hard to compile libs with nightly builds, everything brakes, etc.
 
-But Rust is being crafter along with solid libraries like [Hyper](http://hyperium.github.io/hyper/hyper/index.html). Man, this is great. But lets wait things mature a bit.
+But Rust is being crafted along with solid libraries like [Hyper](http://hyperium.github.io/hyper/hyper/index.html). Man, this is great. But lets wait things mature a bit.
 
 So, now what? Clojure? No. Racket!
 
@@ -41,7 +41,7 @@ Another good thing is that Racket doesn't need a huge decision table to make you
 
 When it comes to performance, Java and [Clojure](http://benchmarksgame.alioth.debian.org/u64/compare.php?lang=clojure&lang2=racket) win. I don't really know how much effort Racket guys put on this. And for lots of scenarios it makes no difference.
 
-Have I told you Racket can also produce beatyful desktop apps? Take a look [here](http://docs.racket-lang.org/gui/index.html).
+Have I told you Racket can also produce beautiful desktop apps? Take a look [here](http://docs.racket-lang.org/gui/index.html).
 
 What now?
 ---
