@@ -6,8 +6,6 @@ comments: true
 categories: [racket]
 ---
 
-**UPDATE: ** Just because I posted yesterday that Rust was a unstable with nightly releases, the guys just posted today (2015 April 3rd) the [Beta release](http://blog.rust-lang.org/2015/04/03/Rust-1.0-beta.html).
-
 Finally 1st post of the year! Well, not that much to say lately. But here a piece of my sensations while playing with [Racket](http://racket-lang.org/) last two weeks.
 
 <!--more-->
@@ -55,3 +53,7 @@ This post is not teaching you anything but shares my findings so far. If you wan
 You can also follow their Youtube channel [Racket Lang](https://www.youtube.com/channel/UC8uSLYDanXDnP9Yn8UrTNzQ) to find good videos.
 
 Good Luck!
+
+**UPDATE: ** Just because I posted yesterday that Rust was a unstable with nightly releases, the guys just posted today (2015 April 3rd) the [Beta release](http://blog.rust-lang.org/2015/04/03/Rust-1.0-beta.html).
+
+**UPDATE 2: ** More on racket in this [post](http://paulosuzart.github.io/blog/2017/11/27/removing-dockerhub-tags-with-racket/).
