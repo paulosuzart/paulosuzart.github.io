@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "An open letter to less experienced developers - Page 2"
-date: 2017-11-27 18:00
+date: 2018-01-02 18:00
 comments: true
 categories: [ career ]
 ---
