@@ -10,6 +10,8 @@ In the last day of 2017, *a usually melancholic day*, a sincere letter came up w
 
 <!--more-->
 
+**DISCLAIMER**: *This is not a sequel of the afore mentioned post, nor I have any connection with the author of that post. This is just some comments and content I would publish as a second page of that letter.*
+
 Getting paid to code for the last 14 years gives me a lot in common with [Paul Robinson](https://medium.com/@p7r?source=post_header_lockup). After university admission in the year 2000, now it's been 18 years since I first wrote a program ([In Turbo Pascal 7](https://en.wikipedia.org/wiki/Turbo_Pascal)). Me and Paul share some good long years in front of computers, but also a lot of the context surrounding us all these years.
 
 I want to add some points to the letter, but before would like to give my two cents on some statements:
@@ -22,7 +24,7 @@ If you can't fill someone else's pocket, to the hell with your Type Classes or w
 
 > The more you code, the more you realise there are whole mathematical, theoretical, engineering and creative universes you do not understand, will never get around to understanding and therefore there is no point in pretending you do, will or can understand.
 
-Man, every time I get back to Scala Z, or haskell, I have to re-read about category theory. Refresh my mind on Functors, Applicatives, etc, etc. And there are plenty more that I can't grasp - or at least will take much more time to grasp.
+Man, every time I get back to Scala Z, or Haskell, I have to re-read about category theory. Refresh my mind on Functors, Applicatives, etc, etc. And there are plenty more that I can't grasp - or at least will take much more time to grasp.
 
 The time where a single developer could craft alone at time something that would make him rich is over. You can't deliver value, good experience, scalability, etc without having at least 3 other people working with you. And this is not lack of time to do everything, it is lack of knowledge. You can't master Front End, Back End, Networking, Distributed Computing, Cloud Infrastructure, Big Data, Machine Learning, Concurrency, Database tuning, and so and so all at once. And again, if you believe you can master all these few topics above, you are doomed to frustration.
 
@@ -48,5 +50,7 @@ You can also witness people thinking they are so good, so amazing that completel
 
 Another common pattern is to mirror your career on someone working at Google. You start to watch all talks on youtube, and read blogs and write your blog. You want to be one of them, want to share how impressive your system or code are. And you start believing you are working for NetFlix, Facebook and alike. When the far you'll reach is working with Spring Boot deployed to a damn Tomcat.
 
-So, the lesson learned here is to be realistic with expectations. High expectations are good, unreal expectations are evil for you and people around you and we have more people on IT with unreal expectations than people with high expectations. It is simply impossible for every developer to become a Zuckerbeg or Gates.
+So, the lesson learned here is to be realistic with expectations. High expectations are good, unreal expectations are evil for you and people around you and we have more people on IT with unreal expectations than people with high expectations. It is simply impossible for every developer to become a Zuckerbeg or Gates in the same way it is impossible to every soccer player to become a Ronaldinho no matter how hard they try. Living aware of the fact you can, or can not, be the next Ronaldinho is better than live believing you'll for sure be the next Ronaldinho.
+
+
 
