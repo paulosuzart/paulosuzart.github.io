@@ -61,7 +61,7 @@ I wish I can put something to production using Crystal. In the mean time, lets p
 
 The code below, that can be fully accessed in this [github repo](https://github.com/paulosuzart/prunedocker-crystal) prunes a Dockerhub repo by keeping just the latest `k` tags in the repository. It is the same goal of the post [Removing Dockerhub tags with Racket](http://paulosuzart.github.io/blog/2017/11/27/removing-dockerhub-tags-with-racket/), but now in Crystal!!!!
 
-The code is so easy to read because there are much less symbols involved. Less `()`, less `,` and absolutely no `;`. Furthermore the semantics for class methods and instance variables makes things pretty clear.
+The code is so easy to read because there are much less symbols involved. Less `()`, less `,` and absolutely no `;`. Furthermore the semantics for class methods and instance variables makes things pretty clear. This code uses a http client as a class method, that is why you see a `@@` here for instantiating it and also setting up the authentication process. The `authenticate` method por example, is static, thus we use `self.authenticate` to point it out.
 
 ``` ruby
 class Prune
@@ -163,8 +163,8 @@ There are much more interesting ways to express things as you can find in the Lu
 
 # Conclusion
 
-Crystal is just `0.24.1` right now. There is a long road ahead for sure. It couldn't be more promising. With a growing community, type safety and speed of C, languages like Go or Rust will need to rethink themselves.
+Crystal is just `0.24.1` right now. There is a long road ahead for sure. It couldn't be more promising. With a growing community, type safety and speed of C, languages like Go or Rust will have to rethink themselves in some areas at least.
 
-I always refused to use ruby due to it's performance. That was a pity because the same constructs Crystal offers, but now it seems time is comming to have cool, light, readable code like ruby with the speed of Crystal.
+I always refused to use ruby due to it's performance. That was a pity because it has the same constructs Crystal offers, but now it seems time is coming where we have cool, slick, readable code like ruby with the speed of Crystal.
 
 Happy Crystal!
