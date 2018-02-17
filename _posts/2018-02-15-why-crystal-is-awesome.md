@@ -10,7 +10,7 @@ Few months ago posted again about [Racket](http://racket-lang.org) and created a
 
 <!--more-->
 
-I'll follow the same post structure as shown in the ["Why Racket is Awesome"](http://paulosuzart.github.io/blog/2015/04/02/why-racket-is-awesome/) post and add some more stuff here and there. Let's begin.
+I'll follow the same post structure as shown in the ["Why Racket is Awesome"](http://paulosuzart.github.io/blog/2015/04/02/why-racket-is-awesome/) post and add some more stuff here and there. Let's begin. Bear it is not an exhaustive analysis or any official promotion of the language, it is just my opinion.
 
 # How I started looking at it
 
@@ -51,7 +51,9 @@ Crystal is **backed by a GC**, so no memory management in your way. Nevertheless
 
 **Types everywhere, although hidden most of the time** is a clear message to more bloated languages, when it comes to annotating types, that things can be practical yet powerful with generics, union types, etc.
 
-Few **macro systems** are clearer and simple as offered by Crystal.
+Few **macro systems** are clearer and simpler as the one offered by Crystal.
+
+Compile time is important and hope over time it gets faster. Not so bad, though.
 
 # What now?
 
