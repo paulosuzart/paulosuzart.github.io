@@ -51,7 +51,7 @@ Crystal is **backed by a GC**, so no memory management in your way. Nevertheless
 
 **Types everywhere, although hidden most of the time** is a clear message to more bloated languages, when it comes to annotating types, that things can be practical yet powerful with generics, union types, etc.
 
-Few **macro systems** are clearer and simpler as the one offered by Crystal.
+Few **macro systems** are clearer and simpler as the one [offered by Crystal](https://crystal-lang.org/docs/syntax_and_semantics/macros.html). Even `method_missing` is available.
 
 Compile time is important and hope over time it gets faster. Not so bad, though.
 
@@ -64,6 +64,9 @@ The code below, that can be fully accessed in this [github repo](https://github.
 The code is so easy to read because there are much less symbols involved. Less `()`, less `,` and absolutely no `;`. Furthermore the semantics for class methods and instance variables makes things pretty clear. This code uses a http client as a class method, that is why you see a `@@` here for instantiating it and also setting up the authentication process. The `authenticate` method por example, is static, thus we use `self.authenticate` to point it out.
 
 ``` ruby
+BASE_URL   = "https://hub.docker.com"
+LOGIN_PATH = "/v2/users/login/"
+
 class Prune
   @@token : String?
 
