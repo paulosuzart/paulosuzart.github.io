@@ -53,6 +53,8 @@ Crystal is **backed by a GC**, so no memory management in your way. Nevertheless
 
 Few **macro systems** are clearer and simpler as the one [offered by Crystal](https://crystal-lang.org/docs/syntax_and_semantics/macros.html). Even `method_missing` is available.
 
+Stack [allocated Structs](https://crystal-lang.org/docs/syntax_and_semantics/structs.html) allows some extra precise control of memory allocation.
+
 Compile time is important and hope over time it gets faster. Not so bad, though.
 
 # What now?
