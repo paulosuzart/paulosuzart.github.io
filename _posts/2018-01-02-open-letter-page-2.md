@@ -6,7 +6,7 @@ comments: true
 categories: [ career ]
 ---
 
-In the last day of 2017, *a usually melancholic day*, a sincere letter came up with the tile: [*"An open letter to less experienced developers"*](https://medium.com/@p7r/an-open-letter-to-less-experienced-developers-c33c16ea5e88). And I need to confess that I read about myself and my career in that letter.
+In the last day of 2017, *a usually melancholic day*, a sincere letter came up with the title: [*"An open letter to less experienced developers"*](https://medium.com/@p7r/an-open-letter-to-less-experienced-developers-c33c16ea5e88). And I need to confess that I read about myself and my career in that letter.
 
 <!--more-->
 
