@@ -119,7 +119,7 @@ In this case `nodes` is supposed to have its first value set to the root node wr
 
 Look, both algorithms could be implemented without Optional, and both could be implemented in a different way even using Optional. But I found this way enough for the purpose.
 
-# This I didn't like in any of the algorithms
+# Things I didn't like in any of the algorithms
 
 In the depth first algo we saw a `null` there. Although it is there, it is contained and will not leak to cause a NPE elsewhere. This is required because `Optional#orElse` can only take a value of Node out of `Optional` context, this means that if you couldn't find the searched node on any side (left, right) you must to provide the empty version of your node, which is null (see the `Optional.ofNullable` there).
 
