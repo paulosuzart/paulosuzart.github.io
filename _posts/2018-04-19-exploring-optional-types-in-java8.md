@@ -127,7 +127,7 @@ In the breadth first algo there is something similar going one, we don't have a 
 
 # Vavr.io Option to the rescue
 
-The [Vavr.io](http://www.vavr.io/) promises to turn Java upside down. And I'm pretty convinced they are doing great. Their [Option](https://static.javadoc.io/io.vavr/vavr/0.9.2/io/vavr/control/Option.html) just works and is awesome. Now imagine we have replaced `Optional` with `Option` in our `Node` class and let's see how both algo looks like afther the change.
+The [Vavr.io](http://www.vavr.io/) promises to turn Java upside down. And I'm pretty convinced they are doing great. Their [Option](https://static.javadoc.io/io.vavr/vavr/0.9.2/io/vavr/control/Option.html) just works and is awesome. Now imagine we have replaced `Optional` with `Option` in our `Node` class and let's see how both algo looks like after the change.
 
 First, the depth first:
 
@@ -141,7 +141,7 @@ First, the depth first:
     }
 ```
 
-I was not in a competition to write the smaller code possible, but it actually became smaller then the first version. This is possible because `Option#orElse` can take another option as alternative value. So `checkChildren` can provide this value by checking both childs of the `currentNode` and returning the result.
+I was not in a competition to write the smaller code possible, but it actually became smaller then the first version. This is possible because `Option#orElse` can take another option as alternative value. So `checkChildren` can provide this value by checking both children of the `currentNode` and returning the result.
 
 The breath first is showed even more beauty:
 
