@@ -44,7 +44,7 @@ puts up.size
 # undefined method 'size' for Nil (compile-time type is (String | Nil))
 ```
 
-This is because changing your code to introduce a possible Nil return changes the return type of `upSenior` to `String | Nil` instead of just `String` as in the first version. As `Nil` has no `upcase` method, you can't even compile your code.
+This happens because changing your code to introduce a possible Nil return, changes the return type of `upSenior` from `String` to `String | Nil` as opposed of what is inferred in the first version. Since `Nil` has no `upcase` method, you can't even compile your code.
 
 This is certainly great technique, but let's explore the functional way of doing it. 
 
@@ -176,7 +176,13 @@ This list is also immutable, this means adding items to it actually returns a ne
 
 I'm not in the business of type theory, I actually suck at it when it comes to explaining these things formally. But I can say optional feels very good in Java too, even though using Vavr.io was a better option. Vavr actually looks more like Category Theory library for Java, or at least a subset what is generally found for [Scala](https://www.scala-lang.org/).
 
+Vavr also provide [Predicates](https://static.javadoc.io/io.vavr/vavr/0.9.2/io/vavr/Predicates.html) that can be used to do [Pattern Match](http://www.vavr.io/vavr-docs/#_pattern_matching) in Java. It's extremely ugly to pattern match with a unfriendly syntax though.
+
+One thing to notices is that during de exercises, it was easy to hit the StackOverflowError wall. Of course there is some brutal recursion here and I was not giving any attention to resource use or the possibility to get a StackOverflowError, but the trees used for testing had no more than 3 levels, what makes things to be a bit worry.
+
 Of course some credit here goes to Java8 lambdas that made it much much more smooth to work with this kind of construct that otherwise would be just bizarre to implement.
+
+T
 
 Hope you have liked the post. Happy Optional Types!
 
