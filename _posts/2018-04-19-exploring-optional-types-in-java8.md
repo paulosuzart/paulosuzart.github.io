@@ -189,6 +189,7 @@ Of course some credit here goes to Java8 lambdas that made it much much more smo
 The thing about these algorithms is that they will always follow the size of the tree. Not a dirrectly link, but possibly `O(log n)` relation here. This can lead to a `StackOverflowError` epidemic. That is why here is a non recursive version of both algos:
 
 ```java
+    // now the search from TreeSearch is not abstract and actually implements the search...
     public Option<Node> search() {
         
         System.out.println("Breadth Started... Looking for value : " + this.searchFor);
@@ -206,7 +207,7 @@ The thing about these algorithms is that they will always follow the size of the
             }
 
             List<Node> nextNodes = List.of(currentNode.getLeft(), currentNode.getRight()).flatMap(n -> n);
-            toSearch = getF(toSearch).apply(nextNodes);
+            toSearch = getF(toSearch).apply(nextNodes); // ... but look this piece
         }
 
         return Option.none();
