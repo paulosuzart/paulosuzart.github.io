@@ -10,9 +10,11 @@ I guess it is the first post on Java since [my last post on it in 2008](https://
 
 In this posts we'll also see [vavr](vavr.io) `Option` type and `List`!
 
+This post contains one update, please check.
+
 <!--more-->
 
-**TL;DR - if you want just the final code of the post, please check [master](https://github.com/paulosuzart/tree-search/tree/master/src/main/java/com/alice) and [vavr](https://github.com/paulosuzart/tree-search/tree/vavr/src/main/java/com/alice) versions**
+**TL;DR - if you want just the final code of the post, please check [master](https://github.com/paulosuzart/tree-search/tree/master/src/main/java/com/alice) for java Optional use, [vavr](https://github.com/paulosuzart/tree-search/tree/vavr/src/main/java/com/alice) for Vavr Option use and [norec](https://github.com/paulosuzart/tree-search/tree/norec) for a version with Vavr but no recursion involved**
 
 # Billion dollars mistake
 
@@ -117,7 +119,7 @@ Similarly, the breadth first will take us to always accumulate the children of t
 
 In this case `nodes` is supposed to have its first value set to the root node wrapped in a list. And from this point all we do is accumulate the children of nodes(if none is the node we are looking for), and just do the iteration again.
 
-Look, both algorithms could be implemented without Optional, and both could be implemented in a different way even using Optional. But I found this way enough for the purpose.
+*Look, both algorithms could be implemented without Optional, and both could be implemented in a different way even using Optional. But I found this way enough for the purpose. For another version of the implementation, please refer to the Update 1 of this post*
 
 # Things I didn't like in any of the algorithms
 
@@ -178,11 +180,58 @@ I'm not in the business of type theory, I actually suck at it when it comes to e
 
 Vavr also provide [Predicates](https://static.javadoc.io/io.vavr/vavr/0.9.2/io/vavr/Predicates.html) that can be used to do [Pattern Match](http://www.vavr.io/vavr-docs/#_pattern_matching) in Java. It's extremely ugly to pattern match with a unfriendly syntax though.
 
-One thing to notices is that during de exercises, it was easy to hit the StackOverflowError wall. Of course there is some brutal recursion here and I was not giving any attention to resource use or the possibility to get a StackOverflowError, but the trees used for testing had no more than 3 levels, what makes things to be a bit worry.
+One thing to notices is that during de exercises, it was easy to hit the `StackOverflowError` wall. Of course there is some brutal recursion here and I was not giving any attention to resource use or the possibility to get a `StackOverflowError`, but the trees used for testing had no more than 3 levels, what makes things to be a bit worry.
 
 Of course some credit here goes to Java8 lambdas that made it much much more smooth to work with this kind of construct that otherwise would be just bizarre to implement.
 
-T
+# Update 1 - No recursion version
+
+The thing about these algorithms is that they will always follow the size of the tree. Not a dirrectly link, but possibly `O(log n)` relation here. This can lead to a `StackOverflowError` epidemic. That is why here is a non recursive version of both algos:
+
+```java
+    public Option<Node> search() {
+        
+        System.out.println("Breadth Started... Looking for value : " + this.searchFor);
+
+        List<Node> toSearch = List.of(this.root);
+
+        while (!toSearch.isEmpty()) {
+            final Tuple2<Node, List<Node>> headAndTail = toSearch.pop2();
+            
+            final Node currentNode = headAndTail._1;
+            toSearch = headAndTail._2;
+
+            if (currentNode.getValue() == this.searchFor) {
+                return Option.some(currentNode);
+            }
+
+            List<Node> nextNodes = List.of(currentNode.getLeft(), currentNode.getRight()).flatMap(n -> n);
+            toSearch = getF(toSearch).apply(nextNodes);
+        }
+
+        return Option.none();
+    }
+```
+
+All breaks down to enqueue nodes to be searched in a list. And for depth first what we need to do is to `prependAll` the child nodes, if any, to this same list while we iterate keep a look using it. The breadth does just the opposite and `appendsAll` to this list.
+
+Noticed the `getF` right there? This is an abstract method that returns a `io.vavr.Function1<T1,R>`. This means we will apply just the relevant part of the algo to the specific strategy (depth/breadth). Here are the `getF` provided by the subclasses:
+
+```java
+// for depth
+@Override
+protected Function1<List<Node>, List<Node>> getF(List<Node> nodes) {
+    return (l) -> l.prependAll(nodes);
+}
+// For breadth
+@Override
+protected Function1<List<Node>, List<Node>> getF(List<Node> nodes) {
+    return (l) -> l.appendAll(nodes);
+}
+```
+
+This pretty much ends this post. 
+
 
 Hope you have liked the post. Happy Optional Types!
 
