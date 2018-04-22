@@ -184,7 +184,7 @@ Of course some credit here goes to Java8 lambdas that made it much much more smo
 
 # Appendix - No recursion version
 
-The thing about these algorithms is that they will always follow the size of the tree. Not a dirrectly link, but possibly `O(log n)` relation here. This can lead to a `StackOverflowError` epidemic. That is why here is a non recursive version of both algos:
+Although serving our purpose of exploring Optional types, the thing about both algorithms is that they will always follow the size of the tree in the worst case. This can lead to a `StackOverflowError` epidemic. That is why here is a non recursive version of both algos:
 
 ```java
     // now the search from TreeSearch is not abstract and actually implements the search...
@@ -217,16 +217,16 @@ All breaks down to enqueue nodes to be searched in a list. And for depth first w
 Noticed the `getF` right there? This is an abstract method that returns a `io.vavr.Function1<T1,R>`. This means we will apply just the relevant part of the algo to the specific strategy (depth/breadth). Here are the `getF` provided by the subclasses:
 
 ```java
-// for depth
-@Override
-protected Function1<List<Node>, List<Node>> getF(List<Node> nodes) {
-    return (l) -> l.prependAll(nodes);
-}
-// For breadth
-@Override
-protected Function1<List<Node>, List<Node>> getF(List<Node> nodes) {
-    return (l) -> l.appendAll(nodes);
-}
+    // for depth
+    @Override
+    protected Function1<List<Node>, List<Node>> getF(List<Node> nodes) {
+        return (l) -> l.prependAll(nodes);
+    }
+    // For breadth
+    @Override
+    protected Function1<List<Node>, List<Node>> getF(List<Node> nodes) {
+        return (l) -> l.appendAll(nodes);
+    }
 ```
 
 The function can't be applied with just a `()` call as in Scala. But using `apply` was ok.
