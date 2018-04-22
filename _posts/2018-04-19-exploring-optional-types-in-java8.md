@@ -10,8 +10,6 @@ I guess it is the first post on Java since [my last post on it in 2008](https://
 
 In this posts we'll also see [vavr](vavr.io) `Option` type and `List`!
 
-This post contains one update, please check.
-
 <!--more-->
 
 **TL;DR - if you want just the final code of the post, please check [master](https://github.com/paulosuzart/tree-search/tree/master/src/main/java/com/alice) for java Optional use, [vavr](https://github.com/paulosuzart/tree-search/tree/vavr/src/main/java/com/alice) for Vavr Option use and [norec](https://github.com/paulosuzart/tree-search/tree/norec) for a version with Vavr but no recursion involved**
@@ -119,7 +117,7 @@ Similarly, the breadth first will take us to always accumulate the children of t
 
 In this case `nodes` is supposed to have its first value set to the root node wrapped in a list. And from this point all we do is accumulate the children of nodes(if none is the node we are looking for), and just do the iteration again.
 
-*Look, both algorithms could be implemented without Optional, and both could be implemented in a different way even using Optional. But I found this way enough for the purpose. For another version of the implementation, please refer to the Update 1 of this post*
+*Look, both algorithms could be implemented without Optional, and both could be implemented in a different way even using Optional. But I found this way enough for the purpose. For another version of the implementation, please refer to the Appendice of this post*
 
 # Things I didn't like in any of the algorithms
 
@@ -184,7 +182,7 @@ One thing to notices is that during de exercises, it was easy to hit the `StackO
 
 Of course some credit here goes to Java8 lambdas that made it much much more smooth to work with this kind of construct that otherwise would be just bizarre to implement.
 
-# Update 1 - No recursion version
+# Appendix - No recursion version
 
 The thing about these algorithms is that they will always follow the size of the tree. Not a dirrectly link, but possibly `O(log n)` relation here. This can lead to a `StackOverflowError` epidemic. That is why here is a non recursive version of both algos:
 
