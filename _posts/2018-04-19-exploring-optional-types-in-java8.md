@@ -205,7 +205,7 @@ Although serving our purpose of exploring Optional types, the thing about both a
             }
 
             List<Node> nextNodes = List.of(currentNode.getLeft(), currentNode.getRight()).flatMap(n -> n);
-            toSearch = getF(toSearch).apply(nextNodes); // ... but look this piece
+            toSearch = getF(nextNodes).apply(toSearch);
         }
 
         return Option.none();
