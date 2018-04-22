@@ -117,7 +117,7 @@ Similarly, the breadth first will take us to always accumulate the children of t
 
 In this case `nodes` is supposed to have its first value set to the root node wrapped in a list. And from this point all we do is accumulate the children of nodes(if none is the node we are looking for), and just do the iteration again.
 
-*Look, both algorithms could be implemented without Optional, and both could be implemented in a different way even using Optional. But I found this way enough for the purpose. For another version of the implementation, please refer to the Appendice of this post*
+*Look, both algorithms could be implemented without Optional, and both could be implemented in a different way even using Optional. But I found this way enough for the purpose. For another version of the implementation, please refer to the Appendix of this post*
 
 # Things I didn't like in any of the algorithms
 
