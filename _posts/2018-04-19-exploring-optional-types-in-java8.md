@@ -231,6 +231,8 @@ protected Function1<List<Node>, List<Node>> getF(List<Node> nodes) {
 }
 ```
 
+The function can't be applied with just a `()` call as in Scala. But using `apply` was ok.
+
 This pretty much ends this post. 
 
 
