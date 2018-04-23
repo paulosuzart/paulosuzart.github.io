@@ -44,7 +44,7 @@ puts up.size
 # undefined method 'size' for Nil (compile-time type is (String | Nil))
 ```
 
-This happens because changing your code to introduce a possible Nil return, changes the return type of `upSenior` from `String` to `String | Nil` as opposed of what is inferred in the first version. Since `Nil` has no `upcase` method, you can't even compile your code.
+This happens because changing your code to introduce a possible Nil return, changes the return type of `upSenior` from `String` to `String | Nil` as opposed to what is inferred in the previous snippet. Since `Nil` has no `upcase` method, you can't even compile this code.
 
 This is certainly great technique, but let's explore the functional way of doing it. 
 
@@ -230,8 +230,6 @@ Noticed the `getF` right there? This is an abstract method that returns a `io.va
 ```
 
 The function can't be applied with just a `()` call as in Scala. But using `apply` was ok.
-
-This pretty much ends this post. 
 
 
 Hope you have liked the post. Happy Optional Types!
