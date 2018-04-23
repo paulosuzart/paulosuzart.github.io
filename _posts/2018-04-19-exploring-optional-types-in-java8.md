@@ -174,17 +174,17 @@ This list is also immutable, this means adding items to it actually returns a ne
 
 # Conclusion
 
-I'm not in the business of type theory, I actually suck at it when it comes to explaining these things formally. But I can say optional feels very good in Java too, even though using Vavr.io was a better option. Vavr actually looks more like Category Theory library for Java, or at least a subset what is generally found for [Scala](https://www.scala-lang.org/).
+I'm not in the business of type theory, I actually suck at explaining these things formally. But I can say optional feels very good in Java too, even though using Vavr.io was a better choice. Vavr actually looks more like Category Theory library for Java, or at least a subset of what is generally found in [Scala](https://www.scala-lang.org/).
 
-Vavr also provide [Predicates](https://static.javadoc.io/io.vavr/vavr/0.9.2/io/vavr/Predicates.html) that can be used to do [Pattern Match](http://www.vavr.io/vavr-docs/#_pattern_matching) in Java. It's extremely ugly to pattern match with a unfriendly syntax though.
+Vavr also provide [Predicates](https://static.javadoc.io/io.vavr/vavr/0.9.2/io/vavr/Predicates.html) that can be used to do [Pattern Match](http://www.vavr.io/vavr-docs/#_pattern_matching) in Java. It's extremely ugly to pattern match with a unfriendly syntax, though.
 
-One thing to notices is that during de exercises, it was easy to hit the `StackOverflowError` wall. Of course there is some brutal recursion here and I was not giving any attention to resource use or the possibility to get a `StackOverflowError`, but the trees used for testing had no more than 3 levels, what makes things to be a bit worry.
+One thing to notice is that during the exercises, it was easy to hit the `StackOverflowError` wall. Of course there is some brutal recursion here and I was not giving any attention to resource use or the possibility to get a `StackOverflowError`, but the trees used for testing had no more than 3 levels, what makes things to be a bit worry.
 
 Of course some credit here goes to Java8 lambdas that made it much much more smooth to work with this kind of construct that otherwise would be just bizarre to implement.
 
 # Appendix - No recursion version
 
-Although serving our purpose of exploring Optional types, the thing about both algorithms is that they will always follow the size of the tree in the worst case. This can lead to a `StackOverflowError` epidemic. That is why here is a non recursive version of both algos:
+Although serving our purpose of exploring Optional types, the thing about both code above is that they will always follow the size of the tree in the worst case. This can lead to a `StackOverflowError` epidemic. That is why here is a non recursive version of both algos just for fun:
 
 ```java
     // now the search from TreeSearch is not abstract and actually implements the search...
@@ -212,7 +212,7 @@ Although serving our purpose of exploring Optional types, the thing about both a
     }
 ```
 
-All breaks down to enqueue nodes to be searched in a list. And for depth first what we need to do is to `prependAll` the child nodes, if any, to this same list while we iterate keep a look using it. The breadth does just the opposite and `appendsAll` to this list.
+All breaks down to enqueue nodes to be searched in a list. And for depth first what we need to do is to `prependAll` the child nodes, if any, to this same list while we continuously check if it is empty. The breadth does just the opposite and `appendsAll` to this list.
 
 Noticed the `getF` right there? This is an abstract method that returns a `io.vavr.Function1<T1,R>`. This means we will apply just the relevant part of the algo to the specific strategy (depth/breadth). Here are the `getF` provided by the subclasses:
 
