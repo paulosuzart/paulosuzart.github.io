@@ -36,8 +36,8 @@ This should print `5` as `upSenior` will fatally return the upcase version of th
 
 ```ruby
 def upSenior(age, name)
-  name.upcase
-end  
+  name.upcase if age > 18
+end   
 
 up = upSenior 12, "Paulo"
 puts up.size
