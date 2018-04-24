@@ -119,9 +119,11 @@ In this case `nodes` is supposed to have its first value set to the root node wr
 
 *Look, both algorithms could be implemented without Optional, and both could be implemented in a different way even using Optional. But I found this way enough for the purpose. For another version of the implementation, please refer to the Appendix of this post*
 
-# Things I didn't like in any of the algorithms
+# Things I didn't like in the sippets above
 
-In the depth first algo we saw a `null` there. Although it is there, it is contained and will not leak to cause a NPE elsewhere. This is required because `Optional#orElse` can only take a value of Node out of `Optional` context, this means that if you couldn't find the searched node on any side (left, right) you must to provide the empty version of your node, which is null (see the `Optional.ofNullable` there).
+In the depth first algo we saw a `null` there. Although it is there, it is contained and will not leak to cause a NPE elsewhere. 
+
+This is required because `Optional#orElse` can only take a value of Node out of `Optional` context, this means that if you couldn't find the searched node on any side (left, right) you must to provide the empty version of your node, which is null (see the `Optional.ofNullable` there).
 
 In the breadth first algo there is something similar going one, we don't have a explicit `null` but we have the ugly `ifPresent`, a mutable `List<Node>` and a `for` loop. There is nothing precisely wrong with neither, but if we can improve, let's improve.
 
@@ -163,34 +165,34 @@ All we have to do is filter the list of nodes (imagine a `isSearchFor` predicate
 
 Inside `checkChildren`, `children`  will be empty as soon as we reach the last leaf of the tree, so we can just return.
 
-# Where is the vavr.io List?
+# What about vavr.io List?
 
-This is funny how one can make things in Java more practical like [vavr's List](https://static.javadoc.io/io.vavr/vavr/0.9.2/io/vavr/collection/List.html). Why don't they do it in the sdk? Whatever.
+It is funny to see how certain things in Java could be more practicallike [vavr's List](https://static.javadoc.io/io.vavr/vavr/0.9.2/io/vavr/collection/List.html). Why don't they do it in the sdk? Whatever.
 
-The code above uses at least three interesting methods provided by this List. One is `filter` that is able to return a list of elements that matches your provided `Predicate`. The other one is `toOption`, where it gets the head of the list and return as a `Option` and finally, the `of` method that is able to produce a list for your with the variable arguments you pass to it.
+The code above uses at least three interesting methods provided by this List. One is `filter` that is able to return a list of elements that matches your provided `Predicate`. The other one is `toOption`, where it gets the head of the list and return as an `Option` and finally, the `of` method that is able to produce a list for your with the variable arguments you pass to it.
 
 This list is also immutable, this means adding items to it actually returns a new list. You can read more on performance of List and other provided structures [right here](http://www.vavr.io/vavr-docs/#_performance_characteristics).
 
 
 # Conclusion
 
-I'm not in the business of type theory, I actually suck at explaining these things formally. But I can say optional feels very good in Java too, even though using Vavr.io was a better choice. Vavr actually looks more like Category Theory library for Java, or at least a subset of what is generally found in [Scala](https://www.scala-lang.org/).
+I'm not in the business of type theory, I actually suck at explaining these things formally. But I can say optional feels very good in Java too, even though using Vavr.io was a better experience. Vavr actually looks more like Category Theory library for Java, or at least a subset of what is generally found in [Scala](https://www.scala-lang.org/) and other languages.
 
-Vavr also provide [Predicates](https://static.javadoc.io/io.vavr/vavr/0.9.2/io/vavr/Predicates.html) that can be used to do [Pattern Match](http://www.vavr.io/vavr-docs/#_pattern_matching) in Java. It's extremely ugly to pattern match with a unfriendly syntax, though.
+Vavr also offers [Predicates](https://static.javadoc.io/io.vavr/vavr/0.9.2/io/vavr/Predicates.html) that can be used to do [Pattern Match](http://www.vavr.io/vavr-docs/#_pattern_matching) in Java. It's extremely ugly to pattern match with a unfriendly syntax, though.
 
-One thing to notice is that during the exercises, it was easy to hit the `StackOverflowError` wall. Of course there is some brutal recursion here and I was not giving any attention to resource use or the possibility to get a `StackOverflowError`, but the trees used for testing had no more than 3 levels, what makes things to be a bit worry.
+One thing to notice is that during the exercises, it was easy to hit the `StackOverflowError` wall. Of course there is some brutal recursion here and I was not giving any attention to resource use or the possibility to get a `StackOverflowError`, but the trees used for testing had no more than 3 levels, what makes things a bit worry.
 
-Of course some credit here goes to Java8 lambdas that made it much much more smooth to work with this kind of construct that otherwise would be just bizarre to implement.
+Of course credit here goes to Java8 lambdas that made it much much more smooth to work with this kind of construct, otherwise it would be just bizarre to implement.
 
 # Appendix - No recursion version
 
-Although serving our purpose of exploring Optional types, the thing about both code above is that they will always follow the size of the tree in the worst case. This can lead to a `StackOverflowError` epidemic. That is why here is a non recursive version of both algos just for fun:
+Although serving our purpose of exploring Optional types, the thing about both codes above is that they will always follow the size of the tree in the **worst case**, specially if the tree is unbalanced. This can lead to `StackOverflowError` epidemic. That is why here is a non recursive version of both algos just for fun:
 
 ```java
-    // now the search from TreeSearch is not abstract and actually implements the search...
+    // now the search from TreeSearch#serach is not abstract and actually implements the search...
     public Option<Node> search() {
         
-        System.out.println("Breadth Started... Looking for value : " + this.searchFor);
+        System.out.println("Started... Looking for value : " + this.searchFor);
 
         List<Node> toSearch = List.of(this.root);
 
@@ -205,24 +207,24 @@ Although serving our purpose of exploring Optional types, the thing about both c
             }
 
             List<Node> nextNodes = List.of(currentNode.getLeft(), currentNode.getRight()).flatMap(n -> n);
-            toSearch = getF(nextNodes).apply(toSearch);
+            toSearch = getF(nextNodes).apply(toSearch); // uses the provided operation on the list
         }
 
         return Option.none();
     }
 ```
 
-All breaks down to enqueue nodes to be searched in a list. And for depth first what we need to do is to `prependAll` the child nodes, if any, to this same list while we continuously check if it is empty. The breadth does just the opposite and `appendsAll` to this list.
+All breaks down to enqueue in a list the nodes to be searched for. And for depth first what we need to do is to `prependAll` the child nodes, if any, to this same list while we continuously check if it is empty. The breadth does just the opposite and `appendsAll` to this list.
 
-Noticed the `getF` right there? This is an abstract method that returns a `io.vavr.Function1<T1,R>`. This means we will apply just the relevant part of the algo to the specific strategy (depth/breadth). Here are the `getF` provided by the subclasses:
+Noticed the `getF` right there? This is an abstract method that returns a `io.vavr.Function1<T1,R>`. The specific algorithm (depth/breadth) has to provide just the correct operation on the list. Here are the `getF` provided by the subclasses:
 
 ```java
-    // for depth
+    // for depth first
     @Override
     protected Function1<List<Node>, List<Node>> getF(List<Node> nodes) {
         return (l) -> l.prependAll(nodes);
     }
-    // For breadth
+    // For breadth first
     @Override
     protected Function1<List<Node>, List<Node>> getF(List<Node> nodes) {
         return (l) -> l.appendAll(nodes);
