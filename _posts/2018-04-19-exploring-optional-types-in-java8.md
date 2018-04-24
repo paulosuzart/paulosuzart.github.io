@@ -10,9 +10,12 @@ I guess it is the first post on Java since [my last post on it back in 2010](htt
 
 In this posts we'll also see [vavr](vavr.io) `Option` type and `List`!
 
+
 <!--more-->
 
 **TL;DR - if you want just the final code of the post, please check [master](https://github.com/paulosuzart/tree-search/tree/master/src/main/java/com/alice) for java Optional use, [vavr](https://github.com/paulosuzart/tree-search/tree/vavr/src/main/java/com/alice) for Vavr Option use and [norec](https://github.com/paulosuzart/tree-search/tree/norec) for a version with Vavr but no recursion involved**
+
+***Disclaimer 1:** This post is not intended to diminish Java, its standard API, nor to compare in detail/offer Vavr.io lib as alternative to Optional or List, etc; **Disclaimer 2:** Also bear that, as pointed out on the text to follow, there are many other ways to implement what was exposed here even without Optional types at all (it may include Java Streams or whatever you can imagine here); **Disclaimer 3:** Optional Types here are being used (in the `master` and vavr `branches`) as input types intentionally for the sake of exploration, don't take it as a rule.*
 
 # Billion dollars mistake
 
