@@ -8,7 +8,7 @@ categories: [ java ]
 
 I guess it is the first post on Java since [my last post on it back in 2010](https://codemountain.wordpress.com/category/java/). It's been 8 years since then and it's been 6 years since I switched from Java to Groovy and then to Python/Node(Typescript). But let's see how implementing Binary Tree Depth and Breadth Search feels like using Java8 lambdas, [Optional](https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html) and things related.
 
-In this posts we'll also see [vavr](vavr.io) `Option` type and `List`!
+In this posts we'll also see [vavr](http://www.vavr.io/) `Option` type and `List`!
 
 
 <!--more-->
