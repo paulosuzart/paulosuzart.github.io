@@ -126,7 +126,13 @@ But how invalid requests to our service provider are being handled? The code loo
 
 In this case our Hystrix command returns a `JsonNode` in case of success call and all our service does is extract the temperature field from the returning json. Notice that the command could be returning the AssyncHttp `Response` for example. It is up to the scenario to choose the best option and decide where we want to rely on Hystrix features. In this case the command also has a fallback to return a empty `Observable`  for failed requests.
 
-Now if you have cloned the repo and have started the app, just `curl [http://localhost:8080/weather/avg?cities=Berlin&cities=London](http://localhost:8080/weather/avg?cities=Berlin&cities=London)` and you should see something like: `{"cities":["Berlin","London"],"avg":289.685}`.
+Now if you have cloned the repo and have started the app, just do a 
+
+```
+curl http://localhost:8080/weather/avg?cities=Berlin&cities=London
+``` 
+
+and you should see something like: `{"cities":["Berlin","London"],"avg":289.685}`.
 
 # Conclusion
 
