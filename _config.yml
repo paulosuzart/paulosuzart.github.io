@@ -2,6 +2,7 @@ title:        Paulo Suzart
 tagline:      'my blog at github.io'
 description:  'Functional programming and a bit of a lot.'
 version:      1.1.1
+baseUrl: https://paulosuzart.github.io
 owner:
   name:       'Paulo Suzart'
   job:        'FP and more'
