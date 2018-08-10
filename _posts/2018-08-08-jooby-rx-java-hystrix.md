@@ -136,6 +136,8 @@ and you should see something like: `{"cities":["Berlin","London"],"avg":289.685}
 
 # Conclusion
 
+The whole code is available in [this repository](https://github.com/paulosuzart/rx-jooby-weather).
+
 Simple like that! Sometimes I see projects like Jooby or [Javalin](https://javalin.io/) as the new Spring. Remember 10 years ago when JEE was so bloated, heavy and confusing and everybody liked how Spring was tackling the Enterprise Software challenge? Today we have Spring still as a great option but new players are getting to the market what is great!
 
 In today's software world something like Hystrix, [Istio](https://istio.io/) and others are becoming the common case. There is a Hystrix inspired lib for Node.js as well, it's called [hystrixjs](https://www.npmjs.com/package/hystrixjs).
