@@ -54,6 +54,8 @@ Then we register our single controller of our service using `eng.router()` and t
 
 Using `env.lifeCycle` to handle service instantiation/register allows use to use `@PostConstruct` and `@PreDestroy` in our services.
 
+There is a custom error handling here. In case of failures (see below), the hystrix command will fallback to an empty `Observable` and if all requests to our weather data provide fails, there will be nothing to compute. In this case a `IllegalArgumentException` by the average double operator.
+
 To bind everything together our jooby application is super simple. It registers the [Rx](https://jooby.org/doc/rxjava/) module, the [Jackson](https://jooby.org/doc/jackson/) module and finally our own module.
 
 ```java
