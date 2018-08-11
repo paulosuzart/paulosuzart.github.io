@@ -8,7 +8,7 @@ categories: [ java ]
 
 RxJava is an implementation of [ReactiveX](http://reactivex.io/), the ubiquitus API for dealing with reactive streams. There are much more languages supporting the API, including .NET, Scala and Others.
 
-Combine with lightweight and modular web frameworks  like [Jooby](https://jooby.org/), we may be facing one of the best combos possible nowadays. Add to this recipe a good circuit breaker and you are good to go. Let's take a quick look.
+Combine it with lightweight and modular web frameworks like [Jooby](https://jooby.org/), and we may be facing one of the best combos possible nowadays. Add to this recipe a good circuit breaker and you are good to go. Let's take a quick look.
 
 <!--more-->
 
