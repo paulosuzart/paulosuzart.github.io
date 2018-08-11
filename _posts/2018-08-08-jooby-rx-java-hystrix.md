@@ -28,12 +28,18 @@ Jooby works with Guice for Dependency Injection. So let's create a Jooby Module 
 public class WeatherModule implements Jooby.Module {
 
     @Override
-    public void configure(Env env, Config conf, Binder binder) throws Throwable {
+    public void configure(Env env, Config conf, Binder binder) {
         binder.bind(AsyncHttpClient.class).toInstance(asyncHttpClient());
         env.router().use(WeatherAvgController.class);
 
         env.lifeCycle(WeatherAvgService.class);
         env.lifeCycle(WeatherClient.class);
+
+        env.router().err(IllegalArgumentException.class, (req, res, err) -> {
+            log.error("Unable to process request due to: {}", err.getCause().getMessage());
+            res.send(Results.with(new UnableToProcessMessage(), Status.BAD_REQUEST));
+        });
+
         env.onStop(registry -> {
             AsyncHttpClient client = registry.require(AsyncHttpClient.class);
             client.close();
@@ -45,6 +51,8 @@ public class WeatherModule implements Jooby.Module {
 We first bind a instance of `AsyncHttpClient` to a instance provided by the excelent [AsyncHttpClient](https://github.com/AsyncHttpClient/async-http-client) Dsl itself (see `asuncHttpClient`). Notice a jooby lifecycle listener closing the `AsyncHttpClient` on shutdown.
 
 Then we register our single controller of our service using `eng.router()` and to sum up, we register our two services `WeatherAvgService` and `WeatherClient`, responsible for doing the calculation and for fetching the current weather information by city respectively.
+
+Using `env.lifeCycle` to handle service instantiation/register allows use to use `@PostConstruct` and `@PreDestroy` in our services.
 
 To bind everything together our jooby application is super simple. It registers the [Rx](https://jooby.org/doc/rxjava/) module, the [Jackson](https://jooby.org/doc/jackson/) module and finally our own module.
 
@@ -111,7 +119,7 @@ Again, we could have accumulated the cities and the average in a different way, 
 
 # The Hystrix Command
 
-But how invalid requests to our service provider are being handled? The code looks plain with few or no handling of errors at all. The trick is in our `weatherClient` that uses Hystrix to handle that. Take a look:
+But how invalid requests to our service provider are being handled? The code looks plain with few or no handling of errors at all. The trick is in our `weatherClient` that uses a Hystrix Command to handle that. Take a look:
 
 ```java
 // WeatherClient.java
@@ -124,6 +132,8 @@ But how invalid requests to our service provider are being handled? The code loo
     }
 ```
 
+Please check the command implementation with fallback: [WeatherCommand](https://github.com/paulosuzart/rx-jooby-weather/blob/master/src/main/java/suzart/jooby/clients/openwheather/WeatherCommand.java).
+
 In this case our Hystrix command returns a `JsonNode` in case of success call and all our service does is extract the temperature field from the returning json. Notice that the command could be returning the AssyncHttp `Response` for example. It is up to the scenario to choose the best option and decide where we want to rely on Hystrix features. In this case the command also has a fallback to return a empty `Observable`  for failed requests.
 
 Now if you have cloned the repo and have started the app, just do a 
@@ -132,7 +142,14 @@ Now if you have cloned the repo and have started the app, just do a
 curl http://localhost:8080/weather/avg?cities=Berlin&cities=London
 ``` 
 
-and you should see something like: `{"cities":["Berlin","London"],"avg":289.685}`.
+and you should see something like: 
+
+```json
+{
+    "cities":["Berlin","London"],
+    "avg":289.685
+}
+```
 
 # Conclusion
 
