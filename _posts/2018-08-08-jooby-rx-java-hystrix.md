@@ -91,7 +91,7 @@ Nice and clean controller with appropriate injection of our service. The service
 
 # The service
 
-The trick here is that we need to hold the list of cities returning temperatures whilst let Rx compute the average. There are may ways to do this, but for learning purposes, let's use the more didactic although not necessarely the best:
+The trick here is that we need to hold the list of cities returning temperatures whilst let Rx compute the average. There are many ways to do this, but for learning purposes, let's use the didactic although not necessarily the best:
 
 ```java
 // WeatherAvgService.java
@@ -105,10 +105,10 @@ The trick here is that we need to hold the list of cities returning temperatures
             Observable<Double> temperatures = Observable.from(temperatureResults).map(TemperatureResult::getTemperature);
             Observable<List<String>> validCities = Observable.from(temperatureResults).map(TemperatureResult::getCity).toList();
 
-            Observable<Double> doubleObservable =
+            Observable<Double> avgObservable =
                     MathObservable
                             .averageDouble(temperatures);
-            return doubleObservable.zipWith(validCities, (avg, c) -> new AvgResult(c, avg));
+            return avgObservable.zipWith(validCities, (avg, citiesList) -> new AvgResult(c, avg));
         });
     }
 ```
