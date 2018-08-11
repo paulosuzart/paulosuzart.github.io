@@ -104,13 +104,20 @@ The trick here is that we need to hold the list of cities returning temperatures
                 .flatMap(weatherClient::getTemperatureByCityName);
 
         return results.toList().flatMap(temperatureResults -> {
-            Observable<Double> temperatures = Observable.from(temperatureResults).map(TemperatureResult::getTemperature);
-            Observable<List<String>> validCities = Observable.from(temperatureResults).map(TemperatureResult::getCity).toList();
+            Observable<Double> temperatures = Observable
+                .from(temperatureResults)
+                .map(TemperatureResult::getTemperature);
+
+            Observable<List<String>> validCities = Observable
+                .from(temperatureResults)
+                .map(TemperatureResult::getCity).toList();
 
             Observable<Double> avgObservable =
                     MathObservable
                             .averageDouble(temperatures);
-            return avgObservable.zipWith(validCities, (avg, citiesList) -> new AvgResult(c, avg));
+            
+            return avgObservable
+                .zipWith(validCities, (avg, citiesList) -> new AvgResult(c, avg));
         });
     }
 ```
