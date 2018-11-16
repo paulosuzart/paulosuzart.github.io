@@ -13,9 +13,9 @@ You probably know I come from Java world. Did JVM stuff from 2004 to 2016 withou
 
 # Intro 
 
-Although extremely slow JVM startup time, poor ecosystem and crazy build tools, Java (and here I extend to Kotlin and Scala) provide good type systems with support for OO and FP styles. This may be seem as a slow down to productivity at first, but as you repeatedly work with dynamic langs like Python and ES6, the productivity you have for not carrying about types can escalate and become a burden if you have bit less documentation and bit less testing.
+Although extremely slow JVM startup time, poor ecosystem and crazy build tools, Java (and here I extend to Kotlin and Scala) provide good type systems with support for OO and FP styles. This may be seen as a slow down to productivity at first, but as you repeatedly work with dynamic langs like Python and ES6, the productivity you have for not carrying about types can escalate and become a burden if you have bit less documentation and bit less testing.
 
-Working at [datacloud.ai](datacloud.ai), a product entirely written in Node.js, allowed us to try pure ES6, ES6 + [Facebook's Flow](https://flow.org/) and lately, our main API with [TypeScript](https://www.typescriptlang.org). Lets checkout.
+Working at datacloud.ai (a now extinct project), a product entirely written in Node.js, allowed us to try pure ES6, ES6 + [Facebook's Flow](https://flow.org/) and lately, our main API with [TypeScript](https://www.typescriptlang.org). Lets how it went for us.
 
 # ORM
 
