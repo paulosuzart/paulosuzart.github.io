@@ -20,7 +20,7 @@ highlighter:  rouge
 # paginate_path: '/blog/pages/page:num/'
 tracking_id : 'UA-26676810-1'
 disqus_short_name: paulosuzartblog
-gems:
+plugins:
   - jekyll-gist
   - jekyll-paginate
   - jekyll-feed
