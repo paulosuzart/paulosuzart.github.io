@@ -122,9 +122,11 @@ That's why `connect` actually merges the `targetURL` but `Matches` the `sourceUR
 
 The code for this post is available in this [GitHub Repo](https://github.com/paulosuzart/goneo-example). Running should be as simple as cloning the repo, issuing a `go build` and then `./goneo`.
 
-Don't forget to do a `docker-compose up` in another terminal so neo4j is availabe for you at (http://localhost:7474/browser/)[http://localhost:7474/browser/].
+Don't forget to do a `docker-compose up` in another terminal so neo4j is availabe for you at [http://localhost:7474/browser/](http://localhost:7474/browser/).
 
-After running the application neo4j should show something like this [Imgur](https://i.imgur.com/QvJ7qOU.png).
+After running the application neo4j should show something like this:
+![](https://i.imgur.com/QvJ7qOU.png =250x)
+
 
 # Conclusion
 
