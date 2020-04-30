@@ -149,7 +149,7 @@ The full implementation you find on [this gist](https://gist.github.com/paulosuz
 
 # Conclusion
 
-Code challenges is something I'm not a big fan of. I myself avoid applying these metal-cold code challenges and prefer code questions where a detailed discussion is enough to find a solution then you iterate with the candidate. It's more humane, more respectful and you better understand the candidate. But given the feedback I got, it turned into a matter of honour to implement this, and if some day they see it, nice, if not, it's my peace of mind that counts.
+Code challenge is something I'm not a big fan of. I myself avoid applying these metal-cold code challenges and prefer code questions where a detailed discussion is enough to find a solution then you iterate with the candidate. It's more humane, more respectful and you better understand the candidate. But given the feedback I got, it turned into a matter of honour to implement this, and if some day they see it, nice, if not, it's my peace of mind that counts.
 
 
 [morse]: https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/International_Morse_Code.svg/186px-International_Morse_Code.svg.png
