@@ -135,7 +135,7 @@ If there is more than one match, the result order is preserved by the walk in de
 
 # Conclusion
 
-Code challenges is something I'm, not a big fan of. I myself avoid applying this metal cold code challenge and prefer code questions where a discussion is enough to find a solution then you iterate with the candidate. It's more humane, more respectful and you better understand the candidate. But given the feedback I god, it turned a matter of honour to implement this right and if some day they see it, nice, if not, it's my peace of mind that counts.
+Code challenges is something I'm not a big fan of. I myself avoid applying these metal-cold code challenges and prefer code questions where a detailed discussion is enough to find a solution then you iterate with the candidate. It's more humane, more respectful and you better understand the candidate. But given the feedback I got, it turned into a matter of honour to implement this, and if some day they see it, nice, if not, it's my peace of mind that counts.
 
 
 [morse]: https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/International_Morse_Code.svg/186px-International_Morse_Code.svg.png
