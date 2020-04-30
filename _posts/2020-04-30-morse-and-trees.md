@@ -14,6 +14,7 @@ Hello again! After more than a year without posting, here I am. This time I talk
    * [Morse code](#morse-code)
    * [The tree](#the-tree)
    * [Searching](#searching)
+   * [The Optimized Search](#the-optimized-search)
    * [Conclusion](#conclusion)
 
 # The code challenge
@@ -55,19 +56,21 @@ You can store the full `morse` sequence that represents a char, the english `sym
 But remember that the order of morse code is not the same as the english alphabet and it's defined by it's prefixes, and ultimately it is how the tree must be structured. A good way to insert nodes in this tree can be:
 
 ```java
-  Signal insert(String signal, char alpha) {
-      Signal currentNode = root; // root of the tree
+    private Signal insert(String signal, char alpha) {
+      Signal currentNode = root;
       for (int i = 0; i < signal.length(); i++) {
         var step = signal.charAt(i);
 
         if (step == '.') {
           if (isNull(currentNode.dot)) {
             currentNode.dot = new Signal();
+            currentNode.dot.morse = signal.substring(0, i + 1);
           }
           currentNode = currentNode.dot;
         } else {
           if (isNull(currentNode.dash)) {
             currentNode.dash = new Signal();
+            currentNode.dash.morse = signal.substring(0, i + 1);
           }
           currentNode = currentNode.dash;
         }
@@ -129,27 +132,75 @@ A depth first search is no more than a stack of nodes waiting to be visited (her
 
 But what to check? The noise requires a regex match, thus we replace any `?` by `[-|\.]`. This way we cover all combinations. Also remember to escape the `.` and make it a `\.`.
 
-Then we go node by node checking if the pattern apply to it. We can optimize a bit by doing two things: one is match only if the size is the same of the `signal` because there's no point in matching `.` against `...` for example. Another optimization is stacking for visit only nodes that make sense, that is nodes that can be slipt by the pattern. But for the challenge this is more then enough.
-
 If there is more than one match, the result order is preserved by the walk in depth search order. After you search you can find the expected results:
 
+But this solution is not optimal. If you think for a moment, running a regex match will cause a increase in time complexity, plus adding to `toSearch` stack nodes you actually don't need to visit will also waste time. How to optimize this?
+
+# The Optimized Search
+
+Many optimizations can imply shaving array positions instead of relying on higher level methods. Sounds terrifying but the improvement is quite straightforward.
+
+```java
+  List<Signal> fuzzyMatch(String signal) {
+      var result = new ArrayList<Signal>();
+      var toSearch = new LinkedList<Signal>();
+
+      toSearch.add(root);
+
+      while (!toSearch.isEmpty()) {
+        Signal curr = toSearch.remove(0);
+
+        if (curr.morse.length() == signal.length()) {
+          result.add(curr);
+          continue;
+        }
+
+        if (signal.charAt(curr.morse.length()) == '.') {
+          addToSearch(toSearch, curr.dot, signal);
+        } else if (signal.charAt(curr.morse.length()) == '-') {
+          addToSearch(toSearch, curr.dash, signal);
+        } else {
+          addToSearch(toSearch, curr.dash, signal);
+          addToSearch(toSearch, curr.dot, signal);
+        }
+      }
+      return result;
+    }
 ```
-.      ==> Expect E = [E]
-?      ==> Expect E or T = [E, T]
-..-    ==> Expect U = [U]
-.??    ==> Expect S, U, R, W = [S, U, R, W]
-.--    ==> Expect W = [W]
-?.     ==> Expect I or N = [I, N]
-.?     ==> Expect I or A = [I, A]
-..--.. ==> Expect ? = [?]
-..-.   ==> Expect F = [F]
+We again start using the `root` node as the first node in our. The first comparison sounds strange but it only blindly compares if the size of the morse is the same size of the searched morse. But if the remaining of the method is correct we can rest assured only nodes that make sense are visited, thus only the size matters.	
+
+Finally the fuzzy magic. If the signal at the position of the current `morse` length is a `.` then go for it. Same if `-` or go visit both if the it's a noise `?`.
+
+In fact the optimized version is much simpler than the version that uses regex and sounds to be saving a lot of time.
+
+By peeking the next value to be matched in a signal we make sure to do a prefix search instead of a Depth First Search. This it's much more optimized.
+
+Let's try some  examples:
+```
+.      Expect E = [E]
+?      Expect E or T = [E, T]
+..-    Expect U = [U]
+.??    Expect S, U, R, W = [S, U, R, W]
+.--    Expect W = [W]
+?.     Expect I or N = [I, N]
+.?     Expect I or A = [I, A]
+..--.. Expect ? = [?]
+..-.   Expect F = [F]
+..---  Expect 2 = [2]
+---..  Expect 8 = [8]
+----.  Expect 9 = [9]
+-----  Expect 0 = [0]
+----?  Expect 9 or 0 = [9, 0]
+
 ```
 
-The full implementation you find on [this gist](https://gist.github.com/paulosuzart/9bb8b4944fb01cdbdaaf72358c52ff1c).
+The full implementation you find on [this gist](https://gist.github.com/paulosuzart/9bb8b4944fb01cdbdaaf72358c52ff1c). The gist includes an optimized version not using regex. This version is slightly more complex to explain but the optimization lies in the fact that only nodes sharing a prefix are visited, plus no regex is used and only the length of the prefix is used to match the signals.
 
 # Conclusion
 
 Code challenge is something I'm not a big fan of. I myself avoid applying these metal-cold code challenges and prefer code questions where a detailed discussion is enough to find a solution then you iterate with the candidate. It's more humane, more respectful and you better understand the candidate. But given the feedback I got, it turned into a matter of honour to implement this, and if some day they see it, nice, if not, it's my peace of mind that counts.
+
+A good understanding of a problem, an equally important, the understanding of the solution can take time. If you check the [gist history](https://gist.github.com/paulosuzart/9bb8b4944fb01cdbdaaf72358c52ff1c/revisions) you'll see dozens of revisions over couple days. As you understand you are able to optimize and fore see conditions that can compromise performance, space or 
 
 
 [morse]: https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/International_Morse_Code.svg/186px-International_Morse_Code.svg.png
