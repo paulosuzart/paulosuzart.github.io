@@ -55,7 +55,7 @@ You can store the full `morse` sequence that represents a char, the english `sym
 But remember that the order of morse code is not the same as the english alphabet and it's defined by it's prefixes. An ultimately is how the tree must be structured. A good possible way to insert node in this tree can be:
 
 ```java
- private Signal insert(String signal, char alpha) {
+  Signal insert(String signal, char alpha) {
       Signal currentNode = root; // root of the tree
       for (int i = 0; i < signal.length(); i++) {
         var step = signal.charAt(i);
@@ -90,7 +90,7 @@ This makes our insert a prefix search by itself. We continue to follow the tree 
 If a `?` are found, `?` need to be replaced by all possible combinations of `.` and `-`. Instead of generating all the combinations let's use regex for that in our search.
 
 ```java
-private void addToSearch(LinkedList<Signal> signals, Signal node) {
+    void addToSearch(LinkedList<Signal> signals, Signal node) {
       if (isNull(node)) {
         return;
       }
@@ -105,13 +105,13 @@ private void addToSearch(LinkedList<Signal> signals, Signal node) {
       toSearch.addLast(root.dash);
 
       var isFuzzy = signal.contains(FUZZY_SIGNAL);
-      var pattern = Pattern.compile(signal.replace(".", "\\.")
+      var pattern = Pattern.compile(signal.replace(".", "\\.") 
         .replace(FUZZY_SIGNAL, "[-|\\.]"));
 
       while (!toSearch.isEmpty()) {
         Signal curr = toSearch.remove(0);
         if (Objects.nonNull(curr.morse) && 
-		   pattern.matcher(curr.morse).matches()) {
+		    pattern.matcher(curr.morse).matches()) {
           result.add(curr);
           if (!isFuzzy) {
             break;
