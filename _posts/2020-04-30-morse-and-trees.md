@@ -33,7 +33,7 @@ If you check the alphabet in morse you'll notice a kinda of prefix structure.
 ![Morse code][morse] 
 ![Morse tree][morse-tree] 
 
-Everything starts from `E`, that is encoded as `.` and go on by adding left node if the next signal is a `.` (see `I`, `..`), or to the right if the next signal is a `-` (see `A`, `.-`). The images make it very clear.
+Everything starts from a root node that points to `E` that is encoded as `.`, and `T` that is encoded as `-`. The structure and goes on by adding a left node if the next signal is a `.` (see `I` for example, `..`), or to the right if the next signal is a `-` (see `A`, `.-`). The images make it very clear.
 
 So we have a tree where each node shares a prefix with the parent node. Not always though, if you check the three you'll notice a empty node after `R`, but it still point to `+` node. So empty nodes are fine and actually needed.
 
