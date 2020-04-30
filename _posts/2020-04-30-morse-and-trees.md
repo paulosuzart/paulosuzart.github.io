@@ -167,7 +167,7 @@ Many optimizations can imply shaving array positions instead of relying on highe
       return result;
     }
 ```
-We again start using the `root` node as the first node in our. The first comparison sounds strange but it only blindly compares if the size of the morse is the same size of the searched morse. But if the remaining of the method is correct we can rest assured only nodes that make sense are visited, thus only the size matters.	
+We again start using the `root` node as the first node in our stack for search. The first comparison sounds strange but it only blindly compares if the size of the morse is the same size of the searched morse. But if the remaining of the method is correct we can rest assured only nodes that make sense are visited, thus only the size matters.	
 
 Finally the fuzzy magic. If the signal at the position of the current `morse` length is a `.` then go for it. Same if `-` or go visit both if the it's a noise `?`.
 
