@@ -155,13 +155,16 @@ Many optimizations can imply shaving array positions instead of relying on highe
           continue;
         }
 
-        if (signal.charAt(curr.morse.length()) == '.') {
-          addToSearch(toSearch, curr.dot, signal);
-        } else if (signal.charAt(curr.morse.length()) == '-') {
-          addToSearch(toSearch, curr.dash, signal);
-        } else {
-          addToSearch(toSearch, curr.dash, signal);
-          addToSearch(toSearch, curr.dot, signal);
+        switch (signal.charAt(curr.morse.length())) {
+          case '.':
+            addToSearch(toSearch, curr.dot);
+            break;
+          case '-':
+            addToSearch(toSearch, curr.dash);
+            break;
+          default:
+            addToSearch(toSearch, curr.dash);
+            addToSearch(toSearch, curr.dot);
         }
       }
       return result;
