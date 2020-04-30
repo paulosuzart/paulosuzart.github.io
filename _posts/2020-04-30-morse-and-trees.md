@@ -131,7 +131,21 @@ But what to check? The noise requires a regex match, thus we replace any `?` by 
 
 Then we go node by node checking if the pattern apply to it. We can optimize a bit by doing two things: one is match only if the size is the same of the `signal` because there's no point in matching `.` against `...` for example. Another optimization is stacking for visit only nodes that make sense, that is nodes that can be slipt by the pattern. But for the challenge this is more then enough.
 
-If there is more than one match, the result order is preserved by the walk in depth search order. 
+If there is more than one match, the result order is preserved by the walk in depth search order. After you search you can find the expected results:
+
+```
+. ==> Expect E = [E]
+? ==> Expect E or T = [E, T]
+..- ==> Expect U = [U]
+.?? ==> Expect S, U, R, W = [S, U, R, W]
+.-- ==> Expect W = [W]
+?. ==> Expect I or N = [I, N]
+.? ==> Expect I or A = [I, A]
+..--.. ==> Expect ? = [?]
+..-. ==> Expect F = [F]
+```
+
+The full implementation you find on [this gist](https://gist.github.com/paulosuzart/9bb8b4944fb01cdbdaaf72358c52ff1c).
 
 # Conclusion
 
