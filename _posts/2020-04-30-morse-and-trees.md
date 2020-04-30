@@ -43,8 +43,8 @@ The visualization of the tree you find above. A possible way to encode a node of
 
 ```java
   class Signal {
-    String morse;
-    String symbol;
+    String morse; // ex "..-"
+    String symbol; // ex "U"
     Signal dash;
     Signal dot;
   }
@@ -52,7 +52,7 @@ The visualization of the tree you find above. A possible way to encode a node of
 
 You can store the full `morse` sequence that represents a char, the english `symbol` and the two pointers to the next morse nodes.
 
-But remember that the order of morse code is not the same as the english alphabet and it's defined by it's prefixes. An ultimately is how the tree must be structured. A good possible way to insert node in this tree can be:
+But remember that the order of morse code is not the same as the english alphabet and it's defined by it's prefixes, and ultimately it is how the tree must be structured. A good way to insert nodes in this tree can be:
 
 ```java
   Signal insert(String signal, char alpha) {
