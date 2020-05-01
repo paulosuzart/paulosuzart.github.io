@@ -35,7 +35,7 @@ If you check the alphabet in morse you'll notice a kinda of prefix structure.
 
 Everything starts from a root node that points to `E` that is encoded as `.`, and `T` that is encoded as `-`. The structure and goes on by adding a left node if the next signal is a `.` (see `I` for example, `..`), or to the right if the next signal is a `-` (see `A`, `.-`). The images make it very clear.
 
-So we have a tree where each node shares a prefix with the parent node. Not always though, if you check the three you'll notice a empty node after `R`, but it still point to `+` node. So empty nodes are fine and actually needed.
+So we have a tree where each node shares a prefix with the parent node. Even when there's not english char representation for that node. For example notice an empty node after `R`, it still point to `+` node.
 
 # The tree
 
