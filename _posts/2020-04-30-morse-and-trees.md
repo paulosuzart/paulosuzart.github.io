@@ -14,7 +14,6 @@ Hello again! After more than a year without posting, here I am. This time I talk
    * [Morse code](#morse-code)
    * [The tree](#the-tree)
    * [Searching](#searching)
-   * [The Optimized Search](#the-optimized-search)
    * [Conclusion](#conclusion)
 
 # The code challenge
@@ -51,7 +50,7 @@ The visualization of the tree you find above. A possible way to encode a node of
   }
 ```
 
-You can store the full `morse` sequence that represents a char, the english `symbol` and the two pointers to the next morse nodes.
+You can store the full `morse` sequence that represents a char, the english `symbol` and the two pointers to the next predecessor and successor morse nodes.
 
 But remember that the order of morse code is not the same as the english alphabet and it's defined by it's prefixes, and ultimately it is how the tree must be structured. A good way to insert nodes in this tree can be:
 
@@ -82,63 +81,15 @@ But remember that the order of morse code is not the same as the english alphabe
   }
 ```
 
-The code challenge provided a set of morse codes and their respective english symbols in alphabet order. What this insert will do is go character by character of a morse being inserted and create, if needed, a node `Signal` for each character. This way, the first element inserted `.-` (`A`) would create two nodes. one for `.` and one for `.-`, the later being filled with `A` information. 
+The code challenge provided a set of morse codes and their respective english symbols in english alphabet order. What this insert will do is go character by character of a morse being inserted and create, if needed, a node `Signal` for each character prefix. This way, the first element inserted `.-` (`A`) would create two nodes. one for `.` and one for `.-`, the later being filled with `A` information. 
 
-Then when the letter `E` is inserted, it's empty node already exist and is assigned to `currentNode` and then filled in. We then end up with a nice tree precisely like the one above.
+When the letter `E` is inserted, its empty node already exist and is assigned to `currentNode` and then filled in. We then end up with a nice tree precisely like the one above.
 
 # Searching
 
-This makes our insert a prefix search by itself. We continue to follow the tree character by character to the left (`.`) or to the right (`-`) depending on what we ant to insert. But our friends of the challenge made things a bit worse. A noise, namely a `?` in the midst of a signal`, pushes us to different waters.
+This makes our insert a sort of binary search where the order of elements is determined by it's prefix. We continue to follow the tree character by character to the left (`.`) or to the right (`-`) depending on what we want to insert. But our friends of the challenge made things a bit challenging. A noise, namely a `?`, in the midst of a signal`, pushes us to different waters when we want to search.
 
-If a `?` are found, `?` need to be replaced by all possible combinations of `.` and `-`. Instead of generating all the combinations let's use regex for that in our search.
-
-```java
-    void addToSearch(LinkedList<Signal> signals, Signal node) {
-      if (isNull(node)) {
-        return;
-      }
-      signals.addFirst(node);
-    }
-
-    List<Signal> fuzzyMatch(String signal) {
-      List<Signal> result = new ArrayList<>();
-      LinkedList<Signal> toSearch = new LinkedList<>();
-
-      toSearch.addFirst(root.dot);
-      toSearch.addLast(root.dash);
-
-      var isFuzzy = signal.contains(FUZZY_SIGNAL);
-      var pattern = Pattern.compile(signal.replace(".", "\\.") 
-        .replace(FUZZY_SIGNAL, "[-|\\.]"));
-
-      while (!toSearch.isEmpty()) {
-        Signal curr = toSearch.remove(0);
-        if (Objects.nonNull(curr.morse) && 
-		    pattern.matcher(curr.morse).matches()) {
-          result.add(curr);
-          if (!isFuzzy) {
-            break;
-          }
-        }
-        addToSearch(toSearch, curr.dash);
-        addToSearch(toSearch, curr.dot);
-      }
-
-      return result;
-    }
-```
-
-A depth first search is no more than a stack of nodes waiting to be visited (here represented by an `ArrayList`). You stack on top (in this case `addFirst`) the nodes that you wanna visit. As usual we start with the two immediate possible nodes to visit, the children of `root`.
-
-But what to check? The noise requires a regex match, thus we replace any `?` by `[-|\.]`. This way we cover all combinations. Also remember to escape the `.` and make it a `\.`.
-
-If there is more than one match, the result order is preserved by the walk in depth search order. After you search you can find the expected results:
-
-But this solution is not optimal. If you think for a moment, running a regex match will cause a increase in time complexity, plus adding to `toSearch` stack nodes you actually don't need to visit will also waste time. How to optimize this?
-
-# The Optimized Search
-
-Many optimizations can imply shaving array positions instead of relying on higher level methods. Sounds terrifying but the improvement is quite straightforward.
+If a `?` are found, `?` need to be replaced by all possible combinations of `.` and `-`. Instead of generating all the combinations and triggering a new search for each, our search algorithm is a binary search with a fork possibility whenever it sees a `?`.
 
 ```java
   List<Signal> fuzzyMatch(String signal) {
@@ -170,15 +121,13 @@ Many optimizations can imply shaving array positions instead of relying on highe
       return result;
     }
 ```
-We again start using the `root` node as the first node in our stack for search. The first comparison sounds strange but it only blindly compares if the size of the morse is the same size of the searched morse. But if the remaining of the method is correct we can rest assured only nodes that make sense are visited, thus only the size matters.	
+Like insert, We again start using the `root` node as the first node in our stack. The first comparison sounds strange but it only blindly compares if the size of the morse in the current node is the same size of the searched morse `signal`. And if the remaining of the algo fine we can rest assured only nodes that make sense are visited, thus only the size matters.	
 
-Finally the fuzzy magic. If the signal at the position of the current `morse` length is a `.` then go for it. Same if `-` or go visit both if the it's a noise `?`.
+Finally the fuzzy magic. If the signal at the position of the current `morse` length is a `.` then go for it. Same if `-` or go visit both if the it's a noise `?`. This is the only difference from a [binary search in a ordered binary tree](https://en.wikipedia.org/wiki/Binary_search_tree#Searching).
 
-In fact the optimized version is much simpler than the version that uses regex and sounds to be saving a lot of time.
+This hack is also a good way to not have to sort the result after a search because search walks the tree in order. Imagine if you replace any `?` by all combinations possible and do a search for each. You would have to implement a way to sort the results of the search what, although possible using the idea of successors and predecessors, would result much more complex and longer.
 
-By peeking the next value to be matched in a signal we make sure to do a prefix search instead of a Depth First Search. This it's much more optimized.
-
-Let's try some  examples:
+Let's give it a try:
 ```
 .      Expect E = [E]
 ?      Expect E or T = [E, T]
@@ -197,13 +146,13 @@ Let's try some  examples:
 
 ```
 
-The full implementation you find on [this gist](https://gist.github.com/paulosuzart/9bb8b4944fb01cdbdaaf72358c52ff1c). The gist includes an optimized version not using regex. This version is slightly more complex to explain but the optimization lies in the fact that only nodes sharing a prefix are visited, plus no regex is used and only the length of the prefix is used to match the signals.
+The full implementation you find on [this gist](https://gist.github.com/paulosuzart/9bb8b4944fb01cdbdaaf72358c52ff1c).
 
 # Conclusion
 
 Code challenge is something I'm not a big fan of. I myself avoid applying these metal-cold code challenges and prefer code questions where a detailed discussion is enough to find a solution then you iterate with the candidate. It's more humane, more respectful and you better understand the candidate. But given the feedback I got, it turned into a matter of honour to implement this, and if some day they see it, nice, if not, it's my peace of mind that counts.
 
-A good understanding of a problem, an equally important, the understanding of the solution can take time. If you check the [gist history](https://gist.github.com/paulosuzart/9bb8b4944fb01cdbdaaf72358c52ff1c/revisions) you'll see dozens of revisions over couple days. As you understand you are able to optimize and fore see conditions that can compromise performance, space or 
+A good understanding of a problem, an equally important, the understanding of the solution can take time. If you check the [gist history](https://gist.github.com/paulosuzart/9bb8b4944fb01cdbdaaf72358c52ff1c/revisions) you'll see dozens of revisions over couple days. As you understand both the problem and the solution, you are able to optimize and foresee conditions that can compromise performance, space or the readability of the solution. I confess the `?` noise got me. Was enough to blur my brain around a simple solution. But now it's done!
 
 
 [morse]: https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/International_Morse_Code.svg/186px-International_Morse_Code.svg.png
