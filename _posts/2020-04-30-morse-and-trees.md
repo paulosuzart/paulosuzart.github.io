@@ -89,7 +89,7 @@ When the letter `E` is inserted, its empty node already exist and is assigned to
 
 This makes our insert a sort of binary search where the order of elements is determined by it's prefix. We continue to follow the tree character by character to the left `.` or to the right `-` depending on what we want to insert. But our friends of the challenge made things a bit challenging. A noise, namely a `?`, in the midst of a `signal`, pushes us to different waters when we want to search.
 
-If a `?` are found, `?` need to be replaced by all possible combinations of `.` and `-`. Instead of generating all the combinations and triggering a new search for each, our search algorithm is a binary search with a fork possibility whenever it sees a `?`.
+While traversing the tree, if a `?` is found, we need to consider both children of a node. In the end our search algorithm is a binary search with a fork possibility whenever it sees a `?`.
 
 ```java
   List<Signal> fuzzyMatch(String signal) {
@@ -121,11 +121,11 @@ If a `?` are found, `?` need to be replaced by all possible combinations of `.` 
       return result;
     }
 ```
-Like insert, We again start using the `root` node as the first node in our stack. The first comparison sounds strange but it only blindly compares if the size of the morse in the current node is the same size of the searched morse `signal`. And if the remaining of the algo fine we can rest assured only nodes that make sense are visited, thus only the size matters.	
+Like insert, We again start using the `root` node as the first node in our stack. The first comparison sounds strange but it only blindly compares if the size of the morse in the current node is the same size of the searched morse `signal`. And if the remaining of the algo is fine we can rest assured only nodes that make sense are visited, thus only the size matters.	
 
-Finally the fuzzy magic. If the signal at the position of the current `morse` length is a `.` then go for it. Same if `-` or go visit both if the it's a noise `?`. This is the only difference from a [binary search in a ordered binary tree](https://en.wikipedia.org/wiki/Binary_search_tree#Searching).
+Finally the fuzzy magic. If the signal at the position of the current `morse` length is a `.` then go for it. Same for `-`. Or then go visit both children if the its a noise `?`. This is the only difference from a [binary search in a ordered binary tree](https://en.wikipedia.org/wiki/Binary_search_tree#Searching).
 
-This hack is also a good way to not have to sort the result after a search because search walks the tree in order. Imagine if you replace any `?` by all combinations possible and do a search for each. You would have to implement a way to sort the results of the search what, although possible using the idea of successors and predecessors, would result much more complex and longer.
+This hack is also a good way to not have to sort the result after a search because search walks the tree in order. Imagine if you replace any `?` by all combinations possible and do a search for each. You would have to implement a way to sort the results of the search. Although possible by using the idea of successors and predecessors, would result much more complex and inefficient.
 
 Let's give it a try:
 ```
