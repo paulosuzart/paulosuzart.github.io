@@ -87,7 +87,7 @@ When the letter `E` is inserted, its empty node already exist and is assigned to
 
 # Searching
 
-This makes our insert a sort of binary search where the order of elements is determined by it's prefix. We continue to follow the tree character by character to the left (`.`) or to the right (`-`) depending on what we want to insert. But our friends of the challenge made things a bit challenging. A noise, namely a `?`, in the midst of a signal`, pushes us to different waters when we want to search.
+This makes our insert a sort of binary search where the order of elements is determined by it's prefix. We continue to follow the tree character by character to the left `.` or to the right `-` depending on what we want to insert. But our friends of the challenge made things a bit challenging. A noise, namely a `?`, in the midst of a `signal`, pushes us to different waters when we want to search.
 
 If a `?` are found, `?` need to be replaced by all possible combinations of `.` and `-`. Instead of generating all the combinations and triggering a new search for each, our search algorithm is a binary search with a fork possibility whenever it sees a `?`.
 
