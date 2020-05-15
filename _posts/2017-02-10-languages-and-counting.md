@@ -7,11 +7,11 @@ categories: [programming]
 ---
 
 
-Hello there, happy new year! In this post I'll talk about the programming languages I got involved somehow (either for serious playing or serious business).
+Hello there, happy new year! In this post I’ll talk about the programming languages I got involved in somehow (either for serious playing or serious business).
 
-Yes they are 15. I started my passion for programming languages almost 10 years ago with Scala. At that time I had been working with Java for 4 years. To be fair, the only existing language in my mind was Java. Then Scala comes into play.
+Yes there are 15. I started my passion for programming languages almost 10 years ago with Scala. At that time I had been working with Java for 4 years. To be fair, the only existing language in my mind was Java. Then Scala came into play.
 
-Here a present you them in a loose chronological order.
+I’ll present them to you here in a loose chronological order: 
 
 <!--more-->
 
