@@ -21,7 +21,7 @@ I quickly started writing about [Scala](https://www.scala-lang.org/). Even had 1
 
 I had the chance to put Scala in production using [Play Framework](https://www.playframework.com) 2.4 + [Slick](http://slick.lightbend.com/) from mapping a Postgres database. It still running by the time of writing. 
 
-Why don't I pursue or stimulate Scala use anymore? There are hundreds of post on the internet explaining why Scala have failed, so I don't need to add any extra content to them. I'm pretty convinced, for example, that, if Play Framework hadn't be ported to Scala, it would be *TODAY* competing with frameworks like Django and Rails. I'm not here to try to predict anything, I've just got real insights from real usage of it and, I'm ok if you want go for it, I'm just out.
+Why don’t I pursue or stimulate Scala use anymore? There are hundreds of post on the internet explaining why Scala failed, so I don’t need to add any extra content to them. I’m pretty convinced, for example, that, if Play Framework hadn’t been ported to Scala, it would be TODAY competing with frameworks like Django and Rails. I’m not here to try to predict anything, I’ve just got real insights from real usage of it and, I’m okay with it if you want go for it, I’m just out.
 
 I've also technically reviewd a [Book on Scala and Lift Web](https://www.packtpub.com/application-development/lift-application-development-cookbook) (that is also pretty much dead BTW).
 
