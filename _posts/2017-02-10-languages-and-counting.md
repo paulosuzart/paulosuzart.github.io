@@ -29,11 +29,11 @@ I've also technically reviewd a [Book on Scala and Lift Web](https://www.packtpu
 
 This very blog has lot's of [Clojure](https://clojure.org/) posts. I felt in love with clojure in 2009, right after learning Scala. I'ts possible to see some [git repos on clojure](github.com/paulosuzart) in my github account. I enjoyed it so so much, I can still remember that times. Very good sensation.
 
-I couldn't really put any Clojure into production. Actually my colleagues said I was sort of freaky to be able to program in such a thing (I know that is nothing special about it, bit lisp like langs are not so common in Brazil). So, impossible to find someone interested in Clojure, not to mention a experienced Clojure developer to hire.
+I couldn’t really put any Clojure into production. Actually, my colleagues said I was a bit weird to be able to program in such a thing (I know that is nothing special about it, bit lisp like langs are not so common in Brazil). So, impossible to find someone interested in Clojure, not to mention an experienced Clojure developer to hire.
 
 I like as a language, but Java interoperability where sort of ugly. Furthermore, there were absolutely no killing app for Clojure. I was a member of the Clojure mailing list and *ALL* there I saw were posts prefixed with _[ANN]_ to announce some tiny poorly tested, poorly documented, non maintained wannabe library. I got tire of this, to be fair. And started to code/play less and less with Clojure.
 
-We had some guys creating a Pedestal framework with lots of craziness, well, useless. I heard they dropped good part of what they were doing to provide just the http framework these days.
+We had some guys creating a Pedestal framework with lots of craziness, well, useless. I heard they have dropped a good part of what they were doing to provide just the http framework these days.
 
 I also technically reviewd a [Book on Clojure for Domain-specific Languages](https://www.amazon.com/Clojure-Domain-specific-Languages-Ryan-Kelker/dp/1782166505).
 
@@ -51,7 +51,7 @@ This is my first project using Go, a [distributed load testing](https://github.c
 
 For me, one of the master pieces written in Go is [BoltDB](https://github.com/boltdb/bolt), check it out.
 
-Go is my third language of choice today, although I don't have any of it in production. The only drawback, or sort of "limitation" is its typesystem, what makes it perfect for semi-low level programming, but it would bite you for writing complex Object hierarchies.
+Go is my third language of choice today, although I don’t have any of it in production. The only drawback, or sort of “limitation” is its typesystem, which makes it perfect for semi-low level programming, but it would bite you in the arse for writing complex Object hierarchies.
 
 This is my option number 3 after python and Node.
 
@@ -63,11 +63,11 @@ I like it, in fact it's been showing a steady growth as the best dynamic lang on
 
 **7. Rust**
 
-Unfortunately I left few tracks behind (intentionally erased) from my contact with Rust. I've helped a memcached client adding a hash ring to it, so it was able to support multiple servers. Also started creating a process manager ala supervisord.
+Unfortunately I left little evidence behind (intentionally erased) from my time with Rust. I helped a memcached client adding a hash ring to it, so it was able to support multiple servers. Also started creating a process manager ala `supervisord`.
 
-People tried to put their political preferences over technical skills, what makes it's community dangerous. I also had a blog on rust giving lots of cool deep tips in the language.
+People tried to put their political preferences over technical skills, which makes it’s community dangerous. I also had a blog on rust giving lots of cool deep tips in the language.
 
-Leaving rust was good, although backed by a big company, the forced mentality of embedding memory management into the type system can bring crazy syntax and almost impossible understanding.
+Leaving Rust was good, although backed by a big company, the forced mentality of embedding memory management into the type system can bring crazy syntax and almost impossible understanding.
 
 The only track I have is [this repo](https://github.com/paulosuzart/currency_watcher), I guess.
 
@@ -93,12 +93,11 @@ I had the chance to create a (not deployed to prod) monitoring system. You can r
 
 I've read few awesome books like [Learn You a Haskell](http://learnyouahaskell.com). Take some time to read it and expand your knowledge on functional programming, it totally pays of. I have a post on Haskell in this very blog, you can read it [here](http://paulosuzart.github.io/blog/2015/08/21/how-much-functional-are-you/).
 
-Although I like the language, there is a exaggeration towards FP purity that makes applying the language on average professionals team, a impossible task. I keep Haskell around just for playing and studying Type Classes, for example.
+Although I like the language, there is an exaggeration towards FP purity that makes applying the language on average professionals team, an impossible task. I keep Haskell around just for playing and studying Type Classes, for example.
 
 **12. Java Script ES6 / Node JS** - option #2
 
-Well, if you ever created a web app, you've coded in js. But with the expansion of the language to the back end was really cool thing. Right now I'm working for a company where good part of back end services we write in Node.JS, and even front end with ReactJs.
-Node has proven to be a rock solid platform for modern app. You start quickly and just move on. 
+Well, if you ever created a web app, you’ve coded in JS. However, the expansion of the language to the back end was a really cool thing. Right now I’m working for a company where a good part of the back end services were written in Node.JS, and even front end with ReactJs. Node has proven to be a rock solid platform for a modern app. You start quickly and just move on.
 
 There is the dynamic language challenges involved, but it is part of the game. There are huge improvements in the ES6 version, though.
 
