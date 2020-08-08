@@ -200,11 +200,13 @@ This is the Edge List of links `Page(A-B) to Page(A-B)` pages, plus the generate
 
 # Conclusion
 
-First and foremost, you can find runnable [code here in this repo](https://github.com/paulosuzart/jgrapht-post).
+You can find runnable [code here in this repo](https://github.com/paulosuzart/jgrapht-post).
 
-With couple lines o code we were able to apply important graph concepts like centrality and to solve a fairly real business problem. You can apply the same concepts for example to select the set of products to show in a home page of an e-commerce or even the best blog articles in a huge content heavy blog.
+With couple lines of code we were able to apply important graph concepts like centrality to solve a fairly real business problem. You can apply the same concepts for example to select the set of products to show in a home page of an e-commerce, or select the best blog articles in a huge content heavy blog, or perhaps select which courses to show in the home page of a educational site.
 
 JGraphT is an amazing library and you can find a huge amount of algos for graphs. You can also use graph generation to randomly generate graphs for tests for example, this way you can make sure your algorithms are working with any (maybe most) graphs that may flow through it.
+
+The only drawback is that once you reach considerably high number of nodes in a graph, you may have to start thinking about distributed graph processing tools like [Apache Flink's Gelly](https://ci.apache.org/projects/flink/flink-docs-stable/dev/libs/gelly/) or [Spark GraphX](https://spark.apache.org/graphx/).
 
 There are much more complex stuff on graphs, some of the problems are [NP Complete](https://en.wikipedia.org/wiki/NP-completeness). But you don't need to invent a new graph algorithm or understand all click, degeneration, coloring, etc to take advantage of it. Start small, try to think if your next problem could be a good fit and give a try to JGraphT.
 
