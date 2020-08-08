@@ -9,6 +9,7 @@ categories: [ java, graphs]
 Hey ho! What crazy times to be alive! But here we go for a new post on Graphs. To be more precise [JGrahT](https://jgrapht.org/) library, a Java library I I used quite heavily recently in my last company. In this post I'm going to use one of the Scoring algorithms provided by the library to solve a SEO related problem. The goals is to serve as an introduction to the library and some basic usage of it. Check it out (Word of waning, cod heavy post)! 
 
 <!--more-->
+# Table of Contents
 
 - [Graphs](#graphs)
 - [The challenge](#the-challenge)
