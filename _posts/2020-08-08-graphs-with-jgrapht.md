@@ -200,7 +200,13 @@ This is the Edge List of links `Page(A-B) to Page(A-B)` pages, plus the generate
 
 # Conclusion
 
+With couple lines o code we were able to apply important graph concepts like centrality and to solve a fairly real business problem. You can apply the same concepts for example to select the set of products to show in a home page of an e-commerce or even the best blog articles in a huge content heavy blog.
+
 JGraphT is an amazing library and you can find a huge amount of algos for graphs. You can also use graph generation to randomly generate graphs for tests for example, this way you can make sure your algorithms are working with any (maybe most) graphs that may flow through it.
+
+There are much more complex stuff on graphs, some of the problems are [NP Complete](https://en.wikipedia.org/wiki/NP-completeness). But you don't need to invent a new graph algorithm or understand all click, degeneration, coloring, etc to take advantage of it. Start small, try to think if your next problem could be a good fit and give a try to JGraphT.
+
+I had a precious chance to fairly deep project using Graphs and it gave me much more confidence on it and how useful graphs can be in a daily basis.
 
 
 
