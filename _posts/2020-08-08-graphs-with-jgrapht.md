@@ -10,6 +10,13 @@ Hey ho! What crazy times to be alive! But here we go for a new post on Graphs. T
 
 <!--more-->
 
+- [Graphs](#graphs)
+- [The challenge](#the-challenge)
+- [Conclusion](#conclusion)
+- [Appendix](#appendix)
+  * [Import / Export](#import--export)
+  * [Edges and Vertex](#edges-and-vertex)
+
 # Graphs
 
 [Graph Theory](https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)) was one of the most intimidating topics at the university for some. When you see drawings of graphs, all makes sense, until you have to do some code yourself. Then the challenges begins. Then you leave the university and may never see graphs again. I had better luck.
