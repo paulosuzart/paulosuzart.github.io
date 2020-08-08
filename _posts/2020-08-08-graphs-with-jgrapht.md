@@ -6,7 +6,7 @@ comments: true
 categories: [ java, graphs]
 ---
 
-Hey ho! What crazy times to be alive! But here we go for a new post on Graphs. To be more precise [JGrahT](https://jgrapht.org/) library, a Java library I I used quite heavily recently in my last company. In this post I'm going to use one of the Scoring algorithms provided by the library to solve a SEO related problem. The goals is to serve as an introduction to the library and some basic usage of it. Check it out!
+Hey ho! What crazy times to be alive! But here we go for a new post on Graphs. To be more precise [JGrahT](https://jgrapht.org/) library, a Java library I I used quite heavily recently in my last company. In this post I'm going to use one of the Scoring algorithms provided by the library to solve a SEO related problem. The goals is to serve as an introduction to the library and some basic usage of it. Check it out (Word of waning, cod heavy post)! 
 
 <!--more-->
 
@@ -212,7 +212,71 @@ There are much more complex stuff on graphs, some of the problems are [NP Comple
 
 I had a precious chance to fairly deep project using Graphs and it gave me much more confidence on it and how useful graphs can be in a daily basis.
 
+# Appendix
 
+## Import / Export
+
+Import and export with JGraphT is pretty straightforward. It offers the [Module org.jgrapht.io](https://jgrapht.org/javadoc/org.jgrapht.io/module-summary.html) precisely for this. The you can find several formats to import/export, including CSV, Json and GML. The one use in this code was the CSV Importer.
+
+```java
+    var target = new SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+    var importer = new CSVImporter<String, DefaultEdge>(CSVFormat.EDGE_LIST);
+    importer.setVertexFactory(Function.identity());
+    importer.importGraph(target, IO.class.getClassLoader().getResourceAsStream('data.csv'));
+    return target;
+```
+
+It requires you to provide a target graph to load data onto. I used the `EDGE_LIST` because it's extremely simple. Just line by line a coma separated list of location `A` and location `B`. I found importing from CSV a slightly limited option and used for testing only, for production we implemented data loading straight from big query so we could preserve all attributes of the data we wanted in our application.
+
+You are allowed to customize what that string means in the CSV. In this case `identity` was used because there is no need to transform anything for vertex that are just the names of the locations.
+
+For exporting, the semantic is quite similar:
+
+```java
+    var lineExporter = new CSVExporter<DefaultEdge, DefaultEdge>(CSVFormat.EDGE_LIST);
+    lineExporter.setVertexIdProvider(e -> {
+        boolean sourceIsHome = root.equals(e);
+        return sourceIsHome ? "Home" :
+                String.format("travel-%s-to-%s", locationGraph.getEdgeSource(e), locationGraph.getEdgeTarget(e));
+    });
+    lineExporter.exportGraph(graph, new File(path));
+```
+
+For demo purpose I hard coded a fake url for each page that is simply `travel-` as a suffix for the departure and arrival locations.
+
+Another very good integration is with graphviz. Check how you can customized to produce the second image of this post:
+
+```java
+ private static void vizPages(org.jgrapht.Graph<String, DefaultEdge> locationsGraph, SimpleDirectedGraph<DefaultEdge, DefaultEdge> pagesGraph, SumScoresDecorator<String, DefaultEdge, Double> pageScores, DefaultEdge rootPage) {
+        DOTExporter<DefaultEdge, DefaultEdge> exporter2 = new DOTExporter<>();
+        exporter2.setVertexIdProvider(page -> {
+            boolean isHome = rootPage.equals(page);
+            return isHome ? "Home" :
+                    String.format("%s_%s", locationsGraph.getEdgeSource(page),
+                            locationsGraph.getEdgeTarget(page));
+        });
+        exporter2.setVertexAttributeProvider(page -> {
+            boolean isHome = rootPage.equals(page);
+            if (isHome) {
+                return Map.of("color", DefaultAttribute.createAttribute("grey"));
+            }
+            var score = pageScores.getVertexScore(page);
+            return Map.of("xlabel", DefaultAttribute.createAttribute(new BigDecimal(score).setScale(2, RoundingMode.CEILING).doubleValue()));
+        });
+        exporter2.exportGraph(pagesGraph, new File("/tmp/g1.dot"));
+    }
+```
+
+The exporter is flexible enough so you can decide what should be he labels and even provide dot files specific configurations per node.
+
+
+## Edges and Vertex
+
+The first thing I was pushed back on JGraphT was he idea of Vertex and Edges. For me, after using Neo4j in production, a Vertex should be a full blow POJO, right? Same for Edges. Not, really with JGraphT.
+
+In JGraphT these two objects can be seen as simply ways to connect objects by some sort of reference. So for example, in my real project we used only the ids of the nodes we wanted to represent as Vertex. If any other information was needed during processing that would be fetched separately out of this id.
+
+There are couple strategies [suggested in the documentation](https://jgrapht.org/guide/VertexAndEdgeTypes), but the rule of thumb is: the simpler your Vertex/Edge object, the better. Just think of a Graph in JGraphT as a huge graph shaped index using ids of your objects.
 
 [locations]: https://i.imgur.com/Ot4h3JD.png
 [output]: https://imgur.com/HJb4jXW.png
