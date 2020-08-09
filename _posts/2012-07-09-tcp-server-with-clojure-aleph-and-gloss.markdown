@@ -3,7 +3,7 @@ layout: post
 title: "TCP Server with Clojure Aleph and Gloss"
 date: 2012-07-09 11:57
 comments: true
-categories: clojure
+tags: clojure
 ---
 
 Hi Ho! Its been a long time without writing here. As you might know, I've just launched a new web/mobile [(Guiato)](http://www.guiato.com.br) platform to help retailers reach their customers with their existing brochures/pamphlets/flyers but now, electronically.

@@ -3,7 +3,7 @@ layout: post
 title: "How Much Functional Are You?"
 date: 2015-08-21 00:22
 comments: true
-categories: [fp, haskell, scala]
+tags: [haskell,scala]
 ---
 
 Whats up? Fine? Well, I don't know exactly why but I ended up reading the [Feature Overview](https://github.com/milessabin/shapeless/wiki/Feature-overview:-shapeless-1.2.4) doc of the great [Shapeless](https://github.com/milessabin/shapeless) [Scala](http://scala-lang.org) lib.

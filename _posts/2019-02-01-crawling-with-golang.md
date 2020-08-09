@@ -3,8 +3,7 @@ layout: post
 title: "Crawling with Golang and Neo4j"
 date: 2019-02-01 10:32
 comments: true
-draft: true
-categories: [ golang ]
+tags: [golang]
 ---
 
 [Golang](https://golang.org/) long ago [fascinated me](https://github.com/paulosuzart/gb). It was fun time and I tried to use in many personal projects and could never do anything serious at work. But this finally changed!

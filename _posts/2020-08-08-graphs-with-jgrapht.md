@@ -3,20 +3,12 @@ layout: post
 title: "Graphs With JGraphT"
 date: 2020-08-08 16:22
 comments: true
-categories: [ java, graphs]
+tags: [java,graphs]
 ---
 
 Hey ho! What crazy times to be alive! But here we go for a new post on Graphs. To be more precise [JGrahT](https://jgrapht.org/) library, a Java library I used quite at lot, recently. In this post I'm going to use one of the Scoring algorithms provided by the library to solve a SEO related problem. The idea is to give a taste of the library and some basic usage of it. Check it out!
 
 <!--more-->
-# Table of Contents
-
-- [Graphs](#graphs)
-- [The challenge](#the-challenge)
-- [Conclusion](#conclusion)
-- [Appendix](#appendix)
-  * [Import / Export](#import--export)
-  * [Edges and Vertex](#edges-and-vertex)
 
 # Graphs
 
@@ -40,7 +32,7 @@ Well, in real life problem is slightly more complex. But for our pet project we 
 
 The graph can be assembled out of the list of routes that have a page representing each of them:
 
-```csv
+```
 London,Berlin
 Barcelona,Berlin
 Berlin,London
@@ -191,7 +183,7 @@ Take it with a grain of salt given that this is a very small simple example. If 
 
 Finally, the output CSV is exported and you should see something like:
 
-```csv
+```
 travel-Berlin-to-London,travel-London-to-Berlin
 travel-Munich-to-London,travel-London-to-Berlin
 travel-London-to-Berlin,travel-Berlin-to-London

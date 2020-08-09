@@ -3,7 +3,7 @@ layout: post
 title: "Django + Postgres + Redis + Knockout.js. Nice shot!"
 date: 2016-06-06 08:30
 comments: true
-categories: [python]
+tags: [python]
 ---
 
 Good News

@@ -3,7 +3,7 @@ layout: post
 title: "Exploring Optional Types in Java 8"
 date: 2018-04-19 14:00
 comments: true
-categories: [ java ]
+tags: [java]
 ---
 
 Let's see how implementing Binary Tree Depth and Breadth Search feels like using Java8 lambdas, [Optional](https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html) and things related.

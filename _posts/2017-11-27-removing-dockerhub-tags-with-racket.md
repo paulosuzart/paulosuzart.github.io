@@ -3,7 +3,7 @@ layout: post
 title: "Removing Dockerhub tags with Racket"
 date: 2017-11-27 18:00
 comments: true
-categories: [ docker, racket ]
+tags: [docker,racket]
 ---
 
 Believe it or not the most viewed blog post of all times is [Why Racket is Awesome](http://paulosuzart.github.io/blog/2015/04/02/why-racket-is-awesome/) written in 2015. I also don't understand why that dense post is the top one. And to boost the interest for [Racket](racket-lang.org), I've decided to implement a small simple utility to prune [Docker](https://www.docker.com/) tags. This way we keep only the most recent `k` tags. Let's check it out.

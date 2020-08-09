@@ -3,7 +3,7 @@ layout: post
 title: "Janus + ack-grep + fish shell: Tools to rule everything"
 date: 2013-05-20 19:44
 comments: true
-categories: [tools, linux]
+tags: [tools,linux]
 ---
 
 Hello, I'm posting as often as the men go to the moon! Sad. For a good

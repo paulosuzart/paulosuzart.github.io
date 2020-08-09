@@ -3,7 +3,7 @@ layout: post
 title: "Jooby, RxJava and Hystrix"
 date: 2018-08-08 10:00
 comments: true
-categories: [ java ]
+tags: [java]
 ---
 
 RxJava is an implementation of [ReactiveX](http://reactivex.io/), the ubiquitus API for dealing with reactive streams. There are much more languages supporting the API, including .NET, Scala and Others.

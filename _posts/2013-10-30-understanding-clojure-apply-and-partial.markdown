@@ -3,7 +3,7 @@ layout: post
 title: "Understanding Clojure apply and partial"
 date: 2013-10-30 20:15
 comments: true
-categories: clojure
+tags: clojure
 ---
 
 Hi guys, a really introductory post on [Clojure](http://clojure.org) `apply` and `partial`functions. I need to confess that I didn't take a look around to see how people are usually explaining these functions. For sure there are better ways to explain it even usingJavascript, but remember: it was used to teach a beginne, so no purism here.

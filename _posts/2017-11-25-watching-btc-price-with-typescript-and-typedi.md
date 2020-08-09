@@ -3,7 +3,7 @@ layout: post
 title: "Watching Bitcoin price with Typescript and Typedi"
 date: 2017-11-25 13:58
 comments: true
-categories: [ node.js, typescript, bitcoin ]
+tags: [node,typescript,bitcoin]
 ---
 
 In my [last post](http://paulosuzart.github.io/blog/2017/10/04/type-safety-orm-and-dependency-injection-node/) I presented a summary of Typescript ecosystem and some important players in the field like [`typedi`](https://www.npmjs.com/package/typedi). In this post we'll check `typedi` features and to make things more interesting, let's create a simple [Cex.io](https://cex.io) client to watch for price changes in a given market.

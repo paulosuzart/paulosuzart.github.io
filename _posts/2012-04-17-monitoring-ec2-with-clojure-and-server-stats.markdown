@@ -3,7 +3,7 @@ layout: post
 title: "Monitoring ec2 with clojure and Server-Stats"
 date: 2012-04-17 17:25
 comments: true
-categories: [clojure, cloud, aws]
+tags: [clojure, cloud, aws]
 ---
 
 Intro

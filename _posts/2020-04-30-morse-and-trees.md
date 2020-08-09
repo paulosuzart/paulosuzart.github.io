@@ -3,18 +3,12 @@ layout: post
 title: "Morse Code and Trees"
 date: 2020-04-30 10:22
 comments: true
-categories: [ java ]
+tags: [java]
 ---
 
 Hello again! After more than a year without posting, here I am. This time I talk about a recent code challenge that I failed and for the sake for my peace of mind I'm sharing a working solution for the problem of finding a english character out of a [Morse Code](https://en.wikipedia.org/wiki/Morse_code) signal. The solution should also consider possible noises in the morse code, thus identifying all possibilities that would match. Let's take a look.
 
 <!--more-->
-# Table of Contents
-   * [The code challenge](#the-code-challenge)
-   * [Morse code](#morse-code)
-   * [The tree](#the-tree)
-   * [Searching](#searching)
-   * [Conclusion](#conclusion)
 
 # The code challenge
 

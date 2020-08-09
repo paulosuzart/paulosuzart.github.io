@@ -3,7 +3,7 @@ layout: post
 title: "Why Racket is Awesome"
 date: 2015-04-02 22:31
 comments: true
-categories: [racket]
+tags: [racket]
 ---
 
 Finally 1st post of the year! Well, not that much to say lately. But here a piece of my sensations while playing with [Racket](http://racket-lang.org/) last two weeks.

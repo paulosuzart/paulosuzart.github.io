@@ -3,7 +3,7 @@ layout: post
 title: "Give Kotlin And Quasar a Try"
 date: 2015-05-30 10:31
 comments: true
-categories: [kotlin]
+tags: [kotlin]
 ---
 
 Hello hello! After a quick incursion into the world of <s>Rust</s> language, I'm back!

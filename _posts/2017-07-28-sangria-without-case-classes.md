@@ -3,7 +3,7 @@ layout: post
 title: "Sangria without case classes"
 date: 2017-07-28 01:18
 comments: true
-categories: [graphql, scala]
+tags: [graphql,scala]
 ---
 
 In my [previous post](http://paulosuzart.github.io/blog/2017/07/26/graphql-yes-im-in/) I talked about how easy it is to implement a dynamically generated [GraphQL](http://graphql.org) Schema using `graphql-js` as you can simply ignores types and do your job. I then made some comments about [Sangria](http://sangria-graphql.org), perhaps the most stable and powerful GraphQL lib for Scala. Follow me in this exploration until I find a solution or a good soul can share it with us.

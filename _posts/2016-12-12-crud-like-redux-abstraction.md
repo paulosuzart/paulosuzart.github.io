@@ -3,7 +3,7 @@ layout: post
 title: "CRUD like Redux Abstraction"
 date: 2016-12-12 10:22
 comments: true
-categories: [react, redux, es6, nodejs]
+tags: [react, redux, es6, nodejs]
 ---
 
 I recently played the role of a front end developer. You know, I'm not one in a broad sense. I have not my head wrapped around CSS and visual stuff. But I made it reasonably well using the following toolkit:

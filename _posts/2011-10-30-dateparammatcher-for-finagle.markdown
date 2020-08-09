@@ -3,7 +3,7 @@ layout: post
 title: "DateParamMatcher for Finagle"
 date: 2011-10-30 23:22
 comments: true
-categories: scala
+tags: scala
 ---
 
 [Twitter Finagle](http://twitter.github.com/finagle) is an amazing framework for RPC communication, and my interest is its HTTP features for creating RESTful APIs.

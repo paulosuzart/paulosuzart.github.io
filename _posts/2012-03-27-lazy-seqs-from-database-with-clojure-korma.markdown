@@ -3,7 +3,7 @@ layout: post
 title: "lazy-seqs from database with clojure korma"
 date: 2012-03-27 20:54
 comments: true
-categories: clojure
+tags: clojure
 ---
 
 As you may know, I've started in a new company last early this month. It is being a huge change in all aspects, technology, people, process, environment, etc.

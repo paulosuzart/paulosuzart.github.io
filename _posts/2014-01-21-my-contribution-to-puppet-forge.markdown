@@ -3,7 +3,7 @@ layout: post
 title: "My Contribution to Puppet Forge"
 date: 2014-01-21 20:25
 comments: true
-categories: [puppet, devops]
+tags: [devops]
 ---
 
 Happy new year! This time I would like to share with you that I've just shared a [Puppet](http://puppetlabs.com/puppet/puppet-open-source) [module](https://forge.puppetlabs.com/paulosuzart/gvm) at [Puppet Forge](http://forge.puppetlabs.com/). That is awesome!

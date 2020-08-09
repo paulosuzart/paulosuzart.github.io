@@ -3,7 +3,7 @@ layout: post
 title: "Why Crystal Is Awesome"
 date: 2018-02-15 14:00
 comments: true
-categories: [ docker, crystal ]
+tags: [docker,crystal]
 ---
 
 Few months ago posted again about [Racket](http://racket-lang.org) and created a simple cod to [remove docker tags from Dockerhub using this language](http://paulosuzart.github.io/blog/2017/11/27/removing-dockerhub-tags-with-racket/). This time We'll do the same but using [Crystal Language](https://crystal-lang.org) as a background to talk about this language.

@@ -3,7 +3,7 @@ layout: post
 title: "Type Safety, ORM and Dependency Injection with node.js"
 date: 2017-10-04 22:35
 comments: true
-categories: [graphql, node.js, typescript, orm]
+tags: [graphql,node,typescript,orm]
 ---
 
 This time I'll share direct knowledge from day to day job with [node.js](nodejs.org) and [TypeScript](https://www.typescriptlang.org).

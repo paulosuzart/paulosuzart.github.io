@@ -3,7 +3,7 @@ layout: post
 title: "Web Noir plus enlive template"
 date: 2012-03-25 21:43
 comments: true
-categories: clojure
+tags: clojure
 ---
 
 Hi again! Long time without writing here. But for a good reason.

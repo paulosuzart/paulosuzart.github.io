@@ -3,7 +3,7 @@ layout: post
 title: "Korma and clojure records"
 date: 2011-12-04 19:02
 comments: true
-categories: clojure
+tags: clojure
 ---
 [Korma](http://sqlkorma.com) is a [clojure](http://clojure.org) framework (by [@ibdknox](http://twitter.com/ibdknox)) that provides great SQL abstractions. You can work purely with clojure code without inserting SQL strings into your code.
 

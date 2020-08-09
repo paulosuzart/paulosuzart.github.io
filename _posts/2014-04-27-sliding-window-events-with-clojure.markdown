@@ -3,7 +3,7 @@ layout: post
 title: "Sliding Window events with Clojure"
 date: 2014-04-27 19:44
 comments: true
-categories: [clojure]
+tags: [clojure]
 ---
 
 Hello all, I'm back to [clojure](http://clojuredocs.org) posts again. :) 

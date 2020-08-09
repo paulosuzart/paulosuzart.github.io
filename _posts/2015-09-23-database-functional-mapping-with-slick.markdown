@@ -3,7 +3,7 @@ layout: post
 title: "Database Functional Mapping with Slick"
 date: 2015-09-23 00:22
 comments: true
-categories: [fp, scala]
+tags: [scala]
 ---
 
 [Typesafe](http://www.typesafe.com/) guys certainly gave nice shots embracing projects like [play!](playframework.com), [akka](http://akka.io) and [Slick](http://slick.typesafe.com/).

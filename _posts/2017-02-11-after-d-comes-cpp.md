@@ -3,7 +3,7 @@ layout: post
 title: "After D comes C++"
 date: 2017-02-11 10:22
 comments: true
-categories: [programming, D, C++]
+tags: [D,C++]
 ---
 
 As mentioned in my [previous post](http://paulosuzart.github.io/blog/2017/02/10/languages-and-counting/), we may be openning our GraphQL Grammar (using [PEGGED](https://github.com/PhilippeSigaud/Pegged)), and interpreter to generate compatible pure D Abstract Syntax Tree.

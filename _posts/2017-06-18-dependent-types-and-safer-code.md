@@ -3,7 +3,7 @@ layout: post
 title: "Dependent Types And Safer Code"
 date: 2017-06-18 13:22
 comments: true
-categories: [programming, idris, fp]
+tags: [idris]
 ---
 
 I've recently joinned a [Discord Functional Programming Server](https://discordapp.com). No, it is not a framework for developing servers using functional programming languages. Instead, a mix of IRC and Slack for discussing several functional langs. If you want to watch and participate in nice discussion and tips about clojure, elixir, elm, erlang, haskell, idris, lisp, ocaml, racket, and scala, join the server [right here](https://discord.gg/jeaFVYE).

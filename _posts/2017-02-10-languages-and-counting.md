@@ -3,7 +3,7 @@ layout: post
 title: "15 languages and counting"
 date: 2017-02-10 10:22
 comments: true
-categories: [programming]
+tags: [programming]
 ---
 
 

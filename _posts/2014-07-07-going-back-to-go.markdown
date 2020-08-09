@@ -3,7 +3,7 @@ layout: post
 title: "Going back to Go (golang)"
 date: 2014-07-07 13:44
 comments: true
-categories: [golang]
+tags: [golang]
 ---
 
 Intro

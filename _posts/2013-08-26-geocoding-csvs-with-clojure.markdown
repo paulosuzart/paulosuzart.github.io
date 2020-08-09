@@ -3,7 +3,7 @@ layout: post
 title: "Geocoding CSVs with Clojure"
 date: 2013-08-26 11:48
 comments: true
-categories: clojure
+tags: clojure
 ---
 
 Hi! Nothing like delivering some value to your company using your preferred tool, hun?

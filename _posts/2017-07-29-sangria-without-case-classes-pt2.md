@@ -3,7 +3,7 @@ layout: post
 title: "Sangria without case classes Part II"
 date: 2017-07-29 22:35
 comments: true
-categories: [graphql, scala]
+tags: [graphql,scala]
 ---
 
 This is a sequel of [previous post Sangria without case classes](http://paulosuzart.github.io/blog/2017/07/28/sangria-without-case-classes/) where I'm exploring shapeless in conjunction with the awesome [Sangria](http://sangria-graphql.org) lib. Mind this is total exploration and chances are (actually very likely) that it is possible to do simpler code to achieve the same effect.

@@ -3,7 +3,7 @@ layout: post
 title: "Clojure macros: Automating AWS SimpleDB admin tasks."
 date: 2012-02-03 21:16
 comments: true
-categories: clojure
+tags: clojure
 ---
 First post of the year! To talk about clojure, of course.
 [I've written (pt_br)](http://codemountain.wordpress.com/2010/10/09/clojure-macros/) about clojure macros before. And yes, it is really powerful.

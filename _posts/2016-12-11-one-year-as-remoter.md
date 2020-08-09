@@ -3,7 +3,7 @@ layout: post
 title: "One year as remoter"
 date: 2016-12-11 22:25
 comments: true
-categories: [remoter]
+tags: [remoter]
 ---
 
 Ok, you are used to *long time without posting*, so no need to repeat it! Anyway, as you know we half accidentally moved to Colombia last year, and now it's been a year since we left São Paulo, Brazil.
