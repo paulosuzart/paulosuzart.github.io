@@ -12,13 +12,13 @@ Hey ho! What crazy times to be alive! But here we go for a new post on Graphs. T
 
 # Graphs
 
-[Graph Theory](https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)) was one of the most intimidating topics at the university for some. When you see drawings of graphs, all makes sense, until you have to do some code yourself. Then the challenges begins. Then you leave the university and may never see graphs again. I had better luck.
+[Graph Theory](https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)) was one of the most intimidating topics at the university for some. When you see graphs drawn on the white board, all makes sense, until you have to do some code yourself. Then you leave the university and may never see graphs again. I had better luck.
 
-At [Omio](https://omio.com/) though, the idea of graphs is simply the natural way to go. Omio allow people to travel from A to B, and then you have a graph!
+I recently worked in a travel company and the idea of graphs is simply the natural way to go. Travel companies are all about allowing people to travel from A to B, and then you have a graph!
 
-**DISCLAIMER:** *This post has no connection with Omio, nor reflects the way systems were developed there. This post is just inspired in a hypothetical scenario related to travel and solving the problem of bots crawling.* 
+**DISCLAIMER:** *This post has no connection with that company, nor reflects the way systems were developed there. This post is just inspired in a hypothetical scenario related to travel and solving the problem of selecting the most relevant pages for a Home page of a website. Code is symbolic and shares nothing with any of the companies assets.* 
 
-After using [Neo4j](https://paulosuzart.github.io/blog/2019/02/01/crawling-with-golang/), it was JGraphT that conquered me. It was a critical piece that allowed us to solve a 6 year long issue with Internal Linking. You can read more about this topic in this blog post: [Nailing Internal Linking with Graph Theory](https://medium.com/omio-engineering/nailing-seo-internal-linking-with-graph-theory-2c45544a024d).
+After using [Neo4j](https://paulosuzart.github.io/blog/2019/02/01/crawling-with-golang/), it was JGraphT that conquered me. It was a critical piece that allowed me to solve a 6 year long issue with Internal Linking. You can read more about this topic in this blog post: [Nailing Internal Linking with Graph Theory](https://medium.com/omio-engineering/nailing-seo-internal-linking-with-graph-theory-2c45544a024d).
 
 # The challenge
 
