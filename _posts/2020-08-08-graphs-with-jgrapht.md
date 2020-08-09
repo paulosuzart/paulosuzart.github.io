@@ -216,17 +216,17 @@ I had a precious chance to fairly deep project using Graphs and it gave me much 
 
 ## Import / Export
 
-Import and export with JGraphT is pretty straightforward. It offers the [Module org.jgrapht.io](https://jgrapht.org/javadoc/org.jgrapht.io/module-summary.html) precisely for this. The you can find several formats to import/export, including CSV, Json and GML. The one use in this code was the CSV Importer.
+Import and export with JGraphT is pretty straightforward. It offers the [Module org.jgrapht.io](https://jgrapht.org/javadoc/org.jgrapht.io/module-summary.html) precisely for this. There you can find several formats to import/export, including CSV, Json and GML. The one use in this code was the CSV Importer.
 
 ```java
     var target = new SimpleDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
     var importer = new CSVImporter<String, DefaultEdge>(CSVFormat.EDGE_LIST);
     importer.setVertexFactory(Function.identity());
-    importer.importGraph(target, IO.class.getClassLoader().getResourceAsStream('data.csv'));
+    importer.importGraph(target, IO.class.getClassLoader().getResourceAsStream("data.csv"));
     return target;
 ```
 
-It requires you to provide a target graph to load data onto. I used the `EDGE_LIST` because it's extremely simple. Just line by line a coma separated list of location `A` and location `B`. I found importing from CSV a slightly limited option and used for testing only, for production we implemented data loading straight from big query so we could preserve all attributes of the data we wanted in our application.
+It requires you to provide a target graph to load data onto. I used the `EDGE_LIST` because it's extremely simple. Just line by line a coma separated list of location `A` and location `B`. I found importing from CSV a slightly limited option and used for testing only, for production we implemented data loading straight from BigQuery so we could preserve all attributes of the data we wanted in our application.
 
 You are allowed to customize what that string means in the CSV. In this case `identity` was used because there is no need to transform anything for vertex that are just the names of the locations.
 
@@ -267,16 +267,16 @@ Another very good integration is with graphviz. Check how you can customized to 
     }
 ```
 
-The exporter is flexible enough so you can decide what should be he labels and even provide dot files specific configurations per node.
+The exporter is flexible enough so you can decide what should be the labels and provide dot files specific configurations per node.
 
 
 ## Edges and Vertex
 
-The first thing I was pushed back on JGraphT was he idea of Vertex and Edges. For me, after using Neo4j in production, a Vertex should be a full blow POJO, right? Same for Edges. Not, really with JGraphT.
+The first thing I was pushed back on JGraphT was he idea of Vertex and Edges. For me, after using Neo4j in production, a Vertex should be a full blow POJO, right? Same for Edges, right? Not really with JGraphT.
 
-In JGraphT these two objects can be seen as simply ways to connect objects by some sort of reference. So for example, in my real project we used only the ids of the nodes we wanted to represent as Vertex. If any other information was needed during processing that would be fetched separately out of this id.
+In JGraphT these two objects can be seen as simply ways to connect objects by some sort of reference. So for example, its a common thing to use in a real project only the ids of the nodes we wanted to represent as Vertex. If any other information is needed during processing, that extra bit could be fetched separately using those ids.
 
-There are couple strategies [suggested in the documentation](https://jgrapht.org/guide/VertexAndEdgeTypes), but the rule of thumb is: the simpler your Vertex/Edge object, the better. Just think of a Graph in JGraphT as a huge graph shaped index using ids of your objects.
+There are couple strategies [suggested in the documentation](https://jgrapht.org/guide/VertexAndEdgeTypes), but the rule of thumb is: the simpler your Vertex/Edge object, the better. Just think of a Graph in JGraphT as a huge graph-shaped-index using ids of your objects.
 
 [locations]: https://i.imgur.com/Ot4h3JD.png
 [output]: https://imgur.com/HJb4jXW.png
