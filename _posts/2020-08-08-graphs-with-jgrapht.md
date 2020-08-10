@@ -228,7 +228,7 @@ Import and export with JGraphT is pretty straightforward. It offers the [Module 
 
 It requires you to provide a target graph to load data onto. I used the `EDGE_LIST` because it's extremely simple. Just line by line a coma separated list of location `A` and location `B`. I found importing from CSV a slightly limited option and used for testing only, for production we implemented data loading straight from BigQuery so we could preserve all attributes of the data we wanted in our application.
 
-You are allowed to customize what that string means in the CSV. In this case `identity` was used because there is no need to transform anything for vertex that are just the names of the locations.
+You are allowed to customize what that string means (`setVertexFactory`) in the CSV. In this case `identity` was used because there is no need to transform anything for vertex that are just the names of the locations.
 
 For exporting, the semantic is quite similar:
 
