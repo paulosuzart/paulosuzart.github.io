@@ -18,7 +18,7 @@ In the end, whatever they might become, Smart Contracts need to be much more acc
 
 [Cosmwasm](https://cosmwasm.com/) is doing an amazing job in this direction and other full blown chains are providing similar end to end experiences, with [Neo](https://neo.org/) and [Klaytn](https://www.klaytn.com/) being instances of these kind of effort. We can mention others like [Celo](https://celo.org/) and [EOS](https://eos.io/) too.
 
-Because of the current distance between blockchain and the regular engineer, I would dare to compare the current state of affairs in the blockchain world with the state of Web development back in 2000. Very complex, cumbersome, cryptic, [EJB](https://en.wikipedia.org/wiki/Jakarta_Enterprise_Beans, Remoting, WebServers for deploying bizarre packages like WAR and EAR. Today much of Web is either built on top of abstracted complexity of that time or is a much better and simpler version of that time. And I believe the same is going to happen for Smart Contracts on a blockchain.
+Because of the current distance between blockchain and the regular engineer, I would dare to compare the current state of affairs in the blockchain world with the state of Java Enterprise development back in 2000. Very complex, cumbersome, cryptic, [EJB](https://en.wikipedia.org/wiki/Jakarta_Enterprise_Beans), Remoting, WebServers for deploying bizarre packages like WAR and EAR. Today much of Web is either built on top of abstracted complexity of that time or is a much better and simpler version of that time. And I believe the same is going to happen for Smart Contracts on a blockchain.
 
 Blockchain, that by the way can / must have clear cut between the ability to execute smart contracts as a reaction to transactions and the ability to attain consensus about these transactions.
 
@@ -179,7 +179,7 @@ It's important to remember that taking a hello world like this to a chain ran by
 
 There are other open questions:
 
-**1. How to make other multi datac enter applications interact with this block chain?**
+**1. How to make other multi data center applications interact with this block chain?**
 Would a light client be enough, so each data center communicate with the smart contract via the local light client?
 
 **2. How make sure events from the blockchain will be propagated to other systems?**
