@@ -149,16 +149,16 @@ If you follow the Git repo and the cosmwasm tutorial to build and deploy this co
 
 ```bash
 # record a charge
-wasmd tx wasm execute wasm1qxxlalvsdjd07p07y3rc5fu6ll8k4tmejq0 \
+wasmd tx wasm execute wasm1xxlalvsdjd07p07y3rc5fu6ll8k4tmejq0 \
 '{"record_charge": {"id": {"provider_name": "SCR", "authz_id" : "123"}, "amount": 25000}}' \
 --from fred  --node http://rpc.oysternet.cosmwasm.com:80 \
 --chain-id oysternet-1 --gas-prices 0.001usponge \
 --gas auto --gas-adjustment 1.3 -y
 # settle it
-wasmd tx wasm execute wasm1qxxlalvsdjd07p07y3rc5fu6ll8k4tmejq0 \
+wasmd tx wasm execute wasm1xxlalvsdjd07p07y3rc5fu6ll8k4tmejq0 \
 '{"settle": {"id": {"provider_name": "SCR", "authz_id" : "123"}}}' --from fred  --node http://rpc.oysternet.cosmwasm.com:80 --chain-id oysternet-1 --gas-prices 0.001usponge --gas auto --gas-adjustment 1.3 -y
 # query it 
-wasmd query wasm contract-state smart wasm1qxxlalvsdjd07p07y3rc5fu6ll8k4tmejq \
+wasmd query wasm contract-state smart wasm1xxlalvsdjd07p07y3rc5fu6ll8k4tmejq \
 '{"get_charge": {"id": {"provider_name": "SCR", "authz_id" : "123"}}}' --node http://rpc.oysternet.cosmwasm.com:80
 # it outputs
 data:
