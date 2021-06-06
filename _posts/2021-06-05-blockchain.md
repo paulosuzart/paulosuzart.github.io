@@ -184,7 +184,7 @@ With that we were able to use the consensus of a [Byzantine Fault Tolerant](http
 # Conclusion
 Like mentioned at some point in the post, the code is available in my github: [transactions](https://github.com/paulosuzart/transactions). *Warning: I didn't fix the tests that comes with the template.* You can see with more details the contract, the messages and a a simple query by id.
 
-It's important to remember that taking a hello world like this to a chain that you / your company can run would take a lot more effort. You would need to spin up all required [nodes](https://docs.tendermint.com/master/nodes/, make sure they communicate across the data centers, establish backups, logging, monitoring, recovery procedures, etc. Besides of course some decent CI / CD for your contracts.
+It's important to remember that taking a hello world like this to a chain that you / your company can run would take a lot more effort. You would need to spin up all required [nodes](https://docs.tendermint.com/master/nodes/), make sure they communicate across the data centers, establish backups, logging, monitoring, recovery procedures, etc. Besides of course some decent CI / CD for your contracts.
 
 There are other open questions:
 
