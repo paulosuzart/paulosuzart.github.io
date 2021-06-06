@@ -38,19 +38,21 @@ So yes, if you was having a perception that a set of nodes playing some consensu
 
 ## Before the sample
 
-Before we see the sample: Most companies will likely aiming to run their own blockchain instead of blindly going for Etherium ([Permissionless chains](https://101blockchains.com/permissioned-vs-permissionless-blockchains/)) or any other. Although distributed, it is still a 3rd party (parties?) that does not offer much guarantees when compared to a cloud provider with a on-paper contract and someone you can sue if things go terribly wrong.
+Before we see the sample I want to share where I stand when it comes to blockchain, or what crosses my mind when I read and study all this.
 
-Another angle that have been signaling to blockchain is that big companies run applications in a handful of data centers at the same time. We need to choose between several options to keep the state of these applications. A central traditional database? A truly global database that does most of what was discussed above - in terms of consensus - for us, like [Google Spanner](https://cloud.google.com/spanner? Or perhaps you have a separate database per data center and find a way to shard and route requests across them?
+Most companies will likely aim for running their own blockchain instead of blindly going for Etherium ([Permissionless chains](https://101blockchains.com/permissioned-vs-permissionless-blockchains/)) or any other. Although distributed, they are a 3rd party (parties?) that does not offer much guarantees when compared to a cloud provider, for example, with a on-paper contract and someone you can sue if things go terribly wrong. Thus my research orbits mostly around permissioned solutions.
 
-Then the idea of blockchain, or daringly speaking: an application with it's own embedded database that remains consistent with the same application running in the other data centers. A blockchain! And going a bit further, instead of multiple applications with their own embedded database and a consensus devouring our network, why not N applications on top of the same consensus? Oh, smart contracts!
+Another angle pointing to blockchain is that big companies run applications in a handful of data centers at the same time. We need pick the best option to keep the state of these applications. A central traditional database? A truly global database that does most of what was discussed above - in terms of consensus - for us, like [Google Spanner](https://cloud.google.com/spanner? Or perhaps you have a database per data center then find a way to shard and route requests across them?
 
-So here is where I stand in this whole story. And working in Payments recently, I see a lot of what we build having a total match with blockchain, contracts, oracles, etc. Now let's see the example.
+The idea of blockchain comes pretty naturally, or daringly speaking: an application with its own embedded database that remains consistent with the same application running in the other data centers. A blockchain! And going a bit further, instead of multiple applications with their own embedded database and a consensus devouring our network, why not N applications on top of the same consensus? Oh, smart contracts!
+
+This is where I stand in this whole story. And working in Payments recently, I see a lot of what we build having a relevant match with blockchain, contracts, oracles, proofs, etc. Now let's see the example.
 
 # 'Transactions' chain
 
-Let's pretend we have a blockchain *(by the end of this article you can actually run it if you want)* that keeps records of transactions and when they were settled. Let's take *settled* here as a simple confirmation with a bank or 3rd party Payments Provider, that a transaction went through as in the money was for example really authorized by the bank.
+Let's pretend we have a blockchain *(by the end of this article you can actually run it if you want)* that keeps records of transactions. It also supports update these transactions to mark them as settled. *Settled* here as a simple confirmation with a bank or 3rd party Payments Provider that a transaction went through, as in: the money was really authorized by the bank.
 
-So if we were to represent the data (or state) of this Contract. We could use something like:
+If we were to represent the data (or state) of this Contract that holds transactions. We could use something like:
 
 ```yaml
 data:
@@ -63,9 +65,9 @@ data:
   # I didn't add the timestamp of settling, but it's good enough as a very minimal example
 ```
 
-Great, so we have he idea of the State we are aiming. Then we need to define a way to interact with this state. Let's say we provide 2 operations: `record_charge`, and `settle`. The first to save, if not present, a [Charge*](https://stripe.com/docs/api/charges/create) and the second to make the created charge as settled.
+Great, we have he idea of the State we are aiming. Now we need to define a way to interact with this state. Let's say we provide 2 operations: `record_charge`, and `settle`. The first to save a [Charge*](https://stripe.com/docs/api/charges/create) and the second to make the created charge as settled.
 
-**Charge here is a concept borrowed from Stripe for didactical purposes.*
+**Charge here is a concept borrowed from Stripe for didactical purposes. I'm using interchangeably with Transaction here*
 
 Encoding this in rust / Cosmwasm is pretty straightforward. Here the state:
 
@@ -78,6 +80,7 @@ pub struct Transaction {
     pub settled: bool,
 }
 
+// Just to make more practical the Charge Id is a separate struct
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct ChargeId {
     pub provider_name: std::string::String,
@@ -85,8 +88,8 @@ pub struct ChargeId {
 }
 ```
 
-For the `record_charge` operation we are relying on the chain itself to get the owner with `info.sender`. So we know someone with a valid wallet
-signed the request. So there's no validations. We could assert if the amount is bigger than 0 for example or other assertions. But let's do it simple:
+For the `record_charge` operation we are relying on the chain itself to get the owner from `info.sender`. This way we know someone with a valid wallet
+signed the request. We could assert if the amount is bigger than 0 for example or other assertions. But let's do it simple:
 
 ```rust
 pub fn record_charge(
@@ -109,7 +112,8 @@ pub fn record_charge(
     Ok(result)
 }
 ```
-After instantiating a Transaction, we just save it and return a `Response` that will sent to tendermint. Attribute here is more like a form of log / event of our transaction. If you are curious to know what is this `TRANS`, then just check the git repo (link at the end of the article). Now the `settle`:
+
+After instantiating a Transaction (not blockchain transaction, our transaction model above), we just save it and return a `Response` that will be sent to tendermint. `Attribute` here is more like a form of log / event of our transaction. If you are curious to know what is this `TRANS`, check the git repo (link at the end of the article). Now the `settle` operation:
 
 ```rust
 pub fn settle(deps: DepsMut, _info: MessageInfo, id: ChargeId) -> Result<Response, ContractError> {
@@ -125,9 +129,10 @@ pub fn settle(deps: DepsMut, _info: MessageInfo, id: ChargeId) -> Result<Respons
     Ok(result)
 }
 ``` 
-Here slightly more work. We check first if the charge was there (yes, the magical `?` up there) and if it is not settled yet. If this is the case we just update the flag to true and that's it.
 
-Now, who is calling these methods? A good old pattern match on a cosmwasm entrypoint:
+Slightly more work this time. We check first if the charge exists (yes, the magical `?` up there) and if it is not settled yet. If this is the case we just update the flag to true and that's it.
+
+Now, who is calling these methods? A good old pattern match on a Comswasm entrypoint:
 
 ```rust
 #[entry_point]
@@ -144,10 +149,10 @@ pub fn execute(
 }
 ```
 
-This works like a Dispatch. So remember that Comswasm is just a go module that calls a web assembly code you write in Rust. Even if you use a pure tendermint application with cosmos SDK, they use the same pattern as tendermint itself communicates with he blockchain application using a very small protocol you can find in [the specification](https://docs.tendermint.com/master/spec/). Forcing the comparison a bit, imagine it's a dispatch [servlet](https://stackoverflow.com/questions/2769467/what-is-dispatcher-servlet-in-spring).
+This works like a Dispatch. So remember that Comswasm is just a go module that calls a web assembly code you write in Rust. Even if you use a pure tendermint application with cosmos SDK, they use the same pattern provided that tendermint itself communicates with he blockchain application using a very concise protocol described in [the specification](https://docs.tendermint.com/master/spec/). Imagine it's a dispatch [servlet](https://stackoverflow.com/questions/2769467/what-is-dispatcher-servlet-in-spring).
 
 
-If you follow the Git repo and the cosmwasm tutorial to build and deploy this contract you should be able to interact with it like this, if you deploy to [oysternet-1](https://github.com/CosmWasm/testnets/tree/master/oysternet-1):
+If you follow the Git repo and the Cosmwasm tutorial to build and deploy this contract you should be able to interact with it using the following commands, if you deploy to [oysternet-1](https://github.com/CosmWasm/testnets/tree/master/oysternet-1):
 
 ```bash
 # record a charge
@@ -172,12 +177,14 @@ data:
   settled: true 
 ```
 
-This is ultra compressed for the sake of brevity and to point you out to more [complete patiently written tutorials](https://docs.terra.money/contracts/tutorial/implementation.html).
+This is ultra compressed tutorial for the sake of brevity and to point you out to more [complete and patiently written tutorials](https://docs.terra.money/contracts/tutorial/implementation.html).
+
+With that we were able to use the consensus of a [Byzantine Fault Tolerant](https://docs.tendermint.com/master/introduction/what-is-tendermint.html) network to make sure the transactions are correct. The use of gas in tendermint is optional, but oysternet is a real testnet provided by [Confio](https://confio.tech/), so they have it enabled.
 
 # Conclusion
-Like mentioned at some point in the post, the code is available in my github: [transactions](https://github.com/paulosuzart/transactions). *Warning: I didn't fix the tests that comes with the template.*
+Like mentioned at some point in the post, the code is available in my github: [transactions](https://github.com/paulosuzart/transactions). *Warning: I didn't fix the tests that comes with the template.* You can see with more details the contract, the messages and a a simple query by id.
 
-It's important to remember that taking a hello world like this to a chain ran by yourself / company will take a lot more effort. You need to spin up all required [nodes](https://docs.tendermint.com/master/nodes/). Make sure they communicate across the data centers, establish backups, logging, monitoring and list goes. Besides of course some decent CI / CD for your contracts.
+It's important to remember that taking a hello world like this to a chain that you / your company can run would take a lot more effort. You would need to spin up all required [nodes](https://docs.tendermint.com/master/nodes/, make sure they communicate across the data centers, establish backups, logging, monitoring, recovery procedures, etc. Besides of course some decent CI / CD for your contracts.
 
 There are other open questions:
 
@@ -196,6 +203,8 @@ Of course, if the user is up to use a blockchain application like Uniswap, Aaave
 **5. How to do mass migrations of contract state?**
 This always happens, you do a nice design, interview your stakeholders, define your ubiquitous language and after a couple of release here we are to do substantial changes to schemas. How to deal with this situation if part of your fleet of services is actually a blockchain?
 
-And the list goes on. But so far I would say my interaction with blockchain was elucidating, and removed much of the hype. It also showed me how much concepts we already use at work and that it might really be a good direction to go especially in this world of Payments. Yet I believe the blockchain of 5 to 10 years will have few in common with what we see now especially for application development. Blockchain needs to be commoditized or popularized as much as cloud computing so it can become main stream of be present in a wider variety of industries. 
+But so far I would say my interaction with blockchain was elucidating, and removed much of the hype. It also showed me how much concepts we already use at work and that it might really be a good direction to go especially in this world of Payments. Yet I believe the blockchain of 5 to 10 years ahead will have few in common with what we see today, especially for application development. Blockchain needs to be commoditized or popularized as much as cloud computing so it can become main stream and present in a wider variety of industries.
+
+What I'm up to now? I'm studying scaling blockchains with techniques like [State Channels](https://magmo.com/nitro-protocol.pdf), [Plasma](https://magmo.com/nitro-protocol.pdf) and [Roll ups](https://vitalik.ca/general/2021/01/05/rollup.html). This would allow some interesting constructs in the Payments world, that does not necessarily involve the end user and would make a blockchain scale to the levels big e-commerce platforms need.
 
 As blockchain enthusiasts, we must spend our energy to have impactful use cases that shows the power and relevance of it and stop chasing the next exponential growth that will bring you a *lembo*. In the end developers (or companies) will by Ether if they have a nice thing to build without having to stumble upon poorly written outdated tutorials (like my own tutorial above) and solutions that are not professional enough to enter the enterprise. At least I'm committed to take my parcel.
