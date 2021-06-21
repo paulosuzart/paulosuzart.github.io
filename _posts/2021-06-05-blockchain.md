@@ -91,7 +91,7 @@ pub struct ChargeId {
 For the `record_charge` operation, we are relying on the chain itself to get the owner from `info.sender`. This way, we know someone with a valid wallet
 signed the request. We could assert if the amount is larger than 0, for example, or other assertions. But let's do it with a simplified model:
 
-```Rust
+```rust
 pub fn record_charge(
     deps: DepsMut,
     info: MessageInfo,
