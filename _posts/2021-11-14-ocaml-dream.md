@@ -158,11 +158,17 @@ The code is mostly the same, except that the server now takes an optional parame
 
 The main difference is that `solve'` became a high-order function that takes a generic container and an arbitrary add function. So the logic remains the same regardless of the underlying container it is using. There are certainly more idiomatic ways to encode the container and its add operation using types or classes. But this was enough for now. The fun is there!
 
+A short difference in the way we access the solution is that `http://localhost:8080/find_repeated?word=hhana&s=set` (`s=set`) triggers the solution with `Set` and the absence of the parameter, or any other value, solves the puzzle using `Hastbl`.
+
+
 # Conclusion
 
 The code used here you find in a [gist](https://gist.github.com/paulosuzart/4547930ad007ce911741816fb510b8e1).
 
 OCaml is a language that I find beautiful and mapping to my recent work in payments, where you have complex business logic and interactions among several different concepts/entities. Having the elegance of OCaml has the potential to make things more straightforward and more maintainable. I will certainly give it a go in real life if I have a chance to.
+
+Dream is such a slim, lightweight framework offering almost everything a modern application would need. I miss out-of-the-box JWT handling. But it should be pretty manageable to implement using a bunch of middlewares. Another area that could get some attention is the external configuration.
+
 
 And here I go, chasing my dreams!
 
