@@ -94,9 +94,9 @@ Dream also comes with a lot of features including [Websocket](https://aantron.gi
 
 ## An improvement
 
-There's a caveat here. See the `added <> target, added` line? This comparison makes the Set walk across the elements to check equality. We have 26 letters in the English alphabet, but suppose you change the solution to take the case into account or take words in a text instead of letters in a word. This change could easily harm things, and Ocaml offers another API that does change elements in place and offers a handy `Hashtbl.length` to check the size of the table before and after adding an element to it.
+There's a caveat here. See the `added <> target, added` line? Sets implement that by walking across the elements to check equality. With 26 letters in the English alphabet, that is not a big deal, but suppose you change the requirements to take the letter case into account. Or, image you start taking words in a text instead of letters in a word. This in requirements can easily harm performance. 
 
-Unfortunately Sets `cardinal`, is some sort of `size` or `length` that needs to walk through the whole internal trie to be able to reply you how many elemts are there. This is a bummer, since holding the number of elements shouldn't be that hard to keep.
+Luckly, Ocaml offers another API that does change elements in place and offers a handy `Hashtbl.length` to check the size of the table before and after adding an element to it. `Hashtbl.length` is a O(1), as opposed to Set's `cardinal`, that walks through the whole internal trie to figure out how many elemts are there.
 
 Something that got me is how Hash Tables work here. If you use `add,` you can add several items to the same key. Much like a [MultiValuedMap](https://commons.apache.org/proper/commons-collections/apidocs/index.html?org/apache/commons/collections4/MultiValuedMap.html). To make it work, I ha do to use `Hashtbl.replace` that keeps only the last added value to a key.
 
