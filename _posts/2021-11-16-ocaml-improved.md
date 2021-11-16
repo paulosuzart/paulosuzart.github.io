@@ -6,19 +6,19 @@ comments: true
 tags: [ocaml]
 ---
 
-In the [last post](./2021-11-14-ocaml-dream.md) we spent some time playing with [Dream](https://aantron.github.io/dream) while doing very basic stuff in [OCaml](https://ocaml.org/). We saw how using Sets vs Hashtables could make a difference in performance and worked around it to allow solutins both using [Sets](https://ocaml.org/api/Set.html) and Hashtables. In this post we will see how to atain polymorphic behaviour of OCaml programs by using [Modules](https://ocaml.org/learn/tutorials/modules.html). 
+In the [last post](./2021-11-14-ocaml-dream.md), we played with [Dream](https://aantron.github.io/dream) while doing very basic stuff in [OCaml](https://ocaml.org/). We saw how using Sets vs. Hashtables could make a difference in performance and worked around it to allow solutions using [Sets](https://ocaml.org/api/Set.html) and Hashtables. In this post, we will see how to attain the polymorphic behavior of OCaml programs by using [Modules](https://ocaml.org/learn/tutorials/modules.html).
 
 <!--more-->
 
 # Modules
 
-Coming from Java - mostly - the idea of Modules is something alien to some extent. Especially in the [language's page about them](https://ocaml.org/learn/tutorials/modules.html). The explanation revolves more around how module help you organize code, how you open / include them, etc. Then you have [First-Class Modules](https://dev.realworldocaml.org/first-class-modules.html) in Real World OCam that is more or less a punch in the face.
+Coming from Java - mostly - the idea of Modules is something alien to some extent. Especially in the [language's page about them](https://ocaml.org/learn/tutorials/modules.html). The explanation revolves more around how modules help you organize code, open / include them, etc. Then you have [First-Class Modules](https://dev.realworldocaml.org/first-class-modules.html) in Real World OCam that is more or less a punch in the face.
 
-I had to read many times and do some try and error until I manage to get to the state I will share in a second. Alhough I can't fully provie a better explanation about modules, they are certainly very powerful tool of the language and a good bulk of polymorphism and parametrization will flow through them.
+I had to read many times and do some try and error until I managed to get to the state I will share in a second. Although I can't fully explain modules, they are certainly a potent tool of the language, and a good bulk of polymorphism and parametrization will flow through them.
 
-There even a second level of complexity with the so-called [Functors](https://dev.realworldocaml.org/functors.html) (no, they are not the Haskell [Functors](https://mmhaskell.com/monads/functors) I throught at first).
+There is even a second level of complexity with the so-called [Functors](https://dev.realworldocaml.org/functors.html) (no, they are not the Haskell [Functors](https://mmhaskell.com/monads/functors) I thought at first).
 
-I will leave the theory and syntax explanatio for those links above and let's see what I got while improving my program.
+I will leave the theory and syntax explanation for those links above, and let's see what I got while improving my program.
 
 # The problem
 
