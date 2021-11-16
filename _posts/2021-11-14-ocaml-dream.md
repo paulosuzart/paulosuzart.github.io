@@ -176,5 +176,5 @@ And here I go, chasing my dreams!
 
 ## Updates
 
-2021 November 16 - Created a simple example with the same solution in [Scala](https://www.scala-lang.org/) + [Zio](https://zio.dev/) in this [Gist](https://gist.github.com/paulosuzart/fcb4eed53ec23a51b7ccebca4df6eec1).
+2021 November 16 - Created a simple example with the same solution in [Scala](https://www.scala-lang.org/) + [Zio](https://zio.dev/) in this [Gist](https://gist.github.com/paulosuzart/fcb4eed53ec23a51b7ccebca4df6eec1#file-main-scala). And to be fully compatible, you can also find the http version in this other [file](https://gist.github.com/paulosuzart/fcb4eed53ec23a51b7ccebca4df6eec1#file-helloworld-scala). This version uses [ZIO-HTTP](https://dream11.github.io/zio-http/), which is very good but as most of new projects, documentation is not the strenght.
 
