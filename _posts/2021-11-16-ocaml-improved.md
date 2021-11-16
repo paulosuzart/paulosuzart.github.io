@@ -41,11 +41,9 @@ let rec solve' word' container add_fn = match word'() with
           | _ -> Some c)
   | _ -> None
 
-(* Finds the first repeated character in a word usingn a set *)
 let solve word =
   solve' (String.to_seq word) CharSet.empty add
 
-(* Finds the first repeated character in a word using a hash table *)
 let solve_ht word =
   let size = String.length word and seq = String.to_seq word in
   solve' seq (Hashtbl.create size) add_ht
