@@ -129,15 +129,17 @@ let solve_ht word =
   solve word myHtable
 ```
 
-The are then conditionally called from the request handler. The interface remain the same and if you run the code provided in the [post repository](https://github.com/paulosuzart/ocaml-example), you can access `http://localhost:8080/find_repeated?word=BBana` and get back a beautify `Found B`.
+They are then conditionally called from the request handler. The interface remains the same, and if you run the code provided in the [post repository](https://github.com/paulosuzart/ocaml-example), you can access `http://localhost:8080/find_repeated?word=BBana` and get back a beautify `Found B`.
 
 # Conclusion
 
-The first conclusion is something that I always say: the more you understand the problem, the more you improve your solution iteratively. The first version was using a convoluted implementation that is much more expensive, using `length`, etc. It was using also these arbitrary functions and providing different values as containres to the solving function. Turing its signature much worse.
+The first conclusion is something that I always say: the more you understand the problem, the more you improve your solution iteratively. The first version uses a convoluted, much more expensive implementation, using `length`, etc. It was also using these arbitrary functions and providing different values as containers to the solving function. Turing its signature much worse.
 
-Using `module` it was possible to have an algorithm that would rely a certain interface and the underlying implementation is a mere detail.
+Using `module`, it was possible to have an algorithm that would rely on a specific interface, and the underlying implementation is a mere detail.
 
-This post makes a good case for talking about Libraries like [Cats](https://typelevel.org/cats/) (*I hope I can stay away from the war going on in the community*), [ScalaZ](https://scalaz.github.io/7/) (always terribel documentation) or Type Classe in [Haskell](http://learnyouahaskell.com/types-and-typeclasses). And the most important, how uniformizing the way things interact can bring high degree of reusability and understanding across different domains.
+This post makes a good case for talking about Libraries like [Cats](https://typelevel.org/cats/) (*I hope I can stay away from the war going on in the community*), [ScalaZ](https://scalaz.github.io/7/) (always terrible documentation) or Type Classe in [Haskell](http://learnyouahaskell.com/types-and-typeclasses). 
+
+Note how uniformizing the way things interact can bring a high degree of reusability and understanding across different domains.
 
 You can clone and run this [repo](https://github.com/paulosuzart/ocaml-example) to play a bit (tests coming soon)! 
 
