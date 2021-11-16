@@ -129,7 +129,7 @@ let solve_ht word =
   solve word myHtable
 ```
 
-The are then conditionally called from the request handler. The interface remain the same and if you run the code provided in the post repository, you can access `http://localhost:8080/find_repeated?word=BBana` and get back a beautify `Found B`.
+The are then conditionally called from the request handler. The interface remain the same and if you run the code provided in the [post repository](https://github.com/paulosuzart/ocaml-example), you can access `http://localhost:8080/find_repeated?word=BBana` and get back a beautify `Found B`.
 
 # Conclusion
 
@@ -139,7 +139,7 @@ Using `module` it was possible to have an algorithm that would rely a certain in
 
 This post makes a good case for talking about Libraries like [Cats](https://typelevel.org/cats/) (*I hope I can stay away from the war going on in the community*), [ScalaZ](https://scalaz.github.io/7/) (always terribel documentation) or Type Classe in [Haskell](http://learnyouahaskell.com/types-and-typeclasses). And the most important, how uniformizing the way things interact can bring high degree of reusability and understanding across different domains.
 
-
+You can clone and run this [repo](https://github.com/paulosuzart/ocaml-example) to play a bit (tests coming soon)! 
 
 
 
