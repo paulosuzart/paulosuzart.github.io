@@ -174,3 +174,7 @@ Dream is such a slim, lightweight framework offering almost everything a modern 
 
 And here I go, chasing my dreams!
 
+## Updates
+
+2021 November 1
+
