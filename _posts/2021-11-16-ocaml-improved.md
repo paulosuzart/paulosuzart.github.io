@@ -22,7 +22,7 @@ I will leave the theory and syntax explanation for those links above, and let's 
 
 # The problem
 
-The core pice of the problem from the previous solution is here:
+The core piece of the problem from the previous solution is here:
 
 ```ocaml
 let add achar target =
@@ -49,13 +49,13 @@ let solve_ht word =
   solve' seq (Hashtbl.create size) add_ht
 ```
 
-Both `solve` and `solve_ht` (functions respectivelly called from the request handler for Set based and Hashtable based solutions) need to provide two extra parameters to the `solve'` function. One is the `container` empty instance (Hashtable or Set) and a function that know how to add elements to the desired containers, provided that the interfaces are different.
+Both `solve` and `solve_ht` (functions respectively called from the request handler for Set based and Hashtable based solutions) need to provide two extra parameters to the `solve'` function. One is the `container` empty instance (Hashtable or Set) and a function that knows how to add elements to the desired containers, provided that the interfaces are different.
 
-The solution works but it's pretty basic, conceptually speaking. It's more of a [clojure](https://clojure.org/) style of doing things. But how would that look like with modules?
+The solution works, but it's pretty basic, conceptually speaking. It's more of a [clojure](https://clojure.org/) style of doing things. But how would that look like with modules?
 
 # The Solution
 
-Let's start with the `interface`, or he signature of what we are trying to generify:
+Let's start with the contract, or he signature of what we are trying to generify:
 
 ```ocaml
 module type CHAR_CONTAINER =
@@ -67,9 +67,9 @@ module type CHAR_CONTAINER =
   end
 ```
 
-To comply with the solution we needed a way to get a `empty` container, whatever it is. We need a way to `add` elements to it. And, as you will see with the improved logic using patter matching with guards, we need a way to look up into the container, here represented by `contains`. I know, you Java developer will be thinking: These interfaces are commong in the [Collections framework](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html), why the heck are you creating an interface for it? Well... 
+To comply with the solution, we needed a way to get an `empty` container, whatever it is. We need a way to `add` elements to it. And, as you will see with the improved logic using pattern matching with guards, we need a way to look up into the container, here represented by `contains`. I know, you Java developer will be thinking: These interfaces are common in the [Collections framework](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html), why the heck are you creating an interface for it? Well...
 
-Comparisons apart, here is what we call `CHAR_CONTAINER`. Something that has the provided signature so our solution function can rely on it instead of forwarded arbitrary functions. How would a conformant implementation for Sets look like? Here we have it:
+Comparisons apart, here is what we call `CHAR_CONTAINER`. It represents something with the provided signature, so our solution function can rely on it instead of forwarded arbitrary functions. How would a conformant implementation for Sets look like? Here we have it:
 
 ```ocaml
 module SetContainer = 
@@ -83,11 +83,11 @@ module SetContainer =
   end
 ```
 
-Beautiful, huh? A way to understand the `type container` like `MyClass<Set>`, where you parametrize your class with some generics. Here we are saying that the `container` type for this module is actually a `Set` of `Char`.
+Beautiful, huh? A way to understand the `type container` like `MyClass<Set>`, where you parametrize your class with some generics. Here we say that this module's `container` type is a `Set` of `Char`.
 
-The implementation for contains wraps the `find_opt` that looks up and return an optional. I'm just converting it to a `bool`. And then `add` and `empty` follows pretty basic.
+The implementation for contains wraps the `find_opt` that looks up and return an optional. I'm just converting it to a `bool`. And then `add,` and `empty` follows pretty basically.
 
-Hashtable version is quite similar. Take a look:
+The Hashtable version is quite similar. Take a look:
 
 ```ocaml
 module HashTblContainer = 
@@ -100,9 +100,9 @@ module HashTblContainer =
   end
 ```
 
-The `container` is obviously different. But the rest of the implementation is quite similar. I used a `create 10` as an arbitrary size. We can change `empty` to take an extra contex but I intentionally want to live the signatures like this so in a next post we can talk about [Monoids](https://typelevel.org/cats/typeclasses/monoid.html).
+The `container` is different. But the rest of the implementation is quite similar. I used a `create 10` as an arbitrary size. We can change `empty` to take a different context, but I intentionally want to live the signatures like this to talk about [Monoids](https://typelevel.org/cats/typeclasses/monoid.html) in future opportunities.
 
-Before we see how we pass the modules to our `solve` function, let's quickly revisit how the new solution look like:
+Before we see how we pass the modules to our `solve` function, let's quickly revisit how the new solution looks like:
 
 ```ocaml
 let solve word (module M : CHAR_CONTAINER) =
@@ -114,9 +114,9 @@ let solve word (module M : CHAR_CONTAINER) =
   solve' empty word_seq
 ```
 
-Much shorter and elegant. The problem it tries to solve is, given a sequence of chars, detect the first repeated letter. The logic now takes a module that conforms with `CHAR_CONTAINER` and the `word` itself. Then starts the `solve'` that will match the `Seq` of `char` and if the first char is contained in the container, it returns right away. Otherwise, the char is added to the container and the function called again. And finally, if the sequence is exhausted (`Nil`) it returns `None`.
+Much shorter and elegant. Given a sequence of chars, the problem it tries to solve is to detect the first repeated letter. The logic now takes a module that conforms with `CHAR_CONTAINER` and the `word` itself. Then starts the `solve'` that will match the `Seq` of `char`, and if the first char is contained in the container, it returns right away. Otherwise, the char is added to the container, and the function is called again. And finally, if the sequence is exhausted (`Nil`) it returns `None`.
 
-The two functions that dispatch to the `solve` functio need to do the heavey lift of summoning the appropriate CHAR_CONTAINER:
+The two functions that dispatch to the `solve` function need to do the heavy lift of summoning the appropriate `CHAR_CONTAINER`:
 
 
 ```ocaml
