@@ -176,5 +176,5 @@ And here I go, chasing my dreams!
 
 ## Updates
 
-2021 November 1
+2021 November 16 - Created a simple example with the same solution in [Scala](https://www.scala-lang.org/) + [Zio](https://zio.dev/) in this [Gist](https://gist.github.com/paulosuzart/fcb4eed53ec23a51b7ccebca4df6eec1).
 
