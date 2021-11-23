@@ -55,7 +55,7 @@ The solution works, but it's pretty basic, conceptually speaking. It's more of a
 
 # The Solution
 
-Let's start with the contract, or he signature of what we are trying to generify:
+Let's start with the contract, or the signature of what we are trying to generify:
 
 ```ocaml
 module type CHAR_CONTAINER =
@@ -83,7 +83,7 @@ module SetContainer =
   end
 ```
 
-Beautiful, huh? A way to understand the `type container` like `MyClass<Set>`, where you parametrize your class with some generics. Here we say that this module's `container` type is a `Set` of `Char`.
+Beautiful, huh? A way to understand the `type container` statement, is similar to define `MyClass<Set>` instance for a `MyClass<T>`, where you parametrize your class with some generics then specify it at creation time. Here we say that this module's `container` type is a `Set` of `Char`.
 
 The implementation for contains wraps the `find_opt` that looks up and return an optional. I'm just converting it to a `bool`. And then `add,` and `empty` follows pretty basically.
 
