@@ -152,6 +152,16 @@ Then our `TaskQueue.Service` is constructed, defining the `handle` method. All i
 
 In Spring, dependencies would be injected via constructors using the good old [@RequiedArgsConstructor](https://projectlombok.org/features/constructor). So you can imagine that the lambda taking `console` and `globalSet` are acting as a factory while referencing both via closure.
 
+Last, but not the least, the `Map` where all records are kept (the `TaskQueue.storeLayer` that you saw in the first snippet) is a requirement for our `TaskQueue.Service` as well as the `app` itself. It is created out of `toLayer` from a `ZRef`. It was defined in our companion object:
+
+```scala
+object TaskQueue {
+    //...
+    val storeLayer = ZRef.make(Map.empty[String, Entry]).toLayer
+    //...
+}
+```
+
 
 ## A Note on ZLayers
 I saw this [comment](https://www.reddit.com/r/scala/comments/qkdtg2/comment/hivt52u/?utm_source=share&utm_medium=web2x&context=3) in a Reddit post. The author says:
