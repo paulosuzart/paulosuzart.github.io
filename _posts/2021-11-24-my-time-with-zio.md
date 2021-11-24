@@ -174,4 +174,4 @@ Yes, the Layer thing can be improved and is becoming much better with 2.0. ZIO h
 
 In my opinion, they can grow as strong and big as Spring and become the go-to ecosystem if you want to use Scala in production. Good luck, folks!
 
-As usual, you find the complete code in my [github](https://github.com/paulosuzart/zio-example).
+As usual, you find the complete code in my [github](https://github.com/paulosuzart/zio-example). You just need a local Kafka cluster with a topic named `leases` to make it work.
