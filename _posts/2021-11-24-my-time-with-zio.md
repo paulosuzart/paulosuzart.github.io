@@ -42,8 +42,8 @@ object Solver extends zio.App:
     TaskQueue.app.provideCustomLayer(env).exitCode
 ```
 
-Things will not make a lot of sense at this point. But this is just the main  method being called and the layers thing you can imagine as wiring dependencies
-in a framework like Spring or Guice (perhaps Guice like). What is happening here is: Hey ZIO Dependency resolution, there's a service that
+Things will not make a lot of sense at this point. But this is just the required `run` method, and the layers thing, you can take it as wiring dependencies
+in a framework like Spring or Guice. What is happening here is: Hey ZIO Dependency resolution, there's a service that
 takes `CommitttableRecords`, logs, and inserts it into the global map. This service to work needs two other services, a `Console` and this global map. This is basically `l1` here. And finally, we provide this produced service (in the form of a layer) and horizontally compose it (like, put side to side) and provide it to `TaskQueue.app` that requires precisely the Kafka Consumer plus the `TaskQueue` plus the global map. How do we know that?
 
 If we check the signature of our `TaskQueue.app` application (Just a ZIO that takes some environment as input and produce some value), we see:
@@ -162,7 +162,6 @@ object TaskQueue {
 }
 ```
 
-
 ## A Note on ZLayers
 I saw this [comment](https://www.reddit.com/r/scala/comments/qkdtg2/comment/hivt52u/?utm_source=share&utm_medium=web2x&context=3) in a Reddit post. The author says:
 
@@ -170,7 +169,7 @@ I saw this [comment](https://www.reddit.com/r/scala/comments/qkdtg2/comment/hivt
 
 And to be honest, I spent a good half a day trying o figure out how to assemble my environment. I managed to make it work with a hand from [kit](https://twitter.com/kitlangton) in the Discord server, but it was a real trickery thing. 
 
-Imagine this: after finally convincing the team to try ZIO, having to spend a day with the ZLayers while having a bunch of business value delayed because of this would be concerning. Still, luckily kit also posted on [twitter](https://mobile.twitter.com/kitlangton) a video showing how things look in ZIO 2.0 and this bunch of environment dependencies.
+Think about this: after finally convincing the team to try ZIO, having to spend a day with the ZLayers while having a bunch of business value delayed because of this would be concerning. Still, luckily kit also posted on [twitter](https://mobile.twitter.com/kitlangton) a video showing how things look in ZIO 2.0 and this bunch of environment dependencies.
 
 # Conclusion
 
