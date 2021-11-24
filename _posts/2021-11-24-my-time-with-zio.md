@@ -6,19 +6,19 @@ comments: true
 tags: [scala]
 ---
 
-Following my study spree during my vacations, it was time to jump into [ZIO](https://zio.dev/). I have touched the project here and there but never tried to build sample. What I found after my last visit one year ago, is a much more mature, ecosystem like suite of capabilities and I like what I see. Let's walk through a simple example consuming a Kafka Topic and keeping a background process ([fiber](https://zio.dev/version-1.x/datatypes/fiber/index)) logging a "materialized" version of this topic in memory.
+Following my study spree during my vacations, it was time to jump into [ZIO](https://zio.dev/). I have touched the project here and there but never tried to build a sample. After my last visit one year ago, what I found is a much more mature, ecosystem-like suite of capabilities, and I like what I see. Let's walk through a simple example of consuming a Kafka Topic and keeping a background process ([fiber](https://zio.dev/version-1.x/datatypes/fiber/index)) logging a "materialized" version of this topic in memory.
 
 <!--more-->
 
 # ZIO
 
-The first thing to catch your eyes is the [adopters list](https://github.com/zio/zio#adopters) in the project's README. You find big names in that list including Asana, Bank of America, DHL, TomTom, Zalando, among others. It's a pretty decent list and bring a lot of credibiliy to the project.
+The first thing to catch your eyes is the [adopters list](https://github.com/zio/zio#adopters) in the project's README. You find big names in that list, including Asana, Bank of America, DHL, TomTom, Zalando, among others. It's a pretty decent list and brings a lot of credibility to the project.
 
 Documentation is [abundant](https://zio.dev/version-1.x/datatypes/index) and folks on [Discord server](https://discord.gg/2ccFBr4) are pretty friendly.
 
-In the Zionomico, John accounts for a previous experience designing and building [Purescript's](https://www.purescript.org/) [Aff](https://github.com/purescript-contrib/purescript-aff) library, among other experiences that helped him learn and mature. Until he came up with what became [Scalaz 8 IO Monad](https://eed3si9n.com/learning-scalaz/IO+Monad.html) and "the seeds of ZIO had been planted, and they grew quickly" (De Goes and Fraser, 2021, pp. 3). I what greatly summarizes the motivations and philosophy behind ZIO is delived by John himlself in this amazin talk to the [Berlin Functional Programming Group](https://www.youtube.com/watch?v=QDleESXlZJw).
+In the Zionomico, John accounts for a previous experience designing and building [Purescript's](https://www.purescript.org/) [Aff](https://github.com/purescript-contrib/purescript-aff) library, among other experiences that helped him learn and mature. Until he came up with what became [Scalaz 8 IO Monad](https://eed3si9n.com/learning-scalaz/IO+Monad.html) and "the seeds of ZIO had been planted, and they grew quickly" (De Goes and Fraser, 2021, pp. 3). John himself delivers the motivations and philosophy behind ZIO in this amazing talk to the [Berlin Functional Programming Group](https://www.youtube.com/watch?v=QDleESXlZJw).
 
-And John is right, barriers need to be lowered for people coming into FP. Typeclasses are a great tool, but if you turn everything into a Semigroup, Ring or whatever, then you totally lose your domain knowledge in favor of abstractions with laws with gret reuse but with great distance from what your business domain.
+And John is right, and barriers need to be lowered for people coming into FP. Typeclasses are a great tool, but if you turn everything into a Semigroup, Ring, or whatever, you lose your domain knowledge in favor of abstractions with laws with great reuse but with great distance from your business domain.
 
 # The sample
 
