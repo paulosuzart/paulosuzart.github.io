@@ -141,7 +141,7 @@ There are open questions in my head. They stem from the fact this is just a tria
 
 1. How to partially mock services in an extensive hierarchy of services? Will that require a lot of handwork to create all variations of environments?
 1. What about solutions tightly integrated with JUnit like [Test Containers](https://www.testcontainers.org/test_framework_integration/junit_5/)? Will that work?
-1. How to do [@BeforeAll](https://junit.org/junit5/docs/5.0.0/api/org/junit/jupiter/api/BeforeAll.html) and alike?
+1. How to do [@BeforeAll](https://junit.org/junit5/docs/5.0.0/api/org/junit/jupiter/api/BeforeAll.html) and alike? _found the answer, it's possible using the [`beforeAll`](https://github.com/zio/zio/blob/master/test/shared/src/main/scala/zio/test/TestAspect.scala#L191) aspect.
 1. Will the folks at ZIO provide a mock capability like Mockito? What about [Power Mock](https://github.com/powermock/powermock)?
 
 Time will tell, and more research from my end will answer a couple of them.
