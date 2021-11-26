@@ -153,3 +153,4 @@ ZIO offers a considerable number of assertions that will cover almost everything
 My example is more or less complete with a simple feature, a simple test, and an increasing admiration for ZIO. If you are looking for a more thorough and profound ZIO Test post, you may visit Pavels Sisojevs [post](https://scala.monster/zio-test/) to find much more.
 
 
+The code for this test you can find on my [github](https://github.com/paulosuzart/zio-example/blob/master/src/test/scala/io/bpp/TaskQueueSpec.scala).
