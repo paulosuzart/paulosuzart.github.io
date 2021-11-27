@@ -10,7 +10,7 @@ Hey you, welcome! In this blog post, we will briefly touch [OCaml](https://ocaml
 I was looking for a reason to try to Dream that is not yet another hello world. Let’s give it a go.
 
 <!--more-->
-
+**UPDATE**: Check the improved version of the solution in the [next blog "OCaml Improved"]({% post_url 2021-11-16-ocaml-improved %}).
 # OCaml
 
 

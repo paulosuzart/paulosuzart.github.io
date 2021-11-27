@@ -6,7 +6,7 @@ comments: true
 tags: [ocaml]
 ---
 
-In the [last post](./2021-11-14-ocaml-dream.md), we played with [Dream](https://aantron.github.io/dream) while doing very basic stuff in [OCaml](https://ocaml.org/). We saw how using Sets vs. Hashtables could make a difference in performance and worked around it to allow solutions using [Sets](https://ocaml.org/api/Set.html) and Hashtables. In this post, we will see how to attain the polymorphic behavior of OCaml programs by using [Modules](https://ocaml.org/learn/tutorials/modules.html).
+In the [last post]({% post_url 2021-11-14-ocaml-dream %}), we played with [Dream](https://aantron.github.io/dream) while doing very basic stuff in [OCaml](https://ocaml.org/). We saw how using Sets vs. Hashtables could make a difference in performance and worked around it to allow solutions using [Sets](https://ocaml.org/api/Set.html) and Hashtables. In this post, we will see how to attain the polymorphic behavior of OCaml programs by using [Modules](https://ocaml.org/learn/tutorials/modules.html).
 
 <!--more-->
 
