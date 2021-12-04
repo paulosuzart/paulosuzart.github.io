@@ -10,7 +10,7 @@ Hey you, welcome! In this blog post, we will briefly touch [OCaml](https://ocaml
 I was looking for a reason to try to Dream that is not yet another hello world. Let’s give it a go.
 
 <!--more-->
-**UPDATE**: Check the improved version of the solution in the [next blog "OCaml Improved"]({% post_url 2021-11-16-ocaml-improved %}).
+**UPDATE**: Check the improved version of the solution in the [next post "OCaml Improved"]({% post_url 2021-11-16-ocaml-improved %}).
 # OCaml
 
 
@@ -83,8 +83,8 @@ let () =
   ```
 
 The parts you see `Dream` is setting up an HTTP server that logs your requests and routes the `GET /find_repeated` to a function called `res`, which returns a simple string used with HTML indicating the result of the processing.
-
-The function `solve` implements the algorithm taking the word as an argument, turning it into a sequence of characters. You see `solve'` as a recursive function because `Sets` in OCaml are immutable; thus, you get a new instance every time you add something to them. This idiom looks like [loop/recur](https://clojuredocs.org/clojure.core/loop) in Clojure.
+*
+The function `solve` implements the algorithm taking the word as an argument, turning it into a sequence of characters. You see `solve'` as a recursive function because `Sets` in OCaml are immutable; thus, you get a new instance every time you add something to them. This idiom looks like [loop/recur](https://clojuredocs.org/clojure.core/loop) in Clojure. *Important:* Check the [next post "OCaml Improved"]({% post_url 2021-11-16-ocaml-improved %}) for an improved solution.
 
 The logic is pretty stupid. It tries to add a character to a Set; if it succeeds, it's because the char wasn't there before. If it "fails", this means the `char` was already present, and the whole processing returns immediately. The `add` is wrapping the native `Set.add` to return a tuple indicating if the set before and after are different. And they will be if the insertion succeeds.
 
