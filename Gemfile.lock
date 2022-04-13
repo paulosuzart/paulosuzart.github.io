@@ -101,7 +101,7 @@ PLATFORMS
 
 DEPENDENCIES
   html-proofer
-  jekyll (>= 3.8.6)
+  jekyll (>= 4.1.1)
   jekyll-gist
   jekyll-paginate
   jekyll-redirect-from
