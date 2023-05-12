@@ -40,22 +40,22 @@ We are basically preparing to read any response and extract into this shape.
 With the LLM instance and the prompt at hand we can then get the trivia content for our game:
 
 ```python
-    prompt = PromptTemplate(
-        input_variables=["subject"],
-        template="""
-        Prepare a trivia game. {format_instructions}.
-        Prepare a trivia about the Subject: {subject}.
-        Bring only 1 questions. 
-        Give three alternatives to each question where one is the correct. Keep answers as short as possible.
-        No sexual or minor than 18 years subjects must be brought up. Questions in english only.
-    """,
-        partial_variables={"format_instructions": parser.get_format_instructions()}
-    )
+  prompt = PromptTemplate(
+      input_variables=["subject"],
+      template="""
+      Prepare a trivia game. {format_instructions}.
+      Prepare a trivia about the Subject: {subject}.
+      Bring only 1 questions. 
+      Give three alternatives to each question where one is the correct. Keep answers as short as possible.
+      No sexual or minor than 18 years subjects must be brought up. Questions in english only.
+  """,
+      partial_variables={"format_instructions": parser.get_format_instructions()}
+  )
 
-    q = prompt.format_prompt(subject=subject)
-    q2 = prompt.format(subject=_subject)
-    result = llm(q2)
-    return retry_parser.parse_with_prompt(result, q)
+  q = prompt.format_prompt(subject=subject)
+  q2 = prompt.format(subject=_subject)
+  result = llm(q2)
+  return retry_parser.parse_with_prompt(result, q)
 ```
 
 That is it. The call to `llm` is an abstracted call to any underlying llm. LangChain allows us to plug several LLMs. You are not required to use [OpenAI](https://openai.com/). 
