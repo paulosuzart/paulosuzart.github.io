@@ -23,7 +23,7 @@ I found [LangChain](https://python.langchain.com/en/latest/). It is basically a 
 1. How to read back the produced content in a structured way so an application can take advantage of the responses to take some action?
 1. How to efficiently give context to the chat so it can answer things about data you have, not only data it was trained on?
 
-LangChain helps with this and much more. In this simple game, Lang Chain will be help us with the point 2 above. It does it by letting you define a [pydantic](https://docs.pydantic.dev/latest/) object like this and giving you a parser to use on the responses from the chat:
+LangChain helps with this and much more. In this simple game, Lang Chain will be help us with the point 1 above. It does it by letting you define a [pydantic](https://docs.pydantic.dev/latest/) object like this and giving you a parser to use on the responses from the chat:
 
 ```python
 class Question(BaseModel):
@@ -35,7 +35,7 @@ class Question(BaseModel):
 parser = PydanticOutputParser(pydantic_object=Question)
 retry_parser = RetryWithErrorOutputParser.from_llm(parser=parser, llm=llm)
 ```
-We are basically preparing to read any response and extract into this shape.
+We are basically preparing to read any response and extract into this shape. This is the concept of so-called Output Parsing and there are [several different options](https://python.langchain.com/en/latest/modules/prompts/output_parsers.html) you can use. 
 
 With the LLM instance and the prompt at hand we can then get the trivia content for our game:
 
