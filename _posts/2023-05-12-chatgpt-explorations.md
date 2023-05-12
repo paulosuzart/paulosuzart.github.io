@@ -10,15 +10,20 @@ ChatGPT is one of the enablers. I don't find what it does to be particularly int
 
 Writing tedious repository code to access databases and boring SQL queries to extract reports can be fully automated. These are tasks that will make you no better engineer or person. It's just the same repetitive tantrum. And this is where we must have AI help as soon as possible without fear of being replaced, but rather excited to be more productive.
 
-We still will need to review the quality of whatever is generated. As there's no real intelligence whatsoever, we will position ourselves more and more to be supervisors of these machines harder than the workers.
+We still will need to review the quality of whatever is generated. As there's no real intelligence whatsoever, we will position ourselves more and more to be supervisors of these machines harder than the workers. 
+
+Doing software today became so much complex. Product Managers, Designers, Frontends, Product Marketing, Analytics, Backenders, Mobile, Platform/SRE, Engineering Experience, etc. This setup adds a lot of overhead especially in communication and collaboration. And this is also where I see AI tools helping removing the clutter. 
 
 # To the weeds
 
-I was thinking about something to build. So I found [LangChain](https://python.langchain.com/en/latest/). It is basically a framework that let you overcome two immediate problems of interacting with a chat:
+Enough talking. Let's see what we have for today! 
+
+I found [LangChain](https://python.langchain.com/en/latest/). It is basically a framework that lets you overcome two immediate problems of interacting with a chat/text based AI:
 
 1. How to read back the produced content in a structured way so an application can take advantage of the responses to take some action?
 1. How to efficiently give context to the chat so it can answer things about data you have, not only data it was trained on?
-LangChain helps with this and much more. In this simple game, Lang Chain will be help us with the point 2 above. It does it by letting you define a pydantic object like this and giving you a parser to use on the responses from the chat:
+
+LangChain helps with this and much more. In this simple game, Lang Chain will be help us with the point 2 above. It does it by letting you define a [pydantic](https://docs.pydantic.dev/latest/) object like this and giving you a parser to use on the responses from the chat:
 
 ```python
 class Question(BaseModel):
@@ -64,7 +69,7 @@ You can find the complete code [repository](https://github.com/paulosuzart/trivi
 The app looks more or less lie this:
 <blockquote class="imgur-embed-pub" lang="en" data-id="a/RNRryV2" data-context="false" ><a href="//imgur.com/a/RNRryV2"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
-I don't want to spend much time on Streamlit, but this thing is so practical. You write your UI components using Python directly, and this thing just works. It is flat, no layers, no b*ll sh*t. Just render your stuff and does the job. As most development platforms were supposed to be. 
+I don't want to spend much time on Streamlit, but this thing is so practical! You write your UI components using Python directly with your app logic, and this thing just works. It is flat, no layers, no b*ll sh*t. Just render your stuff and does the job (As most development platforms were supposed to be).
 
 # Conclusion
 The sky is the limit. What else can you automate with ChatGPT or other LLM to decide how to accomplish specific tasks?
