@@ -6,18 +6,18 @@ In this post, I will share how I built a very simple trivia game using ChatGPT i
 
 I haven't been active in writing. Every day there are more and more content available in this area. I feel a bit like The Tech Lead when he says he [quits coding](https://www.youtube.com/watch?v=ab6xJ4E23VQ) and that nerds are not cool anymore. But I may quit coding not because I'm leaving the computer screen but because some AI assistant will do it for me end-to-end.
 
-ChatGPT is one of the enablers. I don't find what it does particularly intelligent, but what people did to build it is clever. It can't produce anything intelligent at all. And what in the world needs little intelligence? Automation.
+ChatGPT is one of the enablers. I don't find what it does to be particularly intelligent, but what people did to build it, is absolutely clever. It can't produce anything intelligent at all, but then what in the world needs little intelligence? Automation. Of all kinds.
 
-Writing tedious repository code to access databases and boring SQL queries to extract that report can be fully automated. These are things that will make you no better engineer or person. It's just the same repetitive tantrum. And this is where we must have AI help as soon as possible without fear of being replaced, but excited to be more productive.
+Writing tedious repository code to access databases and boring SQL queries to extract reports can be fully automated. These are tasks that will make you no better engineer or person. It's just the same repetitive tantrum. And this is where we must have AI help as soon as possible without fear of being replaced, but rather excited to be more productive.
 
-We still will need to review the quality of whatever is generated. As there's no real intelligence whatsoever, we will more and more be paid to be supervisors of these machines harder than the workers.
+We still will need to review the quality of whatever is generated. As there's no real intelligence whatsoever, we will position ourselves more and more to be supervisors of these machines harder than the workers.
 
 # To the weeds
 
 I was thinking about something to build. So I found [LangChain](https://python.langchain.com/en/latest/). It is basically a framework that let you overcome two immediate problems of interacting with a chat:
 
-How to read back the produced content in a structured way so an application can take advantage of the responses to take some action?
-How to efficiently give context to the chat so it can answer things about data you have, not only data it was trained on?
+1. How to read back the produced content in a structured way so an application can take advantage of the responses to take some action?
+1. How to efficiently give context to the chat so it can answer things about data you have, not only data it was trained on?
 LangChain helps with this and much more. In this simple game, Lang Chain will be help us with the point 2 above. It does it by letting you define a pydantic object like this and giving you a parser to use on the responses from the chat:
 
 ```python
