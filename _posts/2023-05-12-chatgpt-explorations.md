@@ -40,22 +40,22 @@ We are basically preparing to read any response and extract into this shape.
 With the LLM instance and the prompt at hand we can then get the trivia content for our game:
 
 ```python
-  prompt = PromptTemplate(
-      input_variables=["subject"],
-      template="""
-      Prepare a trivia game. {format_instructions}.
-      Prepare a trivia about the Subject: {subject}.
-      Bring only 1 questions. 
-      Give three alternatives to each question where one is the correct. Keep answers as short as possible.
-      No sexual or minor than 18 years subjects must be brought up. Questions in english only.
-  """,
-      partial_variables={"format_instructions": parser.get_format_instructions()}
-  )
+prompt = PromptTemplate(
+    input_variables=["subject"],
+    template="""
+    Prepare a trivia game. {format_instructions}.
+    Prepare a trivia about the Subject: {subject}.
+    Bring only 1 questions. 
+    Give three alternatives to each question where one is the correct. Keep answers as short as possible.
+    No sexual or minor than 18 years subjects must be brought up. Questions in english only.
+""",
+    partial_variables={"format_instructions": parser.get_format_instructions()}
+)
 
-  q = prompt.format_prompt(subject=subject)
-  q2 = prompt.format(subject=_subject)
-  result = llm(q2)
-  return retry_parser.parse_with_prompt(result, q)
+q = prompt.format_prompt(subject=subject)
+q2 = prompt.format(subject=_subject)
+result = llm(q2)
+return retry_parser.parse_with_prompt(result, q)
 ```
 
 That is it. The call to `llm` is an abstracted call to any underlying llm. LangChain allows us to plug several LLMs. You are not required to use [OpenAI](https://openai.com/). 
@@ -64,12 +64,31 @@ One of the problems is that ChatGPT sometimes does not return the full response 
 
 Another nice abstraction LangChain gives us is the `PromptTemplate`. It is responsible for getting your instructions, merging them with any new input, and informing ChatGPT about the format you want for that output (see `{format_instructions}`).
 
-You can find the complete code [repository](https://github.com/paulosuzart/triviagpt), and running it is straightforward. Just clone it and run it on https://streamlit.io/. I can't leave the application public as it uses my real OpenAI API keys. 
+You can find the complete code [repository](https://github.com/paulosuzart/triviagpt), and running it is straightforward. Just clone it and run it on https://streamlit.io/. I can't leave the application public as it uses my real OpenAI API keys.
 
 The app looks more or less lie this:
 <blockquote class="imgur-embed-pub" lang="en" data-id="a/RNRryV2" data-context="false" ><a href="//imgur.com/a/RNRryV2"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 I don't want to spend much time on Streamlit, but this thing is so practical! You write your UI components using Python directly with your app logic, and this thing just works. It is flat, no layers, no b*ll sh*t. Just render your stuff and does the job (As most development platforms were supposed to be).
+
+To build this nice UI, all I did was get the question back from ChatGPT and display it with the components:
+
+```python
+st.write('Here we go')
+st.write(st.session_state.q.question)
+options = ['-'] + st.session_state.q.ops
+option = st.selectbox('Pick one', options)
+
+if option == '-':
+    st.stop()
+if option == st.session_state.q.answer:
+    st.success('Bingo!')
+    st.snow()
+else:
+    st.error('Ooops, not this time')
+```
+
+Just plain and simple. There are other steps of the game that a call to GPT could be used, like letting user reply with a text and the verying if the question is correct, avoid duplicate questions, making some form of scoring. But you got the drill.
 
 # Conclusion
 The sky is the limit. What else can you automate with ChatGPT or other LLM to decide how to accomplish specific tasks?
