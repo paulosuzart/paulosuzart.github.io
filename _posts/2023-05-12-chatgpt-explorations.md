@@ -12,7 +12,7 @@ Writing tedious repository code to access databases and boring SQL queries to ex
 
 We still will need to review the quality of whatever is generated. As there's no real intelligence whatsoever, we will position ourselves more and more to be supervisors of these machines harder than the workers. 
 
-Doing software today became so much complex. Product Managers, Designers, Frontends, Product Marketing, Analytics, Backenders, Mobile, Platform/SRE, Engineering Experience, etc. This setup adds a lot of overhead especially in communication and collaboration. And this is also where I see AI tools helping removing the clutter. 
+Doing software today became so much complex. Product Managers, Designers, Frontends, Product Marketing, Analytics, Backenders, Mobile, Platform/SRE, Engineering Experience, etc. This setup adds a lot of overhead especially in communication and collaboration. And this is also where I see AI tools helping removing the clutter.
 
 # To the weeds
 
