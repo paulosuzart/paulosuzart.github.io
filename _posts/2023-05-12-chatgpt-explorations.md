@@ -1,4 +1,12 @@
-[ChatGPT](https://chat-gpt.org/) has taken the world like fire. The current generation of AI tools took the spotlight, overshadowing BitCoin, Blockchain, and the like. It was my turn now to surrender and give it a try finally.
+---
+layout: post
+title: "ChatGPT Explorations"
+date: 2023-05-12 13:00
+comments: true
+tags: [ai, chatgpt]
+---
+
+[ChatGPT](https://chat-gpt.org/) has spread the world like fire. The current generation of AI tools took the spotlight, overshadowing BitCoin, Blockchain, and the like. It was my turn now to surrender and give it a try finally.
 
 In this post, I will share how I built a very simple trivia game using ChatGPT in Pythyon and deployed to [Streamlit](https://streamlit.io/).
 
