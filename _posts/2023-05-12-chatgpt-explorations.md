@@ -26,7 +26,7 @@ Doing software today became so much complex. Product Managers, Designers, Fronte
 
 Enough talking. Let's see what we have for today! 
 
-I found [LangChain](https://python.langchain.com/en/latest/). It is basically a framework that lets you overcome two immediate problems of interacting with a chat/text based AI:
+I found [LangChain](https://python.langchain.com/en/latest/). It is basically a framework that lets you overcome do a bunch of things in a standardized way across many different LLMs. It also helps with two immediate challenges of interacting with a chat/text based AI:
 
 1. How to read back the produced content in a structured way so an application can take advantage of the responses to take some action?
 1. How to efficiently give context to the chat so it can answer things about data you have, not only data it was trained on?
