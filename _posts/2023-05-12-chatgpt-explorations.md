@@ -16,11 +16,11 @@ I haven't been active in writing. Every day there are more and more content avai
 
 ChatGPT is one of the enablers. I don't find what it does to be particularly intelligent, but what people did to build it, is absolutely clever. It can't produce anything intelligent at all, but then what in the world needs little intelligence? Automation. Of all kinds.
 
-Writing tedious repository code to access databases and boring SQL queries to extract reports can be fully automated. These are tasks that will make you no better engineer or person. It's just the same repetitive tantrum. And this is where we must have AI help as soon as possible without fear of being replaced, but rather excited to be more productive.
+Writing tedious repository code to access databases and boring SQL queries to extract reports can be fully automated. These are tasks that will make you no better engineer or person. It's just the same repetitive tantrum that brings no differentiation to the business. And this is where we must have AI help as soon as possible without fear of being replaced, but rather excited to be more productive.
 
 We still will need to review the quality of whatever is generated. As there's no real intelligence whatsoever, we will position ourselves more and more to be supervisors of these machines harder than the workers. 
 
-Doing software today became so much complex. Product Managers, Designers, Frontends, Product Marketing, Analytics, Backenders, Mobile, Platform/SRE, Engineering Experience, etc. This setup adds a lot of overhead especially in communication and collaboration. And this is also where I see AI tools helping removing the clutter.
+Doing software today became so much complex. Product Managers, Designers, Frontends, Product Marketing, Analytics, Backenders, Mobile, Platform/SRE, Engineering Experience, Data stacks, etc. This setup adds a lot of overhead especially in communication and collaboration. And this is also where I see AI tools helping removing the clutter.
 
 # To the weeds
 
