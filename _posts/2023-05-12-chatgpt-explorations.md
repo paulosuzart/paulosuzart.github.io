@@ -103,7 +103,9 @@ The sky is the limit. What else can you automate with ChatGPT or other LLM to de
 
 This post was written with the help of AI. I have been using Grammarly for a long time. Did I get lazy? Perhaps, but the produced content is much more fluid to read. It feels now that there's no way of scaping the new productivity mode. The better you master these tools, the more productive you can be.
 
-There are other deep concerns about the quality of the training data, the bias, the protection of your data when you use these kinds of tools, etc. Which data leaks will come? How many fraudulent "AI Tools" will be introduced? How will these tools be used to cause harm and control people's opinions and the information they consume? 
+There are other deep concerns about the quality of the training data, the bias, the protection of your data when you use these kinds of tools, etc. Which data leaks will come? How many fraudulent "AI Tools" will be introduced? How will these tools be used to cause harm and control people's opinions and the information they consume?
+
+I truly believe AI tools is to engineers what [web3](https://www.investopedia.com/web-20-web-30-5208698) promissed to be, but without the sole purpose of buying low, selling high. It is an emerging market like data emerged and established its own [roles](https://chartio.com/learn/data-analytics/distinguishing-data-roles/) around it. New roles for AI developer will emerge where you don't necessarily need to know the internals of the AI models, in the same way you don't need to understand the internals of a database to take advantage of it.
 
 There's a long way ahead, and unlike Blockchain, which touched the bottom and didn't recover, AI tools are here to stay.
 
