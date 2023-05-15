@@ -31,7 +31,7 @@ I found [LangChain](https://python.langchain.com/en/latest/). It is basically a 
 1. How to read back the produced content in a structured way so an application can take advantage of the responses to take some action?
 1. How to efficiently give context to the chat so it can answer things about data you have, not only data it was trained on?
 
-LangChain helps with this and much more ([Agents](https://python.langchain.com/en/latest/modules/agents.html), [Chains](https://python.langchain.com/en/latest/modules/chains.html), [Embeddings](https://python.langchain.com/en/latest/modules/models/text_embedding.html), etc.). In this simple game, Lang Chain will be help us with the point 1 above. It does it by letting you define a [pydantic](https://docs.pydantic.dev/latest/) object like this and giving you a parser to use on the responses from the chat:
+LangChain helps with this and much more ([Agents](https://python.langchain.com/en/latest/modules/agents.html), [Chains](https://python.langchain.com/en/latest/modules/chains.html), [Embeddings](https://python.langchain.com/en/latest/modules/models/text_embedding.html), etc.). In this simple game, Lang Chain will help us with the point 1 above. It does it by letting you define a [pydantic](https://docs.pydantic.dev/latest/) object like this and giving you a parser to use on the responses from the chat:
 
 ```python
 class Question(BaseModel):
