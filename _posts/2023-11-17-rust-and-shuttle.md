@@ -39,17 +39,17 @@ If Rust becomes [Oxide](https://github.com/tuqqu/oxide-lang), it would be just p
 
 # Shuttle
 
-I have controversial opinions about many things. They include [React](https://react.dev/), [k8s](https://kubernetes.io/), [AWS](https://aws.amazon.com/), and others. I prefer not to voice them out. But recently, I let it escape in this [LinkedIn post](https://www.linkedin.com/posts/paulosuzart_the-cloud-aware-activity-7124695977025785856-iMEF?utm_source=share&utm_medium=member_desktop).
+I have controversial opinions about many things. They include [React](https://react.dev/), [k8s](https://kubernetes.io/), [AWS](https://aws.amazon.com/), hiring, and others. I prefer not to voice them out. But recently, I let it escape in this [LinkedIn post](https://www.linkedin.com/posts/paulosuzart_the-cloud-aware-activity-7124695977025785856-iMEF?utm_source=share&utm_medium=member_desktop).
 
-I believe 80% of applications out there need only something like [Shuttle](https://www.shuttle.rs/). Or 80% of infrastructure out there needs only something like [Karam](https://kamal-deploy.org/). Nothing else. But the industry insists on some crazy solutions that bring just a new batch of problems even worse than the problems they are solving.
+I believe 80% of applications out there need only something like [Shuttle](https://www.shuttle.rs/). And 80% of infrastructure out there needs only something like [Karam](https://kamal-deploy.org/). Nothing else. But the industry insists on some crazy solutions that bring new scores of problems worse than the problems they promise to solve.
 
-I find Shuttle an incredible solution. Because 80% of the time we don't care about some [vault](https://www.vaultproject.io/) crap mounted in your [Pods](https://kubernetes.io/docs/concepts/workloads/pods/), or if your Dockerfile is correct, or your Helm yaml-based programming is working. Or if you correctly mapped your paths and ports, or defined your ingress, so on and so forth.
+I find Shuttle an incredible solution. Because 80% of the time we don't care about some [vault](https://www.vaultproject.io/) stuff mounted in your [Pods](https://kubernetes.io/docs/concepts/workloads/pods/), or if your Dockerfile is correct, or your Helm "yaml-based programming" is working. Or if you correctly mapped your paths and ports, or defined your ingress. And perhaps that sidecar is crashing on start, or the egress is not properly set, and the MTLS, so on and so forth.
 
-# To the code
+# Show me the code
 
 ## The task
 
-We must create a simple string comparator that takes two strings and tells if they are similar. For example, `"house"` and `"ho2e"` are considered equal because the `2` denotes two missing characters (`u` and `s`), making both words five char len, and the characters that are present match.
+We must create a simple web based string comparator that takes two strings and tells if they are similar. For example, `"house"` and `"ho2e"` are considered equal because the `2` denotes two missing characters (`u` and `s`), making both words five char len, and the characters that are present match.
 
 If you call our service like this, you get the answer:
 
@@ -252,7 +252,25 @@ mod test {
 
 ## Deploy
 
+To tie everything together, we use Shuttle annotation in our `main` function like this:
+
+```rust
+fn init_router() -> Router {
+    Router::new().route("/compare", get(compare))
+        .fallback(handler_404)
+}
+
+// Here we go
+#[shuttle_runtime::main]
+async fn main() -> shuttle_axum::ShuttleAxum {
+    Ok(init_router().into())
+}
+```
+
 Let's save time here and refer to the original documentation at [Shuttle.rs](https://docs.shuttle.rs/getting-started/quick-start).
+
+- `cargo shuttle run ` - Runs your project locally
+- `cargo shuttle deploy --allow-dirty` - Deploys to Shuttle. Use `--allow-dirty` if you are doing from uncommitted changes on your repo.
 
 You don't need to use `curl`. Access [https://similarr.shuttleapp.rs/compare?a=hypothetically&b=h12y](https://similarr.shuttleapp.rs/compare?a=hypothetically&b=h12y), and you should see the result (replace `similarr.shuttleapp.rs` by your domain).
 
@@ -262,7 +280,7 @@ For the complete code, please check my git repo [similarr](https://github.com/pa
 
 After years away from Rust, it was fun to get back. The language is much more mature but also much more extensive. As opposed to other languages that are minimal, like [Clojure](https://clojure.org/) or even [V](https://vlang.io/), Rust has become something that requires some dedicated energy. But it is worth it.
 
-Rust has the potential to take the lead in system programming, mobile, gaming, web, cloud-native, [blockchain](https://cosmwasm.com/), [edge](https://blog.cloudflare.com/workers-rust-sdk/), and even [front-end](https://leptos.dev/), . There's no area where Rust cannot shine.
+Rust has the potential to take the lead in system programming, mobile, gaming, web, cloud-native, [blockchain](https://cosmwasm.com/), [edge](https://blog.cloudflare.com/workers-rust-sdk/), [embedded](https://github.com/rust-embedded), and even [front-end](https://leptos.dev/), . There's no area where Rust cannot shine.
 
 The Shuttle.rs is in the early days. They can learn a lot with the [Nitric](https://nitric.io/) folks and offer more resources. At the same time, it's a company, a group of people with a vision that takes time to build and takes money, resources, and dedication. Some will say "it's vendor lock-in," and others will love it. But if people think twice, a massive amount of their applications have validity; that is to say, they are MVPs, small iterations, small services with few tables, or their product will not succeed. They can save a ton of time and money by using Shuttle.rs.
 
