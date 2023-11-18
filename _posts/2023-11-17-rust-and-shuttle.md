@@ -65,6 +65,8 @@ curl https://similarr.shuttleapp.rs/compare\?a\=house\&b\=ho2e
 }
 ```
 
+The code uses [Axum](https://docs.rs/axum/latest/axum/) a lightweight but powerful framework for the web.
+
 We take the strings `a` and `b`, run our algo, and return the expanded version plus the result `true` or `false`. This expanded version of the strings comes from how I implemented the solution. There might be other ways of solving it that don't require expanding the strings.
 
 ## `/compare` endpoint
