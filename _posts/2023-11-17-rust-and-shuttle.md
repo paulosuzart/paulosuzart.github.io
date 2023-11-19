@@ -45,6 +45,10 @@ I believe 80% of applications out there need only something like [Shuttle](https
 
 I find Shuttle an incredible solution. Because 80% of the time we don't care about some [vault](https://www.vaultproject.io/) stuff mounted in your [Pods](https://kubernetes.io/docs/concepts/workloads/pods/), or if your Dockerfile is correct, or your Helm "yaml-based programming" is working. Or if you correctly mapped your paths and ports, or defined your ingress. And perhaps that sidecar is crashing on start, or the egress is not properly set, and the MTLS, so on and so forth.
 
+Shuttle offers not only a runtime, but also what they call [Resources](https://docs.shuttle.rs/resources/overview). There are some built-in resources like [RDS](https://docs.shuttle.rs/resources/shuttle-aws-rds), [shared datbases](https://docs.shuttle.rs/resources/shuttle-shared-db), [Key-Value store](https://docs.shuttle.rs/resources/shuttle-persist), and they recently added [Turso](https://docs.shuttle.rs/resources/shuttle-turso). Turso + Shuttle is a very good kombo.
+
+You can serve [static files](https://docs.shuttle.rs/resources/shuttle-static-folder), share [secrets](https://docs.shuttle.rs/resources/shuttle-secrets) with your applications, or create your own custom [resources](https://docs.shuttle.rs/resources/custom-resources).
+
 # Show me the code
 
 ## The task
