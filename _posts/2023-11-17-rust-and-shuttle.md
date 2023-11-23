@@ -41,7 +41,7 @@ If Rust becomes [Oxide](https://github.com/tuqqu/oxide-lang), it would be just p
 
 I have controversial opinions about many things. They include [React](https://react.dev/), [k8s](https://kubernetes.io/), [AWS](https://aws.amazon.com/), hiring, and others. I prefer not to voice them out. But recently, I let it escape in this [LinkedIn post](https://www.linkedin.com/posts/paulosuzart_the-cloud-aware-activity-7124695977025785856-iMEF?utm_source=share&utm_medium=member_desktop).
 
-I believe 80% of applications out there need only something like [Shuttle](https://www.shuttle.rs/). And 80% of infrastructure out there needs only something like [Karam](https://kamal-deploy.org/). Nothing else. But the industry insists on some crazy solutions that bring new scores of problems worse than the problems they promise to solve.
+I believe 80% of applications out there need only something like [Shuttle](https://www.shuttle.rs/). And 80% of infrastructure out there needs only something like [Kamal](https://kamal-deploy.org/). Nothing else. But the industry insists on some crazy solutions that bring new scores of problems worse than the problems they promise to solve.
 
 I find Shuttle an incredible solution. Because 80% of the time we don't care about some [vault](https://www.vaultproject.io/) stuff mounted in your [Pods](https://kubernetes.io/docs/concepts/workloads/pods/), or if your Dockerfile is correct, or your Helm "yaml-based programming" is working. Or if you correctly mapped your paths and ports, or defined your ingress. And perhaps that sidecar is crashing on start, or the egress is not properly set, and the MTLS, so on and so forth.
 
