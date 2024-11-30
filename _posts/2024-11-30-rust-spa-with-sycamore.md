@@ -9,7 +9,7 @@ tags: [rust, sycamore, spa]
 [Rust](https://www.rust-lang.org/) continues to grow substantially in the land of [programming languages](https://www.infoworld.com/article/2514539/rust-leaps-forward-in-language-popularity-index.html).
 With a growing community and ecosystem in all areas of software development, including [AI](https://ai2sql.io/grok-ai), there's no corner where you can't apply Rust. And Single Page Applications are no different.
 
-In this post, we will take a look at [Sycamore](https://sycamore.dev/), an amazing reactive UI library (like React) for shipping webassembly to production in Rust.
+In this post, we will examine [Sycamore](https://sycamore.dev/), a fantastic reactive UI library (like React) for shipping `webassembly` to production in Rust.
 
 <!--more-->
 
@@ -18,22 +18,22 @@ In this post, we will take a look at [Sycamore](https://sycamore.dev/), an amazi
 I accidentally stumbled upon [Sycamore](https://sycamore.dev/) while searching for UI frameworks for Rust. I already knew about [Leptos](https://leptos.dev/) and [Dioxus](https://dioxuslabs.com/),
 leading names in this front in Rust. Needless to mention [Tauri](https://v2.tauri.app/), another titan that sends shockwaves of versatility across the language and community.
 
-If you want a deeper comparison between Sycamore, Leptos and Dioxus, there's this [great article](https://blog.vedant.dev/leptos-vs-dioxus-vs-sycamore-vs-svelte-part-1-syntax-comparison-c58ed631896c) by
-[Vendant Pandey](https://blog.vedant.dev/]. In this article we concentrate on "giving it a try" and how it feels in general.
+If you want a deeper comparison between Sycamore, Leptos, and Dioxus, there's this [great article](https://blog.vedant.dev/leptos-vs-dioxus-vs-sycamore-vs-svelte-part-1-syntax-comparison-c58ed631896c) by
+[Vendant Pandey](https://blog.vedant.dev/]. This article concentrates on "giving it a try" and how it feels in general.
 
-**Disclaimer:** It's important to take into account the fact that I'm not a frontend engineer. Despite having coded in React in the past, and getting somewhat involved in FE hiring and FE projects.
+**Disclaimer:** It's important to take into account the fact that I'm not a front-end engineer, despite having coded in React in the past and getting somewhat involved in FE hiring and FE projects.
 
 ### Documentation
 
-Sycamore's documenation is pretty neat. In [_Your First App_](https://sycamore.dev/book/introduction/your-first-app) section, you get a good taste of what's coming, but if you want a more complete example, go straight to the `Hello World` of reactive frameworks: the [Todo app](https://sycamore.dev/book/introduction/todo-app) exmaple.
+Sycamore's documentation is pretty neat. In [_Your First App_](https://sycamore.dev/book/introduction/your-first-app) section, you get a good taste of what's coming, but if you want a complete example, go straight to the `Hello World` of reactive frameworks: the [Todo app](https://sycamore.dev/book/introduction/todo-app) example.
 
-I wish the _JS Interop_ page, _SSR Streaming_ page and the [_Deploy_](https://sycamore.dev/book/cookbook/deploy) were a bit more dense. But in general, the doc is good enough for our purposes.
+I wish the _JS Interop_ page, _SSR Streaming_ page, and the [_Deploy_](https://sycamore.dev/book/cookbook/deploy) were more dense. But in general, the doc is good enough for our purposes.
 
 
 # Our SPA
 
-To add some context, recently I had the chance to build simplified Durable Execution framework similar to [Inngest](https://inngest.com/). The framwork will execute almost plain [Java](https://docs.oracle.com/en/java/javase/index.html) code to completion even in the event of failures, redeployments, intentional delays, etc.
-The framework produces a execution trace (a json) that contains valuable information for introspecting the several instances of durable execution running.
+To add some context, recently, I had the chance to build a simplified Durable Execution framework similar to [Inngest](https://inngest.com/). The framework will execute almost plain [Java](https://docs.oracle.com/en/java/javase/index.html) code to completion even in the event of failures, redeployments, intentional delays, etc.
+The framework produces an execution trace (a JSON) that contains valuable information for introspecting the several instances of durable execution running.
 
 ## Data format
 The format is more or less like this:
@@ -44,26 +44,26 @@ The format is more or less like this:
 * `completed_at` - The actual completion time of the durable execution.
 * `steps` - An array of individual steps involved in the durable execution
 
-And here's an example of what each step might look like:
+Here's an example of what each step might look like:
 
 * `durable_step_id` - The unique identifier of each step
-* `result` - The arbitrary json that is a result of a given step when completed. (e.g. `{ "ok": false }`).
-* `inTaskInfo` - Some runtime specific task information. This is very context specific, just imagine some json with lower level information.
-* `outTaskInfo` - Some runtime specific task information.
+* `result` - The arbitrary JSON that results from a given step when completed. (e.g. `{ "ok": false }`).
+* `inTaskInfo`—Some runtime-specific task information. This is very context-specific; just imagine some JSON with lower-level information.
+* `outTaskInfo` - Some runtime-specific task information.
 
 ## "Design"
-Our page will then require the user to pase the json, and display the trace. Upon click on each step, a side panel will appear showing the specific step detail.
-Each step will be disposed so that the user can visualize the start, completion time as well as a duration.
+Our page will then require the user to paste the JSON and display the trace. Upon clicking on each step, a side panel will appear showing the specific step detail.
+Each step will be displayed so that the user can visualize the start, completion time, and duration.
 
 ![frame1](/assets/img/sample/frame1.png)
 
-And below we see the sidepanel:
+Below we see the sidepanel:
 
 ![frame2](/assets/img/sample/frame2.png)
 
 # Components
 
-The project was set up with [tailwindcss](https://tailwindcss.com/). For that I just had to use [Trunk's](https://trunkrs.dev/) native support for tailwind. Trunk is a bundler (maybe not the best description) to ship your rust code as a webassembly application.
+The project was set up with [tailwindcss](https://tailwindcss.com/). For that, I just had to use [Trunk's](https://trunkrs.dev/) native support for Tailwind. Trunk is a bundler (maybe not the best description) for shipping your Rust code as a web assembly application.
 
 The support for tailwind is [described here](https://trunkrs.dev/assets/#tailwind) and requires a single line of code in our `index.html`:
 
@@ -76,16 +76,16 @@ The support for tailwind is [described here](https://trunkrs.dev/assets/#tailwin
 <!-- ... -->
 ```
 
-The whole code of the SPA is vailable on GitHub [paulosuzart/hello-sycamore](https://github.com/paulosuzart/hello-sycamore), and I would like to explore the approaches I used for handling signals ([`create_sigal`](https://docs.rs/sycamore/latest/sycamore/reactive/fn.create_signal.html), memos ([`create_memo`](https://docs.rs/sycamore/latest/sycamore/reactive/fn.create_memo.html)) and also rending list ([`Keyed`](https://docs.rs/sycamore/latest/sycamore/web/fn.Keyed.html)).
+The whole code of the SPA is available on GitHub [paulosuzart/hello-sycamore](https://github.com/paulosuzart/hello-sycamore), and I would like to explore the approaches I used for handling signals ([`create_sigal`](https://docs.rs/sycamore/latest/sycamore/reactive/fn.create_signal.html), memos ([`create_memo`](https://docs.rs/sycamore/latest/sycamore/reactive/fn.create_memo.html)) and also rending list ([`Keyed`](https://docs.rs/sycamore/latest/sycamore/web/fn.Keyed.html)).
 
 ## Input
 
 [!frame3](/assets/img/sample/frame3.png)
-The only way to get data into our SPA is by letting the user to paste the trace they can obtain from the running durable framework. We must:
+The only way to get data into our SPA is by letting the user paste the trace they can obtain from the running durable framework. We must:
 
 1. Show the input text area
 2. Parse the Json
-3. Display error, if any. Also closing the error modal
+3. Display error, if any. Also, closing the error panel
 4. Update the application state with the parsed data
 
 ```rust
@@ -105,14 +105,13 @@ pub fn TraceInput() -> View {
     }
 }
 ```
-The `TraceInput` component is responsible for the 4 aspects above. For that, it uses a `signal` to display an error. This signal is passed to `TraceInputErrorModal`.
-Notice how `TraceInputErrorModal` also takes a `on_hider_error` propery. This is a function it will use on the close icon of the error modal. By simply setting it to false,
-the `view!` macro will swap between showing the error message or the text input itself.
+The `TraceInput` component is responsible for the four aspects above. To display an error, it uses a `signal`, which is passed to `TraceInputErrorModal`.
+Notice how `TraceInputErrorModal` also takes a `on_hider_error` property. This function will be used on the close icon of the error modal. The `view!` macro will swap between showing the error message or the text input by simply setting it to false.
 
 This same signal (`show_error`) is also used by `TraceInputText` to set the value to `true`.
 
-What I want to highlight is the patter I used: `signal` + toggle on (`set_show_error`) + toggle off (`set_hide_error`). What I liked about this pattern is that the action of toggling the error modal is
-transparent to the components involved. Let's see how it feels in the input itself:
+I want to highlight the pattern I used: `signal` + toggle on (`set_show_error`) + toggle off (`set_hide_error`). What I liked about this pattern is that the action of toggling the error modal is
+transparent to the components involved. Let's see how it feels in the input component:
 
 ```rust
 #[component(inline_props)]
@@ -150,7 +149,7 @@ where
 Check the bound value to the `textarea`. It's a signal for a payload. When filled, the underlying value will match the value of the input. Then the `button` `on:click` calls our
 `parse_json`. Here is where we may call `on_error()` (that setter for our signal passed as property for the input component). It is transparent.
 
-If all is good, the app global state captured by `use_context::<State>()` is set. The `State` is defined as following:
+If all is good, the app global state captured by `use_context::<State>()` is set. The `State` is defined as the following:
 
 ```rust
 #[derive(Debug, Clone, Copy)]
@@ -189,10 +188,10 @@ where
     }
 }
 ```
-Here we react to the button click by calling `on_hider_error`. Very much transparent. There is also a `ReadSignal` create by `let err_msg_read = create_memo(move || err_msg.get_clone());`.
+Here, we react to the button click by calling it `on_hider_error`. It is very transparent. There is also a `ReadSignal` created by `let err_msg_read = create_memo(move || err_msg.get_clone());`.
 
 ## Step List and Details
-Steps are the powerhorse of this framework. They basically execute the computations. Besides the main visualization in a list, there's the detail side panel.
+Steps are the powerhouse of this framework. They execute the computations. In addition to the main visualization in a list, there's the detail side panel.
 
 The list Uses the Sycamore's `Keyed` function:
 
@@ -225,13 +224,13 @@ pub fn Steps(
 }
 ```
 
-There are other ways of rendeing a list, but I found this way particularly useful and concise. Even though I don't need to update this list.
+There are other ways of rendering a list, but I found this method particularly useful and concise, even though I don't need to update this list.
 The `hide_detail` closure is used like the previous component to hide the sidepanel. But instead of using a flag, it directly cleans (set to `None`), the signal
-that controls the visibility of the sidepanel.
+that controls the visibility of the side panel.
 
 ## State and Local Store
 
-We saw the use of `use_context` straight from a component in order to interact with the application state without passing it several nested levels of components. The state is provided
+We saw `use_context` straight from a component to interact with the application state without passing it several nested levels of components. The state is provided
 at the upper level of the application (before the main components are rendered).
 
 ```rust
@@ -275,16 +274,18 @@ fn App() -> View {
 ```
 
 The function `create_effect` is used to "follow" all the mentioned effects and create side effects (persist to the local store). The call to `state.0.with` will do the trick
-and on each change (when the user successfuly parses a Json), the local store is updated. The `App` component is also responsible for trying to read the `localStore` and restore the application state from it.
+, and on each change (when the user successfully parses a JSON), the local store is updated. The `App` component is also responsible for reading the `localStore` and restoring the application state from it.
 
 # Conclusion
-**A note:** Before we wrap up, a quick note. [Zed](http://zed.dev/) and [RustRover](https://www.jetbrains.com/rust/) struggled quite a bit to handle the project, whilst
-[VSCode](https://code.visualstudio.com/) worked out of the box all the time. I was surprised to See RusRover having a hard time to deal with the macros, autocompletes, etc.
+**A note:** here is a quick note before we wrap up. [Zed](http://zed.dev/) and [RustRover](https://www.jetbrains.com/rust/) struggled quite a bit to handle the project, whilst
+[VSCode](https://code.visualstudio.com/) always worked out of the box. I was surprised to see RusRover needing help dealing with the macros, autocompletes, etc.
 
-It was a pleasant experience to play with Sycamore. It is complete enough to create pretty complext applications. It is clearly behind the competition in terms of documentation, echosystem, I don't know how do they plan to chase Dioxus and Leptos. One area that requries some attention is testing, currently a [work in progress](https://sycamore.dev/book/cookbook/testing).
+It was a pleasant experience to play with Sycamore. It is complete enough to create pretty complex applications. However, it is clearly behind the competition in terms of documentation and ecosystem. I don't know how they plan to chase Dioxus and Leptos. One area that requires some attention is testing, which is currently a [work in progress](https://sycamore.dev/book/cookbook/testing).
 
-One more point that might not be that positive is the macro used for html elements. It uses a notation like `div(){}` as opposed to [Leptos])(https://github.com/leptos-rs/leptos/blob/d665dd4b89151e5d797df3db5cd2260cbe1e8fae/examples/counter/src/lib.rs#L17) that uses `<div></div>` notation more natural to html and speeding up some work.
+Another point that is not positive is the macro used for HTML elements. It uses a notation like `div(){}` as opposed to [Leptos])(https://github.com/leptos-rs/leptos/blob/d665dd4b89151e5d797df3db5cd2260cbe1e8fae/examples/counter/src/lib.rs#L17) that uses `<div></div>` notation more natural to html and speeding up some work.
 
-Webassembly is also growing beyond the web brower. [Fermyon](https://www.fermyon.com/) is a great great example of serverless backed by web assembly applications. Webassembly portability is in its early days of exploration, I'm sure more will come soon.
+Webassembly is also growing beyond the web browser. [Fermyon](https://www.fermyon.com/) is a great example of serverless backed by web assembly applications. Webassembly portability is in its early days of exploration; I'm sure more will come soon.
 
-Feel free to access the app at https://hello-sycamore.vercel.app/. You can use this json as an example [here](https://github.com/paulosuzart/hello-sycamore/blob/c510728ade6ca861b4549fdb3ea05315e1b863f6/example_trace.json).
+Feel free to access the app at [https://hello-sycamore.vercel.app/](https://hello-sycamore.vercel.app/). You can use this JSON as an example [here](https://github.com/paulosuzart/hello-sycamore/blob/c510728ade6ca861b4549fdb3ea05315e1b863f6/example_trace.json).
+
+I hope you enjoyed the content!
