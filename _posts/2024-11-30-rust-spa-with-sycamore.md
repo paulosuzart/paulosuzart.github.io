@@ -57,7 +57,7 @@ Each step will be disposed so that the user can visualize the start, completion 
 
 ![frame1](/assets/img/sample/frame1.png)
 
-Amd below we see the sidepanel:
+And below we see the sidepanel:
 
 ![frame2](/assets/img/sample/frame2.png)
 
@@ -107,7 +107,7 @@ pub fn TraceInput() -> View {
 ```
 The `TraceInput` component is responsible for the 4 aspects above. For that, it uses a `signal` to display an error. This signal is passed to `TraceInputErrorModal`.
 Notice how `TraceInputErrorModal` also takes a `on_hider_error` propery. This is a function it will use on the close icon of the error modal. By simply setting it to false,
-the `vew!` macro will swap between showing the error message or the text input itself.
+the `view!` macro will swap between showing the error message or the text input itself.
 
 This same signal (`show_error`) is also used by `TraceInputText` to set the value to `true`.
 
@@ -286,3 +286,5 @@ It was a pleasant experience to play with Sycamore. It is complete enough to cre
 One more point that might not be that positive is the macro used for html elements. It uses a notation like `div(){}` as opposed to [Leptos])(https://github.com/leptos-rs/leptos/blob/d665dd4b89151e5d797df3db5cd2260cbe1e8fae/examples/counter/src/lib.rs#L17) that uses `<div></div>` notation more natural to html and speeding up some work.
 
 Webassembly is also growing beyond the web brower. [Fermyon](https://www.fermyon.com/) is a great great example of serverless backed by web assembly applications. Webassembly portability is in its early days of exploration, I'm sure more will come soon.
+
+Feel free to access the app at https://hello-sycamore.vercel.app/. You can use this json as an example [here](https://github.com/paulosuzart/hello-sycamore/blob/c510728ade6ca861b4549fdb3ea05315e1b863f6/example_trace.json).
