@@ -282,7 +282,7 @@ The function `create_effect` is used to "follow" all the mentioned effects and c
 
 It was a pleasant experience to play with Sycamore. It is complete enough to create pretty complex applications. However, it is clearly behind the competition in terms of documentation and ecosystem. I don't know how they plan to chase Dioxus and Leptos. One area that requires some attention is testing, which is currently a [work in progress](https://sycamore.dev/book/cookbook/testing).
 
-Another point that is not positive is the macro used for HTML elements. It uses a notation like `div(){}` as opposed to [Leptos])(https://github.com/leptos-rs/leptos/blob/d665dd4b89151e5d797df3db5cd2260cbe1e8fae/examples/counter/src/lib.rs#L17) that uses `<div></div>` notation more natural to html and speeding up some work.
+Another point that is not positive is the macro used for HTML elements. It uses a notation like `div(){}` as opposed to [Leptos](https://github.com/leptos-rs/leptos/blob/d665dd4b89151e5d797df3db5cd2260cbe1e8fae/examples/counter/src/lib.rs#L17) that uses `<div></div>` notation more natural to html and speeding up some work.
 
 Webassembly is also growing beyond the web browser. [Fermyon](https://www.fermyon.com/) is a great example of serverless backed by web assembly applications. Webassembly portability is in its early days of exploration; I'm sure more will come soon.
 
