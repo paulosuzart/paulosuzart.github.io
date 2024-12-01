@@ -7,9 +7,9 @@ tags: [rust, sycamore, spa]
 ---
 
 [Rust](https://www.rust-lang.org/) continues to grow substantially in the land of [programming languages](https://www.infoworld.com/article/2514539/rust-leaps-forward-in-language-popularity-index.html).
-With a growing community and ecosystem in all areas of software development, including [AI](https://ai2sql.io/grok-ai), there's no corner where you can't apply Rust. And Single Page Applications are no different.
+With a growing community and ecosystem in all areas of software development, including [AI](https://ai2sql.io/grok-ai), there's no corner where you can't apply it. And Single Page Applications are no different.
 
-In this post, we will examine [Sycamore](https://sycamore.dev/), a fantastic reactive UI library (like React) for shipping `webassembly` to production in Rust.
+In this post, we will examine [Sycamore](https://sycamore.dev/), a fantastic reactive UI library (like React) for shipping [webassembly](https://webassembly.org/) to production in Rust.
 
 <!--more-->
 
@@ -78,7 +78,7 @@ The support for tailwind is [described here](https://trunkrs.dev/assets/#tailwin
 <!-- ... -->
 ```
 
-The whole code of the SPA is available on GitHub [paulosuzart/hello-sycamore](https://github.com/paulosuzart/hello-sycamore), and I would like to explore the approaches I used for handling signals ([`create_sigal`](https://docs.rs/sycamore/latest/sycamore/reactive/fn.create_signal.html), memos ([`create_memo`](https://docs.rs/sycamore/latest/sycamore/reactive/fn.create_memo.html)) and also rending list ([`Keyed`](https://docs.rs/sycamore/latest/sycamore/web/fn.Keyed.html)).
+The whole code of the SPA is available on GitHub [paulosuzart/hello-sycamore](https://github.com/paulosuzart/hello-sycamore), and I would like to explore the approaches I used for handling signals ([`create_sigal`](https://docs.rs/sycamore/latest/sycamore/reactive/fn.create_signal.html), memos ([`create_memo`](https://docs.rs/sycamore/latest/sycamore/reactive/fn.create_memo.html)) and also rending list ([`Keyed`](https://docs.rs/sycamore/latest/sycamore/web/fn.Keyed.html)). *All css were striped from the snippets in this post.*
 
 ## Input
 
@@ -136,7 +136,7 @@ where
             }
         };
     view! {
-        div() {
+        div {
             h2 { "Durable Trace" }
             p { "Please paste the durable trace json" }
             div {
@@ -172,7 +172,7 @@ where
             div {
                 div {
                     button(on:click=move |_| on_hider_error()) {
-                            svg() {
+                            svg {
                                 path(fill-rule="evenodd", d="M4.293", clip-rule="evenodd")
                             }
                         }
@@ -285,7 +285,7 @@ The function `create_effect` is used to "follow" all the mentioned effects and c
 
 It was a pleasant experience to play with Sycamore. It is complete enough to create pretty complex applications. However, it is clearly behind the competition in terms of documentation and ecosystem. I don't know how they plan to chase Dioxus and Leptos. One area that requires some attention is testing, which is currently a [work in progress](https://sycamore.dev/book/cookbook/testing).
 
-Another point that is not positive is the macro used for HTML elements. It uses a notation like `div(){}` as opposed to [Leptos](https://github.com/leptos-rs/leptos/blob/d665dd4b89151e5d797df3db5cd2260cbe1e8fae/examples/counter/src/lib.rs#L17) that uses `<div></div>` notation more natural to html and speeding up some work.
+Another point that is not positive is the macro used for HTML elements. It uses a notation like `div {}` as opposed to [Leptos](https://github.com/leptos-rs/leptos/blob/d665dd4b89151e5d797df3db5cd2260cbe1e8fae/examples/counter/src/lib.rs#L17) that uses `<div></div>` notation more natural to html and speeding up some work.
 
 Webassembly is also growing beyond the web browser. [Fermyon](https://www.fermyon.com/) is a great example of serverless backed by web assembly applications. Webassembly portability is in its early days of exploration; I'm sure more will come soon.
 
