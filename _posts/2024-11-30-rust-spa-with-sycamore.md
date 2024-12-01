@@ -18,8 +18,10 @@ In this post, we will examine [Sycamore](https://sycamore.dev/), a fantastic rea
 I accidentally stumbled upon [Sycamore](https://sycamore.dev/) while searching for UI frameworks for Rust. I already knew about [Leptos](https://leptos.dev/) and [Dioxus](https://dioxuslabs.com/),
 leading names in this front in Rust. Needless to mention [Tauri](https://v2.tauri.app/), another titan that sends shockwaves of versatility across the language and community.
 
+What caught my attention was the simplicity in the reactive constructs, the nice macros for properties and state management. We will see some of them in this post.
+
 If you want a deeper comparison between Sycamore, Leptos, and Dioxus, there's this [great article](https://blog.vedant.dev/leptos-vs-dioxus-vs-sycamore-vs-svelte-part-1-syntax-comparison-c58ed631896c) by
-[Vendant Pandey](https://blog.vedant.dev/]. This article concentrates on "giving it a try" and how it feels in general.
+[Vendant Pandey](https://blog.vedant.dev/). This article concentrates on "giving it a try" and how it feels in general.
 
 **Disclaimer:** It's important to take into account the fact that I'm not a front-end engineer, despite having coded in React in the past and getting somewhat involved in FE hiring and FE projects.
 
@@ -55,11 +57,11 @@ Here's an example of what each step might look like:
 Our page will then require the user to paste the JSON and display the trace. Upon clicking on each step, a side panel will appear showing the specific step detail.
 Each step will be displayed so that the user can visualize the start, completion time, and duration.
 
-![frame1](/assets/img/sample/frame1.png)
+![frame2](/assets/img/sample/frame2.png)
 
 Below we see the sidepanel:
 
-![frame2](/assets/img/sample/frame2.png)
+![frame1](/assets/img/sample/frame1.png)
 
 # Components
 
@@ -80,7 +82,8 @@ The whole code of the SPA is available on GitHub [paulosuzart/hello-sycamore](ht
 
 ## Input
 
-[!frame3](/assets/img/sample/frame3.png)
+![frame3](/assets/img/sample/frame3.png)
+
 The only way to get data into our SPA is by letting the user paste the trace they can obtain from the running durable framework. We must:
 
 1. Show the input text area
@@ -134,10 +137,10 @@ where
         };
     view! {
         div() {
-            h2() { "Durable Trace" }
-            p() { "Please paste the durable trace json" }
-            div() {
-                label() { "Payload" }
+            h2 { "Durable Trace" }
+            p { "Please paste the durable trace json" }
+            div {
+                label { "Payload" }
                 textarea(bind:value=payload, id="payload", name="payload")
             }
             button(on:click=parse_json ) { "Load Trace" }
@@ -165,23 +168,23 @@ where
     F: Fn() + Copy + 'static,
 {
     view! {
-        div() {
-            div() {
-                div() {
+        div {
+            div {
+                div {
                     button(on:click=move |_| on_hider_error()) {
                             svg() {
                                 path(fill-rule="evenodd", d="M4.293", clip-rule="evenodd")
                             }
                         }
                 }
-                div() {
-                    svg() {
+                div {
+                    svg {
                             path(stroke-linecap="round", stroke-linejoin="round")
                     }
-                    h3() {
+                    h3 {
                         "Invalid Json. Please paste a valid durable trace json:"
                     }
-                    p(class="text-s") { (error_msg) }
+                    p { (error_msg) }
                 }
             }
         }
@@ -286,6 +289,6 @@ Another point that is not positive is the macro used for HTML elements. It uses 
 
 Webassembly is also growing beyond the web browser. [Fermyon](https://www.fermyon.com/) is a great example of serverless backed by web assembly applications. Webassembly portability is in its early days of exploration; I'm sure more will come soon.
 
-Feel free to access the app at [https://hello-sycamore.vercel.app/](https://hello-sycamore.vercel.app/). You can use this JSON as an example [here](https://github.com/paulosuzart/hello-sycamore/blob/c510728ade6ca861b4549fdb3ea05315e1b863f6/example_trace.json).
+Feel free to access the app at [https://hello-sycamore.vercel.app/](https://hello-sycamore.vercel.app/). You can use this JSON as an example [here](https://github.com/paulosuzart/hello-sycamore/blob/c510728ade6ca861b4549fdb3ea05315e1b863f6/example_trace.json). This project also contains a GitHub actions [workflow](https://github.com/paulosuzart/hello-sycamore/blob/main/.github/workflows/main.yml) for deploying the compiled project to [Vercel](https://www.vercel.com) as satic content.
 
 I hope you enjoyed the content!
