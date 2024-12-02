@@ -227,8 +227,10 @@ pub fn Steps(
             key=|step| step.durable_step_id.clone())
         }
         (match step_detail.get_clone() {
-            StepDetailEnum::Loaded(step_trace) => view! { StepDetail(step_trace=step_trace, on_hide_step=on_hide_step) },
-            StepDetailEnum::NotSet => view! {},
+            StepDetailEnum::Loaded(step_trace) =>
+                view! { StepDetail(step_trace=step_trace, on_hide_step=on_hide_step) },
+            StepDetailEnum::NotSet =>
+                view! {},
         })
     }
 }
