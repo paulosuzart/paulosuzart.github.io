@@ -213,7 +213,8 @@ pub fn Steps(
 ) -> View {
     // ...
     let step_detail = create_signal(StepDetailEnum::NotSet);
-    let hide_detail = move || step_detail.set(StepDetailEnum::NotSet);
+    let on_hide_step = move || step_detail.set(StepDetailEnum::NotSet);
+    let on_show_step = move |step| step_detail.set(StepDetailEnum::Loaded(step));
     view! {
         div(class="space-y-6") {
             Keyed(list=steps,
@@ -221,12 +222,12 @@ pub fn Steps(
                     StepItem(max_completion=max_completion,
                         delta_window=delta_window,
                         second_rate=second_rate, step=step,
-                        step_detail=step_detail)
+                        on_show_step=on_show_step)
             },
             key=|step| step.durable_step_id.clone())
         }
-        (match (step_detail) {
-            StepDetailEnum::Loaded(t) => view! { StepDetail(step_trace=t, h=hide_detail) },
+        (match step_detail.get_clone() {
+            StepDetailEnum::Loaded(t) => view! { StepDetail(step_trace=t, on_hide_step=on_hide_step) },
             StepDetailEnum::NotSet => view! {},
         })
     }
@@ -234,11 +235,11 @@ pub fn Steps(
 ```
 
 There are other ways of rendering a list, but I found this method particularly useful and concise, even though I don't need to update this list.
-The `hide_detail` closure is used like the previous component to hide the sidepanel. But instead of using a flag, it directly cleans (set to `None`), the signal
-that controls the visibility of the side panel.
 
 Now, check the usage of `let step_detail = create_signal(StepDetailEnum::NotSet);`. Instead of a `bool` + `Option` to control the rendering of a signal, this component uses
 a `enum` to keep track of several variantes of a signal internal state. For the example we use use `Loaded(StepTrace)` and `NotSet`, but we could use `Loading`, among other variants to handle spinners, etc. This pattern offer a more fine grained control of rendering.
+
+The created signal used by the next two modifying state closures. They are then passed to `StepItem` and `StepDetail` respectively, to show and hide the side panel of a step. This pattern keeps a good encapusation of behaviour by keeping interactions with the signal close to it.
 
 
 ## State and Local Store
