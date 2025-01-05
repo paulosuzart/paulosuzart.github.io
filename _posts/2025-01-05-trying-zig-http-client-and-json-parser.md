@@ -203,7 +203,7 @@ We can then use our returned JSON to print it:
 
 ## Bonus - Array slice manipulation
 
-If you have a rust Vector and want to group by something, you don't only this:
+If you have a rust Vector and want to group by something, you do only this:
 
 ```rust
     let mut language_groups: HashMap<String, Vec<String>> = HashMap::new();
@@ -214,7 +214,7 @@ If you have a rust Vector and want to group by something, you don't only this:
 
 There's no memory allocation thinking. And you have your almost on-liner group by of a slice.
 
-But how do we group our repos by language in Zig to get some "dictionary" where the key is the language and the value is a slice of pointers to repositories? Well, we need much more than two lines. And it's not about line numbers, but the number of things the developer needs to keep in mins (this might not be the most idiomatic, but it's a way I found):
+But how do we group our repos by language in Zig to get some "dictionary" where the key is the language and the value is a slice of pointers to repositories? Well, we need much more than two lines. And it's not about line numbers, but the number of things the developer needs to keep in mind (this might not be the most idiomatic, but it's a way I found):
 
 ```zig
 pub fn GroupBy(comptime T: type, keyFn: fn (*T) []const u8) type {
