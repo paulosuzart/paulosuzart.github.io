@@ -333,4 +333,6 @@ Yet the language feels quite good. I wish the community would create some form o
 
 Some container libraries won't hurt, either. An easier way of transferring ownership, copying, etc., can bring the language closer to the daily programmer creating non-technical products for startups.
 
-Zig found a place in my tool belt. Let's see how it evolves.
+Another language that I found very attractive is [C3](https://c3-lang.org/). It offers similar features ([comptime](https://c3-lang.org/generic-programming/compiletime/) e.g.) and makes a lot of promises. I might give it a try too.
+
+Zig found a place in my tool belt. And this is just a first exploration. There's more in the lower levels like C interop, and more. Let's see how it evolves.
