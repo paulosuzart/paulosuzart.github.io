@@ -34,7 +34,7 @@ Zig has excellent learning content, including non-official material like [openmy
 1. Tiger Beetle and [Turso](https://turso.tech/blog/a-deep-look-into-our-new-massive-multitenant-architecture#rewrite-everything) mention [DST - Deterministic Simulation Testing](https://docs.tigerbeetle.com/about/vopr/). You can't thoroughly test a system like this to discover where leaks will occur, so DST is a good tool to catch them (?).
 1. People always talk about [comptime](https://ziglang.org/documentation/master/#comptime), and it is indeed a cool feature. It replaces generics and runtime reflection simultaneously (if you come from Java like me). It's an underestimated feature.
 1. The amount of non-business logic-related stuff developers need to consider may push Zig out of fast-paced product startups. I can't imagine some of the companies I worked with having developers think about a ton of business logic and still take care of the memory plumbings. It will just not happen.
-1. Zig can access the Linux Kernel and power infrastructure, such as a new Kubernetes implementation, better API Gateways, a Database, etc.
+1. Zig may make its way into the Linux Kernel and other powerful infrastructure, such as a new Kubernetes implementation, better API Gateways, a Database, etc.
 1. One-liners in Rust are a dozen lines or more in Zig because there are no decent "collections" like features. Rust manages to be as low-level yet so abstract (thus, people call it a zero-cost abstraction language).
 1. The error handling approach for Zig is one of the best, if not the best.
 
@@ -323,7 +323,7 @@ Quite straightforward.
 
 # Conclusion
 
-Yes, after the compilation passed, I spent several hours trying to find the cause for panics at runtime. The test allocator is helpful as long as you have a lot of coverage. Even after the tests passed, I still wasted a ton of time.
+Yes, after the compilation passed, I spent several hours trying to find the cause for panics at runtime. The test allocator is helpful as long as you have a lot of coverage. Even after the tests passed, I still wasted a ton of time with dangling pointers. This extra overhead is what I believe will disappoint DevOps Go folks. They are used to Go C-like syntax, but similarities stop there.
 
 This was a second attempt. The first was this [gist right here](https://gist.github.com/paulosuzart/37aaeb8ab1de70e68404259bf928e371) with a more procedural approach and equally ton of time wasted trying to find the panics.
 
