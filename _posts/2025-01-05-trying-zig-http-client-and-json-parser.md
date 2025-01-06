@@ -18,7 +18,7 @@ In this post, we will try it and try to get a sense of the language and its feat
 
 I've completed the whole [Advent of Rust at Rustfinity](https://www.rustfinity.com/advent-of-rust) and all [Practices](https://www.rustfinity.com/practice/rust/challenges) they offer. These are language-focused content, as opposed to algorithm-related stuff. And, contrary to what people say, I had zero fights with the borrower checker all this time—not because I'm a [Rust](https://www.rust-lang.org/) ninja, but because I managed to get into the phase where you learn to do things the "Rust way."
 
-I'm actively promoting Rust and sharing articles ([mine](https://paulosuzart.github.io/blog/2024/11/30/rust-spa-with-sycamore/) and others), tooling, and more at work. Even though I know we will never get any Rust to production.
+I'm actively promoting Rust and sharing articles ([mine](https://paulosuzart.github.io/blog/2024/11/30/rust-spa-with-sycamore/) and others), tooling, etc., at work and with friends. Even though I know we will never get any Rust to production at the current company, sharing this knwoledge helps people have different takes on existing problems.
 
 It was essential to get this contact with Rust (for the second time; my first interaction dates back to 2015, as you can see [here](https://crates.io/crates/rust-pm/)) because it allowed me to have a baseline of programming low lever with guardrails versus programming low level without many guardrails in Zig.
 
@@ -33,8 +33,8 @@ Zig has excellent learning content, including non-official material like [openmy
 1. You don't have the memory expressed as types like in Rust. You either read the docs (if they are well written) or read the code to understand what you will own and need to free up.
 1. Tiger Beetle and [Turso](https://turso.tech/blog/a-deep-look-into-our-new-massive-multitenant-architecture#rewrite-everything) mention [DST - Deterministic Simulation Testing](https://docs.tigerbeetle.com/about/vopr/). You can't thoroughly test a system like this to discover where leaks will occur, so DST is a good tool to catch them (?).
 1. People always talk about [comptime](https://ziglang.org/documentation/master/#comptime), and it is indeed a cool feature. It replaces generics and runtime reflection simultaneously (if you come from Java like me). It's an underestimated feature.
-1. The amount of non-business logic-related stuff developers need to consider may push Zig out of fast-paced product startups. I can't imagine some of the companies I worked with having developers think about a ton of business logic and still take care of the memory plumbings. It will just not happen.
-1. Zig may make its way into the Linux Kernel and other powerful infrastructure, such as a new Kubernetes implementation, better API Gateways, a Database, etc.
+1. The amount of non-business logic-related stuff developers need to consider may push Zig out of fast-paced product startups. I can't imagine some of the companies I worked with having developers thinking about a ton of business logic and still take care of the memory plumbings. It will just not happen.
+1. Zig is likely to make its way into the Linux Kernel and other powerful infrastructure, such as a new Kubernetes implementation, better API Gateways, a Database, etc.
 1. One-liners in Rust are a dozen lines or more in Zig because there are no decent "collections" like features. Rust manages to be as low-level yet so abstract (thus, people call it a zero-cost abstraction language).
 1. The error handling approach for Zig is one of the best, if not the best.
 
@@ -58,7 +58,7 @@ pub const Repo = struct {
     language: ?[]const u8,
 };
 ```
-No `#[derive(Debug, Copy)]` or anything like that, just the structs resembling Go, to some extent.
+No `#[derive(Debug, Clone)]` or anything like that, just the structs resembling Go, to some extent.
 
 ## Http
 
@@ -203,12 +203,14 @@ We can then use our returned JSON to print it:
 
 ## Bonus - Array slice manipulation
 
-If you have a rust Vector and want to group by something, you do only this:
+If you have a rust Vector and want to group by something, you do only this (sketch impl):
 
 ```rust
     let mut language_groups: HashMap<String, Vec<String>> = HashMap::new();
     for person in &people {
-        language_groups.entry(person.language.clone()).or_default().push(person.name.clone());
+        language_groups.entry(person.language.clone())
+            .or_default()
+            .push(person.name.clone());
     }
 ```
 
@@ -220,55 +222,55 @@ But how do we group our repos by language in Zig to get some "dictionary" where 
 pub fn GroupBy(comptime T: type, keyFn: fn (*T) []const u8) type {
     return struct {
         const Self = @This();
-        map: std.StringHashMap([]*T),
+        map: std.StringHashMap(std.ArrayList(*Repo)),
         allocator: std.mem.Allocator,
+        arena: std.heap.ArenaAllocator,
 
         pub fn init(allocator: std.mem.Allocator) Self {
             return Self{
-                .map = std.StringHashMap([]*T).init(allocator),
+                .map = std.StringHashMap(std.ArrayList(*Repo)).init(allocator),
                 .allocator = allocator,
+                .arena = std.heap.ArenaAllocator.init(allocator),
             };
         }
 
         /// Returns a StringHashMap managed by GroupBy. In case elements T can't give a []u8 key.
-        pub fn group(self: *Self, items: *const []T) !*std.StringHashMap([]*T) {
+        pub fn group(self: *Self, items: *const []T) !*std.StringHashMap(std.ArrayList(*Repo)) {
+            const arenaAlloc = self.arena.allocator();
             for (items.*) |*item| {
                 const key = keyFn(item);
                 const gop = try self.map.getOrPut(key);
                 if (!gop.found_existing) {
-                    // Allocate a slice of one repo pointer for new languages
-                    gop.value_ptr.* = try self.allocator.alloc(*T, 1);
-                    gop.value_ptr.*[0] = item; // repo is now a pointer
+                    var arr = std.ArrayList(*Repo).init(arenaAlloc);
+                    errdefer arr.deinit();
+                    try arr.append(item);
+                    gop.value_ptr.* = arr;
                 } else {
-                    // Extend the existing slice of repo pointers
-                    const current_slice = gop.value_ptr.*;
-                    var new_slice = try self.allocator.realloc(current_slice, current_slice.len + 1);
-                    new_slice[current_slice.len] = item; // repo is now a pointer
-                    gop.value_ptr.* = new_slice;
+                    try gop.value_ptr.*.append(item);
                 }
             }
-
             return &self.map;
         }
 
         pub fn deinit(self: *Self) void {
-            var iter = self.map.iterator();
-            while (iter.next()) |e| {
-                self.allocator.free(e.value_ptr.*);
-            }
             self.map.deinit();
+            self.arena.deinit();
         }
     };
+}
 
 pub fn getKey(r: *Repo) []const u8 {
     return r.language orelse "Not-Set";
 }
 ```
-Wow! If you come from Java and are used to the [Sream API](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/package-summary.html) you will feel the hit.
+Wow! If you come from Java and are used to the [Stream API](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/package-summary.html) you will feel the hit.
 
-The logic is the same as the Rust code above. Iterate, get the key value, and check if it's present in the final map; if not, create an array with the value in question; otherwise, add the value to the existing array. But what struck me was the need to `deinit` each pointer of the values in the HasMap.
+The logic is the same as the Rust code above. Iterate, get the key value, and check if it's present in the final map; if not, create an array with the value in question; otherwise, add the value to the existing array. But what struck me was the need to `deinit` each pointer of the values in the `map`.
 
 It makes sense if you understand Zig's "No hidden allocations" philosophy. In the end, we allocated all this space in our `for` loop.
+
+Here we have the help of a special allocator called [`ArenaAllocator`](https://www.openmymind.net/learning_zig/heap_memory/#arena).
+Notice how each iteration inside the `for` loop will allocate a new `ArrayList(*Repo)` for each entry not found in the final `map`. All these `ArrayList`s must be freed along with our `GroupBy`, either tracking these allocations in the `map` value pointers or via less cognitive loaded dedicated allocator tha can free up everything at once.
 
 This is how you call the `GroupBy`:
 
@@ -277,9 +279,10 @@ This is how you call the `GroupBy`:
     defer groupBy.deinit();
 
     const repo_slice: []Repo = repos[0..];
-
     const groupped = try groupBy.group(&repo_slice);
 ```
+
+Our friend `defer groupBy.deinit();` is present to freeup the memory used by the group by. It won't clean up the underlying repositories, only the pointers to those repositories.
 
 For exploration purposes, `GroupBy` takes a `keyFn: fn (*T) []const u8`. This is a function that will get each element of the iteration and then return the `[]u8` key for our HashMap.
 
@@ -308,14 +311,18 @@ test "byLanguage works" {
 	///...
     };
 
-    var groupBy = GroupBy(Repo, getKey).init(allocator);
-    defer groupBy.deinit();
-
     const repo_slice: []Repo = repos[0..];
+    {
+        var groupBy = GroupBy(Repo, getKey).init(allocator);
+        defer groupBy.deinit();
 
-    const groupped = try groupBy.group(&repo_slice);
-
-    try std.testing.expectEqual(@as(usize, 2), groupped.count());
+        const groupped = try groupBy.group(&repo_slice);
+        try std.testing.expectEqual(@as(usize, 2), groupped.count());
+        try std.testing.expect(groupped.contains("rust"));
+        try std.testing.expectEqual(@as(usize, 2), groupped.get("rust").?.items.len);
+        try std.testing.expect(groupped.contains("zig"));
+    }
+    try std.testing.expectEqual(repo_slice[0].name, "repo1");
 }
 ```
 
