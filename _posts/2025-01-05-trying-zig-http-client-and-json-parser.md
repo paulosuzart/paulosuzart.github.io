@@ -54,7 +54,7 @@ pub const Repo = struct {
     name: []const u8,
     owner: Owner,
     description: ?[]const u8,
-    topics: [][]u8,
+    topics: [][]const u8,
     language: ?[]const u8,
 };
 ```
@@ -219,7 +219,11 @@ There's no memory allocation thinking. And you have your almost on-liner group b
 But how do we group our repos by language in Zig to get some "dictionary" where the key is the language and the value is a slice of pointers to repositories? Well, we need much more than two lines. And it's not about line numbers, but the number of things the developer needs to keep in mind (this might not be the most idiomatic, but it's a way I found):
 
 ```zig
-pub fn GroupBy(comptime T: type, keyFn: fn (*T) []const u8) type {
+pub fn GroupBy(comptime T: type, keyFn: *const fn (*const T) []const u8) type {
+    // here we enforce the type used in GroupBy to be structs only.
+    if (@typeInfo(T) != .@"struct") {
+        @compileError("Expected struct type for group by" ++ @tagName(@typeInfo(T)));
+    }
     return struct {
         const Self = @This();
         map: std.StringHashMap(std.ArrayList(*Repo)),
@@ -271,6 +275,8 @@ It makes sense if you understand Zig's "No hidden allocations" philosophy. In th
 
 Here we have the help of a special allocator called [`ArenaAllocator`](https://www.openmymind.net/learning_zig/heap_memory/#arena).
 Notice how each iteration inside the `for` loop will allocate a new `ArrayList(*Repo)` for each entry not found in the final `map`. All these `ArrayList`s must be freed along with our `GroupBy`, either tracking these allocations in the `map` value pointers or via less cognitive loaded dedicated allocator tha can free up everything at once.
+
+One last note is the first line of `GroupBy`. Because we use `comptime` types, we could pass anything including `GroupBy(u32, ..)`, which is invalid for our code to work properly. This first bit ensures we take only structs for processing.
 
 This is how you call the `GroupBy`:
 
