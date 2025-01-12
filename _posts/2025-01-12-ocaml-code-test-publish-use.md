@@ -344,7 +344,7 @@ Taking a look at the code, you can judge we are checking for 4 test cases to ens
 
 As I mentioned [cmdline](https://github.com/dbuenzli/cmdliner) is impressive. It outputs this manpage-like help that feels very professional and complete:
 
-![alcotest_output](/assets/img/sample/sterred_ml_help.png)
+![starred_ml_help](/assets/img/sample/starred_ml_help.png)
 
 All options can be set via args or env variables out of the box, as well as defaults, optional, etc. Take a look at the full command definition [here](https://github.com/paulosuzart/starred_ml/blob/d91313f82dd5e27b3e177c6cdb5f50948da163e9/bin/main.ml). And just to mention one of the command options lets see the `max-pages` one:
 
