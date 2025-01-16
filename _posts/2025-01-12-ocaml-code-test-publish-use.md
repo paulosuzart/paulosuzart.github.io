@@ -351,7 +351,7 @@ The release manager `dune-release` offers a `dune-release bistro,` but it hits t
 
 ## Using
 
-I'm the first user of my own program. Check out my auto-generated [paulosuzart/awesome](https://github.com/paulosuzart/awesome) repository and how it is executed via [GitHub Actions](https://github.com/paulosuzart/awesome/blob/735110b7d5df2487b9c03efe51e0a9b31bd37e60/.github/workflows/main.yml#L31). All you have to do is install it via `opam install starred_ml` and then `opam exec -- starred_ml > README.md`. Voilà! You have your awesome README.
+I'm the first user of my own program. Check out my auto-generated [paulosuzart/awesome](https://github.com/paulosuzart/awesome) repository and how it is executed via [GitHub Actions](https://github.com/paulosuzart/awesome/blob/735110b7d5df2487b9c03efe51e0a9b31bd37e60/.github/workflows/main.yml#L31). All you have to do is install it via `opam install starred_ml` and then `opam exec -- starred_ml render > README.md`. Voilà! You have your awesome README.
 
 You can customize the template at will. By default the tempalte at `default.jingoo` is picked up. [Here](https://github.com/paulosuzart/awesome/blob/main/default.jingoo) is my awesome template.
 
