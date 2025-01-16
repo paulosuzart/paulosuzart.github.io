@@ -32,7 +32,7 @@ OCaml has a great ecosystem that can help you get started today:
 You can quickly get up and running with `opam` and `dune`. Here are some tips extra tips:
 
   - [ocaml-platform](https://marketplace.visualstudio.com/items?itemName=ocamllabs.ocaml-platform) - You can use this VSCode extension that works amazingly well.
-   - `dune fmt` - It [formats your code](https://dune.readthedocs.io/en/stable/howto/formatting.html), and I love this. Don't let your engineers waste time debating whether a `let` and `=` should be on the same line. Just go for the standard formatting.
+  - `dune fmt` - It [formats your code](https://dune.readthedocs.io/en/stable/howto/formatting.html), and I love this. Don't let your engineers waste time debating whether a `let` and `=` should be on the same line. Just go for the standard formatting.
   - `dune test` - You can use [alcotest](https://github.com/mirage/alcotest) and `dune test` will execute your tests.
   - `dune exec {package_name}` - to run the project you are building.
 
@@ -52,7 +52,7 @@ For this we will need:
    1. a JSON parser: there's a fantastic lib called [yojson](https://github.com/ocaml-community/yojson). We are covered.
    1. a way to get arguments from the command line or env var: OCaml is blessed with [cmdliner](https://erratique.ch/software/cmdliner/doc/tutorial.html), one of the best cli frameworks I have tried.
    1. a template engine like [jinja2](https://jinja.palletsprojects.com/en/stable/) to give shape to our README:   [jingoo](https://github.com/tategakibunko/jingoo) is essentially the jinja2 of OCaml.
-   1. a slug library to cover languages with spaces and symbols so links don't get broken within our README: also check! There's a small and simple option with [ocaml-slug](https://github.com/thangngoc89/ocaml-slug)
+   1. a conversion from language names to url encoded values, so links don't get broken within our README: also check! There's a Jingoo built-in filter `url_encode`.
    1. a testing library: again from mirageOS, [alcotest](https://github.com/mirage/alcotest) is a popular framework that can help us here.
 
 
@@ -78,7 +78,6 @@ type starred = {
   language : string option;
   html_url : string;
   owner : owner;
-  language_slug : string;
 }
 [@@deriving show, yojson { strict = false; exn = true }]
 
@@ -91,6 +90,9 @@ val from_string : string -> starred_response
 val by_language : starred list -> (string * starred list) list
 (** Converts a list of starred items into a struc grouped by language like
     [("java", [starred; starred]), ("scala", [starred;...])] *)
+
+val languages : ?default_language:string -> starred list -> string list
+(** Return the languages for the repositories. *)
 ```
 
 I want 2 things: *1)* a type (imagine a `struct`) to store the response, *2)* a way to group them by language. The group by operation could be placed outside Github module, but this way is also fine so we keep operations on `starred` type provided by the same module.
@@ -105,46 +107,53 @@ When we use `.mli` files, we are willing to hide the details of our module's imp
 
 ```ocaml
 (** lib/github.ml *)
-let slug = function
-  | Some lang -> Slug.slugify ~lowercase:false lang
-  | None -> Slug.slugify ~lowercase:false "Not-Set"
-
-let with_slug (s : starred) : starred =
- { s with language_slug = slug s.language }
-
-let from_string s =
-  Yojson.Safe.from_string s |> starred_response_of_yojson_exn
-  |> List.map with_slug
+(** ... *)
+let from_string s = Yojson.Safe.from_string s |> starred_response_of_yojson_exn
+let language_not_set = "Not Set"
 
 (** group_by_first will group starred items by its language, if present. returns
- a assoc list of starred items. The list is sorted by language
- alphabetically. Each left value of a language (the list of starred) is also
- sorted alphabetically. *)
+    a assoc list of starred items. The list is sorted by language
+    alphabetically. Each left value of a language (the list of starred) is also
+    sorted alphabetically. *)
 let group_by_first lst =
   let ht = Hashtbl.create 30 in
   List.iter
- (fun (key, value) ->
+    (fun (key, value) ->
       let values = try Hashtbl.find ht key with Not_found -> [] in
       Hashtbl.replace ht key (value :: values))
     lst;
   Hashtbl.fold
- (fun lang repos acc ->
+    (fun lang repos acc ->
       (* Sorts the language list while folding into the final assoc list*)
- (lang, List.sort (fun e e2 -> compare e.name e2.name) repos) :: acc)
+      (lang, List.sort (fun e e2 -> compare e.name e2.name) repos) :: acc)
     ht []
   |> List.sort (fun (c1, _) (c2, _) -> Stdlib.compare c1 c2)
 
 let by_language s =
-  let bz = List.map (fun i -> (i.language_slug, i)) s in
+  let bz =
+    List.map
+      (fun i ->
+        match i.language with Some l -> (l, i) | None -> (language_not_set, i))
+      s
+  in
   group_by_first bz
+
+module StringSet = Set.Make (String)
+
+let languages ?(default_language = language_not_set) starred_items =
+  StringSet.elements @@ StringSet.of_list
+  @@ List.map
+       (fun item ->
+         match item.language with Some l -> l | None -> default_language)
+       starred_items
 ```
-The implementation of `from_string` hides the fact that we fill in a `language_slug` attribute that is not present in the API response. `from_string` uses `starred_response_of_yojson_exn` to parse from string into our type. This function is generated (via metaprogramming [ppx](https://ocaml.org/docs/metaprogramming#ppxs)) and is the one doing the internal plumbing of the parse. The suffix `exn` means it will throw an exception if anything goes wrong. You can see this option set at the preprocessor options on the type:
+Notice `from_string` uses `starred_response_of_yojson_exn` to parse from string into our type. This function is generated (via metaprogramming [ppx](https://ocaml.org/docs/metaprogramming#ppxs)) and is the one doing the internal plumbing of the parse. The suffix `exn` means it will throw an exception if anything goes wrong. You can see this option set at the preprocessor options on the type:
 
 ```ocaml
 [@@deriving show, yojson { strict = false; exn = true }]
 ```
 
-Finally, `by_language` uses a hashmap to group the `starred` by the slug.
+Finally, `by_language` uses a hashmap to group the `starred` by the language.
 
 ## Calling GitHub
 We can see where `Github.from_string` is used after we call GitHub API.
@@ -225,13 +234,6 @@ At the end I wanna give to the template just 3 variables: *1)* the count of lang
 I wanted to add some tests to have the feel of a complete project with proper build, dependencies, modularization and of course, tests.
 
 ```ocaml
-open Alcotest
-module Github = Starred_ml.Github
-module Http_util = Starred_ml.Http_util
-open Http_util
-open Github
-module Util = Starred_ml.Util
-
 let starred_pp ppf i =
   List.iter
     (fun (t, p) ->
@@ -249,7 +251,6 @@ let test_group () =
       language = Some "Java";
       html_url = "example.com";
       owner = { login = "auser" };
-      language_slug = Slug.slugify "Java" ~lowercase:false;
     }
   and sample_java_repo2 =
     {
@@ -259,7 +260,6 @@ let test_group () =
       language = Some "Java";
       html_url = "example.com";
       owner = { login = "viola" };
-      language_slug = Slug.slugify "Java" ~lowercase:false;
     }
   and sample_ocaml_repo =
     {
@@ -269,7 +269,6 @@ let test_group () =
       language = Some "Ocaml";
       html_url = "example.com";
       owner = { login = "bar" };
-      language_slug = Slug.slugify "Ocaml" ~lowercase:false;
     }
   in
   Alcotest.(check starred_testable)
@@ -282,28 +281,6 @@ let test_group () =
 
 let option_pp ppf o =
   match o with Some l -> Fmt.pf ppf "%s" l | None -> Fmt.pf ppf "No next link"
-
-let test_with_slug () =
-  let src =
-    Github.from_string
-      {|[
-        {"name" : "Sample with Slug",
-         "language" : "Vim Script",
-         "owner": {
-            "login" : "foo"
-         },
-         "description" : null,
-         "html_url" : "example.com",
-         "topics" : []
-        }
-      ]|}
-  in
-  let repo =
-    match src with
-    | [] -> failwith "Non empty list needed for our test"
-    | x :: _ -> x
-  in
-  Alcotest.(check string) "Repos get a slug" repo.language_slug "Vim-Script"
 
 let testable_link = Alcotest.testable option_pp ( = )
 
@@ -326,10 +303,8 @@ let () =
         [
           test_case "No Pagination" `Quick test_no_next_page;
           test_case "Next Pat" `Quick test_next_page;
-          test_case "Slug test" `Quick test_with_slug;
         ] );
     ]
-
 ```
 
 The test output is quite beautiful (I forced one error just to take a screenshot):
@@ -338,7 +313,6 @@ The test output is quite beautiful (I forced one error just to take a screenshot
 
 Alcotest kind of requires some effort to understand its concepts. For example, they have this idea of a `testable`; a type that implements a way to pretty-print and test for equality. If you come from more sophisticated assertion libraries like [AssertJ](https://assertj.github.io/doc/), you will need to read a bit of alcotest's posts on the internet. You can find great content [here](https://ocaml-explore.netlify.app/workflows/adding-unit-tests-to-your-project/) and [here](https://mukulrathi.com/ocaml-testing-frameworks/).
 
-Taking a look at the code, you can judge we are checking for 4 test cases to ensure we can parse the API response content, find the next page on each HTTP response if present, and ensure we can add a slug to our `starred` type.
 
 ## The CLI
 
@@ -392,4 +366,4 @@ And the question remains: [Why isn't OCaml more popular?](https://www.youtube.co
 
 This is a great question! And I ask the same for [Crystal](https://crystal-lang.org/) and [V](https://vlang.io/). The fact is that not all languages can become popular; there's simply no such possibility. Furthermore, nobody nailed the formula for popular languages. Some try to put the language behind big names like Go, but see how [dart](https://dart.dev/) operates on a niche only, built on Google's shoulders. Others go community-first until the language is picked by big names (see Rust and Zig).
 
-We can't measure language awesomeness by its popularity. OCaml is very powerful and is slowly modernizing itself and its tooling. We now have things like [Riot](https://riot.ml/), [dbcaml](https://github.com/dbcaml/dbcaml), [Suri Framework](https://github.com/suri-framework), and should the trend continue, I bet OCaml can become much more common that we are used to.
+We can't measure language awesomeness by its popularity. OCaml is very powerful and is slowly modernizing itself and its tooling. We now have things like [Riot](https://riot.ml/), [dbcaml](https://github.com/dbcaml/dbcaml), [Suri Framework](https://github.com/suri-framework), [Melange](https://melange.re/v4.0.0/), [Miou](https://robur-coop.github.io/miou/) and should the trend continue, I bet OCaml can become much more common that we are used to.
