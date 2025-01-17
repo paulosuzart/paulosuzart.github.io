@@ -8,7 +8,7 @@ tags: [ocaml, opam, dune]
 
 [OCaml](https://ocaml.org/) first appeared [back in 1996](https://en.wikipedia.org/wiki/OCaml), and to this day, it's a loved language with great [tooling](https://dune.build/), [libraries](https://tarides.com/open-source/) and [content](https://www.youtube.com/@teej_dv/videos). Even [The Prime Time](https://www.youtube.com/watch?v=mhkoWp5Akww) surrendered to the beauty of the language.
 
-This post will discuss my end-to-end experience with OCaml, from implementation to testing to publishing a package and using it "in production" while building [starred_ml](https://github.com/paulosuzart/starred_ml), an OCaml [awesome-README](https://github.com/paulosuzart/awesome/( generator for your starred GitHub items.
+This post will discuss my end-to-end experience with OCaml, from implementation to testing to publishing a package and using it "in production" while building [starred_ml](https://github.com/paulosuzart/starred_ml), an OCaml [awesome-README](https://github.com/paulosuzart/awesome/) generator for your starred GitHub items.
 
 <!-- more -->
 The links above are just a few examples of what you can find in OCaml's ecosystem. You can find much more in the [OCaml Plante](https://ocaml.org/ocaml-planet) and [Weekly News](https://alan.petitepomme.net/cwn/), for example.
@@ -21,7 +21,7 @@ If you are unfamiliar with the language, the best starting point is always the l
 
 As you may have noticed, I love programming languages. Not how to implement and create one, but more on the usage side: which features they have and how they can make us productive in building, testing, and maintaining our systems. I am passionate about exploring languages and having the Go-To tool for the problem.
 
-Another critical aspect of the language is the surrounding ecosystem. No matter how beautiful, the pure language itself will give engineers a hard time if there's no support in terms of package managers, build tools, monitoring, testing frameworks, etc.
+Another critical aspect of the language is the surrounding ecosystem. Without tooling, the most beautiful language will give engineers a hard time if there's no support in terms of package managers, build tools, monitoring, testing frameworks, etc.
 
 OCaml has a great ecosystem that can help you get started today:
 
@@ -58,7 +58,7 @@ For this we will need:
 
 ## A bit of code here and there
 
-The whole code is relatively small, but walking through it entirely here is not worth it. I want to save you some energy by getting to the end of the article and seeing how I had to deal with publishing a package to `spam`. You might be able to help me with a limitation there.
+The whole code is relatively small, but walking through it entirely here is not worth it. I want to save you some energy by getting to the end of the article and seeing how I had to deal with publishing a package to `opam`. You might be able to help me with a limitation there.
 
 ## GitHub API Model
 
