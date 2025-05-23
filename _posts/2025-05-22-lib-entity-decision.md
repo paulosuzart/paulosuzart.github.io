@@ -61,6 +61,8 @@ What if we could encode these business rules in a way look like this:
 
 > LibEntity is a powerful (and fun!) Java library for building type-safe, state-driven business entities with validation and action handling. It provides a clean, expressive DSL for defining entities, their states, fields, and actions. It's like Spring Boot for your business rules, but with more good vibes and less boilerplate!
 
+Chek the full doc for LibEntity [here](https://paulosuzart.github.io/lib-entity-doc/).
+
 The framework comes with a integrated, but independent sub-project called LibEntity-Decision. It is heavily inspired by [decisions4s](https://business4s.org/decisions4s/) _(although not a drop-in replacement or a port from Scala to Java)_.
 
 ## Show me the code.
