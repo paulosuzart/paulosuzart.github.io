@@ -11,7 +11,8 @@ tags: [java]
 Business logic are the value of our services, not the last fancy REST framework or the most language-native ORM. In this post I introduce [LibEntity-Decision](https://paulosuzart.github.io/lib-entity-doc/integrations/decision/) framework, a metamodel for business decisions inspired by [decision4j](https://github.com/decision4j/decision4j) that should help keeping create, maintain and understand complex business rules behind our entities.
 
 <!-- more -->
-## State machines and transition guards
+
+# State machines and transition guards
 
 It is very common to model state machines in our apps responsible for orchestrating business logic of aggregates. States can be tracked by simple mechanisms like [State Pattern](https://refactoring.guru/design-patterns/state/java/example), as well as complex state machines like [Stateless4j](https://github.com/stateless4j/stateless4j), or [kstatemachine](https://github.com/KStateMachine/kstatemachine).
 
@@ -56,7 +57,7 @@ What if we could encode these business rules in a way look like this:
 
 ✅ Composable matchers: Clean, reusable, and composable rule conditions like `isPresent()`, `in(...)`, `gt(...)`, etc.
 
-## LibEntity-Decision
+# LibEntity-Decision
 
 `LibEntity Decision` is part of `LibEntity` framework. A work in progress in the fields of metamodels for aggregates and business rules. From the doc:
 
