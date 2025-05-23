@@ -149,7 +149,9 @@ The decision table `evalue*` methods allow for the rules to be evaluted agains a
 
 Specific to this example, `evaluateSum` is a method that allows for the rules to be evaluated and the outputs to be summed. This is a simple way to implement a decision table that returns a single value.
 
-The output to the out.diagnose() method is a string that shows the decision table evaluation result, the input values, and the rules that matched:
+## Dignosing the evaluation
+
+The output to the `out.diagnose()` method is a string that shows the decision table evaluation result, the input values, and the rules that matched:
 
 ```
 Hit Policy: Sum
@@ -189,7 +191,22 @@ Other Hit Policies are available:
 - `Unique`: Returns the unique matching rule output.
 - `Collect`: Returns a list of matching rule outputs.
 
-## Future explorations
+## How to mix and match rules?
+
+Behind the scens, LibEntity-Decision is backed by plain Java [Predicates](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Predicate.html). Composing them is very easy:
+
+```java
+@Test
+void testAndMatching() {
+    var insideRange = Rule.gt(0).and(Rule.lt(100));
+    assertTrue(insideRange.eval(50));
+    assertFalse(insideRange.eval(200));
+    assertEquals("> 0 and < 100", insideRange.getMatcher().toString());
+    assertTrue(insideRange.or(Rule.gt(70)).eval(50));
+}
+```
+
+# Future explorations
 
 At the moment evaluation happens eagerly and Policies are used as a way to extract the results. Future explorations may include a lazy evaluation approach, moving the evaluation.
 
