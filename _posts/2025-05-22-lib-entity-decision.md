@@ -6,8 +6,6 @@ comments: true
 tags: [java]
 ---
 
-# Exploring a Decision Engine in Java
-
 Business logic are the value of our services, not the last fancy REST framework or the most language-native ORM. In this post I introduce [LibEntity-Decision](https://paulosuzart.github.io/lib-entity-doc/integrations/decision/) framework, a metamodel for business decisions inspired by [decision4j](https://github.com/decision4j/decision4j) that should help keeping create, maintain and understand complex business rules behind our entities.
 
 <!-- more -->
