@@ -219,3 +219,5 @@ The express "let engineers concentrate in the business rules while we take care 
 The rules of complex SaaS products in finance can be tough. A flawless set of rules are a must to avert loses and risks to the company and its users.
 
 Finally, if you put in place a structure that is easy to reason and easy to iterate, you gain speed and agility while you evolve your product.
+
+The library is not published to Maven Central yet. The code can be found in the github [repository](https://github.com/paulosuzart/lib-entity/tree/main/lib-entity-decision).
