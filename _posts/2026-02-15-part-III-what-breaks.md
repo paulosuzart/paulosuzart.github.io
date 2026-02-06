@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Vibe Part III - What breaks"
-date: 2026-01-15 13:21
+date: 2026-02-15 13:21
 comments: true
 tags: [ai, vibe-coding]
 ---
