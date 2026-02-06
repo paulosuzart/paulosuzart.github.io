@@ -28,15 +28,15 @@ GEM
       logger
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
-    ffi (1.17.0-aarch64-linux-gnu)
+    ffi (1.17.0-aarch64-linux)
     ffi (1.17.0-aarch64-linux-musl)
-    ffi (1.17.0-arm-linux-gnu)
+    ffi (1.17.0-arm-linux)
     ffi (1.17.0-arm-linux-musl)
     ffi (1.17.0-arm64-darwin)
-    ffi (1.17.0-x86-linux-gnu)
+    ffi (1.17.0-x86-linux)
     ffi (1.17.0-x86-linux-musl)
     ffi (1.17.0-x86_64-darwin)
-    ffi (1.17.0-x86_64-linux-gnu)
+    ffi (1.17.0-x86_64-linux)
     ffi (1.17.0-x86_64-linux-musl)
     fiber-annotation (0.2.0)
     fiber-local (1.1.0)
@@ -149,23 +149,23 @@ GEM
     rouge (4.5.1)
     ruby-rc4 (0.1.5)
     safe_yaml (1.0.5)
-    sass-embedded (1.81.0-aarch64-linux-gnu)
+    sass-embedded (1.81.0-aarch64-linux)
       google-protobuf (~> 4.28)
     sass-embedded (1.81.0-aarch64-linux-musl)
       google-protobuf (~> 4.28)
-    sass-embedded (1.81.0-arm-linux-gnueabihf)
+    sass-embedded (1.81.0-arm-linux)
       google-protobuf (~> 4.28)
     sass-embedded (1.81.0-arm-linux-musleabihf)
       google-protobuf (~> 4.28)
     sass-embedded (1.81.0-arm64-darwin)
       google-protobuf (~> 4.28)
-    sass-embedded (1.81.0-x86-linux-gnu)
+    sass-embedded (1.81.0-x86-linux)
       google-protobuf (~> 4.28)
     sass-embedded (1.81.0-x86-linux-musl)
       google-protobuf (~> 4.28)
     sass-embedded (1.81.0-x86_64-darwin)
       google-protobuf (~> 4.28)
-    sass-embedded (1.81.0-x86_64-linux-gnu)
+    sass-embedded (1.81.0-x86_64-linux)
       google-protobuf (~> 4.28)
     sass-embedded (1.81.0-x86_64-linux-musl)
       google-protobuf (~> 4.28)
@@ -182,24 +182,24 @@ GEM
     uri (1.0.2)
     webrick (1.9.0)
     yell (2.2.2)
-    zeitwerk (2.7.1)
+    zeitwerk (2.6.18)
 
 PLATFORMS
   aarch64-linux
-  aarch64-linux-gnu
+  aarch64-linux
   aarch64-linux-musl
   arm-linux
-  arm-linux-gnu
-  arm-linux-gnueabihf
+  arm-linux
+  arm-linux
   arm-linux-musl
   arm-linux-musleabihf
   arm64-darwin
   x86-linux
-  x86-linux-gnu
+  x86-linux
   x86-linux-musl
   x86_64-darwin
   x86_64-linux
-  x86_64-linux-gnu
+  x86_64-linux
   x86_64-linux-musl
 
 DEPENDENCIES
