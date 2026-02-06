@@ -51,6 +51,14 @@ We measure velocity in months, not days. A team that ships fast today but drowns
 
 Clear thinking becomes clearer. Confusion becomes faster confusion. We don't use AI to bypass the hard work, we use it to accelerate the problem space exploration, bounce ideas on hyphothesis, and save time with boilerplate code. If we don't know what we're doing, AI will just make us go faster to the wrong place.
 
+## 9. Keep spec quality bar high.
+
+Features don't enter development until concepts are defined. Not exhaustive specs, but at least clear enough that an engineer could explain the entities to a new hire without having to ask AI how that subsystem works. This is the gate, enforced by engineering.
+
+## 10. Extensibility check.
+
+Before launching a vibed feature, ask: "If we need to add X in three months, what would that take?" If the answer is "rewrite," you're not done. This forces a conversation about foundations.
+
 # Closing
 
 This isn't about slowing down. It's about staying fast—next month, next quarter, next year. This is about the good old software engineering practices as safe-guards for the AI era. Vibe if you want. But vibe with care.

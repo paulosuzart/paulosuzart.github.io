@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Vibe Part III - What breaks"
-date: 2026-01-10 13:21
+date: 2026-01-15 13:21
 comments: true
 tags: [ai, vibe-coding]
 ---
@@ -65,30 +65,6 @@ Results are hard to argue with. When an MVP is "vibed" into existence in forty-e
 
 **Long-term damage:** The team gets locked into a mode where speed is the only legible metric. Quality and extensibility are invisible until they're catastrophically absent.
 
-
-# Toward a Better Vibe
-
-The patterns above aren't inevitable. They're the result of specific gaps we can address. Here are additions to the manifesto that target the root causes:
-
-## For the Business/Engineering Divide
-
-### Concept Co-Ownership
-
-Product and engineering jointly own the domain model. Not "product writes specs, engineering implements"—but shared artifacts that both sides maintain. If product can't explain the model, they can't approve the feature.
-
-### The Spec Quality Bar
-
-Features don't enter development until concepts are defined. Not exhaustive specs—but clear enough that an engineer could explain the entities to a new hire. This is the gate, enforced by engineering.
-
-## For Sustainable Speed
-
-### Velocity Metrics That Include Later
-
-Track not just "time to first ship" but "time to iterate," "bugs per feature," "onboarding time for this area of code." Make the long-term costs visible before they become crises.
-
-### The Extensibility Check
-
-Before launching, ask: "If we need to add X in three months, what would that take?" If the answer is "rewrite," you're not done. This forces a conversation about foundations.
 
 # Conclusion
 
