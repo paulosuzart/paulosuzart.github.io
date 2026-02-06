@@ -21,11 +21,11 @@ This is a manifesto for teams that want to move fast without losing the ability 
 
 ## 1. The AI is not an oracle. 
 
-It's a tool with no context. We don't validate human expertise by checking with this or that LLM. We don't end debates with "but the LLM says so." The AI hasn't sat in our meetings, doesn't know our users, and can't see our codebase. We treat its output as input — not as verdict.
+It's a tool with no context. We don't validate human expertise by checking with this or that LLM. We don't end debates with "but the LLM says so." The AI hasn't sat in our meetings, doesn't know our users, and can't see our codebase. We treat its output as input, not as verdict.
 
 ## 2. Someone must own every decision.
 
-"The AI suggested it" is not a defense. If it's in the code, someone chose to put it there. We name that person. We build the muscle of standing behind choices—even when we're uncertain, even when we used AI to get there.
+"The AI suggested it" is not a defense. If it's in the code, someone chose to put it there. We name that person. We build the muscle of standing behind choices; even when we're uncertain, even when we used AI to get there.
 
 ## 3. We name things before we build them.
 
@@ -37,11 +37,11 @@ The fact that someone built a sample app in an afternoon tells us nothing about 
 
 ## 5. Clarity is not overhead. It's the product.
 
-Well-defined concepts, bounded contexts, documented decisions — these aren't "old school" or "waterfall." They're the only reason we'll be able to iterate six months from now. We pay the cost of clarity upfront because the cost of confusion compounds. Clarity starts with product thinking, product people, and only then it ends in code.
+Well-defined concepts, bounded contexts, documented decisions; these aren't "old school" or "waterfall." They're the only reason we'll be able to iterate six months from now. We pay the cost of clarity upfront because the cost of confusion compounds. Clarity starts with product thinking, product people, and only then it ends in code.
 
 ## 6. Business people must know what they're asking for.
 
-If requirements are vibed, the implementation will be vibed. We don't accept "just make it work" as a spec. We push back — kindly, but firmly — until we have definitions we can build against. Pretty much as if we were to implement it by hand line-by-line. The alternative is building something nobody can explain or extend. The business dies.
+If requirements are vibed, the implementation will be vibed. We don't accept "just make it work" as a spec. We push back; kindly, but firmly; until we have definitions we can build against. Pretty much as if we were to implement it by hand line-by-line. The alternative is building something nobody can explain or extend. The business dies.
 
 ## 7. Speed now, speed later.
 
@@ -55,7 +55,7 @@ Clear thinking becomes clearer. Confusion becomes faster confusion. We don't use
 
 Features don't enter development until concepts are defined. Not exhaustive specs, but at least clear enough that an engineer could explain the entities to a new hire without having to ask AI how that subsystem works. This is the gate, enforced by engineering.
 
-## 10. Extensibility check.
+## 10. Extensibility always on.
 
 Before launching a vibed feature, ask: "If we need to add X in three months, what would that take?" If the answer is "rewrite," you're not done. This forces a conversation about foundations.
 
