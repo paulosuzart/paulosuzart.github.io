@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Vibe Parte II - What you see"
-date: 2026-02-10 13:21
+date: 2026-02-10 10:21
 comments: true
 tags: [ai, vibe-coding]
 ---
