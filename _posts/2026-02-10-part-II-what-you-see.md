@@ -6,7 +6,7 @@ comments: true
 tags: [ai, vibe-coding]
 ---
 
-In the previous post, a [vibe manifesto](./2026-02-05-the-vibe-manifesto.html) was presented. It was blunt, no bigger context, no warning. Just a series of wishes, a series of considerations I wish people would consider when using AI to build software.
+In the previous post, a [vibe manifesto]({% link _posts/2026-02-05-part-I-the-vibe-manifesto.md %}) was presented. It was blunt, no bigger context, no warning. Just a series of wishes, a series of considerations I wish people would consider when using AI to build software.
 
 This post is a follow up on that, but with a different focus. It's not about what we should do, but about what we see when vibing. More on the downside of it.
 
@@ -64,7 +64,6 @@ The sections below depict whta we can consider as patterns (or are they anti-pat
 # Conclusion
 
 These patterns are not exclusive to AI-assisted development, but they are amplified by it. The speed of AI can make these patterns more dangerous, as they can spread more quickly and have a greater impact. It's crucial to be aware of these patterns and to actively work against them. Otherwise, we risk building software that is not only slow and buggy, but also impossible to maintain or extend.
-
 
 
 *This series of posts express my sole opinion and not the opinion of any employer.*

@@ -63,4 +63,6 @@ Before launching a vibed feature, ask: "If we need to add X in three months, wha
 
 This isn't about slowing down. It's about staying fast—next month, next quarter, next year. This is about the good old software engineering practices as safe-guards for the AI era. Vibe if you want. But vibe with care.
 
+In the next post, [What you see]({% link _posts/2026-02-10-part-II-what-you-see.md %}), we look at the patterns that emerge when vibing becomes the default.
+
 *This series of posts express my sole opinion and not the opinion of any employer.*
