@@ -195,3 +195,5 @@ What I like about this setup is how naturally the security model falls out of th
 Dioxus fullstack is still maturing, and I don't recommend it for production if you need battle-tested stability. But for a personal project where you want SSR + WASM + server functions in one Rust codebase, it's a genuinely exciting stack. And as this post shows, since it's Axum under the hood, you can reach in and do things like plug in observability layers without fighting the framework.
 
 Give [hot_dog](https://github.com/paulosuzart/hot_dog) a look if you want to see all of this in context. Feedback and PRs welcome.
+
+*This post was entirely written by AI.*
