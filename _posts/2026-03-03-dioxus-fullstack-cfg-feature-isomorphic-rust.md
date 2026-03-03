@@ -129,10 +129,82 @@ The `id` comes in as a properly typed `u32`, extracted from the URL by the route
 
 Running `dx serve` spins up the full SSR + hot-reload dev server. Running `dx build --release --platform web` produces the optimised WASM bundle and `dx build --release --platform server` produces the server binary. Same source, two artefacts, zero duplication.
 
-The practical win for a side project is real: there is no API layer to maintain between a separate frontend and backend. Server functions (Dioxus's RPC mechanism, not shown here) let you call server-side code directly from components, with the serialisation generated automatically. The mental model stays at the component level throughout.
+The practical win for a side project is real: there is no API layer to maintain between a separate frontend and backend. Server functions — Dioxus's built-in RPC mechanism — let you call server-side code directly from components, with the serialisation generated automatically. The mental model stays at the component level throughout.
+
+# Server functions: calling the backend from a component
+
+The `#[server]` macro is where the compile-time wall and the shared component tree come together. You annotate a regular async function with it, and Dioxus generates two things:
+
+- A **server-side implementation** compiled in only when the `server` feature is active, which runs your actual Rust code (database queries, etc.).
+- A **client-side stub** compiled into the WASM bundle, which serialises the arguments, sends an HTTP POST to a generated endpoint, and deserialises the response.
+
+From the component's point of view, the function is just a plain async call — no `fetch`, no `serde_json::from_str`, no manually written routes.
+
+Here is a real example from `hot_dog`. Two server functions live in `src/backend/kids.rs`:
+
+```rust
+#[server]
+pub async fn get_granularity() -> Result<String, ServerFnError> {
+    let settings = get_count_metadata().await?;
+    Ok(settings.granularity)
+}
+
+#[server]
+pub async fn update_granularity(granularity: String) -> Result<(), ServerFnError> {
+    if !ALLOWED_GRANULARITIES.contains(&granularity.as_str()) {
+        return Err(ServerFnError::new(format!(
+            "Invalid granularity: '{granularity}'. Must be one of: {ALLOWED_GRANULARITIES:?}"
+        )));
+    }
+    let conn = get_db().await;
+    conn.execute(
+        "UPDATE settings SET granularity = ?1 WHERE id = 1",
+        libsql::params![granularity],
+    )
+    .await
+    .map_err(|e| ServerFnError::new(e.to_string()))?;
+    Ok(())
+}
+```
+
+Both functions use `libsql` (the Turso client) — a dependency that only exists when the `server` feature is active. The `#[server]` macro enforces this: referencing server-only imports inside the function body when compiling for the browser target is a compile error.
+
+In the settings component (`src/components/settings/component.rs`), the frontend calls them without any HTTP plumbing:
+
+```rust
+// Reactive read: use_resource drives an async fetch and re-runs on dependency changes
+let mut granularity = use_resource(get_granularity);
+
+// Extract the current value with a sensible default while loading
+let current = match &*granularity.read() {
+    Some(Ok(g)) => g.clone(),
+    _ => "MONTHLY".to_string(),
+};
+
+// Reactive write: spawn a one-shot async task on click
+onclick: move |_| {
+    let value = value.clone();
+    popover_open.set(false);
+    spawn(async move {
+        if let Err(e) = update_granularity(value).await {
+            consume_toast().error(
+                "Failed to update aggregation".to_string(),
+                ToastOptions::new()
+                    .description(format!("{e}"))
+                    .duration(Duration::from_secs(5)),
+            );
+        }
+        granularity.restart(); // re-fetch to reflect the new value
+    });
+}
+```
+
+`use_resource` is Dioxus's hook for async data fetching: it runs the closure once, tracks signal dependencies, and re-runs automatically when they change. `spawn` is used for fire-and-forget mutations — call the server function, handle the error, then call `.restart()` on the resource to pull fresh data.
+
+The key thing to notice is that `update_granularity(value).await` looks exactly like a local async function call. There is no HTTP client configuration, no endpoint URL, no request/response boilerplate. The `#[server]` macro takes care of all of that.
 
 # Wrapping up
 
-The combination of Cargo feature flags and `#[cfg]` gives you a compile-time enforced boundary between server and browser code, while Dioxus provides the runtime glue that makes the same component tree render on both sides. The `#[derive(Routable)]` enum keeps routing type-safe across both environments. It is a genuinely different approach to fullstack web development, and for Rust developers it feels surprisingly natural.
+The combination of Cargo feature flags and `#[cfg]` gives you a compile-time enforced boundary between server and browser code, while Dioxus provides the runtime glue that makes the same component tree render on both sides. The `#[derive(Routable)]` enum keeps routing type-safe across both environments, and `#[server]` functions close the loop by letting components call backend logic as if it were a local async function. It is a genuinely different approach to fullstack web development, and for Rust developers it feels surprisingly natural.
 
 The complete source is at [github.com/paulosuzart/hot_dog](https://github.com/paulosuzart/hot_dog). Have a look — it's small enough to read in an afternoon.
