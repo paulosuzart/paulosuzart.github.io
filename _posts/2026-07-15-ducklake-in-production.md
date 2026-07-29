@@ -10,7 +10,7 @@ I'm excited to share some learning on running [Ducklake](http://ducklake.select/
 
 In this post, you will see some of the challenges and learning encountered while running Ducklake in production.
 
-**TL;DR:** *You can use many of the shared tips by using [Lakemon](https://www.lakemon.dev/), a tool that is in the making and brings many of the shared tips to our finger tips. It is under construction.*
+**TL;DR:** *You can use many of the shared tips by using [Lakemon](https://www.lakemon.dev/), a tool that is in the making and brings many of the shared tips to our fingertips. It is under construction.*
 
 <!--more-->
 
@@ -48,7 +48,7 @@ And where can Ducklake be applied? To be hones, I don't see mother analytics (le
 
 By the time of writing this post, Ducklake is handling more than 70GB of data in production with data pipelines grinding through hundreds of millions of rows per pipeline run without issues.
 
-# The learning
+# The learnings
 
 This post is not a code tutorial to copy/paste or a step-by-step walkthrough. It is a summary of our experience using Ducklake in production.
 
@@ -120,29 +120,29 @@ When invoked, data will be written to parquet files and into your selected stora
 
 {% include callout.html type="note" text="**The tradeoff is:** What is a good `DATA_INLINING_ROW_LIMIT` for your use case? 
 
-- too big: you can ruin the catalog (bloat, slow parquet writes due to partitioning/sorting);
-- too little: you end up with too many small files anyway. I personally tend to bet on CDC infrastructure buffering rather than catalog inlining. Something like [Open Data Buffer](https://www.opendata.dev/blog/buffer-ha-pipelines-without-kafka/), for example." %}
+- Too big: you can ruin the catalog (bloat, slow parquet writes due to partitioning/sorting);
+- Too little: you end up with too many small files anyway. I personally tend to bet on CDC infrastructure buffering rather than catalog inlining. Something like [Open Data Buffer](https://www.opendata.dev/blog/buffer-ha-pipelines-without-kafka/), for example." %}
 
 ## Sorted tables might be enough (no partitions)
 
 Each write to DuckLake results in one or more files already. And in many cases, the CDC data will land into a [bronze layer](https://www.databricks.com/blog/what-is-medallion-architecture) to be used by downstream data pipelines. The pipelines might consider a window of data to process, rather than processing all data at once. So if you include (as a default value column or added to the data during the ingestino) a `_ingestion_timestamp` column, you can easily filter for data that hasn't been processed yet. For that you take advanted of [Sorted Tables](https://ducklake.select/docs/stable/duckdb/advanced_features/sorted_tables).
 
-With pipelines processing recently ingested data on each run, only recent files will be scanned. With Sorted Tables, ducklake will store min/max values and fewer files will be used at all. From them doc:
+With pipelines processing recently ingested data on each run, only recent files will be scanned. With Sorted Tables, ducklake will store `min`/`max` values and fewer files will be used at all. From them doc:
 
 > Sorting data before writing improves the effectiveness of min/max statistics at query time, which allows the DuckDB query engine to skip data files whose value ranges do not overlap with a query's filter predicates.
 
 {% include callout.html type="note" text="**The tradeoff is:** Even with 100Mi records, CDC keeps **adding files** (representing updates, deletes, inserts). If you ingest, say 10GB at once, then partitioning plays a bigger role, but if you ingest smaller chunks that are naturall for CDC, your data is already spread across multiple files and Sorted tables statistics avoids scanning files that are not part of the processing window.
 
-**IMPORTANT:** When [Sorted Tables get compacted](https://ducklake.select/docs/stable/duckdb/maintenance/merge_adjacent_files#sorted-compaction) by `ducklake_merge_adjacent_files`, the sorting will be preserved, but sorting can still be disabled if not strickly needed (very often, I would say).
+**IMPORTANT:** When [Sorted Tables get compacted](https://ducklake.select/docs/stable/duckdb/maintenance/merge_adjacent_files#sorted-compaction) by `ducklake_merge_adjacent_files`, the sorting will be preserved, but sorting can still be disabled if not strictly needed (very often, I would say).
 " %}
 
-I'm not advotacing against partitions at all. There are other use cases like Asset price ingestion where data is constantly added and never, or almost never touched. Query usually happens with time and asset filters. As opposed to CDC where the same record gets upated overtime demaning N partitions on each data flush. This is where you notice the number of files explode.
+I'm not advocating against partitions at all. There are other use cases like Asset price ingestion where data is constantly added and never, or almost never touched. Query usually happens with time and asset filters. As opposed to CDC where the same record gets updated overtime demanding N partitions on each data flush. This is where you notice the number of files explode.
 
 ## Call maintenance procedures per table
 
 Ducklake offers a `CHECKPOINT` command that can be used to trigger compaction e purging of old snapshots. You can do some gymnastic to scope a `CHECKPOINT` to a specific table or portion of tables by using [autocompact options](https://ducklake.select/docs/stable/duckdb/maintenance/merge_adjacent_files#controlling-which-tables-are-compacted), but what `CHECKPOINT` does behind the scenes is trigger several maintenance commands that I prefer to run manually per table.
 
-Having one writer per table is a good way to increse throughput, so contention happens at table level. And contention here means flushing inlined data, the regular insert/update/delete operations and running all other maintenance commands.
+Having one writer per table is a good way to increase throughput, so contention happens at table level. And contention here means flushing inlined data, the regular insert/update/delete operations and running all other maintenance commands.
 
 Ducklake comes with a [rich metadata schema](https://ducklake.select/docs/stable/specification/tables/overview) that allows full introspection of the lake state. One way to see the situation of a table is to query the metadata and decide whether or not certain maintenance commands need to be run:
 
@@ -170,9 +170,9 @@ Tables under `__ducklake_metadata_<attachment_mame>` are accessible and can be q
 {% include callout.html type="note" text="**The tradeoff is:**
 
 - Call CHECKPOINT globally that affect N tables and the lake state: Less cognitive load, but misses the opportunity to tail the maintenance for the characteristics of the table, 
-- CALL individual maintenance procdures (`ducklake_rewrite_data_files`, `ducklake_merge_adjacent_files`) at table level: More things to know about the lake, but a tailored maintenance for the traffic you get on a table. 
+- CALL individual maintenance procedures (`ducklake_rewrite_data_files`, `ducklake_merge_adjacent_files`) at table level: More things to know about the lake, but a tailored maintenance for the traffic you get on a table. 
 
-In the end the frequency and thresholds for maintenanance in the `customer` table will be very different from the need of a `user_visits` table" %}
+In the end the frequency and thresholds for maintenance in the `customer` table will be very different from the need of a `user_visits` table" %}
 
 ## Shard the ingestion
 
@@ -180,7 +180,7 @@ Try to shard the ingestion queues<->tables to contain memory usage on merge and 
 
 ## Call global maintenance during lower traffic
 
-Global maintenance are those that affect the whole lake like [`CALL ducklake_expire_snapshots`](https://ducklake.select/docs/stable/duckdb/maintenance/expire_snapshots) and [`CALL ducklake_cleanup_old_files`](https://ducklake.select/docs/stable/duckdb/maintenance/cleanup_of_files) (use `older_than` for both to controll the size of affected files).
+Global maintenance are those that affect the whole lake like [`CALL ducklake_expire_snapshots`](https://ducklake.select/docs/stable/duckdb/maintenance/expire_snapshots) and [`CALL ducklake_cleanup_old_files`](https://ducklake.select/docs/stable/duckdb/maintenance/cleanup_of_files) (use `older_than` for both to control the size of affected files).
 
 For simplicity, pick up a lower traffic ingestion process and enable global maintenance on it. For lower traffic, global maintenance is less disruptive and can be done with less impact on the system.
 
@@ -189,7 +189,7 @@ For simplicity, pick up a lower traffic ingestion process and enable global main
 - Calling global maintenance across all ingestion processes will lead to race conditions on the catalog. 
 " %}
 
-Alos notice that running global maintenance very often affects the ability to use snapshot information for features like [Changed Data Feed](https://ducklake.select/docs/stable/duckdb/advanced_features/data_change_feed#compaction).
+Also notice that running global maintenance very often affects the ability to use snapshot information for features like [Changed Data Feed](https://ducklake.select/docs/stable/duckdb/advanced_features/data_change_feed#compaction).
 
 ## Table Rewrite is an option
 
@@ -220,8 +220,8 @@ Just pay attention to the table size and if possible, stop the ingestion to perf
 
 # Conclusion
 
-These are some of the learnings and tips I could share after running a lakehouse in production. It is a couple hundreds of gigabytes, but it is enough to get exposed to a lot of practices to take the best out of the platform.
+These are some of the learnings and tips I could share after running a lakehouse in production. It is a couple of hundreds of gigabytes, but it is enough to get exposed to a lot of practices to take the best out of the platform.
 
-I personally get really excited about lakehouses. Their flexibility, scalability and low cost of entry is what makes them so attractive.
+I personally get really excited about lakehouses. Their flexibility, scalability, and low cost of entry is what makes them so attractive.
 
-While a powerful tool that can easily become part of your data stack, operating a lakehouse requires constant monitoring of its health. Luckily, DuckLake provides all metadata possible to monitor the health of your lakehouse. And the metadata available allowed me to build [Lakemon](https://www.lakemon.dev/). A tool that is in the making and brings many of the shared tips to our finger tips. It is essentially in the making and being matured with real daily usage.
+While a powerful tool that can easily become part of your data stack, operating a lakehouse requires constant monitoring of its health. Luckily, DuckLake provides all metadata possible to monitor the health of your lakehouse. And the metadata available allowed me to build [Lakemon](https://www.lakemon.dev/). A tool that is in the making and brings many of the shared tips to our fingertips. It is essentially in the making and being matured with real daily usage.
