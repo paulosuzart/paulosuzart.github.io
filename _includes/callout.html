@@ -1,0 +1,98 @@
+{% comment %}
+  Callout box
+  Usage: include callout.html with text="..." and type="note"
+{% endcomment %}
+{% assign callout_type = include.type | default: "note" %}
+<div class="callout callout-{{ callout_type }}">
+  <div class="callout-icon">
+    <i class="far fa-check-circle"></i>
+  </div>
+  <div class="callout-content">
+    {{ include.text | markdownify }}
+  </div>
+</div>
+
+<style>
+.callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  padding: 0.9rem 1.1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(46, 160, 67, 0.35);
+  background-color: rgba(46, 160, 67, 0.08);
+  color: #1f6f3d;
+}
+
+.callout-icon {
+  flex: 0 0 auto;
+  margin-top: 0.15rem;
+  color: #2ea043;
+}
+
+.callout-content {
+  flex: 1 1 auto;
+}
+
+.callout-content p {
+  margin-bottom: 0;
+}
+
+.callout-content p + p {
+  margin-top: 0.5rem;
+}
+
+.callout-content ul {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding-left: 0;
+}
+
+.callout-content ul li {
+  position: relative;
+  padding-left: 1.1rem;
+}
+
+.callout-content ul li + li {
+  margin-top: 0.35rem;
+}
+
+.callout-content ul li::before {
+  content: "›";
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+  color: #2ea043;
+}
+
+[data-mode="dark"] .callout {
+  border-color: rgba(63, 185, 80, 0.4);
+  background-color: rgba(63, 185, 80, 0.12);
+  color: #7ee2a8;
+}
+
+[data-mode="dark"] .callout-icon {
+  color: #3fb950;
+}
+
+[data-mode="dark"] .callout-content ul li::before {
+  color: #3fb950;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) .callout {
+    border-color: rgba(63, 185, 80, 0.4);
+    background-color: rgba(63, 185, 80, 0.12);
+    color: #7ee2a8;
+  }
+
+  html:not([data-mode]) .callout-icon {
+    color: #3fb950;
+  }
+
+  html:not([data-mode]) .callout-content ul li::before {
+    color: #3fb950;
+  }
+}
+</style>
